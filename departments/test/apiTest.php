@@ -51,24 +51,38 @@ try {
         }
     } elseif($action === 'fetchAllSort'){
         $status = $_POST['filter_status'];
-        $filterCriteria = [
-            [
-                "column" => "name",
-                "operator" => "LIKE",
-                "value" => "Okay"
-            ],
-            [
-                "column" => "status",
+        $searchFilter = "";
+        $dateFilterColumn = "";
+        $dateStart = "2024-01-01";
+        $dateEnd = "2024-12-31";
+        $offset = 3;
+        // test data
+        
+        $filterCriteria = [];
+        
+        if(!empty($status)){
+            $filterCriteria[] = [
+                "column" => "department.status",
                 "operator" => "=",
                 "value" => $status
-            ],
-            [
-                "column" => "created_at",
+            ];
+        }
+        if(!empty($searchFilter)){
+            $filterCriteria[] = [
+                "column" => "department.name",
+                "operator" => "LIKE",
+                "value" => ""
+            ];
+        }
+        if(!empty($dateFilterColumn)){
+            $filterCriteria[] = [
+                "column" => "department." . $dateFilterColumn,
                 "operator" => "BETWEEN",
-                "lower_bound" => "2024-01-01",
-                "upper_bound" => "2024-12-31"
-            ],
-        ];
+                "lower_bound" => $dateStart,
+                "upper_bound" => $dateEnd
+            ];
+        }
+        print_r($filterCriteria);
         
         $sortCriteria = [
             [
@@ -76,10 +90,7 @@ try {
                 "direction" => $_POST['sort_order']
             ]
         ];
-        $data = $departmentDao->fetchAll([], 
-        [
-            ["column" => "status", "operator" => "=", "value" => "Active"]
-        ], $sortCriteria, $_POST['numberEntries']);
+        $data = $departmentDao->fetchAll([], $filterCriteria, $sortCriteria, $_POST['numberEntries'], $offset);
         $departments = $data["result_set"];
         $totalDepartments = $data["total_row_count"];
         $totalPages = ceil($totalDepartments / $_POST['numberEntries']);

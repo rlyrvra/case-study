@@ -1,4 +1,4 @@
-function fetchAllSort(){
+function fetchAllSort(page){
     var numberEntries = $("#entries").val();
     var sortByColumn = $("#sortBy").val();
     
@@ -8,6 +8,8 @@ function fetchAllSort(){
     if(sortOrderBy == null) return;
     var filterStatus = $("#status").val();
     console.log(filterStatus);
+    var startDate = $("#dateCreatedStart").val();
+    
     $.ajax({
         url: 'apiTest.php',
         type: 'POST',

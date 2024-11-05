@@ -60,7 +60,7 @@
       <?php for ($i = 1; $i <= $totalPages; $i++): ?>
         <!-- Page Numbers -->
         <li class="page-item <?= $i === $page ? 'active' : '' ?>">
-          <a class="page-link" href="?page=<?= $i ?>"><?= $i ?></a>
+          <a class="page-link" onclick="fetchAllSort(<?php echo $page ?>)" ><?= $i ?></a>
         </li>
       <?php endfor; ?>
       <!-- Next Button -->
