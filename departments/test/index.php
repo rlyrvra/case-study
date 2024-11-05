@@ -4,15 +4,97 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Department Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="ajax-requests.js"></script>
+    <script src="fetchAllSort.js"></script>
 </head>
 <body>
 
     <h1>Department Management</h1>
+    <div class="container mt-5">
+    <form onsubmit="event.preventDefault();">
+        <!-- Row for Entries, Sort By, Order By -->
+        <fieldset class="row mb-3">
+            <!-- Number of Entries -->
+            <div class="col-md-4">
+                <label for="entries" class="form-label">Number of Entries</label>
+                <select id="entries" class="form-select">
+                    <option value="2" selected>2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+
+            <!-- Sort By -->
+            <div class="col-md-4">
+                <label for="sortBy" class="form-label">Sort By</label>
+                <select id="sortBy" class="form-select">
+                    <option value="name">Name</option>
+                    <option value="created_at" selected>Created At</option>
+                    <option value="updated_at">Updated At</option>
+                </select>
+            </div>
+
+            <!-- Order By -->
+            <div class="col-md-4">
+                <label for="orderBy" class="form-label">Order By</label>
+                <select id="orderBy" class="form-select">
+                    <option value="ASC" selected>Ascending</option>
+                    <option value="DESC">Descending</option>
+                </select>
+            </div>
+        </fieldset>
+
+        <!-- Filter By Section -->
+        <fieldset class="row mb-3">
+            <legend>Filter By:</legend>
+
+            <!-- Status -->
+            <div class="col-md-4">
+                <label for="status" class="form-label">Status</label>
+                <select id="status" class="form-select">
+                    <option value="Active" selected>Active</option>
+                    <option value="Inactive">Inactive</option>
+                    <option value="Archived">Archived</option>
+                </select>
+            </div>
+
+            <!-- Date Created -->
+            <div class="col-md-4">
+                <label class="form-label">Date Created</label>
+                <div class="row">
+                    <div class="col">
+                        <input type="date" id="dateCreatedStart" class="form-control" placeholder="Start Date">
+                    </div>
+                    <div class="col">
+                        <input type="date" id="dateCreatedEnd" class="form-control" placeholder="End Date">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Date Modified -->
+            <div class="col-md-4">
+                <label class="form-label">Date Modified</label>
+                <div class="row">
+                    <div class="col">
+                        <input type="date" id="dateModifiedStart" class="form-control" placeholder="Start Date">
+                    </div>
+                    <div class="col">
+                        <input type="date" id="dateModifiedEnd" class="form-control" placeholder="End Date">
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+
+        <!-- Submit Button -->
+        <button onclick="fetchAllSort()" class="btn btn-primary">Apply Filters</button>
+    </form>
+    </div>
+
     <button onclick="fetchAllDepartments()">Fetch All Departments</button>
     <div id="departments"></div>
-
     <div style="font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f4;">
         <h2 style="color: #333;">Create New Department</h2>
         <form id="createDepartmentForm" onsubmit="event.preventDefault(); createDepartment();">
@@ -29,6 +111,6 @@
 
         <div id="createMessage" style="font-weight: bold;"></div>
     </div>
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>

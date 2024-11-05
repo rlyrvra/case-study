@@ -243,7 +243,7 @@ class DepartmentDao
         } catch (PDOException $exception) {
             error_log("Database Error: An error occurred while fetching the departments. " .
                       "Exception: {$exception->getMessage()}");
-
+            echo $exception->getMessage();
             return ActionResult::FAILURE;
         }
     }

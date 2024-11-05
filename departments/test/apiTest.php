@@ -49,6 +49,43 @@ try {
         } else {
             echo "Invalid department data.";
         }
+    } elseif($action === 'fetchAllSort'){
+        $status = $_POST['filter_status'];
+        $filterCriteria = [
+            [
+                "column" => "name",
+                "operator" => "LIKE",
+                "value" => "Okay"
+            ],
+            [
+                "column" => "status",
+                "operator" => "=",
+                "value" => $status
+            ],
+            [
+                "column" => "created_at",
+                "operator" => "BETWEEN",
+                "lower_bound" => "2024-01-01",
+                "upper_bound" => "2024-12-31"
+            ],
+        ];
+        
+        $sortCriteria = [
+            [
+                "column" => "department." . $_POST['sort_by'],
+                "direction" => $_POST['sort_order']
+            ]
+        ];
+        $data = $departmentDao->fetchAll([], 
+        [
+            ["column" => "status", "operator" => "=", "value" => "Active"]
+        ], $sortCriteria, $_POST['numberEntries']);
+        $departments = $data["result_set"];
+        $totalDepartments = $data["total_row_count"];
+        $totalPages = ceil($totalDepartments / $_POST['numberEntries']);
+        include __DIR__ . '/departmentsTable.php';
+
+
     } else {
         echo "Invalid action specified.";
     }
