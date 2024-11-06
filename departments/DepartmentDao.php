@@ -244,7 +244,7 @@ class DepartmentDao
         } catch (PDOException $exception) {
             error_log("Database Error: An error occurred while fetching the departments. " .
                       "Exception: {$exception->getMessage()}");
-echo $exception->getMessage();
+            echo $exception->getMessage();
             return ActionResult::FAILURE;
         }
     }
@@ -252,15 +252,22 @@ echo $exception->getMessage();
     public function update(Department $department, int $userId): ActionResult
     {
         $query = '
-            UPDATE departments
+            UPDATE departments AS department 
+            JOIN (
+            SELECT 
+                id 
+            FROM 
+                departments 
+            WHERE 
+                MD5(id) = :hashed_id                    ) AS subquery
+            ON
+                department.id = subquery.id
             SET
-                name               = :name              ,
-                department_head_id = :department_head_id,
-                description        = :description       ,
-                status             = :status            ,
-                updated_by         = :updated_by
-            WHERE
-                id = :department_id
+                department.name               = :name              ,
+                department.department_head_id = :department_head_id,
+                department.description        = :description       ,
+                department.status             = :status            ,
+                department.updated_by         = :updated_by
         ';
 
         try {
@@ -268,6 +275,7 @@ echo $exception->getMessage();
 
             $statement = $this->pdo->prepare($query);
 
+            $statement->bindValue(':hashed_id'         , md5($department->getId())         , Helper::getPdoParameterType($department->getName()            ));
             $statement->bindValue(':name'              , $department->getName()            , Helper::getPdoParameterType($department->getName()            ));
             $statement->bindValue(':department_head_id', $department->getDepartmentHeadId(), Helper::getPdoParameterType($department->getDepartmentHeadId()));
             $statement->bindValue(':description'       , $department->getDescription()     , Helper::getPdoParameterType($department->getDescription()     ));

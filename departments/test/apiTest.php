@@ -24,7 +24,11 @@ try {
         $totalDepartments = $data["total_row_count"];
         $totalPages = ceil($totalDepartments / $limit);
         include __DIR__ . '/departmentsTable.php';
-    } elseif ($action === 'create') {
+        return;
+    } 
+
+
+    if ($action === 'create') {
         $departmentData = $_POST['department'] ?? null;
 
         if ($departmentData) {
@@ -49,13 +53,17 @@ try {
         } else {
             echo "Invalid department data.";
         }
-    } elseif($action === 'fetchAllSort'){
+        return;
+    } 
+
+
+    if($action === 'fetchAllSort'){
         $status = $_POST['filter_status'];
-        $searchFilter = "";
-        $dateFilterColumn = "";
-        $dateStart = "2024-01-01";
-        $dateEnd = "2024-12-31";
-        $offset = 3;
+        $searchFilter = $_POST['filter_search'];
+        $dateFilterColumn = $_POST['filter_date_column'];
+        $dateStart = isset($_POST['filter_startDate']) && $dateFilterColumn !== "none" ? $_POST['filter_startDate'] : 0;
+        $dateEnd = isset($_POST['filter_endDate']) && $dateFilterColumn !== "none" ? $_POST['filter_endDate'] : 0;
+        $offset = 0;
         // test data
         
         $filterCriteria = [];
@@ -71,10 +79,10 @@ try {
             $filterCriteria[] = [
                 "column" => "department.name",
                 "operator" => "LIKE",
-                "value" => ""
+                "value" => "%$searchFilter%"
             ];
         }
-        if(!empty($dateFilterColumn)){
+        if((!empty($dateFilterColumn) && $dateFilterColumn !== "none") && !empty($dateStart) && !empty($dateEnd)){
             $filterCriteria[] = [
                 "column" => "department." . $dateFilterColumn,
                 "operator" => "BETWEEN",
@@ -95,11 +103,52 @@ try {
         $totalDepartments = $data["total_row_count"];
         $totalPages = ceil($totalDepartments / $_POST['numberEntries']);
         include __DIR__ . '/departmentsTable.php';
+        return;
 
-
-    } else {
-        echo "Invalid action specified.";
     }
+
+
+    if($action == 'update'){
+        $departmentData = $_POST['department'] ?? null;
+        if ($departmentData) {
+            $name = $departmentData['name'] ?? '';
+            $departmentHeadId = $departmentData['departmentHeadId'] ?? null;
+            $departmentId = $departmentData['departmentId'] ?? null;
+            // $newDepartment = new Department(
+            //     id: null,
+            //     name: $name,
+            //     departmentHeadId: $departmentHeadId,
+            //     description: null,
+            //     status: "Active"
+            // );
+            $updatedDepartment = new Department(
+                id: 36,
+                name: "IT Department",
+                departmentHeadId: 2,
+                description: "Updated description for IT Department",
+                status: "Active"
+            );
+
+            $updateResult = $departmentDao->update($updatedDepartment, $userId);
+
+            if ($result) {
+                echo "Department created successfully!";
+            } else {
+                echo "Failed to create department. Please try again.";
+            }
+        } else {
+            echo "Invalid department data.";
+        }
+
+        
+        
+        return;
+    }
+
+
+
+
+    echo "Invalid action specified.";
 } catch (Exception $e) {
     echo "Error: " . $e->getMessage();
 }

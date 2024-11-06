@@ -5,9 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Department Management</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    
     <script src="ajax-requests.js"></script>
-    <script src="fetchAllSort.js"></script>
+    <script src="fetchAllSort.js?v=1.1"></script>
 </head>
 <body>
 
@@ -63,26 +65,36 @@
 
             <!-- Date Created -->
             <div class="col-md-4">
-                <label class="form-label">Date Created</label>
+                <label class="form-label">Search At:</label>
                 <div class="row">
                     <div class="col">
-                        <input type="date" id="dateCreatedStart" class="form-control" placeholder="Start Date">
+                    <select id="searchColumn" class="form-select">
+                        <option value="name" selected>Name</option>
+                        <option value="description">Description</option>
+                    </select>
                     </div>
                     <div class="col">
-                        <input type="date" id="dateCreatedEnd" class="form-control" placeholder="End Date">
+                        <input type="text" id="searchText" class="form-control" placeholder="Enter text">
                     </div>
                 </div>
             </div>
 
             <!-- Date Modified -->
             <div class="col-md-4">
-                <label class="form-label">Date Modified</label>
-                <div class="row">
-                    <div class="col">
-                        <input type="date" id="dateModifiedStart" class="form-control" placeholder="Start Date">
+                <label class="form-label">At Date:</label>
+                <div class="row g-1">
+                    <div class="col-4">
+                        <select id="dateColumn" class="form-select">
+                            <option value="none">None</option>
+                            <option value="created_at">Date Created</option>
+                            <option value="updated_at">Date Modified</option>
+                        </select>
                     </div>
-                    <div class="col">
-                        <input type="date" id="dateModifiedEnd" class="form-control" placeholder="End Date">
+                    <div class="col-4">
+                        <input type="date" id="dateStart" class="form-control" placeholder="Start Date">
+                    </div>
+                    <div class="col-4">
+                        <input type="date" id="dateEnd" class="form-control" placeholder="End Date">
                     </div>
                 </div>
             </div>
@@ -112,5 +124,6 @@
         <div id="createMessage" style="font-weight: bold;"></div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    
 </body>
 </html>

@@ -9,39 +9,32 @@
 <table border="1" class="table" id="myTable">
   <thead>
     <tr>
-      <th>id</th>
-      <th>name</th>
-      <th>department_id</th>
-      <th>description</th>
-      <th>status</th>
+      <th>Job Title</th>
+      <th>Department</th>
+      <th>Description</th>
+      <th>Status</th>
       <th>Created At</th>
       <th>Created By</th>
       <th>Updated At</th>
       <th>Updated By</th>
-      <?php if ($status === "Archived") echo "<th>Deleted At</th>"; ?>
-      <?php if ($status === "Archived") echo "<th>Deleted By</th>"; ?>
-      <th>Action</th>
+      <?php //if ($status === "Archived") echo "<th>Deleted At</th>"; ?>
+      <?php //if ($status === "Archived") echo "<th>Deleted By</th>"; ?>
     </tr>
   </thead>
   <tbody>
-    <?php if (!empty($departments)): ?>
-      <?php foreach ($departments as $row): ?>
+    <?php if (!empty($jobTitles)): ?>
+      <?php foreach ($jobTitles as $row): ?>
         <tr>
-          <td><?php echo htmlspecialchars($row['id']); ?></td>
-          <td><?php echo htmlspecialchars($row['name']); ?></td>
-          <td><?php echo htmlspecialchars($row['department_head_id']); ?></td>
+          <td><?php echo htmlspecialchars($row['title']); ?></td>
+          <td><?php echo htmlspecialchars($row['department_name']); ?></td>
           <td><?php echo htmlspecialchars($row['description']); ?></td>
           <td><?php echo htmlspecialchars($row['status']); ?></td>
           <td><?php echo htmlspecialchars($row['created_at']); ?></td>
           <td><?php echo htmlspecialchars($row['created_by']); ?></td>
           <td><?php echo htmlspecialchars($row['updated_at']); ?></td>
           <td><?php echo htmlspecialchars($row['updated_by']); ?></td>
-          <?php if ($status === "Archived") echo "<td>" . htmlspecialchars($row['deleted_at']) . "</td>"; ?>
-          <?php if ($status === "Archived") echo "<td>" . htmlspecialchars($row['deleted_by']) . "</td>"; ?>
-          <td>
-            <a class="btn btn-warning" title="Click to Edit" onclick="updateDepartment(<?php echo md5(htmlspecialchars($row['id'])) ?>)"> <i class="fa-solid fa-user-pen"></i></a> 
-            <a class="btn btn-danger" onclick="deleteDepartment(<?php echo md5(htmlspecialchars($row['id'])) ?>)"><i class="fa-solid fa-user-times"></i></a> 
-          </td>
+          <?php //if ($status === "Archived") echo "<td>" . htmlspecialchars($row['deleted_at']) . "</td>"; ?>
+          <?php //if ($status === "Archived") echo "<td>" . htmlspecialchars($row['deleted_by']) . "</td>"; ?>
         </tr>
       <?php endforeach; ?>
     <?php else: ?>
