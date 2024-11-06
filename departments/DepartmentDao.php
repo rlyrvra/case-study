@@ -252,6 +252,53 @@ class DepartmentDao
     public function update(Department $department, int $userId): ActionResult
     {
         $query = '
+            UPDATE departments
+            SET
+                name               = :name              ,
+                department_head_id = :department_head_id,
+                description        = :description       ,
+                status             = :status            ,
+                updated_by         = :updated_by
+            WHERE
+                id = :department_id
+        ';
+
+        try {
+            $this->pdo->beginTransaction();
+
+            $statement = $this->pdo->prepare($query);
+
+            $statement->bindValue(':hashed_id'         , md5($department->getId())         , Helper::getPdoParameterType($department->getName()            ));
+            $statement->bindValue(':name'              , $department->getName()            , Helper::getPdoParameterType($department->getName()            ));
+            $statement->bindValue(':department_head_id', $department->getDepartmentHeadId(), Helper::getPdoParameterType($department->getDepartmentHeadId()));
+            $statement->bindValue(':description'       , $department->getDescription()     , Helper::getPdoParameterType($department->getDescription()     ));
+            $statement->bindValue(':status'            , $department->getStatus()          , Helper::getPdoParameterType($department->getStatus()          ));
+            $statement->bindValue(':updated_by'        , $userId                           , Helper::getPdoParameterType($userId                           ));
+            $statement->bindValue(':department_id'     , $department->getId()              , Helper::getPdoParameterType($department->getId()              ));
+
+            $statement->execute();
+
+            $this->pdo->commit();
+
+            return ActionResult::SUCCESS;
+
+        } catch (PDOException $exception) {
+            $this->pdo->rollBack();
+
+            error_log('Database Error: An error occurred while updating the department. ' .
+                      'Exception: ' . $exception->getMessage());
+
+            if ( (int) $exception->getCode() === ErrorCode::DUPLICATE_ENTRY->value) {
+                return ActionResult::DUPLICATE_ENTRY_ERROR;
+            }
+
+            return ActionResult::FAILURE;
+        }
+    }
+
+    public function updateThruHash(Department $department, int $userId, string $hashed_id): ActionResult
+    {
+        $query = '
             UPDATE departments AS department 
             JOIN (
             SELECT 
@@ -275,13 +322,12 @@ class DepartmentDao
 
             $statement = $this->pdo->prepare($query);
 
-            $statement->bindValue(':hashed_id'         , md5($department->getId())         , Helper::getPdoParameterType($department->getName()            ));
+            $statement->bindValue(':hashed_id'         , $hashed_id                        , Helper::getPdoParameterType($department->getName()            ));
             $statement->bindValue(':name'              , $department->getName()            , Helper::getPdoParameterType($department->getName()            ));
             $statement->bindValue(':department_head_id', $department->getDepartmentHeadId(), Helper::getPdoParameterType($department->getDepartmentHeadId()));
             $statement->bindValue(':description'       , $department->getDescription()     , Helper::getPdoParameterType($department->getDescription()     ));
             $statement->bindValue(':status'            , $department->getStatus()          , Helper::getPdoParameterType($department->getStatus()          ));
             $statement->bindValue(':updated_by'        , $userId                           , Helper::getPdoParameterType($userId                           ));
-            $statement->bindValue(':department_id'     , $department->getId()              , Helper::getPdoParameterType($department->getId()              ));
 
             $statement->execute();
 

@@ -114,6 +114,9 @@ try {
             $name = $departmentData['name'] ?? '';
             $departmentHeadId = $departmentData['departmentHeadId'] ?? null;
             $departmentId = $departmentData['departmentId'] ?? null;
+            $departmentDescription = $departmentData['departmentDescription'] ?? null;
+            $departmentStatus = $departmentData['departmentStatus'] ?? null;
+            $hashed_id = $departmentData['md5_id'] ?? null;
             // $newDepartment = new Department(
             //     id: null,
             //     name: $name,
@@ -122,19 +125,19 @@ try {
             //     status: "Active"
             // );
             $updatedDepartment = new Department(
-                id: 36,
-                name: "IT Department",
-                departmentHeadId: 2,
-                description: "Updated description for IT Department",
-                status: "Active"
+                id: null,
+                name: $name,
+                departmentHeadId: $departmentHeadId,
+                description: $departmentDescription,
+                status: $departmentStatus
             );
 
-            $updateResult = $departmentDao->update($updatedDepartment, $userId);
+            $updateResult = $departmentDao->updateThruHash($updatedDepartment, $userId, $md5_id);
 
-            if ($result) {
-                echo "Department created successfully!";
+            if ($updateResult) {
+                echo "Department updated successfully!";
             } else {
-                echo "Failed to create department. Please try again.";
+                echo "Failed to update department. Please try again.";
             }
         } else {
             echo "Invalid department data.";

@@ -40,7 +40,7 @@
           <?php if ($status === "Archived") echo "<td>" . htmlspecialchars($row['deleted_by']) . "</td>"; ?>
           <td>
             <a class="btn btn-warning" title="Click to Edit" onclick="updateDepartment(<?php echo md5(htmlspecialchars($row['id'])) ?>)"> <i class="fa-solid fa-user-pen"></i></a> 
-            <a class="btn btn-danger" onclick="deleteDepartment(<?php echo md5(htmlspecialchars($row['id'])) ?>)"><i class="fa-solid fa-user-times"></i></a> 
+            <a class="btn btn-danger" title="Click to Delete" onclick="deleteDepartment(<?php echo md5(htmlspecialchars($row['id'])) ?>)"><i class="fa-solid fa-user-times"></i></a> 
           </td>
         </tr>
       <?php endforeach; ?>
