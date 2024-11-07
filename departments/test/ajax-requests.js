@@ -1,4 +1,5 @@
 function fetchAllDepartments(page = 1) {
+    console.log(page);
     $.ajax({
         url: 'apiTest.php',
         method: 'POST',
@@ -16,11 +17,11 @@ function fetchAllDepartments(page = 1) {
     });
 }
 
-$(document).on('click', '.page-link', function(e) {
-    e.preventDefault();
-    const page = $(this).data('page');
-    fetchAllDepartments(page);
-});
+// $(document).on('click', '.page-link', function(e) {
+//     e.preventDefault();
+//     const page = $(this).data('page');
+//     fetchAllDepartments(page);
+// });
 
 function createDepartment() {
     const departmentName = document.getElementById('departmentName').value;

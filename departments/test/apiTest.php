@@ -63,7 +63,9 @@ try {
         $dateFilterColumn = $_POST['filter_date_column'];
         $dateStart = isset($_POST['filter_startDate']) && $dateFilterColumn !== "none" ? $_POST['filter_startDate'] : 0;
         $dateEnd = isset($_POST['filter_endDate']) && $dateFilterColumn !== "none" ? $_POST['filter_endDate'] : 0;
-        $offset = 0;
+        $page = isset($_POST['page']) ? (int)$_POST['page'] : 1;
+        $limit = isset($_POST['numberEntries']) ? $_POST['numberEntries'] : 5;
+        $offset = ($page - 1) * $limit;
         // test data
         
         $filterCriteria = [];
@@ -98,7 +100,7 @@ try {
                 "direction" => $_POST['sort_order']
             ]
         ];
-        $data = $departmentDao->fetchAll([], $filterCriteria, $sortCriteria, $_POST['numberEntries'], $offset);
+        $data = $departmentDao->fetchAll([], $filterCriteria, $sortCriteria, $limit, $offset);
         $departments = $data["result_set"];
         $totalDepartments = $data["total_row_count"];
         $totalPages = ceil($totalDepartments / $_POST['numberEntries']);
@@ -108,9 +110,28 @@ try {
     }
 
 
+    if($action == 'updateClick'){
+        $hashed_id = $_POST['md5_id'] ?? null;
+        echo $hashed_id;
+        $filterCriteria = [
+            [
+                "column" => "MD5(department.id)",
+                "operator" => "=",
+                "value" => $hashed_id
+            ],
+        ];
+        $data = $departmentDao->fetchAll([], $filterCriteria, []);
+        $departments = $data["result_set"];
+        
+
+        include __DIR__ . '/updateOverlay.php';
+        return;
+    }
+
     if($action == 'update'){
         $departmentData = $_POST['department'] ?? null;
         if ($departmentData) {
+            print_r($departmentData);
             $name = $departmentData['name'] ?? '';
             $departmentHeadId = $departmentData['departmentHeadId'] ?? null;
             $departmentId = $departmentData['departmentId'] ?? null;
@@ -132,7 +153,7 @@ try {
                 status: $departmentStatus
             );
 
-            $updateResult = $departmentDao->updateThruHash($updatedDepartment, $userId, $md5_id);
+            $updateResult = $departmentDao->updateThruHash($updatedDepartment, $userId, $hashed_id);
 
             if ($updateResult) {
                 echo "Department updated successfully!";
@@ -145,6 +166,19 @@ try {
 
         
         
+        return;
+    }
+
+
+    if($action == 'delete'){
+        $hashed_id = $_POST['md5_id'] ?? null;
+        $deleteResult = $departmentDao->softDeleteThruHash($hashed_id, $userId);
+
+        if ($updateResult) {
+            echo "Department deleted successfully!";
+        } else {
+            echo "Failed to delete department. Please try again.";
+        }
         return;
     }
 

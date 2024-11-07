@@ -249,6 +249,7 @@ class DepartmentDao
         }
     }
 
+
     public function update(Department $department, int $userId): ActionResult
     {
         $query = '
@@ -299,22 +300,15 @@ class DepartmentDao
     public function updateThruHash(Department $department, int $userId, string $hashed_id): ActionResult
     {
         $query = '
-            UPDATE departments AS department 
-            JOIN (
-            SELECT 
-                id 
-            FROM 
-                departments 
-            WHERE 
-                MD5(id) = :hashed_id                    ) AS subquery
-            ON
-                department.id = subquery.id
+            UPDATE departments AS department
             SET
                 department.name               = :name              ,
                 department.department_head_id = :department_head_id,
                 department.description        = :description       ,
                 department.status             = :status            ,
                 department.updated_by         = :updated_by
+            WHERE 
+                MD5(id) = :hashed_id                    
         ';
 
         try {
@@ -373,6 +367,43 @@ class DepartmentDao
 
             $statement->bindValue(':deleted_by'   , $userId      , Helper::getPdoParameterType($userId      ));
             $statement->bindValue(':department_id', $departmentId, Helper::getPdoParameterType($departmentId));
+
+            $statement->execute();
+
+            $this->pdo->commit();
+
+            return ActionResult::SUCCESS;
+
+        } catch (PDOException $exception) {
+            $this->pdo->rollBack();
+
+            error_log('Database Error: An error occurred while deleting the department. ' .
+                      'Exception: ' . $exception->getMessage());
+
+            return ActionResult::FAILURE;
+        }
+    }
+
+
+    public function softDeleteThruHash(string $hashed_id, int $userId): ActionResult
+    {
+        $query = '
+            UPDATE departments AS department
+            SET
+                department.status     = "Archived"       ,
+                department.deleted_at = CURRENT_TIMESTAMP,
+                department.deleted_by = :deleted_by
+            WHERE 
+                MD5(department.id) = :hashed_id
+        ';
+
+        try {
+            $this->pdo->beginTransaction();
+
+            $statement = $this->pdo->prepare($query);
+
+            $statement->bindValue(':deleted_by'   , $userId      , Helper::getPdoParameterType($userId      ));
+            $statement->bindValue(':hashed_id'    , $hashed_id   , Helper::getPdoParameterType($hashed_id   ));
 
             $statement->execute();
 

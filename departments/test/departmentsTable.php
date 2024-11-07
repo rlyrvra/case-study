@@ -18,9 +18,9 @@
       <th>Created By</th>
       <th>Updated At</th>
       <th>Updated By</th>
-      <?php if ($status === "Archived") echo "<th>Deleted At</th>"; ?>
-      <?php if ($status === "Archived") echo "<th>Deleted By</th>"; ?>
-      <th>Action</th>
+      <?php if (isset($status) && $status === 'Archived') echo "<th>Deleted At</th>"; ?>
+      <?php if (isset($status) && $status === 'Archived') echo "<th>Deleted By</th>"; ?>
+      <?php if (!isset($status) || $status !== 'Archived') echo "<th>Action</th>"; ?> 
     </tr>
   </thead>
   <tbody>
@@ -36,12 +36,18 @@
           <td><?php echo htmlspecialchars($row['created_by']); ?></td>
           <td><?php echo htmlspecialchars($row['updated_at']); ?></td>
           <td><?php echo htmlspecialchars($row['updated_by']); ?></td>
-          <?php if ($status === "Archived") echo "<td>" . htmlspecialchars($row['deleted_at']) . "</td>"; ?>
-          <?php if ($status === "Archived") echo "<td>" . htmlspecialchars($row['deleted_by']) . "</td>"; ?>
-          <td>
-            <a class="btn btn-warning" title="Click to Edit" onclick="updateDepartment(<?php echo md5(htmlspecialchars($row['id'])) ?>)"> <i class="fa-solid fa-user-pen"></i></a> 
-            <a class="btn btn-danger" title="Click to Delete" onclick="deleteDepartment(<?php echo md5(htmlspecialchars($row['id'])) ?>)"><i class="fa-solid fa-user-times"></i></a> 
-          </td>
+          <?php if (isset($status) && $status === 'Archived') echo "<td>" . htmlspecialchars($row['deleted_at']) . "</td>"; ?>
+          <?php if (isset($status) && $status === 'Archived') echo "<td>" . htmlspecialchars($row['deleted_by']) . "</td>"; ?>
+          <?php if (!isset($status) || $status !== 'Archived') echo
+            '<td>
+              <a class="btn btn-warning" title="Click to Edit" onclick="updateDepartmentClick(\'' . md5(htmlspecialchars($row['id'])) . '\')"> 
+                <i class="fa-solid fa-user-pen"></i>
+              </a> 
+              <a class="btn btn-danger" title="Click to Delete" onclick="deleteDepartment(\'' . md5(htmlspecialchars($row['id'])) . '\')">
+                <i class="fa-solid fa-user-times"></i>
+              </a> 
+            </td>';
+          ?>
         </tr>
       <?php endforeach; ?>
     <?php else: ?>
@@ -53,24 +59,24 @@
 </table>
 
 <!-- Pagination Block (Placed after the table) -->
-<div class="container mt-5">
-  <nav aria-label="Page navigation example">
+<div class="container mt-5" id="pagination">
+  <nav aria-label="Page navigation example" class="d-flex justify-content-center">
     <ul class="pagination">
       <!-- Previous Button -->
       <li class="page-item <?= $page <= 1 ? 'disabled' : '' ?>">
-        <a class="page-link" href="?page=<?= max(1, $page - 1) ?>" aria-label="Previous">
+        <a class="page-link" onclick="fetchAllSort('prev')" aria-label="Previous">
           <span aria-hidden="true">&laquo;</span>
         </a>
       </li>
       <?php for ($i = 1; $i <= $totalPages; $i++): ?>
         <!-- Page Numbers -->
         <li class="page-item <?= $i === $page ? 'active' : '' ?>">
-          <a class="page-link" onclick="fetchAllSort(<?php echo $page ?>)" ><?= $i ?></a>
+          <a class="page-link" onclick="fetchAllSort(<?php echo $i ?>)" ><?= $i ?></a>
         </li>
       <?php endfor; ?>
       <!-- Next Button -->
       <li class="page-item <?= $page >= $totalPages ? 'disabled' : '' ?>">
-        <a class="page-link" href="?page=<?= min($totalPages, $page + 1) ?>" aria-label="Next">
+        <a class="page-link" onclick="fetchAllSort('next')" aria-label="Next">
           <span aria-hidden="true">&raquo;</span>
         </a>
       </li>
