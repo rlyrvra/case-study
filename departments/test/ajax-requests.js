@@ -24,8 +24,8 @@ function fetchAllDepartments(page = 1) {
 // });
 
 function createDepartment() {
-    const departmentName = document.getElementById('departmentName').value;
-    const departmentHeadId = document.getElementById('departmentHeadId').value;
+    const departmentName = document.getElementById('createDepartmentName').value;
+    const departmentHeadId = document.getElementById('createDepartmentHeadId').value;
 
     const departmentData = {
         name: departmentName,
@@ -40,7 +40,7 @@ function createDepartment() {
             department: departmentData
         },
         success(response) {
-            fetchAllDepartments();
+            fetchAllSort();
             document.getElementById('createDepartmentForm').reset();
         },
         error(xhr, status, error) {
@@ -65,22 +65,4 @@ function updateDepartment(departmentData) {
         }
     });
 }
-
-function deleteDepartment(departmentId) {
-    $.ajax({
-        url: 'apiTest.php',
-        method: 'POST',
-        data: {
-            action: 'delete',
-            department_id: departmentId
-        },
-        success(response) {
-            fetchAllDepartments();
-        },
-        error(xhr, status, error) {
-            console.error("Error deleting department:", error);
-        }
-    });
-}
-
 

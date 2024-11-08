@@ -33,27 +33,27 @@
 <div class="form-container" id="formContainer" style="display: none;">
     <form action="#" onsubmit="event.preventDefault();">
         <div class="mb-3">
+            <label for="jobTitleName" class="form-label">Job Title</label>
+            <input type="text" class="form-control" id="jobTitleName" name="name" required value="">
+        </div>
+        <div class="mb-3">
             <label for="departmentName" class="form-label">Department Name</label>
-            <input type="text" class="form-control" id="departmentName" name="name" required value="">
+            <select class="form-select" id="jobTitleDepartmentName" name="jobTitleDepartmentName" placeholder="Enter Department" require></select>
         </div>
         <div class="mb-3">
-            <label for="departmentHeadId" class="form-label">Department Head ID</label>
-            <input type="number" class="form-control" id="departmentHeadId" name="departmentHeadId" value="">
+            <label for="description" class="form-label">Job Description</label>
+            <textarea class="form-control" id="jobTitledescription" name="jobTitleDescription"></textarea>
         </div>
         <div class="mb-3">
-            <label for="departmentDescription" class="form-label">Department Description</label>
-            <textarea class="form-control" id="departmentDescription" name="departmentDescription"></textarea>
-        </div>
-        <div class="mb-3">
-            <label for="departmentStatus" class="form-label">Department Status</label>
-            <select class="form-select" id="departmentStatus" name="departmentStatus" value="">
+            <label for="status" class="form-label">Job Title Status</label>
+            <select class="form-select" id="jobTitlestatus" name="status" value="">
                 <option value="Active">Active</option>
                 <option value="Inactive">Inactive</option>
                 <option value="Archived">Archived</option>
             </select>
         </div>
         <div class="d-flex justify-content-between">
-            <button type="submit" class="btn btn-success" onclick="updateDepartment('<?php echo $hashed_id; ?>')">Update</button>
+            <button type="submit" class="btn btn-success" onclick="updatejobTitle('<?php echo $hashed_id; ?>')">Update</button>
             <button type="button" class="btn btn-secondary" id="cancelBtn" onclick="hideUpdateOverlay()">Cancel</button>
         </div>
     </form>

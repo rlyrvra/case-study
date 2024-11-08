@@ -1,15 +1,127 @@
 <?php require_once __DIR__ . '/../../includes/header.php'; ?>
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- font-awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<!-- Bootstrap JS (optional for dropdowns, etc.) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Select2 JS -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+<script>
+//select2 js script
+// $(document).ready(function() {
+//     $('#sortBy').select2({
+//         placeholder: 'Select an option',
+//         allowClear: true
+//     });
+// });
+</script>
+<!-- Scripts -->
+<script src="ajax-requests.js?v=1.3"></script>
+<title>Job Title Management</title>
 
 <body>
     <div class="container mt-5">
     <h2>Add Job Title</h2>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.43/moment-timezone-with-data.min.js"></script>
-    <script src="ajax-requests.js"></script>
+
+    <div id="updateOverlay">
+        
+    </div>
+
     <div class="container mt-5">
+        <h4 class="mb-4">Sort Criteria:</h4>
+        <form onsubmit="event.preventDefault();" class="mb-4">
+            <!-- Row for Entries, Sort By, Order By -->
+            <fieldset class="row mb-3">
+                <!-- Number of Entries -->
+                <div class="col-md-4">
+                    <label for="entries" class="form-label">Number of Entries</label>
+                    <select id="entries" class="form-select">
+                        <option value="2" selected>2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </div>
+
+                <!-- Sort By -->
+                <div class="col-md-4">
+                    <label for="sortBy" class="form-label">Sort By</label>
+                    <select id="sortBy" class="form-select">
+                        <option value="title">Name</option>
+                        <option value="created_at" selected>Created At</option>
+                        <option value="updated_at">Updated At</option>
+                    </select>
+                </div>
+
+                <!-- Order By -->
+                <div class="col-md-4">
+                    <label for="orderBy" class="form-label">Order By</label>
+                    <select id="orderBy" class="form-select">
+                        <option value="ASC" selected>Ascending</option>
+                        <option value="DESC">Descending</option>
+                    </select>
+                </div>
+            </fieldset>
+
+            <!-- Filter By Section -->
+            <fieldset class="row mb-3">
+                <legend>Filter Criteria:</legend>
+
+                <!-- Status -->
+                <div class="col-md-4">
+                    <label for="status" class="form-label">Status</label>
+                    <select id="status" class="form-select">
+                        <option value="Active" selected>Active</option>
+                        <option value="Inactive">Inactive</option>
+                        <option value="Archived">Archived</option>
+                    </select>
+                </div>
+
+                <!-- Search At: -->
+                <div class="col-md-4">
+                    <label class="form-label">Search At:</label>
+                    <div class="row">
+                        <div class="col">
+                        <select id="searchColumn" class="form-select">
+                            <option value="title" selected>Name</option>
+                            <option value="description">Description</option>
+                        </select>
+                        </div>
+                        <div class="col">
+                            <input type="text" id="searchText" class="form-control" placeholder="Enter text">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Date Modified -->
+                <div class="col-md-4">
+                    <label class="form-label">At Date:</label>
+                    <div class="row g-1">
+                        <div class="col-4">
+                            <select id="dateColumn" class="form-select">
+                                <option value="none">None</option>
+                                <option value="created_at">Date Created</option>
+                                <option value="updated_at">Date Modified</option>
+                            </select>
+                        </div>
+                        <div class="col-4">
+                            <input type="date" id="dateStart" class="form-control" placeholder="Start Date">
+                        </div>
+                        <div class="col-4">
+                            <input type="date" id="dateEnd" class="form-control" placeholder="End Date">
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+
+            <!-- Submit Button -->
+            <button onclick="fetchAllSort()" class="btn btn-primary">Apply Filters</button>
+        </form>
         <h4 class="mb-4">Job Title Form</h4>
         <form>
             <div class="mb-3">
@@ -21,9 +133,10 @@
                 <input type="text" class="form-control" id="name" name="name" placeholder="Enter Name" require>
             </div>
             <div class="mb-3">
-                <label for="departmentId" class="form-label">Department Id</label>
-                <input type="number" class="form-control" id="departmentId" name="department_id" placeholder="Enter Department ID" require>
+                <label for="departmentId" class="form-label">Department Name</label>
+                <select class="form-select" id="departmentName" name="department_name" placeholder="Enter Department ID" require></select>
             </div>
+            
             <div class="mb-3">
                 <label for="description" class="form-label">Description</label>
                 <textarea class="form-control" id="description" name="description" rows="3" placeholder="Enter Job Description"></textarea>
@@ -36,14 +149,13 @@
                 </select>
             </div>
             <input type="hidden" name="action" value="getValues">
-            <button type="submit" class="btn btn-primary" id="seePreview">Data Preview</button>
+            
         </form>
-        <form>
-            <button type="submit" class="btn btn-primary" id="addValues">Add To Table</button>
-        </form>
-        <form onsubmit="event.preventDefault()">
+        <div class="mb-5">
             <button type="submit" class="btn btn-primary" id="loadTable" onclick="fetchAllJobTitles()">Load Table</button>
-        </form>
+            <button type="submit" class="btn btn-primary" id="seePreview">Data Preview</button>
+            <button type="submit" class="btn btn-primary" id="addValues">Add To Table</button>
+        </div>
 
         <div class="mb-3" id="job_title_preview">
 
@@ -55,4 +167,8 @@
 
         </div>
     </div>
+    <?php include_once __DIR__ . '/fetchDepartmentsInJobTitle.php'; ?>
+    <script>
+        populateDepartmentSelect(document.getElementById("departmentName"));
+    </script>
 </body>

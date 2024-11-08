@@ -54,11 +54,12 @@ try {
             echo "Invalid department data.";
         }
         return;
-    } 
+    }
 
 
     if($action === 'fetchAllSort'){
         $status = $_POST['filter_status'];
+        $searchAt = isset($_POST['filter_searchAt']) & $_POST['filter_searchAt'] !== "none" ? $_POST['filter_searchAt'] : null;
         $searchFilter = $_POST['filter_search'];
         $dateFilterColumn = $_POST['filter_date_column'];
         $dateStart = isset($_POST['filter_startDate']) && $dateFilterColumn !== "none" ? $_POST['filter_startDate'] : 0;
@@ -79,7 +80,7 @@ try {
         }
         if(!empty($searchFilter)){
             $filterCriteria[] = [
-                "column" => "department.name",
+                "column" => "department." . $searchAt, 
                 "operator" => "LIKE",
                 "value" => "%$searchFilter%"
             ];
@@ -110,19 +111,19 @@ try {
     }
 
 
-    if($action == 'updateClick'){
+    if($action == 'updateDepartmentsClick'){
         $hashed_id = $_POST['md5_id'] ?? null;
+        // $filterCriteria = [
+        //     [
+        //         "column" => "MD5(department.id)",
+        //         "operator" => "=",
+        //         "value" => $hashed_id
+        //     ],
+        // ];
+        // $data = $departmentDao->fetchAll([], $filterCriteria, []);
+        // $departments = $data["result_set"];
+
         echo $hashed_id;
-        $filterCriteria = [
-            [
-                "column" => "MD5(department.id)",
-                "operator" => "=",
-                "value" => $hashed_id
-            ],
-        ];
-        $data = $departmentDao->fetchAll([], $filterCriteria, []);
-        $departments = $data["result_set"];
-        
 
         include __DIR__ . '/updateOverlay.php';
         return;
@@ -138,13 +139,8 @@ try {
             $departmentDescription = $departmentData['departmentDescription'] ?? null;
             $departmentStatus = $departmentData['departmentStatus'] ?? null;
             $hashed_id = $departmentData['md5_id'] ?? null;
-            // $newDepartment = new Department(
-            //     id: null,
-            //     name: $name,
-            //     departmentHeadId: $departmentHeadId,
-            //     description: null,
-            //     status: "Active"
-            // );
+
+
             $updatedDepartment = new Department(
                 id: null,
                 name: $name,
@@ -174,7 +170,7 @@ try {
         $hashed_id = $_POST['md5_id'] ?? null;
         $deleteResult = $departmentDao->softDeleteThruHash($hashed_id, $userId);
 
-        if ($updateResult) {
+        if ($deleteResult) {
             echo "Department deleted successfully!";
         } else {
             echo "Failed to delete department. Please try again.";

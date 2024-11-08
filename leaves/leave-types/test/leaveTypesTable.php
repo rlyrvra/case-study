@@ -9,30 +9,32 @@
 <table border="1" class="table" id="myTable">
   <thead>
     <tr>
-      <th>Job Title</th>
-      <th>Department</th>
-      <th>Description</th>
-      <th>Status</th>
+      <th>name</th>
+      <th>maximum_number_of_days</th>
+      <th>is_paid</th>
+      <th>description</th>
+      <th>status</th>
       <th>Created At</th>
       <!-- <th>Created By</th> -->
       <th>Updated At</th>
       <!-- <th>Updated By</th> -->
       <?php if (isset($status) && $status === 'Archived') echo "<th>Deleted At</th>"; ?>
-      <?php if (isset($status) && $status === 'Archived') echo "<th>Deleted By</th>"; ?>
+      <?php //if (isset($status) && $status === 'Archived') echo "<th>Deleted By</th>"; ?>
       <?php if (!isset($status) || $status !== 'Archived') echo "<th>Action</th>"; ?> 
     </tr>
   </thead>
   <tbody>
-    <?php if (!empty($jobTitles)): ?>
-      <?php foreach ($jobTitles as $row): ?>
+    <?php if (!empty($leaveTypes)): ?>
+      <?php foreach ($leaveTypes as $row): ?>
         <tr data-id="<?php echo md5(htmlspecialchars($row['id'])); ?>" 
-            data-name="<?php echo htmlspecialchars($row['title']); ?>" 
-            data-department-id="<?php echo htmlspecialchars($row['department_id']); ?>" 
-            data-job-title-name="<?php echo htmlspecialchars($row['department_name']); ?>" 
+            data-name="<?php echo htmlspecialchars($row['name']); ?>" 
+            data-maximum-number-of-days="<?php echo htmlspecialchars($row['maximum_number_of_days']); ?>"
+            data-is-paid="<?php echo htmlspecialchars($row['is_paid']); ?>" 
             data-description="<?php echo htmlspecialchars($row['description']); ?>" 
             data-status="<?php echo htmlspecialchars($row['status']); ?>">
-          <td><?php echo htmlspecialchars($row['title']); ?></td>
-          <td><?php echo htmlspecialchars($row['department_name']); ?></td>
+          <td><?php echo htmlspecialchars($row['name']); ?></td>
+          <td><?php echo htmlspecialchars($row['maximum_number_of_days']); ?></td>
+          <td><?php echo htmlspecialchars($row['is_paid']); ?></td>
           <td><?php echo htmlspecialchars($row['description']); ?></td>
           <td><?php echo htmlspecialchars($row['status']); ?></td>
           <td><?php echo htmlspecialchars($row['created_at']); ?></td>
@@ -40,13 +42,13 @@
           <td><?php echo htmlspecialchars($row['updated_at']); ?></td>
           <!-- <td><?php //echo htmlspecialchars($row['updated_by']); ?></td> -->
           <?php if (isset($status) && $status === 'Archived') echo "<td>" . htmlspecialchars($row['deleted_at']) . "</td>"; ?>
-          <?php if (isset($status) && $status === 'Archived') echo "<td>" . htmlspecialchars($row['deleted_by']) . "</td>"; ?>
+          <?php //if (isset($status) && $status === 'Archived') echo "<td>" . htmlspecialchars($row['deleted_by']) . "</td>"; ?>
           <?php if (!isset($status) || $status !== 'Archived') echo
             '<td>
-              <a class="btn btn-warning" title="Click to Edit" onclick="updateJobTitleClick(this)"> 
+              <a class="btn btn-warning" title="Click to Edit" onclick="updateLeaveTypeClick(this)" data-bs-toggle="modal" data-bs-target="#leaveTypeUpdateModal"> 
                 <i class="fa-solid fa-user-pen"></i>
               </a> 
-              <a class="btn btn-danger" title="Click to Delete" onclick="deleteJobTitle(this)">
+              <a class="btn btn-danger" title="Click to Delete" onclick="confirmDeleteLeaveType(this)">
                 <i class="fa-solid fa-user-times"></i>
               </a> 
             </td>';
