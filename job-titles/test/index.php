@@ -137,7 +137,6 @@
             <div class="mb-3">
                 <label for="createJobTitle_department_name" class="form-label">Department Name</label>
                 <select class="form-select" id="createJobTitle_department_name" name="createJobTitle_department_name" placeholder="Enter Department" require>
-
                 </select>
             </div>
             <div class="mb-3">

@@ -7,7 +7,7 @@ require_once __DIR__ . '/../../includes/Helper.php';
 require_once __DIR__ . '/../../includes/enums/ErrorCode.php';
 require_once __DIR__ . '/../../database/database.php';
 
-// Example allowance data; replace this with your database query to fetch allowances
+// Database query to fetch allowances
 $allowanceDao = new AllowanceDao($pdo);
 $selectedColumns = ["id", "name", "amount"];
 $filterCriteria = [
