@@ -90,6 +90,8 @@ class EmployeeAllowanceDao
                     array_flip($columns)
                 );
 
+        $joinClauses = "";
+
         if (array_key_exists("allowance_name"          , $selectedColumns) ||
             array_key_exists("allowance_is_taxable"    , $selectedColumns) ||
             array_key_exists("allowance_frequency"     , $selectedColumns) ||
