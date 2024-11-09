@@ -13,7 +13,7 @@ class LeaveEntitlementDao
         $this->pdo = $pdo;
     }
 
-    public function createOrUpdate(LeaveEntitlement $leaveEntitlement): ActionResult
+    public function create(LeaveEntitlement $leaveEntitlement): ActionResult
     {
         $query = '
             INSERT INTO leave_entitlements (
@@ -31,8 +31,8 @@ class LeaveEntitlementDao
             )
             ON DUPLICATE KEY UPDATE
                 number_of_entitled_days = VALUES(number_of_entitled_days),
-                number_of_days_taken    = VALUES(number_of_days_taken)   ,
-                remaining_days          = VALUES(remaining_days)         ,
+                number_of_days_taken    = VALUES(number_of_days_taken   ),
+                remaining_days          = VALUES(remaining_days         ),
                 updated_at              = CURRENT_TIMESTAMP
         ';
 
@@ -186,7 +186,7 @@ class LeaveEntitlementDao
             SELECT SQL_CALC_FOUND_ROWS
                 " . implode(", ", $selectedColumns) . "
             FROM
-                leave_entitlements
+                leave_entitlements AS leave_entitlement
             {$joinClauses}
             WHERE
                 " . implode(" AND ", $whereClauses) . "
