@@ -11,7 +11,7 @@
     <tr>
       <th>id</th>
       <th>name</th>
-      <th>department_id</th>
+      <th>department_head_id</th>
       <th>description</th>
       <th>status</th>
       <th>Created At</th>
@@ -44,10 +44,10 @@
           <?php //if (isset($status) && $status === 'Archived') echo "<td>" . htmlspecialchars($row['deleted_by']) . "</td>"; ?>
           <?php if (!isset($status) || $status !== 'Archived') echo
             '<td>
-              <a class="btn btn-warning" title="Click to Edit" onclick="updateDepartmentClick(this)"> 
+              <a class="btn btn-warning" title="Click to Edit" onclick="updateDepartmentClick(this)" data-bs-toggle="modal" data-bs-target="#departmentUpdateModal"> 
                 <i class="fa-solid fa-user-pen"></i>
               </a> 
-              <a class="btn btn-danger" title="Click to Delete" onclick="deleteDepartment(this)">
+              <a class="btn btn-danger" title="Click to Delete" onclick="confirmDeleteDepartment(this)">
                 <i class="fa-solid fa-user-times"></i>
               </a> 
             </td>';

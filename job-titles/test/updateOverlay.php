@@ -57,5 +57,4 @@
             <button type="button" class="btn btn-secondary" id="cancelBtn" onclick="hideUpdateOverlay()">Cancel</button>
         </div>
     </form>
-    
 </div>

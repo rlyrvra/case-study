@@ -26,6 +26,10 @@ function getDepartments(){
 <script>
 var departments = getDepartmentValues();
 
+function clearDepartmentSelect(select){
+    select.innerHTML = '';
+}
+
 function getDepartmentValues(){
     const values = <?php 
         $departments = getDepartments();
@@ -36,6 +40,7 @@ function getDepartmentValues(){
 }
 
 function populateDepartmentSelect(select){
+    clearDepartmentSelect(select);
     departments.forEach(department => {
         const option = document.createElement("option");
         option.value = department.id;

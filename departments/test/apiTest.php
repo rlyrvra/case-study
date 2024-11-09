@@ -73,8 +73,8 @@ try {
 
 
     if($action === 'fetchAllSort'){
-        $status = $_POST['filter_status'];
-        $searchAt = isset($_POST['filter_searchAt']) & $_POST['filter_searchAt'] !== "none" ? $_POST['filter_searchAt'] : null;
+        $status = $_POST['filter_status'] && $_POST['filter_status'] ? $_POST['filter_status'] : null;
+        $searchAt = isset($_POST['filter_searchAt']) && $_POST['filter_searchAt'] !== "none" ? $_POST['filter_searchAt'] : null;
         $searchFilter = $_POST['filter_search'];
         $dateFilterColumn = $_POST['filter_date_column'];
         $dateStart = isset($_POST['filter_startDate']) && $dateFilterColumn !== "none" ? $_POST['filter_startDate'] : 0;
@@ -125,24 +125,6 @@ try {
 
     }
 
-
-    if($action == 'updateDepartmentsClick'){
-        $hashed_id = $_POST['md5_id'] ?? null;
-        // $filterCriteria = [
-        //     [
-        //         "column" => "MD5(department.id)",
-        //         "operator" => "=",
-        //         "value" => $hashed_id
-        //     ],
-        // ];
-        // $data = $departmentDao->fetchAll([], $filterCriteria, []);
-        // $departments = $data["result_set"];
-
-        echo $hashed_id;
-
-        include __DIR__ . '/updateOverlay.php';
-        return;
-    }
 
     if($action == 'update'){
         $departmentData = $_POST['department'] ?? null;

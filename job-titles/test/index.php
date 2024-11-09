@@ -7,23 +7,29 @@
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <!-- Bootstrap JS (optional for dropdowns, etc.) -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Sweet Alert -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
 <!-- Select2 JS -->
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 <script>
 //select2 js script
 // $(document).ready(function() {
-//     $('#sortBy').select2({
+//     $('#departmentName').select2({
 //         placeholder: 'Select an option',
 //         allowClear: true
 //     });
 // });
 </script>
 <!-- Scripts -->
-<script src="ajax-requests.js?v=1.3"></script>
+<script src="ajax-requests.js?v=1.4"></script>
 <title>Job Title Management</title>
 
 <body>
+    <?php include_once __DIR__ . '/jobTitleUpdateFormModal.php'; ?>
+    <div id="responseTest"></div>
     <div class="container mt-5">
     <h2>Add Job Title</h2>
     </div>
@@ -62,8 +68,8 @@
                 <div class="col-md-4">
                     <label for="orderBy" class="form-label">Order By</label>
                     <select id="orderBy" class="form-select">
-                        <option value="ASC" selected>Ascending</option>
-                        <option value="DESC">Descending</option>
+                        <option value="ASC">Ascending</option>
+                        <option value="DESC" selected>Descending</option>
                     </select>
                 </div>
             </fieldset>
@@ -119,42 +125,37 @@
                 </div>
             </fieldset>
 
-            <!-- Submit Button -->
+            <!-- Apply Button -->
             <button onclick="fetchAllSort()" class="btn btn-primary">Apply Filters</button>
         </form>
         <h4 class="mb-4">Job Title Form</h4>
-        <form>
+        <form id="create_job_title_form">
             <div class="mb-3">
-                <label for="id" class="form-label">Current UserID</label>
-                <input type="number" class="form-control" id="userId" name="userId" placeholder="Enter ID">
+                <label for="createJobTitle_title" class="form-label">Title</label>
+                <input type="text" class="form-control" id="createJobTitle_title" name="createJobTitle_title" placeholder="Enter Name" require>
             </div>
             <div class="mb-3">
-                <label for="name" class="form-label">Name</label>
-                <input type="text" class="form-control" id="name" name="name" placeholder="Enter Name" require>
-            </div>
-            <div class="mb-3">
-                <label for="departmentId" class="form-label">Department Name</label>
-                <select class="form-select" id="departmentName" name="department_name" placeholder="Enter Department ID" require></select>
-            </div>
-            
-            <div class="mb-3">
-                <label for="description" class="form-label">Description</label>
-                <textarea class="form-control" id="description" name="description" rows="3" placeholder="Enter Job Description"></textarea>
-            </div>
-            <div class="mb-3">
-                <label for="status" class="form-label">Status</label>
-                <select class="form-select" id="status" name="status">
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
+                <label for="createJobTitle_department_name" class="form-label">Department Name</label>
+                <select class="form-select" id="createJobTitle_department_name" name="createJobTitle_department_name" placeholder="Enter Department" require>
+
                 </select>
             </div>
-            <input type="hidden" name="action" value="getValues">
-            
+            <div class="mb-3">
+                <label for="createJobTitle_description" class="form-label">Description</label>
+                <textarea class="form-select" id="createJobTitle_description" name="createJobTitle_description" rows="3" placeholder="Enter Job Description"></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="createJobTitle_status" class="form-label">Status</label>
+                <select class="form-select" id="createJobTitle_status" name="createJobTitle_status">
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
+                </select>
+            </div>
         </form>
         <div class="mb-5">
-            <button type="submit" class="btn btn-primary" id="loadTable" onclick="fetchAllJobTitles()">Load Table</button>
-            <button type="submit" class="btn btn-primary" id="seePreview">Data Preview</button>
-            <button type="submit" class="btn btn-primary" id="addValues">Add To Table</button>
+            <!-- <button type="submit" class="btn btn-primary" id="loadTable" onclick="fetchAllJobTitles()">Load Table</button> -->
+            <!-- <button type="submit" class="btn btn-primary" id="seePreview">Data Preview</button> -->
+            <button type="submit" class="btn btn-primary" id="btnSubmitJobTitle" onclick="createJobTitle()">Create</button>
         </div>
 
         <div class="mb-3" id="job_title_preview">
@@ -169,6 +170,6 @@
     </div>
     <?php include_once __DIR__ . '/fetchDepartmentsInJobTitle.php'; ?>
     <script>
-        populateDepartmentSelect(document.getElementById("departmentName"));
+        populateDepartmentSelect(document.getElementById("createJobTitle_department_name"));
     </script>
 </body>

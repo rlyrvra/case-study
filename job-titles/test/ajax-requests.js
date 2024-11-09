@@ -71,6 +71,126 @@ function fetchAllSort(page = 1){
     });
 }
 
+function createJobTitle() {
+    const jobTitleName = document.getElementById('createJobTitle_title').value;
+    const jobTitleDepartmentName = document.getElementById('createJobTitle_department_name').value;
+    const jobTitleDescription = document.getElementById('createJobTitle_description').value;
+    const jobTitleStatus = document.getElementById('createJobTitle_status').value;
+
+    console.log(`Job Title Name: ${jobTitleName}, 
+        Job Title Department Name: ${jobTitleDepartmentName}, 
+        Job Title Description: ${jobTitleDescription}, 
+        Job Title Status: ${jobTitleStatus}`);
+
+    const jobTitleData = {
+        title: jobTitleName,
+        department_id: jobTitleDepartmentName,
+        description: jobTitleDescription,
+        status: jobTitleStatus,
+    };
+
+    $.ajax({
+        url: 'apiTest.php',
+        method: 'POST',
+        data: {
+            action: 'create',
+            job_title: jobTitleData
+        },
+        success(response) {
+            fetchAllSort();
+            document.getElementById('create_job_title_form').reset();
+        },
+        error(xhr, status, error) {
+            console.error("Error creating department:", error);
+        }
+    });
+}
+
+function updateJobTitle(button){
+    var token = button.getAttribute('data-token');;
+    const jobTitleName = document.getElementById('updateJobTitleName').value;
+    const jobTitleDepartmentName = document.getElementById('updateJobTitleDepartmentName').value;
+    const jobTitleDescription = document.getElementById('updateJobTitledescription').value;
+    const jobTitleStatus = document.getElementById('updateJobTitleStatus').value;
+
+    console.log(`MD5 ID: ${token}, 
+        Job Title Name: ${jobTitleName}, 
+        Job Title Department Name: ${jobTitleDepartmentName}, 
+        Job Title Description: ${jobTitleDescription}, 
+        Job Title Status: ${jobTitleStatus}`);
+    
+    
+    $.ajax({
+        url: 'apiTest.php',
+        type: 'POST',
+        data: {
+            action: 'update',
+            job_title: {
+                md5_id: token,
+                title: jobTitleName,
+                department_id: jobTitleDepartmentName,
+                description: jobTitleDescription,
+                status: jobTitleStatus,
+            }
+        },
+        success: function(response) {
+            $('#responseTest').html(response);
+            showSuccessAlert();
+            fetchAllSort();
+            
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log("AJAX Error: " + textStatus + ": " + errorThrown);
+        }
+    });
+    
+}
+
+function deleteJobTitle(button){
+    const row = button.closest('tr');  // Get the closest row
+    const jobTitleData = {
+        token: row.getAttribute('data-id'),
+    };
+    
+    $.ajax({
+        url: 'apiTest.php',
+        type: 'POST',
+        data: {
+            action: 'delete',
+            md5_id: jobTitleData.token
+        },
+        success: function(response) {
+            $('#responseTest').html(response);
+            fetchAllSort();
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log("AJAX Error: " + textStatus + ": " + errorThrown);
+        }
+    });
+    
+}
+
+function confirmDeleteJobTitle(button) {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "Do you want to delete this department?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+        deleteJobTitle(button);
+        Swal.fire(
+            'Deleted!',
+            'The department has been deleted.',
+            'success'
+        );
+        }
+    });
+}
+
 function getPage(page){
     let output;
     if(page === 'next'){
@@ -102,10 +222,6 @@ function getMaxPageValue() {
 
 
 function updateJobTitleClick(button){
-    let updateOverlay = $("#updateOverlay");
-    updateOverlay.innerHTML = '';
-
-
     const row = button.closest('tr');  // Get the closest row
     const jobTitleData = {
         token: row.getAttribute('data-id'),
@@ -115,45 +231,34 @@ function updateJobTitleClick(button){
         description: row.getAttribute('data-description'),
         status: row.getAttribute('data-status')
     };
-
     console.log(jobTitleData);
-    $.ajax({
-        url: 'apiTest.php',
-        type: 'POST',
-        data: {
-            action: 'updateJobTitleClick',
-            md5_id: jobTitleData.token
-        },
-        success: function(response) {
-            updateOverlay.html(response);
+    const txtJobTitleName = $("#updateJobTitleName");
+    const selectDepartmentName = document.getElementById("updateJobTitleDepartmentName");
+            
+    const txtDescription = $("#updateJobTitledescription");
+    const txtStatus = $("#updateJobTitleStatus");
+    const btnUpdateJobTitle = document.getElementById('updateJobTitleBtn');
 
-            const formContainer = document.getElementById('formContainer');
-            const overlay = document.getElementById('overlay');
-            
-            formContainer.style.display = 'block';
-            overlay.style.display = 'block';
+    txtJobTitleName.val(jobTitleData.title);
+    departments = getDepartmentValues();
+    populateDepartmentSelect(selectDepartmentName);
+    selectDepartmentJobTitle(jobTitleData.departmentId, selectDepartmentName);
+    txtDescription.val(jobTitleData.description);
+    txtStatus.val(jobTitleData.status);
+    btnUpdateJobTitle.setAttribute('data-token', jobTitleData.token);
 
-            const txtJobTitleName = $("#jobTitleName");
-            const selectDepartmentName = document.getElementById("jobTitleDepartmentName");
-            
-            const txtDescription = $("#jobTitledescription");
-            const txtStatus = $("#jobTitlestatus");
+}
 
-            txtJobTitleName.val(jobTitleData.title);
-            departments = getDepartmentValues();
-            populateDepartmentSelect(selectDepartmentName);
-            selectDepartmentJobTitle(jobTitleData.departmentId, selectDepartmentName);
-            txtDescription.val(jobTitleData.description);
-            txtStatus.val(jobTitleData.status);
-            
-            
-            
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            console.log("AJAX Error: " + textStatus + ": " + errorThrown);
-        }
+function showSuccessAlert() {
+    Swal.fire({
+        title: 'Success!',
+        text: 'Updated successfully.',
+        icon: 'success',
+        timer: 2000,
+        confirmButtonText: 'OK'
     });
 }
+
 
 function hideUpdateOverlay(){
     const updateOverlay = $("#updateOverlay");
@@ -188,4 +293,7 @@ function toggleDeletedAtOption() {
     }
 }
 
+document.addEventListener('DOMContentLoaded', function () {
+    fetchAllSort();
+});
 

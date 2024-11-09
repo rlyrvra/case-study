@@ -14,45 +14,19 @@ try {
     $userId = 1;
     $jobTitleDao = new JobTitleDao($pdo);
     $action = $_POST['action'] ?? '';
-    $page = isset($_POST['page']) ? (int)$_POST['page'] : 1;
-    $limit = 5;
-    $offset = ($page - 1) * $limit;
+    
+    
 
     if ($action === 'fetchAll') {
+        $page = isset($_POST['page']) ? (int)$_POST['page'] : 1;
+        $limit = 5;
+        $offset = ($page - 1) * $limit;
         $data = $jobTitleDao->fetchAll([], [], [["column" => "job_title_name", "direction" => "DESC"], ["column" => "id", "direction" => "ASC"]]);
         $jobTitles = $data["result_set"];
         $totalJobTitles = $data["total_row_count"];
         $totalPages = ceil($totalJobTitles / $limit);
         include __DIR__ . '/jobTitlesTable.php';
         return;
-    }
-    
-    if ($action === 'create') {
-        // $job_titleData = $_POST['job_title'] ?? null;
-
-        // if ($job_titleData) {
-        //     $name = $job_titleData['name'] ?? '';
-        //     $job_titleHeadId = $job_titleData['job_titleHeadId'] ?? null;
-
-        //     $newjob_title = new job_title(
-        //         id: null,
-        //         name: $name,
-        //         job_titleHeadId: $job_titleHeadId,
-        //         description: null,
-        //         status: "Active"
-        //     );
-
-        //     $result = $job_titleDao->create($newjob_title, 1);
-
-        //     if ($result) {
-        //         echo "job_title created successfully!";
-        //     } else {
-        //         echo "Failed to create job_title. Please try again.";
-        //     }
-        // } else {
-        //     echo "Invalid job_title data.";
-        // }
-        // return;
     }
 
     if($action === 'fetchAllSort'){
@@ -109,15 +83,88 @@ try {
 
     }
 
-    if($action == 'updateJobTitleClick'){
-        $hashed_id = $_POST['md5_id'] ?? null;
-        
+    if ($action === 'create') {
+        $jobTitleData = $_POST['job_title'] ?? null;
 
-        echo $hashed_id;
-        
-        include __DIR__ . '/updateOverlay.php';
+        if (!$jobTitleData) {
+            echo "Invalid JT data.";
+            return;
+            
+        } 
+
+        $jobTitleTitle = $jobTitleData['title'] ?? '';
+        $jobTitleDepartmentId = $jobTitleData['department_id'] ?? null;
+        $jobTitledescription = $jobTitleData['description'] ?? null;
+        $jobTitleStatus = $jobTitleData['status'] ?? null;
+
+        $newJobTitle = new JobTitle(
+            id: null,
+            title: $jobTitleTitle,
+            departmentId: $jobTitleDepartmentId,
+            description: $jobTitledescription,
+            status: $jobTitleStatus
+        );
+
+        $result = $jobTitleDao->create($newJobTitle, $userId);
+
+        if ($result) {
+            echo "Job Title created successfully!";
+        } else {
+            echo "Failed to JT. Please try again.";
+        }
+
         return;
     }
+
+    if($action == 'update'){
+        
+        $jobTitleData = $_POST['job_title'] ?? null;
+        if (!$jobTitleData) {
+            echo "Invalid job title data.";
+            return;
+        }
+
+        print_r($jobTitleData);
+
+        $hashed_id = $jobTitleData['md5_id'] ?? null;
+        $jobTitleTitle = $jobTitleData['title'] ?? '';
+        $jobTitleDepartmentId = $jobTitleData['department_id'] ?? null;
+        $jobTitledescription = $jobTitleData['description'] ?? null;
+        $jobTitleStatus = $jobTitleData['status'] ?? null;
+
+
+        $updateJobTitle = new JobTitle(
+            id: null,
+            title: $jobTitleTitle,
+            departmentId: $jobTitleDepartmentId,
+            description: $jobTitledescription,
+            status: $jobTitleStatus
+        );
+
+        $updateResult = $jobTitleDao->updateThruHash($updateJobTitle, $userId, $hashed_id);
+
+        if ($updateResult) {
+            echo "JT updated successfully!";
+        } else {
+            echo "Failed to JT. Please try again.";
+        }
+        
+        return;
+    }
+
+    if($action == 'delete'){
+        $hashed_id = $_POST['md5_id'] ?? null;
+        $deleteResult = $jobTitleDao->softDeleteThruHash($hashed_id, $userId);
+
+        if ($deleteResult) {
+            echo "Department deleted successfully!";
+        } else {
+            echo "Failed to delete department. Please try again.";
+        }
+        return;
+    }
+
+    
 
     
     echo "Invalid action specified.";

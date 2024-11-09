@@ -1,59 +1,3 @@
-function fetchAllSort(page = 1){
-    var numberEntries = $("#entries").val();
-    var sortByColumn = $("#sortBy").val();
-    var pageNumber = getPage(page);
-    if(sortByColumn == null) return;
-    var sortOrderBy = $("#orderBy").val();
-    if(sortOrderBy == null) return;
-    var filterStatus = $("#status").val();
-    var searchColumn = $("#searchColumn").val();
-    var dateColumn = $("#dateColumn").val();
-    var startDate, endDate;
-    if(dateColumn !== "none"){
-        startDate = $("#dateStart").val();
-        endDate = $("#dateEnd").val();
-    }
-    var search = $("#searchText").val();
-
-    
-    console.log(`
-        Number of Entries: ${numberEntries}, 
-        Sort By Column: ${sortByColumn}, 
-        Page Number: ${pageNumber}, 
-        Sort Order By: ${sortOrderBy}, 
-        Filter Status: ${filterStatus}, 
-        Search At Column: ${searchColumn}, 
-        Date Column: ${dateColumn}, 
-        Start Date: ${startDate}, 
-        End Date: ${endDate}, 
-        Search Text: ${search}`);
-
-        
-    $.ajax({
-        url: 'apiTest.php',
-        type: 'POST',
-        data: {
-            action: 'fetchAllSort',
-            page: pageNumber,
-            numberEntries: numberEntries,
-            sort_by: sortByColumn,
-            sort_order: sortOrderBy,
-            filter_status: filterStatus,
-            filter_searchAt: searchColumn,
-            filter_search: search,
-            filter_date_column: dateColumn,
-            filter_startDate: startDate,
-            filter_endDate: endDate
-        },
-        success: function(response) {
-            $('#departments').html(response);
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            console.log("AJAX Error: " + textStatus + ": " + errorThrown);
-        }
-    });
-}
-
 function getPage(page){
     let output;
     if(page === 'next'){
@@ -83,35 +27,39 @@ function getMaxPageValue() {
     return maxPage;
 }
 
-function deleteDepartment(button){
-
-    const row = button.closest('tr');  // Get the closest row
-    const departmentData = {
-        token: row.getAttribute('data-id'),
-    };
-    
-    $.ajax({
-        url: 'apiTest.php',
-        type: 'POST',
-        data: {
-            action: 'delete',
-            md5_id: departmentData.token
-        },
-        success: function(response) {
-            $('#departments').html(response);
-            fetchAllSort();
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            console.log("AJAX Error: " + textStatus + ": " + errorThrown);
+function confirmDeleteDepartment(button) {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "Do you want to delete this department?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+        deleteDepartment(button);
+        Swal.fire(
+            'Deleted!',
+            'The leave type has been deleted.',
+            'success'
+        );
         }
     });
-    
 }
 
-function updateDepartmentClick(button){
-    let updateOverlay = $("#updateOverlay");
-    updateOverlay.innerHTML = '';
+function showSuccessAlert() {
+    Swal.fire({
+        title: 'Success!',
+        text: 'Updated successfully.',
+        icon: 'success',
+        timer: 2000,
+        confirmButtonText: 'OK'
+    });
+}
 
+
+function updateDepartmentClick(button){
 
     const row = button.closest('tr');  // Get the closest row
     const departmentData = {
@@ -124,68 +72,17 @@ function updateDepartmentClick(button){
 
     console.log(departmentData);
 
-    $.ajax({
-        url: 'apiTest.php',
-        type: 'POST',
-        data: {
-            action: 'updateDepartmentsClick',
-            md5_id: departmentData.token
-        },
-        success: function(response) {
-            $('#updateOverlay').html(response);
+    const txtDepartmentName = $("#updateDepartmentName");
+    const txtDepartmentHeadId = $("#updateDepartmentHeadId");
+    const txtDepartmentDescription = $("#updateDepartmentDescription");
+    const txtDepartmentStatus = $("#updateDepartmentStatus");
+    const btnUpdateDepartment = document.getElementById('updateDepartmentBtn');
 
-            const formContainer = document.getElementById('formContainer');
-            const overlay = document.getElementById('overlay');
-            
-            formContainer.style.display = 'block';
-            overlay.style.display = 'block';
-
-            const txtDepartmentName = $("#departmentName");
-            const txtDepartmentHeadId = $("#departmentHeadId");
-            const txtDepartmentDescription = $("#departmentDescription");
-            const txtDepartmentStatus = $("#departmentStatus");
-
-            txtDepartmentName.val(departmentData.name);
-            txtDepartmentHeadId.val(departmentData.departmentHeadId);
-            txtDepartmentDescription.val(departmentData.description);
-            txtDepartmentStatus.val(departmentData.status);
-            
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            console.log("AJAX Error: " + textStatus + ": " + errorThrown);
-        }
-    });
-    
-}
-
-function updateDepartment(token){
-    var md5_id = token;
-    var departmentName = $("#departmentName").val();
-    var departmentHeadId = $("#departmentHeadId").val();
-    var departmentDescription = $("#departmentDescription").val();
-    var departmentStatus = $("#departmentStatus").val();
-    $.ajax({
-        url: 'apiTest.php',
-        type: 'POST',
-        data: {
-            action: 'update',
-            department: {
-                md5_id: md5_id,
-                name: departmentName,
-                departmentHeadId: departmentHeadId,
-                departmentDescription: departmentDescription,
-                departmentStatus: departmentStatus
-            }
-        },
-        success: function(response) {
-            $('#updateOverlay').html(response);
-            fetchAllSort();
-            
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            console.log("AJAX Error: " + textStatus + ": " + errorThrown);
-        }
-    });
+    txtDepartmentName.val(departmentData.name);
+    txtDepartmentHeadId.val(departmentData.departmentHeadId);
+    txtDepartmentDescription.val(departmentData.description);
+    txtDepartmentStatus.val(departmentData.status);
+    btnUpdateDepartment.setAttribute('data-token', departmentData.token);
     
 }
 
@@ -222,3 +119,7 @@ function toggleDeletedAtOption() {
         }
     }
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+    fetchAllSort();
+});

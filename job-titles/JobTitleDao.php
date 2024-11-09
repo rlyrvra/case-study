@@ -289,9 +289,90 @@ class JobTitleDao
         }
     }
 
+    public function updateThruHash(JobTitle $jobTitle, int $userId, string $hashed_id): ActionResult
+    {
+        $query = '
+            UPDATE job_titles
+            SET
+                title         = :title        ,
+                department_id = :department_id,
+                description   = :description  ,
+                status        = :status       ,
+                updated_by    = :updated_by
+            WHERE
+                MD5(id) = :hashed_id
+        ';
+
+        try {
+            $this->pdo->beginTransaction();
+
+            $statement = $this->pdo->prepare($query);
+
+            $statement->bindValue(':title'        , $jobTitle->getTitle()       , Helper::getPdoParameterType($jobTitle->getTitle()       ));
+            $statement->bindValue(':department_id', $jobTitle->getDepartmentId(), Helper::getPdoParameterType($jobTitle->getDepartmentId()));
+            $statement->bindValue(':description'  , $jobTitle->getDescription() , Helper::getPdoParameterType($jobTitle->getDescription() ));
+            $statement->bindValue(':status'       , $jobTitle->getStatus()      , Helper::getPdoParameterType($jobTitle->getStatus()      ));
+            $statement->bindValue(':updated_by'   , $userId                     , Helper::getPdoParameterType($userId                     ));
+            $statement->bindValue(':hashed_id'    , $hashed_id                  , Helper::getPdoParameterType($hashed_id                  ));
+            $statement->execute();
+
+            $this->pdo->commit();
+
+            return ActionResult::SUCCESS;
+
+        } catch (PDOException $exception) {
+            $this->pdo->rollBack();
+
+            error_log('Database Error: An error occurred while updating the job title. ' .
+                      'Exception: ' . $exception->getMessage());
+
+            if ( (int) $exception->getCode() === ErrorCode::DUPLICATE_ENTRY->value) {
+                return ActionResult::DUPLICATE_ENTRY_ERROR;
+            }
+
+            return ActionResult::FAILURE;
+        }
+    }
+
     public function delete(int $departmentId, int $userId): ActionResult
     {
         return $this->softDelete($departmentId, $userId);
+    }
+
+    public function softDeleteThruHash(string $hashed_id, int $userId): ActionResult
+    {
+        $query = '
+            UPDATE job_titles
+            SET
+                status     = "Archived"       ,
+                deleted_at = CURRENT_TIMESTAMP,
+                deleted_by = :deleted_by
+            WHERE
+                MD5(id) = :hashed_id
+        ';
+
+        try {
+            $this->pdo->beginTransaction();
+
+            $statement = $this->pdo->prepare($query);
+
+            $statement->bindValue(':deleted_by'  , $userId    , Helper::getPdoParameterType($userId    ));
+            $statement->bindValue(':hashed_id'   , $hashed_id , Helper::getPdoParameterType($hashed_id  ));
+
+            $statement->execute();
+
+            $this->pdo->commit();
+
+            return ActionResult::SUCCESS;
+
+        } catch (PDOException $exception) {
+            $this->pdo->rollBack();
+
+            error_log('Database Error: An error occurred while deleting the job title. ' .
+                      'Exception: ' . $exception->getMessage());
+            echo $exception->getMessage();
+            return ActionResult::FAILURE;
+        }
     }
 
     private function softDelete(int $jobTitleId, int $userId): ActionResult

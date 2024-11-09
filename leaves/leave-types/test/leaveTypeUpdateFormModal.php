@@ -1,15 +1,3 @@
-<?php require_once __DIR__ . '/../../../includes/header.php'; ?>
-<!-- Bootstrap CSS -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-<!-- font-awesome -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-<!-- jQuery -->
-<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-<!-- Bootstrap JS (optional for dropdowns, etc.) -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-<!-- Sweet Alert -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<body>
 <!-- Bootstrap Modal Structure -->
 <div class="modal fade" id="leaveTypeUpdateModal" tabindex="-1" aria-labelledby="leaveTypeModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -39,7 +27,6 @@
                 <label for="description" class="form-label">Description</label>
                 <textarea class="form-control" id="updateDescription" rows="3" placeholder="Enter description"></textarea>
             </div>
-            
             <div class="mb-3">
                 <label for="status" class="form-label">Status</label>
                 <select class="form-select" id="updateStatus">

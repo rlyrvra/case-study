@@ -3,7 +3,9 @@
 // Expecting $data to be passed from api.php
 ?>
 <style>
-
+#pagination .page-item:hover{
+  cursor: pointer;
+}
 </style>
 <!-- Table Rendering -->
 <table border="1" class="table" id="myTable">
@@ -43,10 +45,10 @@
           <?php if (isset($status) && $status === 'Archived') echo "<td>" . htmlspecialchars($row['deleted_by']) . "</td>"; ?>
           <?php if (!isset($status) || $status !== 'Archived') echo
             '<td>
-              <a class="btn btn-warning" title="Click to Edit" onclick="updateJobTitleClick(this)"> 
+              <a class="btn btn-warning" title="Click to Edit" onclick="updateJobTitleClick(this)" data-bs-toggle="modal" data-bs-target="#jobTitleUpdateFormModal"> 
                 <i class="fa-solid fa-user-pen"></i>
               </a> 
-              <a class="btn btn-danger" title="Click to Delete" onclick="deleteJobTitle(this)">
+              <a class="btn btn-danger" title="Click to Delete" onclick="confirmDeleteJobTitle(this)">
                 <i class="fa-solid fa-user-times"></i>
               </a> 
             </td>';

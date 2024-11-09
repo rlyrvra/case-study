@@ -3,7 +3,6 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 <!-- font-awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <!-- Bootstrap JS (optional for dropdowns, etc.) -->
@@ -14,7 +13,8 @@
 <script src="ajax-requests.js?v1.2"></script>
 <body>
     <div id="responseTest"></div>
-    <?php include_once __DIR__ . '/leaveTypeModal.php'; ?> 
+    <?php include_once __DIR__ . '/leaveTypeUpdateFormModal.php'; ?> 
+    <?php include_once __DIR__ . '/sortFilter.php'; ?> 
     <div class="container mt-3">
         <h2>Add Leave Types</h2>
         <form id="leave_type_form" onsubmit="event.preventDefault()">
@@ -57,6 +57,6 @@
         
     </div> 
     <script>
-        fetchAll();
+        fetchAllSort();
     </script>
 </body>

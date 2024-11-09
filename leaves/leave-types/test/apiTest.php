@@ -14,12 +14,12 @@ try {
     $userId = 1;
     $leaveTypeDao = new LeaveTypeDao($pdo);
     $action = $_POST['action'] ?? '';
-    $page = isset($_POST['page']) ? (int)$_POST['page'] : 1;
-    $limit = 5;
-    $offset = ($page - 1) * $limit;
     
 
     if ($action === 'fetchAll') {
+        $page = isset($_POST['page']) ? (int)$_POST['page'] : 1;
+        $limit = 5;
+        $offset = ($page - 1) * $limit;
         $filterCriteria = [
             ["column" => "status", "operator" => "=", "value" => "Active"]
         ];
@@ -32,6 +32,60 @@ try {
         $totalPages = ceil($totalLeaveTypes / $limit);
         include __DIR__ . '/leaveTypesTable.php';
         return;
+    }
+
+    if($action === 'fetchAllSort'){
+        $status = $_POST['filter_status'];
+        $searchAt = isset($_POST['filter_searchAt']) & $_POST['filter_searchAt'] !== "none" ? $_POST['filter_searchAt'] : null;
+        $searchFilter = $_POST['filter_search'];
+        $dateFilterColumn = $_POST['filter_date_column'];
+        $dateStart = isset($_POST['filter_startDate']) && $dateFilterColumn !== "none" ? $_POST['filter_startDate'] : 0;
+        $dateEnd = isset($_POST['filter_endDate']) && $dateFilterColumn !== "none" ? $_POST['filter_endDate'] : 0;
+        $page = isset($_POST['page']) ? (int)$_POST['page'] : 1;
+        $limit = isset($_POST['numberEntries']) ? $_POST['numberEntries'] : 5;
+        $offset = ($page - 1) * $limit;
+        
+        
+        $filterCriteria = [];
+        
+        if(!empty($status)){
+            $filterCriteria[] = [
+                "column" => "leave_type.status",
+                "operator" => "=",
+                "value" => $status
+            ];
+        }
+        if(!empty($searchFilter)){
+            $filterCriteria[] = [
+                "column" => "leave_type." . $searchAt,
+                "operator" => "LIKE",
+                "value" => "%$searchFilter%"
+            ];
+        }
+        if((!empty($dateFilterColumn) && $dateFilterColumn !== "none") && !empty($dateStart) && !empty($dateEnd)){
+            $filterCriteria[] = [
+                "column" => "leave_type." . $dateFilterColumn,
+                "operator" => "BETWEEN",
+                "lower_bound" => $dateStart,
+                "upper_bound" => $dateEnd
+            ];
+        }
+        print_r($filterCriteria);
+        
+        $sortCriteria = [
+            [
+                "column" => "leave_type." . $_POST['sort_by'],
+                "direction" => $_POST['sort_order']
+            ]
+        ];
+        print_r($sortCriteria);
+        $data = $leaveTypeDao->fetchAll([], $filterCriteria, $sortCriteria, $limit, $offset);
+        $leaveTypes = $data["result_set"];
+        $total_leave_types = $data["total_row_count"];
+        $totalPages = ceil($total_leave_types / $_POST['numberEntries']);
+        include __DIR__ . '/leaveTypesTable.php';
+        return;
+
     }
 
 
@@ -90,7 +144,7 @@ try {
             $updateResult = $leaveTypeDao->updateThruHash($updatedLeaveType, $userId, $hashed_id);
 
             if ($updateResult) {
-                echo "LT updated successfully!";
+                echo "LT deleted successfully!";
             } else {
                 echo "Failed to LT department. Please try again.";
             }
