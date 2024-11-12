@@ -1,0 +1,1 @@
+<?php $rfidTag = '5ACFE81'; echo $rfidTag; ?>

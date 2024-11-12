@@ -22,10 +22,10 @@ $allowances = $data['result_set'];
 
 
 $employeeAllowanceDao = new EmployeeAllowanceDao($pdo);
-$selectedColumns = ["allowance_id", "name", "amount"];
+$selectedColumns = ["allowance_id", "allowance_name", "amount", "allowance_status"];
 $filterCriteria = [
     [
-        "column"   => "employee_allowance.employee_id",
+        "column"   => "employee_id",
         "operator" => "=",
         "value"    => $employeeId
     ],

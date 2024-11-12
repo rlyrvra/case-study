@@ -14,21 +14,25 @@ require_once __DIR__ . '/../../database/database.php';
 try {
     $employeeAllowanceDao = new EmployeeAllowanceDao($pdo);
     $action = $_POST['action'] ?? '';
-    $employeeId = $_POST['employee_id'] ?? null;
+   
 
     if ($action === 'fetchAll') {
+        
         include __DIR__ . '/allowanceDynamic.php';
         return;
     } 
 
     if ($action === 'fetchAllEmployeeAllowances') {
+        $employeeId = $_POST['employee_id'] ?? null;
         include __DIR__ . '/allowanceDynamic copy.php';
         return;
     } 
 
 
     if ($action === 'create') {
+        $employeeId = $_POST['employee_id'] ?? null;
         $employeeAllowances = $_POST['allowance'] ?? null;
+        
 
         if (!$employeeAllowances) {
             echo "Invalid Employee allowance data.";
