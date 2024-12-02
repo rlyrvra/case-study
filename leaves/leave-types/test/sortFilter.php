@@ -18,7 +18,7 @@
         <div class="col-md-4">
             <label for="sortBy" class="form-label">Sort By</label>
             <select id="sortBy" class="form-select">
-                <option value="title">Name</option>
+                <option value="name">Name</option>
                 <option value="created_at" selected>Created At</option>
                 <option value="updated_at">Updated At</option>
             </select>
@@ -54,7 +54,7 @@
             <div class="row">
                 <div class="col">
                 <select id="searchColumn" class="form-select">
-                    <option value="title" selected>Name</option>
+                    <option value="name" selected>Name</option>
                     <option value="description">Description</option>
                 </select>
                 </div>

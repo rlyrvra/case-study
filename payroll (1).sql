@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 09, 2024 at 10:42 PM
+-- Generation Time: Nov 30, 2024 at 11:39 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -73,6 +73,27 @@ INSERT INTO `allowances` (`id`, `name`, `amount`, `is_taxable`, `frequency`, `de
 (2, '111', 111.00, 1, 'Weekly', '123', 'Active', '1111-11-11', '1111-11-11', '2024-11-07 03:15:28', '2024-11-07 03:19:13', NULL),
 (3, 'Marc Allowance', 500.00, 1, 'Weekly', 'Marc weekly allowance', 'Active', '2021-01-01', '2024-01-01', '2024-11-07 03:17:05', '2024-11-07 03:17:05', NULL),
 (4, 'Marc Allowance 2', 5000.00, 1, 'Weekly', '12312', 'Active', '2023-02-20', '2024-01-01', '2024-11-07 03:20:28', '2024-11-07 03:20:28', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `company_profile`
+--
+
+CREATE TABLE `company_profile` (
+  `location` varchar(100) DEFAULT NULL,
+  `industry` varchar(100) DEFAULT NULL,
+  `business_type` varchar(100) DEFAULT NULL,
+  `size` int(11) DEFAULT NULL,
+  `history` varchar(600) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `company_profile`
+--
+
+INSERT INTO `company_profile` (`location`, `industry`, `business_type`, `size`, `history`) VALUES
+('99 Location, Sample Size, Sample Location, Sample City, Sample 3', 'Information and Technology', 'Private', 1000, 'The company\'s first major release, **\"ChronoQuest\"** (2011), marked a turning point in its growth. This game, a time-traveling role-playing adventure, pushed the boundaries of storytelling and AI-driven gameplay, earning critical acclaim and a dedicated fanbase. The success of ChronoQuest solidified Digital Realms’ reputation as a developer of high-quality, story-rich games. This success allowed them to expand their operations, hiring top talent across programming, art, and design, and launching a research and development wing to experiment with emerging tech like virtual reality and AI.');
 
 -- --------------------------------------------------------
 
@@ -455,6 +476,43 @@ CREATE TABLE `payroll_groups` (
 INSERT INTO `payroll_groups` (`id`) VALUES
 (1);
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `remember_me_tokens`
+--
+
+CREATE TABLE `remember_me_tokens` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `selector` varchar(16) DEFAULT NULL,
+  `hashed_token` varchar(64) DEFAULT NULL,
+  `expires_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `remember_me_tokens`
+--
+
+INSERT INTO `remember_me_tokens` (`id`, `user_id`, `selector`, `hashed_token`, `expires_at`) VALUES
+(1, 5, 'df0f060d1f5317f3', '2c7b948928ad865897895926c9183526b3f8b09b1b8a825f13522b095774a6f0', '2024-12-12 08:58:01'),
+(2, 5, 'b08a238fb8001bc7', '707110027ccabf86b442d275c669bab708cb71695e92cf356cff19b87ef14953', '2024-12-12 08:59:04'),
+(3, 5, '99fd0c1a0e761555', 'a4c0062143e5fa63d8eda46cbc6ab0122c129d26cb36a0fec2c69a1618cf7674', '2024-11-10 09:01:13'),
+(4, 5, '01ff55c527271a04', '90ff9769e14feee90ab3ed963bff154c069bb7e232f838935d0fb74c4e9d8859', '2024-12-12 09:05:08'),
+(5, 5, '1555a41351e1c110', 'acc5e23aa1ece649338d1a8d4415f1f37023cdc67517c920ae14341c4afc062c', '2024-11-12 09:08:13'),
+(6, 5, 'a2d4e163eb12ee45', 'cdcf2302f5806ec63f08538f5e03a726c698d98e368bc385d7a8cd0dfc0c3452', '2024-12-12 09:19:30'),
+(7, 5, '073d5345fd573ee5', 'ecd3c630488d75ea0840e37b307254e5889b4e2915d7fa6364cc31b9332f8a78', '2024-12-12 09:19:41'),
+(8, 5, '24aff430c05b4774', 'd69195c4e22c7e40204a670472a9569b4c05d327cdc6c82928c3d674c9f0cffe', '2024-12-12 14:32:09'),
+(9, 2, '71285a55deead667', '957e215b031e4b28c92aa4584019ccab4519b6d8f0cd2d7aedcdc2f51ec15beb', '2024-12-12 14:43:10'),
+(10, 5, '2e8903c7617679d9', 'f17d1f66ef68c7e248509de9b2baf40d12989279a08ae0f8e77b1cc3de607052', '2024-12-19 08:17:53'),
+(11, 5, '08ba787a2909ec74', '8b548a8225c4e4215fac75d743611ad8a4822f7cf8dd4b604447b1f3cc5b4455', '2024-12-19 08:18:34'),
+(12, 5, '5629931f4299f868', '498a542499b71239b24e6bf6ee0f9ec98bcab5fb1940f986a276cc5fc0dc977e', '2024-12-20 08:55:05'),
+(13, 5, '843ff346037638ef', '79be240b26194772de80d38559f4e0f3a58d42f27ba74a5a5e4d2728a6699c42', '2024-12-20 08:55:16'),
+(14, 5, 'e9adf25de6b471c5', '66eca016e06edd3797444b568e0ff4054e7faed1b53f4fb15d8d38b022a8cf4f', '2024-12-20 08:55:22'),
+(15, 5, '4d456fa9afafc43b', 'b443740a1ff2852d2e05779824abf957b81c81ffe486e9b18af3ab28cccfda4c', '2024-12-20 08:55:28'),
+(16, 5, '07be8feb7552e76d', 'a06433ba57f8eeb9effa1368df88ab6f600c67dd18278599bd844287279fbc04', '2024-12-20 09:03:35'),
+(17, 5, '92946a78a2780c56', '5a01c13ce65bbfe18f2c54adc45d494a90e278422e4002a8ba11bdb70db0c7f2', '2024-12-29 14:45:01');
+
 --
 -- Indexes for dumped tables
 --
@@ -618,6 +676,12 @@ ALTER TABLE `payroll_groups`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `remember_me_tokens`
+--
+ALTER TABLE `remember_me_tokens`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -698,6 +762,12 @@ ALTER TABLE `leave_types`
 --
 ALTER TABLE `payroll_groups`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `remember_me_tokens`
+--
+ALTER TABLE `remember_me_tokens`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- Constraints for dumped tables
