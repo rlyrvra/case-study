@@ -13,7 +13,7 @@ class EmployeeAllowanceDao
         $this->pdo = $pdo;
     }
 
-    public function assignAllowanceToEmployee(EmployeeAllowance $employeeAllowance): ActionResult
+    public function create(EmployeeAllowance $employeeAllowance): ActionResult
     {
         $query = "
             INSERT INTO employee_allowances (
@@ -59,11 +59,11 @@ class EmployeeAllowanceDao
     }
 
     public function fetchAll(
-        ?array $columns        = null,
-        ?array $filterCriteria = null,
-        ?array $sortCriteria   = null,
-        ?int   $limit          = null,
-        ?int   $offset         = null
+        ? array $columns        = null,
+        ? array $filterCriteria = null,
+        ? array $sortCriteria   = null,
+        ? int   $limit          = null,
+        ? int   $offset         = null
     ): ActionResult|array {
         $tableColumns = [
             "id"                       => "employee_allowance.id           AS id"                      ,
@@ -122,6 +122,10 @@ class EmployeeAllowanceDao
                     case "LIKE":
                         $whereClauses   [] = "{$column} {$operator} ?";
                         $queryParameters[] = $filterCriterion["value"];
+                        break;
+
+                    case "IS NULL":
+                        $whereClauses[] = "{$column} {$operator}";
                         break;
 
                     case "BETWEEN":

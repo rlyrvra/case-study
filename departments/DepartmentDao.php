@@ -13,24 +13,20 @@ class DepartmentDao
         $this->pdo = $pdo;
     }
 
-    public function create(Department $department, int $userId): ActionResult
+    public function create(Department $department): ActionResult
     {
         $query = '
             INSERT INTO departments (
                 name              ,
                 department_head_id,
                 description       ,
-                status            ,
-                created_by        ,
-                updated_by
+                status
             )
             VALUES (
                 :name              ,
                 :department_head_id,
                 :description       ,
-                :status            ,
-                :created_by        ,
-                :updated_by
+                :status
             )
         ';
 
@@ -43,8 +39,6 @@ class DepartmentDao
             $statement->bindValue(':department_head_id', $department->getDepartmentHeadId(), Helper::getPdoParameterType($department->getDepartmentHeadId()));
             $statement->bindValue(':description'       , $department->getDescription()     , Helper::getPdoParameterType($department->getDescription()     ));
             $statement->bindValue(':status'            , $department->getStatus()          , Helper::getPdoParameterType($department->getStatus()          ));
-            $statement->bindValue(':created_by'        , $userId                           , Helper::getPdoParameterType($userId                           ));
-            $statement->bindValue(':updated_by'        , $userId                           , Helper::getPdoParameterType($userId                           ));
 
             $statement->execute();
 
@@ -67,27 +61,21 @@ class DepartmentDao
     }
 
     public function fetchAll(
-        ?array $columns        = null,
-        ?array $filterCriteria = null,
-        ?array $sortCriteria   = null,
-        ?int   $limit          = null,
-        ?int   $offset         = null
+        ? array $columns        = null,
+        ? array $filterCriteria = null,
+        ? array $sortCriteria   = null,
+        ? int   $limit          = null,
+        ? int   $offset         = null
     ): ActionResult|array {
         $tableColumns = [
-            "id"                          => "department.id               AS id"                         ,
-            "name"                        => "department.name             AS name"                       ,
-            "department_head_id"          => "department_head.id          AS department_head_id"         ,
-            "department_head_first_name"  => "department_head.first_name  AS department_head_first_name" ,
-            "department_head_middle_name" => "department_head.middle_name AS department_head_middle_name",
-            "department_head_last_name"   => "department_head.last_name   AS department_head_last_name"  ,
-            "description"                 => "department.description      AS description"                ,
-            "status"                      => "department.status           AS status"                     ,
-            "created_at"                  => "department.created_at       AS created_at"                 ,
-            "created_by"                  => "created_by_admin.username   AS created_by"                 ,
-            "updated_at"                  => "department.updated_at       AS updated_at"                 ,
-            "updated_by"                  => "updated_by_admin.username   AS updated_by"                 ,
-            "deleted_at"                  => "department.deleted_at       AS deleted_at"                 ,
-            "deleted_by"                  => "deleted_by_admin.username   AS deleted_by"
+            "id"                        => "department.id                 AS id"                         ,
+            "name"                      => "department.name               AS name"                       ,
+            "department_head_id"        => "department.department_head_id AS department_head_id"         ,
+            "department_head_full_name" => "department_head.full_name     AS department_head_full_name"  ,
+            "status"                    => "department.status             AS status"                     ,
+            "created_at"                => "department.created_at         AS created_at"                 ,
+            "updated_at"                => "department.updated_at         AS updated_at"                 ,
+            "deleted_at"                => "department.deleted_at         AS deleted_at"
         ];
 
         $selectedColumns =
@@ -100,41 +88,12 @@ class DepartmentDao
 
         $joinClauses = "";
 
-        if (array_key_exists("department_head_first_name" , $selectedColumns) ||
-            array_key_exists("department_head_middle_name", $selectedColumns) ||
-            array_key_exists("department_head_last_name"  , $selectedColumns)) {
+        if (array_key_exists("department_head_full_name" , $selectedColumns)) {
             $joinClauses .= "
                 LEFT JOIN
                     employees AS department_head
                 ON
                     department.department_head_id = department_head.id
-            ";
-        }
-
-        if (array_key_exists("created_by", $selectedColumns)) {
-            $joinClauses .= "
-                LEFT JOIN
-                    admins AS created_by_admin
-                ON
-                    department.created_by = created_by_admin.id
-            ";
-        }
-
-        if (array_key_exists("updated_by", $selectedColumns)) {
-            $joinClauses .= "
-                LEFT JOIN
-                    admins AS updated_by_admin
-                ON
-                    department.updated_by = updated_by_admin.id
-            ";
-        }
-
-        if (array_key_exists("deleted_by", $selectedColumns)) {
-            $joinClauses .= "
-                LEFT JOIN
-                    admins AS deleted_by_admin
-                ON
-                    department.deleted_by = deleted_by_admin.id
             ";
         }
 
@@ -243,13 +202,12 @@ class DepartmentDao
         } catch (PDOException $exception) {
             error_log("Database Error: An error occurred while fetching the departments. " .
                       "Exception: {$exception->getMessage()}");
-            echo $exception->getMessage();
+
             return ActionResult::FAILURE;
         }
     }
 
-
-    public function update(Department $department, int $userId): ActionResult
+    public function update(Department $department): ActionResult
     {
         $query = '
             UPDATE departments
@@ -257,8 +215,7 @@ class DepartmentDao
                 name               = :name              ,
                 department_head_id = :department_head_id,
                 description        = :description       ,
-                status             = :status            ,
-                updated_by         = :updated_by
+                status             = :status
             WHERE
                 id = :department_id
         ';
@@ -268,12 +225,10 @@ class DepartmentDao
 
             $statement = $this->pdo->prepare($query);
 
-            $statement->bindValue(':hashed_id'         , md5($department->getId())         , Helper::getPdoParameterType($department->getName()            ));
             $statement->bindValue(':name'              , $department->getName()            , Helper::getPdoParameterType($department->getName()            ));
             $statement->bindValue(':department_head_id', $department->getDepartmentHeadId(), Helper::getPdoParameterType($department->getDepartmentHeadId()));
             $statement->bindValue(':description'       , $department->getDescription()     , Helper::getPdoParameterType($department->getDescription()     ));
             $statement->bindValue(':status'            , $department->getStatus()          , Helper::getPdoParameterType($department->getStatus()          ));
-            $statement->bindValue(':updated_by'        , $userId                           , Helper::getPdoParameterType($userId                           ));
             $statement->bindValue(':department_id'     , $department->getId()              , Helper::getPdoParameterType($department->getId()              ));
 
             $statement->execute();
@@ -296,65 +251,50 @@ class DepartmentDao
         }
     }
 
-    public function updateThruHash(Department $department, int $userId, string $hashed_id): ActionResult
+    public function isDepartmentHead(int $employeeId): ActionResult|bool
     {
         $query = '
-            UPDATE departments AS department
-            SET
-                department.name               = :name              ,
-                department.department_head_id = :department_head_id,
-                department.description        = :description       ,
-                department.status             = :status            ,
-                department.updated_by         = :updated_by
-            WHERE 
-                MD5(id) = :hashed_id                    
+            SELECT
+                COUNT(*) AS count
+            FROM
+                departments
+            WHERE
+                department_head_id = :employee_id
+            AND
+                status <> "Archived"
         ';
 
         try {
-            $this->pdo->beginTransaction();
-
             $statement = $this->pdo->prepare($query);
 
-            $statement->bindValue(':hashed_id'         , $hashed_id                        , Helper::getPdoParameterType($department->getName()            ));
-            $statement->bindValue(':name'              , $department->getName()            , Helper::getPdoParameterType($department->getName()            ));
-            $statement->bindValue(':department_head_id', $department->getDepartmentHeadId(), Helper::getPdoParameterType($department->getDepartmentHeadId()));
-            $statement->bindValue(':description'       , $department->getDescription()     , Helper::getPdoParameterType($department->getDescription()     ));
-            $statement->bindValue(':status'            , $department->getStatus()          , Helper::getPdoParameterType($department->getStatus()          ));
-            $statement->bindValue(':updated_by'        , $userId                           , Helper::getPdoParameterType($userId                           ));
+            $statement->bindValue(':employee_id', $employeeId, PDO::PARAM_INT);
 
             $statement->execute();
 
-            $this->pdo->commit();
+            $result = $statement->fetch(PDO::FETCH_ASSOC);
 
-            return ActionResult::SUCCESS;
+            return $result['count'] > 0;
 
         } catch (PDOException $exception) {
-            $this->pdo->rollBack();
-
-            error_log('Database Error: An error occurred while updating the department. ' .
+            error_log('Database Error: An error occurred while checking if the employee is a department head. ' .
                       'Exception: ' . $exception->getMessage());
-
-            if ( (int) $exception->getCode() === ErrorCode::DUPLICATE_ENTRY->value) {
-                return ActionResult::DUPLICATE_ENTRY_ERROR;
-            }
 
             return ActionResult::FAILURE;
         }
     }
 
-    public function delete(int $departmentId, int $userId): ActionResult
+    public function delete(int $departmentId): ActionResult
     {
-        return $this->softDelete($departmentId, $userId);
+        return $this->softDelete($departmentId);
     }
 
-    private function softDelete(int $departmentId, int $userId): ActionResult
+    private function softDelete(int $departmentId): ActionResult
     {
         $query = '
             UPDATE departments
             SET
                 status     = "Archived"       ,
-                deleted_at = CURRENT_TIMESTAMP,
-                deleted_by = :deleted_by
+                deleted_at = CURRENT_TIMESTAMP
             WHERE
                 id = :department_id
         ';
@@ -364,45 +304,7 @@ class DepartmentDao
 
             $statement = $this->pdo->prepare($query);
 
-            $statement->bindValue(':deleted_by'   , $userId      , Helper::getPdoParameterType($userId      ));
             $statement->bindValue(':department_id', $departmentId, Helper::getPdoParameterType($departmentId));
-
-            $statement->execute();
-
-            $this->pdo->commit();
-
-            return ActionResult::SUCCESS;
-
-        } catch (PDOException $exception) {
-            $this->pdo->rollBack();
-
-            error_log('Database Error: An error occurred while deleting the department. ' .
-                      'Exception: ' . $exception->getMessage());
-
-            return ActionResult::FAILURE;
-        }
-    }
-
-
-    public function softDeleteThruHash(string $hashed_id, int $userId): ActionResult
-    {
-        $query = '
-            UPDATE departments AS department
-            SET
-                department.status     = "Archived"       ,
-                department.deleted_at = CURRENT_TIMESTAMP,
-                department.deleted_by = :deleted_by
-            WHERE 
-                MD5(department.id) = :hashed_id
-        ';
-
-        try {
-            $this->pdo->beginTransaction();
-
-            $statement = $this->pdo->prepare($query);
-
-            $statement->bindValue(':deleted_by'   , $userId      , Helper::getPdoParameterType($userId      ));
-            $statement->bindValue(':hashed_id'    , $hashed_id   , Helper::getPdoParameterType($hashed_id   ));
 
             $statement->execute();
 

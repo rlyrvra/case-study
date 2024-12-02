@@ -1,8 +1,8 @@
 <?php
 
-require_once __DIR__ . '/../../includes/Helper.php'            ;
-require_once __DIR__ . '/../../includes/enums/ActionResult.php';
-require_once __DIR__ . '/../../includes/enums/ErrorCode.php'   ;
+require_once __DIR__ . "/../../includes/Helper.php"            ;
+require_once __DIR__ . "/../../includes/enums/ActionResult.php";
+require_once __DIR__ . "/../../includes/enums/ErrorCode.php"   ;
 
 class LeaveTypeDao
 {
@@ -13,41 +13,35 @@ class LeaveTypeDao
         $this->pdo = $pdo;
     }
 
-    public function create(LeaveType $leaveType, int $userId): ActionResult
+    public function create(LeaveType $leaveType): ActionResult
     {
-        $query = '
+        $query = "
             INSERT INTO leave_types (
                 name                  ,
                 maximum_number_of_days,
                 is_paid               ,
                 description           ,
-                status                ,
-                created_by            ,
-                updated_by
+                status
             )
             VALUES (
                 :name                  ,
                 :maximum_number_of_days,
                 :is_paid               ,
                 :description           ,
-                :status                ,
-                :created_by            ,
-                :updated_by
+                :status
             )
-        ';
+        ";
 
         try {
             $this->pdo->beginTransaction();
 
             $statement = $this->pdo->prepare($query);
 
-            $statement->bindValue(':name'                  , $leaveType->getName()               , Helper::getPdoParameterType($leaveType->getName()               ));
-            $statement->bindValue(':maximum_number_of_days', $leaveType->getMaximumNumberOfDays(), Helper::getPdoParameterType($leaveType->getMaximumNumberOfDays()));
-            $statement->bindValue(':is_paid'               , $leaveType->isPaid()                , Helper::getPdoParameterType($leaveType->isPaid()                ));
-            $statement->bindValue(':description'           , $leaveType->getDescription()        , Helper::getPdoParameterType($leaveType->getDescription()        ));
-            $statement->bindValue(':status'                , $leaveType->getStatus()             , Helper::getPdoParameterType($leaveType->getStatus()             ));
-            $statement->bindValue(':created_by'            , $userId                             , Helper::getPdoParameterType($userId                             ));
-            $statement->bindValue(':updated_by'            , $userId                             , Helper::getPdoParameterType($userId                             ));
+            $statement->bindValue(":name"                  , $leaveType->getName()               , Helper::getPdoParameterType($leaveType->getName()               ));
+            $statement->bindValue(":maximum_number_of_days", $leaveType->getMaximumNumberOfDays(), Helper::getPdoParameterType($leaveType->getMaximumNumberOfDays()));
+            $statement->bindValue(":is_paid"               , $leaveType->isPaid()                , Helper::getPdoParameterType($leaveType->isPaid()                ));
+            $statement->bindValue(":description"           , $leaveType->getDescription()        , Helper::getPdoParameterType($leaveType->getDescription()        ));
+            $statement->bindValue(":status"                , $leaveType->getStatus()             , Helper::getPdoParameterType($leaveType->getStatus()             ));
 
             $statement->execute();
 
@@ -58,8 +52,8 @@ class LeaveTypeDao
         } catch (PDOException $exception) {
             $this->pdo->rollBack();
 
-            error_log('Database Error: An error occurred while creating the leave type. ' .
-                      'Exception: ' . $exception->getMessage());
+            error_log("Database Error: An error occurred while creating the leave type. " .
+                      "Exception: {$exception->getMessage()}");
 
             if ( (int) $exception->getCode() === ErrorCode::DUPLICATE_ENTRY->value) {
                 return ActionResult::DUPLICATE_ENTRY_ERROR;
@@ -70,11 +64,11 @@ class LeaveTypeDao
     }
 
     public function fetchAll(
-        ?array $columns        = null,
-        ?array $filterCriteria = null,
-        ?array $sortCriteria   = null,
-        ?int   $limit          = null,
-        ?int   $offset         = null
+        ? array $columns        = null,
+        ? array $filterCriteria = null,
+        ? array $sortCriteria   = null,
+        ? int   $limit          = null,
+        ? int   $offset         = null
     ): ActionResult|array {
         $tableColumns = [
             "id"                     => "leave_type.id                     AS id"                    ,
@@ -84,11 +78,8 @@ class LeaveTypeDao
             "description"            => "leave_type.description            AS description"           ,
             "status"                 => "leave_type.status                 AS status"                ,
             "created_at"             => "leave_type.created_at             AS created_at"            ,
-            "created_by"             => "created_by_admin.username         AS created_by"            ,
             "updated_at"             => "leave_type.updated_at             AS updated_at"            ,
-            "updated_by"             => "updated_by_admin.username         AS updated_by"            ,
             "deleted_at"             => "leave_type.deleted_at             AS deleted_at"            ,
-            "deleted_by"             => "deleted_by_admin.username         AS deleted_by"
         ];
 
         $selectedColumns =
@@ -99,47 +90,19 @@ class LeaveTypeDao
                     array_flip($columns)
                 );
 
-        $joinClauses = "";
-
-        if (array_key_exists("created_by", $selectedColumns)) {
-            $joinClauses .= "
-                LEFT JOIN
-                    admins AS created_by_admin
-                ON
-                    leave_type.created_by = created_by_admin.id
-            ";
-        }
-
-        if (array_key_exists("updated_by", $selectedColumns)) {
-            $joinClauses .= "
-                LEFT JOIN
-                    admins AS updated_by_admin
-                ON
-                    leave_type.updated_by = updated_by_admin.id
-            ";
-        }
-
-        if (array_key_exists("deleted_by", $selectedColumns)) {
-            $joinClauses .= "
-                LEFT JOIN
-                    admins AS deleted_by_admin
-                ON
-                    leave_type.deleted_by = deleted_by_admin.id
-            ";
-        }
-
         $queryParameters = [];
+
         $whereClauses = [];
 
         if (empty($filterCriteria)) {
             $whereClauses[] = "leave_type.status <> 'Archived'";
         } else {
             foreach ($filterCriteria as $filterCriterion) {
-                $column   = $filterCriterion["column"];
+                $column   = $filterCriterion["column"  ];
                 $operator = $filterCriterion["operator"];
 
                 switch ($operator) {
-                    case "=":
+                    case "="   :
                     case "LIKE":
                         $whereClauses   [] = "{$column} {$operator} ?";
                         $queryParameters[] = $filterCriterion["value"];
@@ -159,7 +122,7 @@ class LeaveTypeDao
 
         $orderByClauses = [];
 
-        if (!empty($sortCriteria)) {
+        if ( ! empty($sortCriteria)) {
             foreach ($sortCriteria as $sortCriterion) {
                 $column = $sortCriterion["column"];
 
@@ -199,7 +162,6 @@ class LeaveTypeDao
                 " . implode(", ", $selectedColumns) . "
             FROM
                 leave_types AS leave_type
-            {$joinClauses}
             WHERE
                 " . implode(" AND ", $whereClauses) . "
             " . (!empty($orderByClauses) ? "ORDER BY " . implode(", ", $orderByClauses) : "") . "
@@ -232,38 +194,36 @@ class LeaveTypeDao
         } catch (PDOException $exception) {
             error_log("Database Error: An error occurred while fetching the leave types. " .
                       "Exception: {$exception->getMessage()}");
-            echo $exception->getMessage();
+
             return ActionResult::FAILURE;
         }
     }
 
-    public function update(LeaveType $leaveType, int $userId): ActionResult
+    public function update(LeaveType $leaveType): ActionResult
     {
-        $query = '
+        $query = "
             UPDATE leave_types
             SET
                 name                   = :name                  ,
                 maximum_number_of_days = :maximum_number_of_days,
                 is_paid                = :is_paid               ,
                 description            = :description           ,
-                status                 = :status                ,
-                updated_by             = :updated_by
+                status                 = :status
             WHERE
                 id = :leave_type_id
-        ';
+        ";
 
         try {
             $this->pdo->beginTransaction();
 
             $statement = $this->pdo->prepare($query);
 
-            $statement->bindValue(':name'                  , $leaveType->getName()               , Helper::getPdoParameterType($leaveType->getName()               ));
-            $statement->bindValue(':maximum_number_of_days', $leaveType->getMaximumNumberOfDays(), Helper::getPdoParameterType($leaveType->getMaximumNumberOfDays()));
-            $statement->bindValue(':is_paid'               , $leaveType->isPaid()                , Helper::getPdoParameterType($leaveType->isPaid()                ));
-            $statement->bindValue(':description'           , $leaveType->getDescription()        , Helper::getPdoParameterType($leaveType->getDescription()        ));
-            $statement->bindValue(':status'                , $leaveType->getStatus()             , Helper::getPdoParameterType($leaveType->getStatus()             ));
-            $statement->bindValue(':updated_by'            , $userId                             , Helper::getPdoParameterType($userId                             ));
-            $statement->bindValue(':leave_type_id'         , $leaveType->getId()                 , Helper::getPdoParameterType($leaveType->getId()                 ));
+            $statement->bindValue(":name"                  , $leaveType->getName()               , Helper::getPdoParameterType($leaveType->getName()               ));
+            $statement->bindValue(":maximum_number_of_days", $leaveType->getMaximumNumberOfDays(), Helper::getPdoParameterType($leaveType->getMaximumNumberOfDays()));
+            $statement->bindValue(":is_paid"               , $leaveType->isPaid()                , Helper::getPdoParameterType($leaveType->isPaid()                ));
+            $statement->bindValue(":description"           , $leaveType->getDescription()        , Helper::getPdoParameterType($leaveType->getDescription()        ));
+            $statement->bindValue(":status"                , $leaveType->getStatus()             , Helper::getPdoParameterType($leaveType->getStatus()             ));
+            $statement->bindValue(":leave_type_id"         , $leaveType->getId()                 , Helper::getPdoParameterType($leaveType->getId()                 ));
 
             $statement->execute();
 
@@ -274,8 +234,8 @@ class LeaveTypeDao
         } catch (PDOException $exception) {
             $this->pdo->rollBack();
 
-            error_log('Database Error: An error occurred while updating the leave type. ' .
-                    'Exception: ' . $exception->getMessage());
+            error_log("Database Error: An error occurred while updating the leave type. " .
+                      "Exception: {$exception->getMessage()}");
 
             if ( (int) $exception->getCode() === ErrorCode::DUPLICATE_ENTRY->value) {
                 return ActionResult::DUPLICATE_ENTRY_ERROR;
@@ -285,114 +245,28 @@ class LeaveTypeDao
         }
     }
 
-    public function updateThruHash(LeaveType $leaveType, int $userId, string $hashed_id): ActionResult
+    public function delete(int $leaveTypeId): ActionResult
     {
-        $query = '
-            UPDATE leave_types
-            SET
-                name                   = :name                  ,
-                maximum_number_of_days = :maximum_number_of_days,
-                is_paid                = :is_paid               ,
-                description            = :description           ,
-                status                 = :status                ,
-                updated_by             = :updated_by
-            WHERE
-                MD5(id) = :hashed_id
-        ';
-
-        try {
-            $this->pdo->beginTransaction();
-
-            $statement = $this->pdo->prepare($query);
-
-            $statement->bindValue(':name'                  , $leaveType->getName()               , Helper::getPdoParameterType($leaveType->getName()               ));
-            $statement->bindValue(':maximum_number_of_days', $leaveType->getMaximumNumberOfDays(), Helper::getPdoParameterType($leaveType->getMaximumNumberOfDays()));
-            $statement->bindValue(':is_paid'               , $leaveType->isPaid()                , Helper::getPdoParameterType($leaveType->isPaid()                ));
-            $statement->bindValue(':description'           , $leaveType->getDescription()        , Helper::getPdoParameterType($leaveType->getDescription()        ));
-            $statement->bindValue(':status'                , $leaveType->getStatus()             , Helper::getPdoParameterType($leaveType->getStatus()             ));
-            $statement->bindValue(':updated_by'            , $userId                             , Helper::getPdoParameterType($userId                             ));
-            $statement->bindValue(':hashed_id'             , $hashed_id                          , Helper::getPdoParameterType($hashed_id                          ));
-
-            $statement->execute();
-
-            $this->pdo->commit();
-
-            return ActionResult::SUCCESS;
-
-        } catch (PDOException $exception) {
-            $this->pdo->rollBack();
-
-            error_log('Database Error: An error occurred while updating the leave type. ' .
-                    'Exception: ' . $exception->getMessage());
-            //echo $exception->getMessage();
-            if ( (int) $exception->getCode() === ErrorCode::DUPLICATE_ENTRY->value) {
-                return ActionResult::DUPLICATE_ENTRY_ERROR;
-            }
-
-            return ActionResult::FAILURE;
-        }
+        return $this->softDelete($leaveTypeId);
     }
 
-    public function delete(int $leaveTypeId, int $userId): ActionResult
+    private function softDelete(int $leaveTypeId): ActionResult
     {
-        return $this->softDelete($leaveTypeId, $userId);
-    }
-
-    public function softDeleteThruHash(string $hashed_id, int $userId): ActionResult
-    {
-        $query = '
+        $query = "
             UPDATE leave_types
             SET
-                status     = "Archived"       ,
-                deleted_at = CURRENT_TIMESTAMP,
-                deleted_by = :deleted_by
-            WHERE
-                MD5(id) = :hashed_id
-        ';
-
-        try {
-            $this->pdo->beginTransaction();
-
-            $statement = $this->pdo->prepare($query);
-
-            $statement->bindValue(':deleted_by'   , $userId     , Helper::getPdoParameterType($userId     ));
-            $statement->bindValue(':hashed_id'    , $hashed_id  , Helper::getPdoParameterType($hashed_id));
-
-            $statement->execute();
-
-            $this->pdo->commit();
-
-            return ActionResult::SUCCESS;
-
-        } catch (PDOException $exception) {
-            $this->pdo->rollBack();
-
-            error_log('Database Error: An error occurred while deleting the leave type. ' .
-                      'Exception: ' . $exception->getMessage());
-            echo $exception->getMessage();
-            return ActionResult::FAILURE;
-        }
-    }
-
-    private function softDelete(int $leaveTypeId, int $userId): ActionResult
-    {
-        $query = '
-            UPDATE leave_types
-            SET
-                status     = "Archived"       ,
-                deleted_at = CURRENT_TIMESTAMP,
-                deleted_by = :deleted_by
+                status     = 'Archived'       ,
+                deleted_at = CURRENT_TIMESTAMP
             WHERE
                 id = :leave_type_id
-        ';
+        ";
 
         try {
             $this->pdo->beginTransaction();
 
             $statement = $this->pdo->prepare($query);
 
-            $statement->bindValue(':deleted_by'   , $userId     , Helper::getPdoParameterType($userId     ));
-            $statement->bindValue(':leave_type_id', $leaveTypeId, Helper::getPdoParameterType($leaveTypeId));
+            $statement->bindValue(":leave_type_id", $leaveTypeId, Helper::getPdoParameterType($leaveTypeId));
 
             $statement->execute();
 
@@ -403,8 +277,8 @@ class LeaveTypeDao
         } catch (PDOException $exception) {
             $this->pdo->rollBack();
 
-            error_log('Database Error: An error occurred while deleting the leave type. ' .
-                      'Exception: ' . $exception->getMessage());
+            error_log("Database Error: An error occurred while deleting the leave type. " .
+                      "Exception: {$exception->getMessage()}");
 
             return ActionResult::FAILURE;
         }

@@ -121,10 +121,14 @@ class EmployeeDeductionDao
                 $operator = $filterCriterion["operator"];
 
                 switch ($operator) {
-                    case "=":
+                    case "="   :
                     case "LIKE":
                         $whereClauses   [] = "{$column} {$operator} ?";
                         $queryParameters[] = $filterCriterion["value"];
+                        break;
+
+                    case "IS NULL":
+                        $whereClauses[] = "{$column} {$operator}";
                         break;
 
                     case "BETWEEN":
