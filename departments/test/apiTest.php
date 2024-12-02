@@ -5,13 +5,12 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
 }
 
 require_once __DIR__ . '/../DepartmentDao.php';
+require_once __DIR__ . '/../DepartmentService.php';
+require_once __DIR__ . '/../DepartmentRepository.php';
 require_once __DIR__ . '/../Department.php';
 require_once __DIR__ . '/../../includes/Helper.php';
 require_once __DIR__ . '/../../includes/enums/ErrorCode.php';
 require_once __DIR__ . '/../../database/database.php';
-
-require_once __DIR__ . '/../../job-titles/JobTitle.php';
-require_once __DIR__ . '/../../job-titles/JobTitleDao.php';
 
 try {
     $userId = 1;
@@ -116,9 +115,16 @@ try {
                 "direction" => $_POST['sort_order']
             ]
         ];
-        $data = $departmentDao->fetchAll([], $filterCriteria, $sortCriteria, $limit, $offset);
-        $departments = $data["result_set"];
-        $totalDepartments = $data["total_row_count"];
+        $departmentRepository = new DepartmentRepository($departmentDao);
+
+        $departmentService = new DepartmentService($departmentRepository);
+
+        $result = $departmentService->fetchAllDepartments([], $filterCriteria, $sortCriteria, $limit, $offset);
+        $departments;
+        if ($result === ActionResult::FAILURE) {
+            $departments = $result['result_set'];
+        }
+        $totalDepartments = $result["total_row_count"];
         $totalPages = ceil($totalDepartments / $_POST['numberEntries']);
         include __DIR__ . '/departmentsTable.php';
         return;

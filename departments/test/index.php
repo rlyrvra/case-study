@@ -119,11 +119,11 @@
         <form id="createDepartmentForm" onsubmit="event.preventDefault(); createDepartment();">
             <div>
                 <label for="departmentName" style="display: block; margin-bottom: 5px;">Department Name:</label>
-                <input type="text" id="departmentName" name="createDepartmentName" required style="padding: 10px; width: 100%; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px;">
+                <input type="text" id="createDepartmentName" name="createDepartmentName" required style="padding: 10px; width: 100%; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px;">
             </div>
             <div>
                 <label for="departmentHeadId" style="display: block; margin-bottom: 5px;">Department Head ID:</label>
-                <input type="number" id="departmentHeadId" name="createDepartmentHeadId" required style="padding: 10px; width: 100%; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px;">
+                <input type="number" id="createDepartmentHeadId" name="createDepartmentHeadId" style="padding: 10px; width: 100%; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px;">
             </div>
             <button type="submit" style="padding: 10px 15px; cursor: pointer; background-color: #007bff; color: white; border: none; border-radius: 4px;">Create Department</button>
         </form>

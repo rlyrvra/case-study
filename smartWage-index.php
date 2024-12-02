@@ -1,8 +1,9 @@
 <?php require_once __DIR__ . '/includes/session.php'; ?>
+<?php require_once __DIR__ . '/includes/file-locations.php' ?>
 <?php
 var_dump($_SESSION);
 if(!isset($_SESSION['id'])){
-  header("Location: /case-study/login.php?r=true");
+  header("Location: ". $SMARTWAGE_LOCATION ."/login.php?r=true");
 }
 
 if(isset($_GET['s']) && $_GET['s'] == true){
