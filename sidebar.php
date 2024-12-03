@@ -47,7 +47,7 @@
     <li class="menu-item" id="job-titles-menu">
     <a href="job-titles.php" class="menu-link">
     <i class="menu-icon tf-icons bx bx-vector"></i>
-        <div data-i18n="Account Settings">Job Title </div>
+        <div>Job Title </div>
     
     </a>
         
@@ -57,25 +57,32 @@
     ?>
 
     <!-- Employees -->
-    <li class="menu-item">
+    <?php
+    if($_SESSION['access_role'] == 'Admin' || $_SESSION['access_role'] == 'Manager'){
+        echo '
+    <li class="menu-item" id="employees-menu">
+
         <a href="javascript:void(0);" class="menu-link menu-toggle">
         <i class="menu-icon tf-icons bx bx-user"></i>
-        <div data-i18n="Authentications">Employees</div>
+        <div>Employees</div>
         </a>
+        
         <ul class="menu-sub">
-        <li class="menu-item">
-            <a href="auth-login-basic.html" class="menu-link" target="_blank">
-            <div data-i18n="Basic">Add Employee</div>
+        <li class="menu-item" id="add-employees-menu">
+            <a href="add-employees.php" class="menu-link">
+            <div>Add Employee</div>
             </a>
         </li>
-        <li class="menu-item">
-            <a href="auth-register-basic.html" class="menu-link" target="_blank">
-            <div data-i18n="Basic">Manage Employee</div>
+        <li class="menu-item" id="manage-employees-menu">
+            <a href="auth-register-basic.html" class="menu-link">
+            <div>Manage Employee</div>
             </a>
         </li>
         
         </ul>
-    </li>
+    </li>';
+    }
+    ?>
 
     <!-- Attendance -->
     <li class="menu-item">
@@ -126,11 +133,17 @@
         <div data-i18n="User interface">Leaves</div>
         </a>
         <ul class="menu-sub">
-        <li class="menu-item">
-            <a href="ui-accordion.html" class="menu-link">
+        <?php
+        if($_SESSION['access_role'] == 'Admin' || $_SESSION['access_role'] == 'Manager'){
+        echo '
+        <li class="menu-item" id="leave-types-menu">
+            <a href="leave-types.php" class="menu-link">
             <div data-i18n="Accordion">Leave Types</div>
             </a>
         </li>
+        ';
+        }
+        ?>
         <li class="menu-item" id="apply-leave-menu">
             <a href="apply-leave.php" class="menu-link">
             <div data-i18n="Alerts">Apply Leave</div>
@@ -152,10 +165,10 @@
 
     
     <!-- Payroll -->
-    <li class="menu-item">
+    <li class="menu-item" id="payroll-menu">
         <a href="javascript:void(0);" class="menu-link menu-toggle">
         <i class="menu-icon tf-icons bx bx-money"></i>
-        <div data-i18n="Form Elements">Payroll</div>
+        <div>Payroll</div>
         </a>
         <ul class="menu-sub">
         <li class="menu-item">
@@ -174,13 +187,17 @@
             <div data-i18n="Input groups">Payroll Groups</div>
             </a>
         </li>
-
-        <li class="menu-item">
-            <a href="forms-input-groups.html" class="menu-link">
-            <div data-i18n="Input groups">Allowances</div>
+        <?php
+        if($_SESSION['access_role'] == 'Admin' || $_SESSION['access_role'] == 'Manager'){
+        echo '
+        <li class="menu-item" id="allowances-menu">
+            <a href="allowances.php" class="menu-link">
+            <div>Allowances</div>
             </a>
         </li>
-
+        ';
+        }
+        ?>
         <li class="menu-item">
             <a href="forms-input-groups.html" class="menu-link">
             <div data-i18n="Input groups">Deductions</div>

@@ -58,7 +58,6 @@ require_once __DIR__ . '/includes/header.php';
             scroll-behavior: smooth;
         }
         .indexSections{
-            height: 100vh;
             scroll-snap-align: start;
         }
         .one{
@@ -132,11 +131,11 @@ require_once __DIR__ . '/includes/header.php';
   </div>
 </nav>
 <div class="indexContainer">
-    <section class="indexSections" id="top">
+    <section class="indexSections h-100" id="top">
         <img src="img/wallpaperSample.jpg" alt="wallpaper">
         
     </section>
-    <section class="indexSections d-flex justify-content-center" id="aboutUs">
+    <section class="indexSections d-flex justify-content-center h-100" id="aboutUs">
         <div class="container inside p-5">
             <div class="row mt-2">
                 <div class="section container mt-4">
@@ -182,11 +181,11 @@ require_once __DIR__ . '/includes/header.php';
             </div>
         </div>
     </section>
-    <section class="two indexSections" id="principles">
+    <section class="two indexSections h-100" id="principles">
 
     </section>
     
-    <section class="three indexSections" id="compliance">
+    <section class="three indexSections h-100" id="compliance">
 
     </section>
 </div>
