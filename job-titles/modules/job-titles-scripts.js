@@ -30,7 +30,7 @@ function getMaxPageValue() {
 function showCreatedSuccessAlert() {
     Swal.fire({
         title: 'Success!',
-        text: 'Department created successfully.',
+        text: 'Job title created successfully.',
         icon: 'success',
         timer: 2000,
         confirmButtonText: 'OK'
@@ -40,7 +40,7 @@ function showCreatedSuccessAlert() {
 function confirmDeleteDepartment(button) {
     Swal.fire({
         title: 'Are you sure?',
-        text: "Do you want to delete this department?",
+        text: "Do you want to delete this job title?",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -51,7 +51,7 @@ function confirmDeleteDepartment(button) {
         deleteDepartment(button);
         Swal.fire(
             'Deleted!',
-            'The department has been deleted.',
+            'The job title has been deleted.',
             'success'
         );
         }
@@ -116,7 +116,7 @@ function updateDepartmentClick(button){
 function showSuccessUpdate() {
     Swal.fire({
         title: 'Success!',
-        text: 'This department has updated successfully.',
+        text: 'Job Title updated successfully.',
         icon: 'success',
         timer: 2000,
         confirmButtonText: 'OK'

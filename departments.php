@@ -139,30 +139,6 @@ if($_SESSION['access_role'] !== 'Admin'){
 </div>
 <!-- / Layout wrapper -->
 
-<?php include_once __DIR__ . '/departments/modules/departments-fetch-department-heads.php'; ?>
-<script>
-  populateDepartmentHeadsSelect(document.getElementById("create_department_head"));
-  populateDepartmentHeadsSelect(document.getElementById("update_department_head"));
-</script>
-
-<script>
-$(document).ready(function () {
-    // Initialize Selectize
-    $('#create_department_head').selectize({
-        placeholder: 'Select a department head',
-        allowEmptyOption: true
-    });
-});
-
-$(document).ready(function () {
-    // Initialize Selectize
-    $('#update_department_head').selectize({
-        placeholder: 'Select a department head',
-        allowEmptyOption: true
-    });
-});
-</script>
-
 <!-- Core JS -->
 <!-- build:js assets/vendor/js/core.js -->
 <script src="assets/vendor/libs/jquery/jquery.js"></script>
@@ -192,6 +168,34 @@ $(document).ready(function () {
   crossorigin="anonymous"
   referrerpolicy="no-referrer"
 ></script>
+
+<?php include_once __DIR__ . '/departments/modules/departments-fetch-department-heads.php'; ?>
+<script>
+  populateDepartmentHeadsSelect(document.getElementById("create_department_head"));
+  populateDepartmentHeadsSelect(document.getElementById("update_department_head"));
+</script>
+
+<script>
+$(document).ready(function () {
+    // Initialize Selectize
+    $('#create_department_head').selectize({
+        placeholder: 'Select a department head',
+        allowEmptyOption: true
+    });
+});
+
+$(document).ready(function () {
+    // Initialize Selectize
+    $('#update_department_head').selectize({
+        placeholder: 'Select a department head',
+        allowEmptyOption: true
+    });
+});
+</script>
+
+
+
+
 <style>
 
 </style>

@@ -28,6 +28,22 @@ if($_SESSION['access_role'] !== 'Admin'){
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <!-- Sweet Alert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- Selectize -->
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/css/selectize.default.min.css"
+  integrity="sha512-pTaEn+6gF1IeWv3W1+7X7eM60TFu/agjgoHmYhAfLEU8Phuf6JKiiE8YmsNC0aCgQv4192s4Vai8YZ6VNM6vyQ=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+/>
+
+
+<!-- Ajax -->
+<script src="job-titles/modules/job-titles-ajax.js?v1.1"></script>
+<!-- Scripts -->
+<script src="job-titles/modules/job-titles-scripts.js?v1.2"></script>
+
+
 <!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -75,17 +91,55 @@ if($_SESSION['access_role'] !== 'Admin'){
     <script>
       document.getElementById("job-titles-menu").classList.add("active");
     </script>
-
+        <?php require_once __DIR__ . '/job-titles/modules/job-title-modals-add-form.php' ?>
     <!-- Layout container -->
     <div class="layout-page">
-    <?php require_once __DIR__ . '/user.php' ?>
+      <?php require_once __DIR__ . '/user.php' ?>
 
       <!-- / Navbar -->
       <div class="content-wrapper">
-        <div class="container-xxl">
+        <div class="container-fluid pt-5 pb-5">
+          <div class="container-fluid mb-3 d-flex align-items-center">
+              <h1 class="display-1">Job Titles</h1>
+              <button type="button" class="btn btn-success btn-xl ms-auto" data-bs-toggle="modal" data-bs-target="#add_job_titles_modal">
+                <i class="bx bx-plus bx-lg"></i>Add Job Title
+              </button>
+              
+            </div>
+
+            <div class="divider text-start">
+              <div class="divider-text">
+                
+              </div>
+            </div>
+
+            <div class="container-fluid card pt-3 pb-3 mt-5 mb-5">
+              <?php require_once __DIR__ . '/job-titles/modules/job-titles-sorter.php' ?>
+            </div>
+
+            <div class="divider text-start">
+              <div class="divider-text">
+                
+              </div>
+            </div>
+
+            <div class="container-fluid card pt-5 pb-3 mt-5">
+              <div class="card-header">
+                <h5>List of Job Titles
+              </div>
+              <div class="card-body">
+                <div id="job-titles-table" class="table-responsive text-no-wrap"></div>
+              </div>
+            </div>
+
             
+
+            
+            <script>
+              fetchAllJobTitles();
+            </script>
+          </div>
         </div>
-      </div>
       <?php require_once __DIR__ . '/footer.php' ?>
       <div class="content-backdrop fade"></div>
     </div>
@@ -119,5 +173,113 @@ if($_SESSION['access_role'] !== 'Admin'){
 
 <!-- Place this tag in your head or just before your close body tag. -->
 <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+
+<!-- Selectize -->
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/js/selectize.min.js"
+  integrity="sha512-IOebNkvA/HZjMM7MxL0NYeLYEalloZ8ckak+NDtOViP7oiYzG5vn6WVXyrJDiJPhl4yRdmNAG49iuLmhkUdVsQ=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+></script>
+
+<?php include_once __DIR__ . '/job-titles/modules/job-titles-fetch-departments.php'; ?>
+<script>
+    populateDepartmentSelect(document.getElementById("create_jobtitle_department_name"));
+</script>
+
+
+<script>
+const REGEX_EMAIL = "([a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@" + "(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)";
+
+$("#create_jobtitle_department_name").selectize({
+  persist: false,
+  maxItems: 1,
+  valueField: "id",
+  labelField: "description",
+  searchField: ["name", "description"],
+  options: departments,
+  render: {
+    item: function (item, escape) {
+        return (
+        "<div>" +
+        (item.name
+            ? '<span class="name">' + escape(item.name) + "</span>"
+            : "") +
+        (item.description
+            ? '<span class="description">' + escape(item.description) + "</span>"
+            : "") +
+        "</div>"
+        );
+    },
+    option: function (item, escape) {
+        var label = item.name || item.description;
+        var caption = item.name ? item.description : null;
+        return (
+        "<div>" +
+        '<span class="label">' +
+        escape(label) +
+        "</span>" +
+        (caption
+            ? '<span class="caption">' + escape(caption) + "</span>"
+            : "") +
+        "</div>"
+        );
+    },
+  },
+  createFilter: function (input) {
+    var match, regex;
+
+    // email@address.com
+    regex = new RegExp("^" + REGEX_EMAIL + "$", "i");
+    match = input.match(regex);
+    if (match) return !this.options.hasOwnProperty(match[0]);
+
+    // name <email@address.com>
+    regex = new RegExp("^([^<]*)<" + REGEX_EMAIL + ">$", "i");
+    match = input.match(regex);
+    if (match) return !this.options.hasOwnProperty(match[2]);
+
+    return false;
+  },
+  create: function (input) {
+    if (new RegExp("^" + REGEX_EMAIL + "$", "i").test(input)) {
+        return { email: input };
+    }
+    var match = input.match(
+        new RegExp("^([^<]*)<" + REGEX_EMAIL + ">$", "i")
+    );
+    if (match) {
+        return {
+        email: match[2],
+        name: $.trim(match[1]),
+        };
+    }
+    alert("Invalid email address.");
+    return false;
+  },
+});
+</script>
+
+<style>
+.selectize-control.add_department .selectize-input > div .description {
+  opacity: 0.8;
+}
+.selectize-control.add_department .selectize-input > div .name + .description {
+  margin-left: 5px;
+}
+.selectize-control.add_department .selectize-input > div .description:before {
+  content: "<";
+}
+.selectize-control.add_department .selectize-input > div .description:after {
+  content: ">";
+}
+.selectize-control.add_department .selectize-dropdown .caption {
+  font-size: 12px;
+  display: block;
+  color: #a0a0a0;
+}
+</style>
+
 </body>
 </html>
