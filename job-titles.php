@@ -7,13 +7,10 @@ if(!isset($_SESSION['id'])){
   header("Location: ". $SMARTWAGE_LOCATION ."/login.php?r=true");
 }
 
-if(isset($_GET['s']) && $_GET['s'] == true){
-  include_once __DIR__ . '/sweet-alert-toasts/login/login-success.php';
+if($_SESSION['access_role'] !== 'Admin'){
+  header("Location: ". $SMARTWAGE_LOCATION ."/smartWage-index.php?aR=true");
 }
 
-if(isset($_GET['aR']) && $_GET['aR'] == true){
-  include_once __DIR__ . '/sweet-alert-toasts/login/login-access-role-insufficient.php';
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -24,7 +21,7 @@ if(isset($_GET['aR']) && $_GET['aR'] == true){
 
 </style>
 <head>
-<title> Dashboard </title>
+<title> Job Titles </title>
 <!-- font-awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <!-- jQuery -->
@@ -76,7 +73,7 @@ if(isset($_GET['aR']) && $_GET['aR'] == true){
     
     <?php require_once __DIR__ . '/sidebar.php' ?>
     <script>
-      document.getElementById("dashboard-menu").classList.add("active");
+      document.getElementById("job-titles-menu").classList.add("active");
     </script>
 
     <!-- Layout container -->

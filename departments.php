@@ -1,36 +1,45 @@
 <?php require_once __DIR__ . '/includes/security-headers.php'; ?>
 <?php require_once __DIR__ . '/includes/session.php'; ?>
 <?php require_once __DIR__ . '/includes/file-locations.php' ?>
-
 <?php
 if(!isset($_SESSION['id'])){
   header("Location: ". $SMARTWAGE_LOCATION ."/login.php?r=true");
 }
-
-if(isset($_GET['s']) && $_GET['s'] == true){
-  include_once __DIR__ . '/sweet-alert-toasts/login/login-success.php';
-}
-
-if(isset($_GET['aR']) && $_GET['aR'] == true){
-  include_once __DIR__ . '/sweet-alert-toasts/login/login-access-role-insufficient.php';
+if($_SESSION['access_role'] !== 'Admin'){
+  header("Location: ". $SMARTWAGE_LOCATION ."/smartWage-index.php?aR=true");
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <style>
 
-
-
 </style>
 <head>
-<title> Dashboard </title>
+<title> Departments </title>
 <!-- font-awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <!-- Sweet Alert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- Selectize -->
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/css/selectize.default.min.css"
+  integrity="sha512-pTaEn+6gF1IeWv3W1+7X7eM60TFu/agjgoHmYhAfLEU8Phuf6JKiiE8YmsNC0aCgQv4192s4Vai8YZ6VNM6vyQ=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+/>
+
+
+<!-- Ajax -->
+<script src="departments/modules/departments-ajax.js?v1.2"></script>
+<!-- Scripts -->
+<script src="departments/modules/departments-scripts.js?v1.2"></script>
+
+
 <!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -60,14 +69,6 @@ if(isset($_GET['aR']) && $_GET['aR'] == true){
 <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
 <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
 <script src="assets/js/config.js"></script>
-
-<!-- font-awesome -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-<!-- jQuery -->
-<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-
-<!-- Sweet Alert -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
 <!-- Layout wrapper -->
@@ -76,17 +77,56 @@ if(isset($_GET['aR']) && $_GET['aR'] == true){
     
     <?php require_once __DIR__ . '/sidebar.php' ?>
     <script>
-      document.getElementById("dashboard-menu").classList.add("active");
+      document.getElementById("departments-menu").classList.add("active");
     </script>
-
+    <?php require_once __DIR__ . '/departments/modules/department-modals-update-form.php' ?>
+    <?php require_once __DIR__ . '/departments/modules/department-modals-add-form.php' ?>
     <!-- Layout container -->
     <div class="layout-page">
     <?php require_once __DIR__ . '/user.php' ?>
-
+    
       <!-- / Navbar -->
       <div class="content-wrapper">
-        <div class="container-xxl">
+        <div class="container-fluid pt-5 pb-5">
+            <div class="container-fluid mb-3 d-flex align-items-center">
+              <h1 class="display-1">Departments</h1>
+              <button type="button" class="btn btn-success btn-xl ms-auto" data-bs-toggle="modal" data-bs-target="#add-departments-modal">
+                <i class="bx bx-plus bx-lg"></i>Add Department
+              </button>
+              
+            </div>
+
+            <div class="divider text-start">
+              <div class="divider-text">
+                
+              </div>
+            </div>
+
+            <div class="container-fluid card pt-3 pb-3 mt-5 mb-5">
+              <?php require_once __DIR__ . '/departments/modules/departments-sorter.php' ?>
+            </div>
+
+            <div class="divider text-start">
+              <div class="divider-text">
+                
+              </div>
+            </div>
+
+            <div class="container-fluid card pt-5 pb-3 mt-5">
+              <div class="card-header">
+                <h5>List of Departments
+              </div>
+              <div class="card-body">
+                <div id="departments-table" class="table-responsive text-no-wrap"></div>
+              </div>
+            </div>
+
             
+
+            
+            <script>
+              fetchAllDepartments();
+            </script>
         </div>
       </div>
       <?php require_once __DIR__ . '/footer.php' ?>
@@ -99,7 +139,29 @@ if(isset($_GET['aR']) && $_GET['aR'] == true){
 </div>
 <!-- / Layout wrapper -->
 
+<?php include_once __DIR__ . '/departments/modules/departments-fetch-department-heads.php'; ?>
+<script>
+  populateDepartmentHeadsSelect(document.getElementById("create_department_head"));
+  populateDepartmentHeadsSelect(document.getElementById("update_department_head"));
+</script>
 
+<script>
+$(document).ready(function () {
+    // Initialize Selectize
+    $('#create_department_head').selectize({
+        placeholder: 'Select a department head',
+        allowEmptyOption: true
+    });
+});
+
+$(document).ready(function () {
+    // Initialize Selectize
+    $('#update_department_head').selectize({
+        placeholder: 'Select a department head',
+        allowEmptyOption: true
+    });
+});
+</script>
 
 <!-- Core JS -->
 <!-- build:js assets/vendor/js/core.js -->
@@ -122,5 +184,17 @@ if(isset($_GET['aR']) && $_GET['aR'] == true){
 
 <!-- Place this tag in your head or just before your close body tag. -->
 <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+<!-- Selectize -->
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/js/selectize.min.js"
+  integrity="sha512-IOebNkvA/HZjMM7MxL0NYeLYEalloZ8ckak+NDtOViP7oiYzG5vn6WVXyrJDiJPhl4yRdmNAG49iuLmhkUdVsQ=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+></script>
+<style>
+
+</style>
+
 </body>
 </html>

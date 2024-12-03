@@ -1,23 +1,4 @@
 function fetchAllDepartments(page = 1) {
-    console.log(page);
-    $.ajax({
-        url: 'apiTest.php',
-        method: 'POST',
-        data: {
-            action: 'fetchAll',
-            page: page
-        },
-        dataType: 'html',
-        success(response) {
-            $('#departments').html(response);
-        },
-        error(xhr, status, error) {
-            console.error("Error fetching departments:", error);
-        }
-    });
-}
-
-function fetchAllSort(page = 1){
     var numberEntries = $("#entries").val();
     var sortByColumn = $("#sortBy").val();
     var pageNumber = getPage(page);
@@ -49,10 +30,10 @@ function fetchAllSort(page = 1){
 
         
     $.ajax({
-        url: 'apiTest.php',
+        url: 'departments/modules/departments-api.php',
         type: 'POST',
         data: {
-            action: 'fetchAllSort',
+            action: 'fetchAll',
             page: pageNumber,
             numberEntries: numberEntries,
             sort_by: sortByColumn,
@@ -65,7 +46,7 @@ function fetchAllSort(page = 1){
             filter_endDate: endDate
         },
         success: function(response) {
-            $('#departments').html(response);
+            $('#departments-table').html(response);
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log("AJAX Error: " + textStatus + ": " + errorThrown);
@@ -73,25 +54,32 @@ function fetchAllSort(page = 1){
     });
 }
 
+
 function createDepartment() {
-    const departmentName = document.getElementById('createDepartmentName').value;
-    const departmentHeadId = document.getElementById('createDepartmentHeadId').value;
+    const departmentName = document.getElementById('create_department_name').value;
+    const departmentHeadId = document.getElementById('create_department_head').value;
+    const departmentDescription = document.getElementById('create_department_description').value;
+    const departmentStatus = document.getElementById('create_department_status').value;
 
     const departmentData = {
         name: departmentName,
-        departmentHeadId: departmentHeadId
+        departmentHeadId: departmentHeadId,
+        description: departmentDescription,
+        status: departmentStatus
     };
+
     $.ajax({
-        url: 'apiTest.php',
+        url: 'departments/modules/departments-api.php',
         method: 'POST',
         data: {
             action: 'create',
             department: departmentData
         },
         success: function(response) {
-            $('#responseTest').html(response);
-            fetchAllSort();
-            document.getElementById('createDepartmentForm').reset();
+            $('#departments-table').html(response);
+            fetchAllDepartments();
+            document.getElementById('add-departments-form').reset();
+            showCreatedSuccessAlert();
         },
         error(xhr, status, error) {
             console.error("Error creating department:", error);
@@ -106,7 +94,7 @@ function deleteDepartment(button){
     };
     
     $.ajax({
-        url: 'apiTest.php',
+        url: 'departments/modules/departments-api.php',
         type: 'POST',
         data: {
             action: 'delete',
@@ -114,7 +102,7 @@ function deleteDepartment(button){
         },
         success: function(response) {
             $('#departments').html(response);
-            fetchAllSort();
+            fetchAllDepartments();
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log("AJAX Error: " + textStatus + ": " + errorThrown);
@@ -124,11 +112,11 @@ function deleteDepartment(button){
 }
 
 function updateDepartment(button){
-    var md5_id = button.getAttribute('data-token');;
-    var departmentName = document.getElementById('updateDepartmentName').value;
-    var departmentHeadId = document.getElementById('updateDepartmentHeadId').value;
-    var departmentDescription = document.getElementById('updateDepartmentDescription').value;
-    var departmentStatus = document.getElementById('updateDepartmentStatus').value;
+    var md5_id = button.getAttribute('data-token');
+    var departmentName = document.getElementById('update_department_name').value;
+    var departmentHeadId = document.getElementById('update_department_head').value;
+    var departmentDescription = document.getElementById('update_department_description').value;
+    var departmentStatus = document.getElementById('update_department_status').value;
 
     console.log(`MD5 ID: ${md5_id}, 
         Department Name: ${departmentName}, 
@@ -137,7 +125,7 @@ function updateDepartment(button){
         Department Status: ${departmentStatus}`);
 
     $.ajax({
-        url: 'apiTest.php',
+        url: 'departments/modules/departments-api.php',
         type: 'POST',
         data: {
             action: 'update',
@@ -151,8 +139,8 @@ function updateDepartment(button){
         },
         success: function(response) {
             $('#responseTest').html(response);
-            showSuccessAlert();
-            fetchAllSort();
+            showSuccessUpdate();
+            fetchAllDepartments();
             
         },
         error: function(jqXHR, textStatus, errorThrown) {
@@ -161,10 +149,3 @@ function updateDepartment(button){
     });
     
 }
-
-
-// $(document).on('click', '.page-link', function(e) {
-//     e.preventDefault();
-//     const page = $(this).data('page');
-//     fetchAllDepartments(page);
-// });

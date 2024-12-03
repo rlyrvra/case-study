@@ -1,4 +1,5 @@
 <?php include_once __DIR__ . '/database/database.php'; ?>
+<?php require_once __DIR__ . '/includes/file-locations.php' ?>
 <?php
 // Check if the remember me cookie exists
 if (isset($_COOKIE['remember_me'])) {
@@ -30,7 +31,7 @@ if (isset($_COOKIE['remember_me'])) {
 
 <?php
 if (isset($_SESSION['id'])){
-    header("Location: /case-study/smartWage-index.php?s=true");
+    header("Location: ". $SMARTWAGE_LOCATION . "/smartWage-index.php?s=true");
     exit;
 }
 ?>

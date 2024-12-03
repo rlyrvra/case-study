@@ -15,74 +15,19 @@ require_once __DIR__ . '/../../includes/enums/ErrorCode.php';
 require_once __DIR__ . '/../../database/database.php';
 
 try {
-    $userId = 1;
     $departmentDao = new DepartmentDao($pdo);
     $action = $_POST['action'] ?? '';
-    $page = isset($_POST['page']) ? (int)$_POST['page'] : 1;
-    $limit = 5;
-    $offset = ($page - 1) * $limit;
 
     if ($action === 'fetchAll') {
-        $data = $departmentDao->fetchAll([], [["column" => "status", "operator" => "=", "value" => "Active"]], [["column" => "department.created_at", "direction" => "DESC"]], $limit, $offset);
-        $departments = $data["result_set"];
-        $totalDepartments = $data["total_row_count"];
-        $totalPages = ceil($totalDepartments / $limit);
-
-        $jobTitleDao = new JobTitleDao($pdo);
-        $filterCriteria = [
-            [
-                "column" => "job_title.status",
-                "operator" => "=",
-                "value" => "Active"
-            ]
-        ];
-        $data2 = $jobTitleDao->fetchAll(["id", "title"], $filterCriteria);
-        $jobTitles = $data2["result_set"];
-        print_r($jobTitles);
-        include __DIR__ . '/departmentsTable.php';
-        return;
-    }
-
-
-    if ($action === 'create') {
-        $departmentData = $_POST['department'] ?? null;
-        if ($departmentData == null) {
-            echo "Invalid department data.";
-            return;
-        }
-        $name = $departmentData['name'] ?? '';
-        $departmentHeadId = $departmentData['departmentHeadId'] !== '' ? (int) $departmentData['departmentHeadId'] : null;
-
-        $newDepartment = new Department(
-            id: null,
-            name: $name,
-            departmentHeadId: $departmentHeadId,
-            description: null,
-            status: "Active"
-        );
-        $departmentRepository = new DepartmentRepository($departmentDao);
-        $departmentService = new DepartmentService($departmentRepository);
-        $result = $departmentService->createDepartment($newDepartment);
-        if ($result !== ActionResult::FAILURE) {
-            echo "Department created successfully!";
-        } else {
-            echo "Failed to create department. Please try again.";
-        }
-        return;
-    }
-
-
-    if($action === 'fetchAllSort'){
-        $status = $_POST['filter_status'] && $_POST['filter_status'] ? $_POST['filter_status'] : null;
+        $status = isset($_POST['filter_status']) && $_POST['filter_status'] ? $_POST['filter_status'] : null;
         $searchAt = isset($_POST['filter_searchAt']) && $_POST['filter_searchAt'] !== "none" ? $_POST['filter_searchAt'] : null;
-        $searchFilter = $_POST['filter_search'];
-        $dateFilterColumn = $_POST['filter_date_column'];
+        $searchFilter = isset($_POST['filter_search']) ? $_POST['filter_search'] : null;
+        $dateFilterColumn = isset($_POST['filter_date_column']) ? $_POST['filter_date_column'] : null;
         $dateStart = isset($_POST['filter_startDate']) && $dateFilterColumn !== "none" ? $_POST['filter_startDate'] : 0;
         $dateEnd = isset($_POST['filter_endDate']) && $dateFilterColumn !== "none" ? $_POST['filter_endDate'] : 0;
         $page = isset($_POST['page']) ? (int)$_POST['page'] : 1;
-        $limit = isset($_POST['numberEntries']) ? $_POST['numberEntries'] : 5;
+        $limit = isset($_POST['numberEntries']) ? $_POST['numberEntries'] : 10;
         $offset = ($page - 1) * $limit;
-        // test data
         
         $filterCriteria = [];
         
@@ -108,7 +53,8 @@ try {
                 "upper_bound" => $dateEnd
             ];
         }
-        
+
+
         $sortCriteria = [
             [
                 "column" => "department." . $_POST['sort_by'],
@@ -124,19 +70,60 @@ try {
         }
 
         $totalDepartments = $result["total_row_count"];
-        $totalPages = ceil($totalDepartments / $_POST['numberEntries']);
-        include __DIR__ . '/departmentsTable.php';
+        $totalPages = ceil($totalDepartments / $limit);
+        include __DIR__ . '/departments-table.php';
         return;
+    }
 
+    if ($action === 'create') {
+        $departmentData = $_POST['department'] ?? null;
+        if ($departmentData == null) {
+            echo "Invalid department data.";
+            return;
+        }
+        $name = isset($departmentData['name']) && $departmentData['name'] !== '' ? $departmentData['name'] : null;
+        $departmentHeadId = $departmentData['departmentHeadId'] !== '' && $departmentData['departmentHeadId'] !== 'None' ? (int) $departmentData['departmentHeadId'] : null;
+        $description = isset($departmentData['description']) ? $departmentData['description'] : null;
+        $status = isset($departmentData['status']) ? $departmentData['status'] : null;
+        
+        $newDepartment = new Department(
+            id: null,
+            name: $name,
+            departmentHeadId: $departmentHeadId,
+            description: $description,
+            status: $status
+        );
+        $departmentRepository = new DepartmentRepository($departmentDao);
+        $departmentService = new DepartmentService($departmentRepository);
+        $result = $departmentService->createDepartment($newDepartment);
+        if ($result !== ActionResult::FAILURE) {
+            echo "Department created successfully!";
+        } else {
+            echo "Failed to create department. Please try again.";
+        }
+        return;
+    }
+
+    if($action == 'delete'){
+        $hashed_id = $_POST['md5_id'] ?? null;
+        $departmentRepository = new DepartmentRepository($departmentDao);
+        $departmentService = new DepartmentService($departmentRepository);
+        $updateResult = $departmentService->deleteDepartment($hashed_id);
+
+        if ($deleteResult) {
+            echo "Department deleted successfully!";
+        } else {
+            echo "Failed to delete department. Please try again.";
+        }
+        return;
     }
 
 
     if($action == 'update'){
         $departmentData = $_POST['department'] ?? null;
         if ($departmentData) {
-            print_r($departmentData);
             $name = $departmentData['name'] ?? '';
-            $departmentHeadId = $departmentData['departmentHeadId'] !== '' ? (int) $departmentData['departmentHeadId'] : null;
+            $departmentHeadId = $departmentData['departmentHeadId'] !== '' && $departmentData['departmentHeadId'] !== 'None'  ? (int) $departmentData['departmentHeadId'] : null;
             $departmentDescription = $departmentData['departmentDescription'] ?? null;
             $departmentStatus = $departmentData['departmentStatus'] ?? null;
             $hashed_id = $departmentData['md5_id'] ?? null;
@@ -164,24 +151,6 @@ try {
         
         return;
     }
-
-
-    if($action == 'delete'){
-        $hashed_id = $_POST['md5_id'] ?? null;
-        $departmentRepository = new DepartmentRepository($departmentDao);
-        $departmentService = new DepartmentService($departmentRepository);
-        $updateResult = $departmentService->deleteDepartment($hashed_id);
-
-        if ($deleteResult) {
-            echo "Department deleted successfully!";
-        } else {
-            echo "Failed to delete department. Please try again.";
-        }
-        return;
-    }
-
-
-
 
     echo "Invalid action specified.";
 } catch (Exception $e) {

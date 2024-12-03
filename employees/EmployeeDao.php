@@ -210,6 +210,7 @@ class EmployeeDao
             "first_name"                      => "employee.first_name                      AS first_name"                     ,
             "middle_name"                     => "employee.middle_name                     AS middle_name"                    ,
             "last_name"                       => "employee.last_name                       AS last_name"                      ,
+            "full_name"                       => "employee.full_name                       AS full_name"                      ,
             "date_of_birth"                   => "employee.date_of_birth                   AS date_of_birth"                  ,
             "gender"                          => "employee.gender                          AS gender"                         ,
             "marital_status"                  => "employee.marital_status                  AS marital_status"                 ,

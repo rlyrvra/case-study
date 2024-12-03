@@ -1,9 +1,7 @@
 <?php 
 require_once __DIR__ . '/company-profile/CompanyProfile.php';
 require_once __DIR__. '/database/database.php';
-
-
-require_once __DIR__ . '/includes/security-headers.php'; 
+require_once __DIR__ . '/includes/header.php'; 
 
 ?>
 <head>

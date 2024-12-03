@@ -13,7 +13,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
 
     $employeeDao = new EmployeeDao($pdo);
 
-    $selectedColumns = ["id", "access_role"];
+    $selectedColumns = ["id", "access_role", "full_name", "profile_picture"];
     $filterCriteria = [
         [
             "column" => "employee.username",
@@ -39,10 +39,14 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
     $response['success'] = true;
     $userId = $result[0]['id'];
     $accessRole = $result[0]['access_role'];
+    $fullName = $result[0]['full_name'];
+    $profilePicture = $result[0]['profile_picture'];
 
     // Store user info in the session
     $_SESSION['id'] = $userId;
     $_SESSION['access_role'] = $accessRole;
+    $_SESSION['full_name'] = $fullName;
+    $_SESSION['profile_picture'] = $profilePicture;
 
     // Handle the "Remember Me" functionality
     if ($remember) {

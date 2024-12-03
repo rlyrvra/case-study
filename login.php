@@ -1,6 +1,6 @@
 <?php require_once __DIR__ . '/includes/header.php'; ?>
 <?php require_once __DIR__ . '/includes/session.php'; ?>
-<?php require_once __DIR__ . '/login-validator.php'?>
+<?php require_once __DIR__ . '/login-validator.php'; ?>
 <?php
 if(isset($_GET['r']) && $_GET['r']){
     include_once __DIR__ . '/sweet-alert-toasts/login/login-require.php';
