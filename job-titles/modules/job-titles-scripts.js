@@ -82,43 +82,60 @@ function toggleDeletedAtOption() {
 }
 
 
-function updateDepartmentClick(button){
+function updateJobTitleClick(button){
 
     const row = button.closest('tr');  // Get the closest row
-    const departmentData = {
+    const jobTitleData = {
         token: row.getAttribute('data-id'),
-        name: row.getAttribute('data-name'),
-        departHeadId: row.getAttribute('data-dept-head-id'),
-        departmentHeadId: row.getAttribute('data-department-head-id'),
+        title: row.getAttribute('data-title'),
+        department_id: row.getAttribute('data-department-id'),
+        department_name: row.getAttribute('department_name'),
         description: row.getAttribute('data-description'),
         status: row.getAttribute('data-status')
     };
 
-    const txtDepartmentName = $("#update_department_name");
-    const txtDepartmentHeadId = $("#update_department_head");
-    const txtDepartmentDescription = $("#update_department_description");
-    const $select = $('#update_department_head').selectize();
-    const txtDepartmentStatus = $("#update_department_status");
-    const btnUpdateDepartment = document.getElementById('update_department_btn');
+    const txtJobTitleName = $("#update_jobtitle_title");
+    const txtDescription = $("#update_jobtitle_description");
+    const $select = $('#update_jobtitle_department_name').selectize();
+    const btnUpdateJobTitle = document.getElementById('update_department_btn');
 
-    txtDepartmentName.val(departmentData.name);
-    txtDepartmentHeadId.val(departmentData.departmentHeadId);
-    txtDepartmentDescription.val(departmentData.description);
-    txtDepartmentStatus.val(departmentData.status);
+    txtJobTitleName.val(jobTitleData.title);
+    txtDescription.val(jobTitleData.description);
     // Get the Selectize instance
     var selectize = $select[0].selectize;
     // Set a value
-    selectize.setValue(departmentData.departHeadId);
-    btnUpdateDepartment.setAttribute('data-token', departmentData.token);
+    selectize.setValue(jobTitleData.department_id);
+    btnUpdateJobTitle.setAttribute('data-token', jobTitleData.token);
     
 }
 
-function showSuccessUpdate() {
+function showSuccessUpdateAlert() {
     Swal.fire({
         title: 'Success!',
         text: 'Job Title updated successfully.',
         icon: 'success',
         timer: 2000,
         confirmButtonText: 'OK'
+    });
+}
+
+function confirmDeleteJobTitle(button) {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "Do you want to delete this job title?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+        deleteJobTitle(button);
+        Swal.fire(
+            'Deleted!',
+            'The job title has been deleted.',
+            'success'
+        );
+        }
     });
 }

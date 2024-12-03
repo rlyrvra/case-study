@@ -141,7 +141,7 @@ try {
             status: $jobTitleStatus
         );
 
-        $updateResult = $jobTitleDao->updateThruHash($updateJobTitle, $userId, $hashed_id);
+        $updateResult = $jobTitleDao->update($updateJobTitle, $hashed_id);
 
         if ($updateResult) {
             echo "JT updated successfully!";
@@ -154,7 +154,7 @@ try {
 
     if($action == 'delete'){
         $hashed_id = $_POST['md5_id'] ?? null;
-        $deleteResult = $jobTitleDao->softDeleteThruHash($hashed_id, $userId);
+        $deleteResult = $jobTitleDao->delete($hashed_id);
 
         if ($deleteResult) {
             echo "Department deleted successfully!";

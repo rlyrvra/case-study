@@ -80,12 +80,75 @@ function createJobTitle() {
             job_title: jobTitleData
         },
         success: function(response) {
-            //fetchAllJobTitles();
-            $('#job-titles-table').html(response);
+            fetchAllJobTitles();
+            showCreatedSuccessAlert();
             document.getElementById('create_job_title_form').reset();
         },
         error(xhr, status, error) {
             console.error("Error creating job titles:", error);
         }
     });
+}
+
+function updateJobTitle(button){
+    var token = button.getAttribute('data-token');;
+    const jobTitleName = document.getElementById('update_jobtitle_title').value;
+    const jobTitleDepartmentName = document.getElementById('update_jobtitle_department_name').value;
+    const jobTitleDescription = document.getElementById('update_jobtitle_description').value;
+    const jobTitleStatus = document.getElementById('update_jobtitle_status').value;
+
+    console.log(`MD5 ID: ${token}, 
+        Job Title Name: ${jobTitleName}, 
+        Job Title Department Name: ${jobTitleDepartmentName}, 
+        Job Title Description: ${jobTitleDescription}, 
+        Job Title Status: ${jobTitleStatus}`);
+
+    $.ajax({
+        url: 'job-titles/modules/job-titles-api.php',
+        type: 'POST',
+        data: {
+            action: 'update',
+            job_title: {
+                md5_id: token,
+                title: jobTitleName,
+                department_id: jobTitleDepartmentName,
+                description: jobTitleDescription,
+                status: jobTitleStatus,
+            }
+        },
+        success: function(response) {
+            //$('#job-titles-table').html(response);
+            showSuccessUpdateAlert();
+            fetchAllJobTitles();
+            
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log("AJAX Error: " + textStatus + ": " + errorThrown);
+        }
+    });
+    
+}
+
+function deleteJobTitle(button){
+    const row = button.closest('tr');  // Get the closest row
+    const jobTitleData = {
+        token: row.getAttribute('data-id'),
+    };
+    
+    $.ajax({
+        url: 'job-titles/modules/job-titles-api.php',
+        type: 'POST',
+        data: {
+            action: 'delete',
+            md5_id: jobTitleData.token
+        },
+        success: function(response) {
+            //('#job-titles-table').html(response);
+            fetchAllSort();
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log("AJAX Error: " + textStatus + ": " + errorThrown);
+        }
+    });
+    
 }

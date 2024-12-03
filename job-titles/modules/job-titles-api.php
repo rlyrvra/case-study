@@ -97,8 +97,6 @@ try {
             status: $jobTitleStatus
         );
 
-        print_r($newJobTitle);
-
         $jobTitleRepository = new JobTitleRepository($jobTitleDao);
         $jobTitleService = new JobTitleService($jobTitleRepository);
         $result = $jobTitleService->createJobTitle($newJobTitle);
@@ -111,6 +109,59 @@ try {
 
         return;
     }
+
+    if($action == 'update'){
+        
+        $jobTitleData = $_POST['job_title'] ?? null;
+        if (!$jobTitleData) {
+            echo "Invalid job title data.";
+            return;
+        }
+
+        $hashed_id = $jobTitleData['md5_id'] ?? null;
+        $jobTitleTitle = $jobTitleData['title'] ?? '';
+        $jobTitleDepartmentId = $jobTitleData['department_id'] ?? null;
+        $jobTitledescription = $jobTitleData['description'] ?? null;
+        $jobTitleStatus = $jobTitleData['status'] ?? null;
+
+
+        $updateJobTitle = new JobTitle(
+            id: $hashed_id,
+            title: $jobTitleTitle,
+            departmentId: $jobTitleDepartmentId,
+            description: $jobTitledescription,
+            status: $jobTitleStatus
+        );
+
+        //echo "$hashed_id, $jobTitleTitle, $jobTitleDepartmentId, $jobTitledescription, $jobTitleStatus </br>";
+
+        $jobTitleRepository = new JobTitleRepository($jobTitleDao);
+        $jobTitleService = new JobTitleService($jobTitleRepository);
+        $result = $jobTitleService->updateJobTitle($updateJobTitle);
+
+        if ($result) {
+            echo "Job Title updated successfully!";
+        } else {
+            echo "Failed to JT. Please try again.";
+        }
+        
+        return;
+    }
+
+    if($action == 'delete'){
+        $hashed_id = $_POST['md5_id'] ?? null;
+        $jobTitleRepository = new JobTitleRepository($jobTitleDao);
+        $jobTitleService = new JobTitleService($jobTitleRepository);
+        $result = $jobTitleService->deleteJobTitle($hashed_id);
+
+        if ($result) {
+            echo "JT deleted successfully!";
+        } else {
+            echo "Failed to JT. Please try again.";
+        }
+        return;
+    }
+
 
 
 

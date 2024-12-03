@@ -48,7 +48,7 @@
                         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                             <i class="bx bx-arrow-back bx-xs"></i>Close
                         </button>
-                        <button type="submit" id="update_department_btn" class="btn btn-primary" onclick="updateDepartment(this);" data-bs-dismiss="modal"><i class="bx bx-plus bx-xs"></i>update</button>
+                        <button type="submit" id="update_department_btn" class="btn btn-info" onclick="updateDepartment(this);" data-bs-dismiss="modal"><i class="bx bx-plus bx-xs"></i>update</button>
                     </div>
                 </form>
             </div>

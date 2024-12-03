@@ -48,7 +48,7 @@
                         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                             <i class="bx bx-arrow-back bx-xs"></i>Close
                         </button>
-                        <button type="submit" class="btn btn-primary" onclick="createDepartment();" data-bs-dismiss="modal"><i class="bx bx-plus bx-xs"></i>Create</button>
+                        <button type="submit" class="btn btn-success" onclick="createDepartment();" data-bs-dismiss="modal"><i class="bx bx-plus bx-xs"></i>Create</button>
                     </div>
                 </form>
             </div>

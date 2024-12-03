@@ -20,7 +20,6 @@
       <th>Updated At</th>
       <!-- <th>Updated By</th> -->
       <?php if (isset($status) && $status === 'Archived') echo "<th>Deleted At</th>"; ?>
-      <?php if (isset($status) && $status === 'Archived') echo "<th>Deleted By</th>"; ?>
       <?php if (!isset($status) || $status !== 'Archived') echo "<th style='width: 14%'>Action</th>"; ?> 
     </tr>
   </thead>
@@ -28,9 +27,9 @@
     <?php if (!empty($jobTitles)): ?>
       <?php foreach ($jobTitles as $row): ?>
         <tr data-id="<?php echo htmlspecialchars($row['id']); ?>" 
-            data-name="<?php echo htmlspecialchars($row['title']); ?>" 
+            data-title="<?php echo htmlspecialchars($row['title']); ?>" 
             data-department-id="<?php echo htmlspecialchars($row['department_id']); ?>" 
-            data-job-title-name="<?php echo htmlspecialchars($row['department_name']); ?>" 
+            data-department-name="<?php echo htmlspecialchars($row['department_name']); ?>" 
             data-description="<?php echo htmlspecialchars($row['description']); ?>" 
             data-status="<?php echo htmlspecialchars($row['status']); ?>">
           <td><?php echo htmlspecialchars($row['title']); ?></td>
@@ -52,10 +51,10 @@
           <td><?php echo htmlspecialchars($row['updated_at']); ?></td>
           <!-- <td><?php //echo htmlspecialchars($row['updated_by']); ?></td> -->
           <?php if (isset($status) && $status === 'Archived') echo "<td>" . htmlspecialchars($row['deleted_at']) . "</td>"; ?>
-          <?php if (isset($status) && $status === 'Archived') echo "<td>" . htmlspecialchars($row['deleted_by']) . "</td>"; ?>
+          <!-- <?php //if (isset($status) && $status === 'Archived') echo "<td>" . htmlspecialchars($row['deleted_by']) . "</td>"; ?> -->
           <?php if (!isset($status) || $status !== 'Archived') echo
             '<td>
-              <button class="btn btn-info" title="Click to Edit" onclick="updateJobTitleClick(this)" data-bs-toggle="modal" data-bs-target="#jobTitleUpdateFormModal"> 
+              <button class="btn btn-info" title="Click to Edit" onclick="updateJobTitleClick(this)" data-bs-toggle="modal" data-bs-target="#update_job_titles_modal"> 
                 <i class="bx bx-edit-alt"></i>
               </button> 
               <button class="btn btn-danger" title="Click to Delete" onclick="confirmDeleteJobTitle(this)">

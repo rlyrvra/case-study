@@ -41,7 +41,7 @@ if($_SESSION['access_role'] !== 'Admin'){
 <!-- Ajax -->
 <script src="job-titles/modules/job-titles-ajax.js?v1.1"></script>
 <!-- Scripts -->
-<script src="job-titles/modules/job-titles-scripts.js?v1.2"></script>
+<script src="job-titles/modules/job-titles-scripts.js?v1.1"></script>
 
 
 <!-- Fonts -->
@@ -91,7 +91,8 @@ if($_SESSION['access_role'] !== 'Admin'){
     <script>
       document.getElementById("job-titles-menu").classList.add("active");
     </script>
-        <?php require_once __DIR__ . '/job-titles/modules/job-title-modals-add-form.php' ?>
+    <?php require_once __DIR__ . '/job-titles/modules/job-title-modals-add-form.php' ?>
+    <?php require_once __DIR__ . '/job-titles/modules/job-title-modals-update-form.php' ?>
     <!-- Layout container -->
     <div class="layout-page">
       <?php require_once __DIR__ . '/user.php' ?>
@@ -136,7 +137,9 @@ if($_SESSION['access_role'] !== 'Admin'){
 
             
             <script>
-              fetchAllJobTitles();
+              $(document).ready(function () {
+                fetchAllJobTitles();
+              });
             </script>
           </div>
         </div>
@@ -185,79 +188,86 @@ if($_SESSION['access_role'] !== 'Admin'){
 
 <?php include_once __DIR__ . '/job-titles/modules/job-titles-fetch-departments.php'; ?>
 <script>
-    populateDepartmentSelect(document.getElementById("create_jobtitle_department_name"));
+$(document).ready(function () {
+  populateDepartmentSelect(document.getElementById("create_jobtitle_department_name"));
+});
+
+$(document).ready(function () {
+  populateDepartmentSelect(document.getElementById("update_jobtitle_department_name"));
+});
 </script>
 
 
 <script>
-const REGEX_EMAIL = "([a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@" + "(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)";
-
-$("#create_jobtitle_department_name").selectize({
-  persist: false,
-  maxItems: 1,
-  valueField: "id",
-  labelField: "description",
-  searchField: ["name", "description"],
-  options: departments,
-  render: {
-    item: function (item, escape) {
-        return (
-        "<div>" +
-        (item.name
-            ? '<span class="name">' + escape(item.name) + "</span>"
-            : "") +
-        (item.description
-            ? '<span class="description">' + escape(item.description) + "</span>"
-            : "") +
-        "</div>"
-        );
+$(document).ready(function () {
+  const REGEX_EMAIL = "([a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@" + "(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)";
+  $("#create_jobtitle_department_name").selectize({
+    persist: false,
+    maxItems: 1,
+    valueField: "id",
+    labelField: "description",
+    searchField: ["name", "description"],
+    options: departments,
+    render: {
+      item: function (item, escape) {
+          return (
+          "<div>" +
+          (item.name
+              ? '<span class="name">' + escape(item.name) + "</span>"
+              : "") +
+          (item.description
+              ? '<span class="description">' + escape(item.description) + "</span>"
+              : "") +
+          "</div>"
+          );
+      },
+      option: function (item, escape) {
+          var label = item.name || item.description;
+          var caption = item.name ? item.description : null;
+          return (
+          "<div>" +
+          '<span class="label">' +
+          escape(label) +
+          "</span>" +
+          (caption
+              ? '<span class="caption">' + escape(caption) + "</span>"
+              : "") +
+          "</div>"
+          );
+      },
     },
-    option: function (item, escape) {
-        var label = item.name || item.description;
-        var caption = item.name ? item.description : null;
-        return (
-        "<div>" +
-        '<span class="label">' +
-        escape(label) +
-        "</span>" +
-        (caption
-            ? '<span class="caption">' + escape(caption) + "</span>"
-            : "") +
-        "</div>"
-        );
+    createFilter: function (input) {
+      var match, regex;
+
+      // email@address.com
+      regex = new RegExp("^" + REGEX_EMAIL + "$", "i");
+      match = input.match(regex);
+      if (match) return !this.options.hasOwnProperty(match[0]);
+
+      // name <email@address.com>
+      regex = new RegExp("^([^<]*)<" + REGEX_EMAIL + ">$", "i");
+      match = input.match(regex);
+      if (match) return !this.options.hasOwnProperty(match[2]);
+
+      return false;
     },
-  },
-  createFilter: function (input) {
-    var match, regex;
-
-    // email@address.com
-    regex = new RegExp("^" + REGEX_EMAIL + "$", "i");
-    match = input.match(regex);
-    if (match) return !this.options.hasOwnProperty(match[0]);
-
-    // name <email@address.com>
-    regex = new RegExp("^([^<]*)<" + REGEX_EMAIL + ">$", "i");
-    match = input.match(regex);
-    if (match) return !this.options.hasOwnProperty(match[2]);
-
-    return false;
-  },
-  create: function (input) {
-    if (new RegExp("^" + REGEX_EMAIL + "$", "i").test(input)) {
-        return { email: input };
-    }
-    var match = input.match(
-        new RegExp("^([^<]*)<" + REGEX_EMAIL + ">$", "i")
-    );
-    if (match) {
-        return {
-        email: match[2],
-        name: $.trim(match[1]),
-        };
-    }
-    alert("Invalid email address.");
-    return false;
-  },
+    create: function (input) {
+      if (new RegExp("^" + REGEX_EMAIL + "$", "i").test(input)) {
+          return { email: input };
+      }
+      var match = input.match(
+          new RegExp("^([^<]*)<" + REGEX_EMAIL + ">$", "i")
+      );
+      if (match) {
+          return {
+          email: match[2],
+          name: $.trim(match[1]),
+          };
+      }
+      alert("Invalid email address.");
+      return false;
+    },
+  });
 });
 </script>
 
@@ -275,6 +285,101 @@ $("#create_jobtitle_department_name").selectize({
   content: ">";
 }
 .selectize-control.add_department .selectize-dropdown .caption {
+  font-size: 12px;
+  display: block;
+  color: #a0a0a0;
+}
+</style>
+
+
+<script>
+$(document).ready(function () {
+  const REGEX_EMAIL = "([a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@" + "(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)";
+  $("#update_jobtitle_department_name").selectize({
+    persist: false,
+    maxItems: 1,
+    valueField: "id",
+    labelField: "description",
+    searchField: ["name", "description"],
+    options: departments,
+    render: {
+      item: function (item, escape) {
+          return (
+          "<div>" +
+          (item.name
+              ? '<span class="name">' + escape(item.name) + "</span>"
+              : "") +
+          (item.description
+              ? '<span class="description">' + escape(item.description) + "</span>"
+              : "") +
+          "</div>"
+          );
+      },
+      option: function (item, escape) {
+          var label = item.name || item.description;
+          var caption = item.name ? item.description : null;
+          return (
+          "<div>" +
+          '<span class="label">' +
+          escape(label) +
+          "</span>" +
+          (caption
+              ? '<span class="caption">' + escape(caption) + "</span>"
+              : "") +
+          "</div>"
+          );
+      },
+    },
+    createFilter: function (input) {
+      var match, regex;
+
+      // email@address.com
+      regex = new RegExp("^" + REGEX_EMAIL + "$", "i");
+      match = input.match(regex);
+      if (match) return !this.options.hasOwnProperty(match[0]);
+
+      // name <email@address.com>
+      regex = new RegExp("^([^<]*)<" + REGEX_EMAIL + ">$", "i");
+      match = input.match(regex);
+      if (match) return !this.options.hasOwnProperty(match[2]);
+
+      return false;
+    },
+    create: function (input) {
+      if (new RegExp("^" + REGEX_EMAIL + "$", "i").test(input)) {
+          return { email: input };
+      }
+      var match = input.match(
+          new RegExp("^([^<]*)<" + REGEX_EMAIL + ">$", "i")
+      );
+      if (match) {
+          return {
+          email: match[2],
+          name: $.trim(match[1]),
+          };
+      }
+      alert("Invalid email address.");
+      return false;
+    },
+  });
+});
+</script>
+
+
+<style>
+.selectize-control.update_department .selectize-input > div .description {
+  opacity: 0.8;
+}
+.selectize-control.update_department .selectize-input > div .name + .description {
+  margin-left: 5px;
+}
+.selectize-control.update_department .selectize-input > div .description:before {
+  content: "<";
+}
+.selectize-control.update_department .selectize-input > div .description:after {
+  content: ">";
+}
+.selectize-control.update_department .selectize-dropdown .caption {
   font-size: 12px;
   display: block;
   color: #a0a0a0;

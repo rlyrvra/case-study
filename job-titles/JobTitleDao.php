@@ -248,7 +248,6 @@ class JobTitleDao
             if ( (int) $exception->getCode() === ErrorCode::DUPLICATE_ENTRY->value) {
                 return ActionResult::DUPLICATE_ENTRY_ERROR;
             }
-
             return ActionResult::FAILURE;
         }
     }

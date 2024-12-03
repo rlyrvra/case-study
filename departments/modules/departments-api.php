@@ -96,6 +96,7 @@ try {
         $departmentRepository = new DepartmentRepository($departmentDao);
         $departmentService = new DepartmentService($departmentRepository);
         $result = $departmentService->createDepartment($newDepartment);
+        
         if ($result !== ActionResult::FAILURE) {
             echo "Department created successfully!";
         } else {

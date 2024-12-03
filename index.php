@@ -54,11 +54,11 @@ require_once __DIR__ . '/includes/header.php';
         .indexContainer{
             scroll-snap-type: y mandatory;
             overflow-y: scroll;
-            height: 100%;
+            height: 100vh;
             scroll-behavior: smooth;
         }
         .indexSections{
-            height: 100%;
+            height: 100vh;
             scroll-snap-align: start;
         }
         .one{
