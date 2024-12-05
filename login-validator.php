@@ -30,8 +30,9 @@ if (isset($_COOKIE['remember_me'])) {
 ?>
 
 <?php
-if (isset($_SESSION['id'])){
+if (isset($_SESSION['id']) && isset($_SESSION['access_role'])){
     header("Location: ". $SMARTWAGE_LOCATION . "/smartWage-index.php?s=true");
     exit;
 }
+
 ?>

@@ -30,6 +30,10 @@
                 <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
                 <div class="avatar avatar-online">
                 <?php 
+                    if(!isset($_SESSION['profile_picture'])){
+                        echo "<img src='https://via.placeholder.com/50' alt='Profile Picture' class='w-px-35 h-auto rounded-circle' />";
+                        return;
+                    }
                     // Render the image
                     $imageData = base64_encode($_SESSION['profile_picture']);
 
@@ -44,6 +48,10 @@
                         <div class="flex-shrink-0 me-3">
                         <div class="avatar avatar-online">
                         <?php 
+                            if(!isset($_SESSION['profile_picture'])){
+                                echo "<img src='https://via.placeholder.com/50' alt='Profile Picture' class='w-px-35 h-auto rounded-circle' />";
+                                return;
+                            }
                             // Render the image
                             $imageData = base64_encode($_SESSION['profile_picture']);
 

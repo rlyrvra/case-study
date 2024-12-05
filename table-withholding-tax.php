@@ -1,14 +1,8 @@
-<?php require_once __DIR__ . '/includes/security-headers.php'; ?>
-<?php require_once __DIR__ . '/includes/session.php'; ?>
-<?php require_once __DIR__ . '/includes/file-locations.php' ?>
-<?php
-if(!isset($_SESSION['id'])){
-  header("Location: ". $SMARTWAGE_LOCATION ."/login.php?r=true");
-}
-
-if(isset($_GET['s']) && $_GET['s'] == true){
-  include_once __DIR__ . '/sweet-alert-toasts/login/login-success.php';
-}
+<?php 
+require_once __DIR__ . '/includes/security-headers.php'; 
+require_once __DIR__ . '/includes/session.php'; 
+require_once __DIR__ . '/includes/file-locations.php';
+require_once __DIR__ . '/login-checker.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -95,39 +89,41 @@ if(isset($_GET['s']) && $_GET['s'] == true){
               <option value="semiMonthly">Semi-Monthly</option>
               <option value="monthly">Monthly</option>
           </select>
-          <table id="withholding-tax-table" class="table table-responsive table-hover no-wrap">
-            <thead>
-                <tr>
-                  <th>Daily</th>
-                  <th>1</th>
-                  <th>2</th>
-                  <th>3</th>
-                  <th>4</th>
-                  <th>5</th>
-                  <th>6</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Compensation Range</td>
-                  <td>₱685 and Below</td>
-                  <td>₱685 - ₱1,095</td>
-                  <td>₱1,095 - ₱2,191</td>
-                  <td>₱2,191 - ₱5,478</td>
-                  <td>₱5,479 - ₱21,917</td>
-                  <td>₱21,918 and Above</td>
-                </tr>
-                <tr>
-                <td>Prescribed Withholding Tax</td>
-                <td>0.00</td>
-                <td>0.00 + 15% over ₱685</td>
-                <td>₱61.65 + 20% over ₱1,096</td>
-                <td>₱280.85 + 25% over ₱2,192</td>
-                <td>₱1,102.60 + 30% over ₱5,479</td>
-                <td>₱6,034.30 + 35% over ₱21,918</td>
-                </tr>
-              </tbody>
-          </table>
+          <div class="table-responsive no-wrap">
+            <table id="withholding-tax-table" class="table table-hover">
+              <thead>
+                  <tr>
+                    <th>Daily</th>
+                    <th>1</th>
+                    <th>2</th>
+                    <th>3</th>
+                    <th>4</th>
+                    <th>5</th>
+                    <th>6</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Compensation Range</td>
+                    <td>₱685 and Below</td>
+                    <td>₱685 - ₱1,095</td>
+                    <td>₱1,095 - ₱2,191</td>
+                    <td>₱2,191 - ₱5,478</td>
+                    <td>₱5,479 - ₱21,917</td>
+                    <td>₱21,918 and Above</td>
+                  </tr>
+                  <tr>
+                  <td>Prescribed Withholding Tax</td>
+                  <td>0.00</td>
+                  <td>0.00 + 15% over ₱685</td>
+                  <td>₱61.65 + 20% over ₱1,096</td>
+                  <td>₱280.85 + 25% over ₱2,192</td>
+                  <td>₱1,102.60 + 30% over ₱5,479</td>
+                  <td>₱6,034.30 + 35% over ₱21,918</td>
+                  </tr>
+                </tbody>
+            </table>
+          </div>
           <style>
             
           </style>
@@ -328,6 +324,7 @@ if(isset($_GET['s']) && $_GET['s'] == true){
       }
     });
   });
+  
   $(document).ready(function() {
     $('#withholding-tax-table').DataTable();
   });

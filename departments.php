@@ -1,10 +1,9 @@
-<?php require_once __DIR__ . '/includes/security-headers.php'; ?>
-<?php require_once __DIR__ . '/includes/session.php'; ?>
-<?php require_once __DIR__ . '/includes/file-locations.php' ?>
-<?php
-if(!isset($_SESSION['id'])){
-  header("Location: ". $SMARTWAGE_LOCATION ."/login.php?r=true");
-}
+<?php 
+require_once __DIR__ . '/includes/security-headers.php'; 
+require_once __DIR__ . '/includes/session.php'; 
+require_once __DIR__ . '/includes/file-locations.php';
+require_once __DIR__ . '/login-checker.php';
+
 if($_SESSION['access_role'] !== 'Admin'){
   header("Location: ". $SMARTWAGE_LOCATION ."/smartWage-index.php?aR=true");
 }

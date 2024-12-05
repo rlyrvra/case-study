@@ -1,11 +1,9 @@
-<?php require_once __DIR__ . '/includes/security-headers.php'; ?>
-<?php require_once __DIR__ . '/includes/session.php'; ?>
-<?php require_once __DIR__ . '/includes/file-locations.php' ?>
+<?php 
+require_once __DIR__ . '/includes/security-headers.php'; 
+require_once __DIR__ . '/includes/session.php'; 
+require_once __DIR__ . '/includes/file-locations.php';
+require_once __DIR__ . '/login-checker.php';
 
-<?php
-if(!isset($_SESSION['id'])){
-  header("Location: ". $SMARTWAGE_LOCATION ."/login.php?r=true");
-}
 
 if(isset($_GET['s']) && $_GET['s'] == true){
   include_once __DIR__ . '/sweet-alert-toasts/login/login-success.php';
