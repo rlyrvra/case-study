@@ -338,7 +338,7 @@ class EmployeeDao
             $whereClauses[] = "employee.deleted_at is NULL";
         } else {
             foreach ($filterCriteria as $filterCriterion) {
-                $column   = $filterCriterion["column"];
+                $column   = $filterCriterion["column"  ];
                 $operator = $filterCriterion["operator"];
                 $boolean  = isset($filterCriterion["boolean"])
                     ? strtoupper($filterCriterion["boolean"])
@@ -370,7 +370,7 @@ class EmployeeDao
             }
         }
 
-        if ( ! empty($whereClauses) && in_array(trim(end($whereClauses)), ['AND', 'OR'], true)) {
+        if (in_array(trim(end($whereClauses)), ['AND', 'OR'], true)) {
             array_pop($whereClauses);
         }
 
@@ -418,12 +418,12 @@ class EmployeeDao
                 employees AS employee
             {$joinClauses}
             WHERE
-            " . implode(" ", $whereClauses) . "
+                " . implode(" ", $whereClauses) . "
             " . (!empty($orderByClauses) ? "ORDER BY " . implode(", ", $orderByClauses) : "") . "
             {$limitClause}
             {$offsetClause}
         ";
-        echo "<pre>$query</pre>";
+
         try {
             $statement = $this->pdo->prepare($query);
 
@@ -449,7 +449,7 @@ class EmployeeDao
         } catch (PDOException $exception) {
             error_log("Database Error: An error occurred while fetching the employees. " .
                       "Exception: {$exception->getMessage()}");
-            echo $exception->getMessage();
+
             return ActionResult::FAILURE;
         }
     }
