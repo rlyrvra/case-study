@@ -47,12 +47,12 @@ try {
         }
         if(empty($searchAt) && !empty($searchFilter)){
             $filterCriteria[] = [
-                ['column' => 'full_name', 'operator' => 'LIKE', 'value' => "%$searchFilter", 'boolean' => 'OR'],
-                ['column' => 'job_title_title', 'operator' => 'LIKE', 'value' => "%$searchFilter", 'boolean' => 'OR'],
-                ['column' => 'email_address', 'operator' => 'LIKE', 'value' => "%$searchFilter", 'boolean' => 'OR']
+                ['column' => 'full_name', 'operator' => '=', 'value' => $searchFilter, 'boolean' => 'OR'],
+                ['column' => 'job_title_title', 'operator' => '=', 'value' => $searchFilter, 'boolean' => 'OR'],
+                ['column' => 'email_address', 'operator' => 'LIKE', 'value' => $searchFilter, 'boolean' => 'OR']
             ];
         }
-        if(!empty($searchFilter)){
+        if(!empty($searchAt) && !empty($searchFilter)){
             $filterCriteria[] = [
                 "column" => "employee." . $searchAt, 
                 "operator" => "LIKE",

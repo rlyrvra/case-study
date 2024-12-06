@@ -32,8 +32,8 @@
             Actions
         </button>
         <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="add-employee.php?m=v&token=<?php echo htmlspecialchars(md5($row['id']));?>"><i class="bx bx-user"></i>View</a></li>
-            <li><a class="dropdown-item" href="add-employee.php?m=u&token=<?php echo htmlspecialchars(md5($row['id']));?>"><i class="bx bx-edit-alt"></i>Edit</a></li>
+            <li><a class="dropdown-item" href="add-employees.php?m=v&token=<?php echo htmlspecialchars(md5($row['id']));?>"><i class="bx bx-user"></i>View</a></li>
+            <li><a class="dropdown-item" href="add-employees.php?m=u&token=<?php echo htmlspecialchars(md5($row['id']));?>"><i class="bx bx-edit-alt"></i>Edit</a></li>
             <li><a class="dropdown-item" href="javascript:void(0);" onclick="confirmDeleteEmployee(this)"><i class="bx bx-trash"></i>Delete</a></li>
         </ul>
         </div>
