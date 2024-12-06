@@ -338,8 +338,11 @@ class EmployeeDao
             $whereClauses[] = "employee.deleted_at is NULL";
         } else {
             foreach ($filterCriteria as $filterCriterion) {
-                $column   = $filterCriterion["column"  ];
+                $column   = $filterCriterion["column"];
                 $operator = $filterCriterion["operator"];
+                $boolean  = isset($filterCriterion["boolean"])
+                    ? strtoupper($filterCriterion["boolean"])
+                    : 'AND';
 
                 switch ($operator) {
                     case "="   :
@@ -357,12 +360,13 @@ class EmployeeDao
                         $queryParameters[] = $filterCriterion["lower_bound"];
                         $queryParameters[] = $filterCriterion["upper_bound"];
                         break;
-
-                    default:
-                        // Do nothing
                 }
+
+                $whereClauses[] = " {$boolean} ";
             }
         }
+
+        array_pop($whereClauses);
 
         $orderByClauses = [];
 
@@ -408,7 +412,7 @@ class EmployeeDao
                 employees AS employee
             {$joinClauses}
             WHERE
-                " . implode(" AND ", $whereClauses) . "
+            " . implode(" ", $whereClauses) . "
             " . (!empty($orderByClauses) ? "ORDER BY " . implode(", ", $orderByClauses) : "") . "
             {$limitClause}
             {$offsetClause}
@@ -610,6 +614,32 @@ class EmployeeDao
             $this->pdo->rollBack();
 
             error_log("Database Error: An error occurred while changing the password. " .
+                      "Exception: {$exception->getMessage()}");
+
+            return ActionResult::FAILURE;
+        }
+    }
+
+    public function countTotalRecords(): ActionResult|int
+    {
+        $query = "
+            SELECT
+                COUNT(*)
+            FROM
+                employees
+        ";
+
+        try {
+            $statement = $this->pdo->prepare($query);
+
+            $statement->execute();
+
+            $result = $statement->fetchColumn();
+
+            return (int) $result;
+
+        } catch (PDOException $exception) {
+            error_log("Database Error: An error occurred while counting the records. " .
                       "Exception: {$exception->getMessage()}");
 
             return ActionResult::FAILURE;
