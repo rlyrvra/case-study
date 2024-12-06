@@ -39,7 +39,7 @@
             <option value="full_name">Name</option>
             <option value="job_title">Job Title</option>
             <option value="email">Email</option>
-            <option value="emp_code">Employee Code</option>
+            <option value="employee_code">Employee Code</option>
         </select>
         <input type="text" class="form-control" id="searchText" />
         <button id="openModalBtn" class="btn btn-success" onclick="fetchAllEmployees()"> Search

@@ -45,6 +45,13 @@ try {
                 "operator" => "IS NULL"
             ];
         }
+        if(empty($searchAt) && !empty($searchFilter)){
+            $filterCriteria[] = [
+                ['column' => 'full_name', 'operator' => '=', 'value' => $searchFilter, 'boolean' => 'OR'],
+                ['column' => 'job_title_title', 'operator' => '=', 'value' => $searchFilter, 'boolean' => 'OR'],
+                ['column' => 'email_address', 'operator' => 'LIKE', 'value' => $searchFilter, 'boolean' => 'OR']
+            ];
+        }
         if(!empty($searchFilter)){
             $filterCriteria[] = [
                 "column" => "employee." . $searchAt, 
@@ -67,6 +74,7 @@ try {
                 "value" => $departmentFilter
             ];
         }
+        print_r($filterCriteria);
 
 
 
