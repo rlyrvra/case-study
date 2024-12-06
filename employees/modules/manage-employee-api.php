@@ -21,11 +21,11 @@ try {
 
     if ($action === 'fetchAll') {
         $selectedColumns = ["id", "full_name", "job_title_title", "profile_picture", "access_role", "department_name", "email_address", "employee_code", "phone_number", "date_of_hire", "created_at"];
-        $status = isset($_POST['filter_status']) && $_POST['filter_status'] ? $_POST['filter_status'] : null;
-        $searchAt = isset($_POST['filter_searchAt']) && $_POST['filter_searchAt'] !== "none" ? $_POST['filter_searchAt'] : null;
-        $searchFilter = isset($_POST['filter_search']) ? $_POST['filter_search'] : null;
-        $departmentFilter = isset($_POST['filter_department_id']) && !empty($_POST['filter_department_id']) ? $_POST['filter_department_id'] : null;
-        $dateFilterColumn = isset($_POST['filter_date_column']) ? $_POST['filter_date_column'] : null;
+        $status = isset($_POST['filter_status']) && $_POST['filter_status'] ? $_POST['filter_status'] : "";
+        $searchAt = isset($_POST['filter_searchAt']) && $_POST['filter_searchAt'] !== "none" ? $_POST['filter_searchAt'] : "";
+        $searchFilter = isset($_POST['filter_search']) ? $_POST['filter_search'] : "";
+        $departmentFilter = isset($_POST['filter_department_id']) && !empty($_POST['filter_department_id']) ? $_POST['filter_department_id'] : "";
+        $dateFilterColumn = isset($_POST['filter_date_column']) ? $_POST['filter_date_column'] : "";
         $dateStart = isset($_POST['filter_startDate']) && $dateFilterColumn !== "none" ? $_POST['filter_startDate'] : 0;
         $dateEnd = isset($_POST['filter_endDate']) && $dateFilterColumn !== "none" ? $_POST['filter_endDate'] : 0;
         $page = isset($_POST['page']) ? (int)$_POST['page'] : 1;
@@ -47,9 +47,9 @@ try {
         }
         if(empty($searchAt) && !empty($searchFilter)){
             $filterCriteria[] = [
-                ['column' => 'full_name', 'operator' => '=', 'value' => $searchFilter, 'boolean' => 'OR'],
-                ['column' => 'job_title_title', 'operator' => '=', 'value' => $searchFilter, 'boolean' => 'OR'],
-                ['column' => 'email_address', 'operator' => 'LIKE', 'value' => $searchFilter, 'boolean' => 'OR']
+                ['column' => 'full_name', 'operator' => 'LIKE', 'value' => "%$searchFilter", 'boolean' => 'OR'],
+                ['column' => 'job_title_title', 'operator' => 'LIKE', 'value' => "%$searchFilter", 'boolean' => 'OR'],
+                ['column' => 'email_address', 'operator' => 'LIKE', 'value' => "%$searchFilter", 'boolean' => 'OR']
             ];
         }
         if(!empty($searchFilter)){
