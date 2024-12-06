@@ -37,7 +37,7 @@
         <select class="form-select" id="search_at" name="search_at" placeholder="Search At">
             <option value="none" selected>Search At</option>
             <option value="full_name">Name</option>
-            <option value="job_title">Job Title</option>
+            <option value="title">Job Title</option>
             <option value="email">Email</option>
             <option value="employee_code">Employee Code</option>
         </select>

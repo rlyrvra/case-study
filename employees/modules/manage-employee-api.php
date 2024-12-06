@@ -45,20 +45,29 @@ try {
                 "operator" => "IS NULL"
             ];
         }
+
         if(empty($searchAt) && !empty($searchFilter)){
             $filterCriteria[] = [
-                ['column' => 'full_name', 'operator' => '=', 'value' => $searchFilter, 'boolean' => 'OR'],
-                ['column' => 'job_title_title', 'operator' => '=', 'value' => $searchFilter, 'boolean' => 'OR'],
-                ['column' => 'email_address', 'operator' => 'LIKE', 'value' => $searchFilter, 'boolean' => 'OR']
+                ['column' => 'employee.full_name', 'operator' => 'LIKE', 'value' => "%$searchFilter%", 'boolean' => 'OR'],
+                ['column' => 'job_title.title', 'operator' => 'LIKE', 'value' => "%$searchFilter%", 'boolean' => 'OR'],
+                ['column' => 'employee.email_address', 'operator' => 'LIKE', 'value' => "%$searchFilter%", 'boolean' => 'OR']
             ];
         }
-        if(!empty($searchAt) && !empty($searchFilter)){
+
+        if(!empty($searchAt) && !empty($searchFilter && $searchAt === "title")){
+            $filterCriteria[] = [
+                "column" => "job_title." . $searchAt, 
+                "operator" => "LIKE",
+                "value" => "%$searchFilter%"
+            ];
+        }else if(!empty($searchAt) && !empty($searchFilter)){
             $filterCriteria[] = [
                 "column" => "employee." . $searchAt, 
                 "operator" => "LIKE",
                 "value" => "%$searchFilter%"
             ];
         }
+
         if((!empty($dateFilterColumn) && $dateFilterColumn !== "none") && !empty($dateStart) && !empty($dateEnd)){
             $filterCriteria[] = [
                 "column" => "employee." . $dateFilterColumn,
@@ -67,6 +76,7 @@ try {
                 "upper_bound" => $dateEnd
             ];
         }
+
         if(!empty($departmentFilter)){
             $filterCriteria[] = [
                 "column" => "employee.department_id", 
@@ -74,6 +84,7 @@ try {
                 "value" => $departmentFilter
             ];
         }
+        
         print_r($filterCriteria);
 
 

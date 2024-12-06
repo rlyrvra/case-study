@@ -1,6 +1,6 @@
 <?php
 try {
-    $pdo = new PDO('mysql:host=localhost;dbname=payroll', 'root', '');
+    $pdo = new PDO('mysql:host=localhost;dbname=smart_wage', 'root', '');
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     $employee_id = null;  // Example employee_id (can be null)
