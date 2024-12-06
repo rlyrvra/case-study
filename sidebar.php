@@ -74,7 +74,7 @@
             </a>
         </li>
         <li class="menu-item" id="manage-employees-menu">
-            <a href="auth-register-basic.html" class="menu-link">
+            <a href="manage-employee.php" class="menu-link">
             <div>Manage Employee</div>
             </a>
         </li>

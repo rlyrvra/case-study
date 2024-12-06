@@ -120,7 +120,7 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
               </div>
             </div>
 
-            <div class="container-fluid card pt-5 pb-5 mt-5 mb-5 flex-column text-no-wrap no-wrap">
+            <div class="container-fluid card pt-5 pb-5 mt-5 mb-5">
               <div class="row justify-content-center">
                 <!-- Header -->
                 <div class="profile-header col-auto">
@@ -133,7 +133,7 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
                 </div>
               </div>
               <div class="row">
-                <div class="col-12 d-flex justify-content-center flex-fill">
+                <div class="col-12 d-flex justify-content-center flex-column flex-lg-row">
                   <ul class="col-3 menu-vertical nav nav-pills pt-4 pb-4" role="tablist">
                     <li class="nav-item">
                       <button
