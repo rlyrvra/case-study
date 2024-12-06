@@ -26,6 +26,23 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <!-- Sweet Alert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- Selectize -->
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/css/selectize.default.min.css"
+  integrity="sha512-pTaEn+6gF1IeWv3W1+7X7eM60TFu/agjgoHmYhAfLEU8Phuf6JKiiE8YmsNC0aCgQv4192s4Vai8YZ6VNM6vyQ=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+/>
+
+<!-- Ajax -->
+<script src="employees/modules/manage-employee-ajax.js?v1.1"></script>
+<!-- Scripts -->
+<script src="employees/modules/manage-employee-scripts.js?v1.1"></script>
+
+
+
+
 <!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -71,7 +88,8 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
     
     <?php require_once __DIR__ . '/sidebar.php' ?>
     <script>
-      document.getElementById("dashboard-menu").classList.add("active");
+      document.getElementById("employees-menu").classList.add("open");
+      document.getElementById("manage-employees-menu").classList.add("active");
     </script>
 
     <!-- Layout container -->
@@ -81,10 +99,22 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
       <!-- / Navbar -->
       <div class="content-wrapper">
         <div class="container-fluid pt-5 pb-5">
-          <div class="row mb-5">
+            <div class="container-fluid mb-3">
+              <h1 class="display-1">Manage Employees</h1>
+            </div>
 
+
+          <div class="divider text-start">
+            <div class="divider-text">
+              
+            </div>
           </div>
-          <div class="row flex-column flex-lg-row">
+
+          <div class="card py-4 container-xxl row mx-auto">
+            <?php require_once __DIR__ . '/employees/modules/manage-employee-sorter.php' ?>
+          </div>
+
+          <div id="manage-employee-table" class="row flex-column flex-lg-row justify-content-center">
             
             
 
@@ -113,6 +143,12 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
 </div>
 <!-- / Layout wrapper -->
 
+<script>
+$(document).ready(function (){
+  fetchAllEmployees();
+});
+</script>
+
 
 
 <!-- Core JS -->
@@ -136,5 +172,108 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
 
 <!-- Place this tag in your head or just before your close body tag. -->
 <script async defer src="https://buttons.github.io/buttons.js"></script>
+<!-- Selectize -->
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/js/selectize.min.js"
+  integrity="sha512-IOebNkvA/HZjMM7MxL0NYeLYEalloZ8ckak+NDtOViP7oiYzG5vn6WVXyrJDiJPhl4yRdmNAG49iuLmhkUdVsQ=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+></script>
+
+<?php include_once __DIR__ . '/employees/modules/manage-employee-fetch-departments.php'; ?>
+
+
+<script>
+$(document).ready(function () {
+  const REGEX_EMAIL = "([a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@" + "(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)";
+  $("#selectize_department_sorter").selectize({
+    persist: false,
+    maxItems: 1,
+    valueField: "id",
+    labelField: "description",
+    searchField: ["name", "description"],
+    options: departments,
+    render: {
+      item: function (item, escape) {
+          return (
+          "<div>" +
+          (item.name
+              ? '<span class="name">' + escape(item.name) + "</span>"
+              : "") +
+          (item.description
+              ? '<span class="description">' + escape(item.description) + "</span>"
+              : "") +
+          "</div>"
+          );
+      },
+      option: function (item, escape) {
+          var label = item.name || item.description;
+          var caption = item.name ? item.description : null;
+          return (
+          "<div>" +
+          '<span class="label">' +
+          escape(label) +
+          "</span>" +
+          (caption
+              ? '<span class="caption">' + escape(caption) + "</span>"
+              : "") +
+          "</div>"
+          );
+      },
+    },
+    createFilter: function (input) {
+      var match, regex;
+
+      // email@address.com
+      regex = new RegExp("^" + REGEX_EMAIL + "$", "i");
+      match = input.match(regex);
+      if (match) return !this.options.hasOwnProperty(match[0]);
+
+      // name <email@address.com>
+      regex = new RegExp("^([^<]*)<" + REGEX_EMAIL + ">$", "i");
+      match = input.match(regex);
+      if (match) return !this.options.hasOwnProperty(match[2]);
+
+      return false;
+    },
+    create: function (input) {
+      if (new RegExp("^" + REGEX_EMAIL + "$", "i").test(input)) {
+          return { email: input };
+      }
+      var match = input.match(
+          new RegExp("^([^<]*)<" + REGEX_EMAIL + ">$", "i")
+      );
+      if (match) {
+          return {
+          email: match[2],
+          name: $.trim(match[1]),
+          };
+      }
+      alert("Invalid email address.");
+      return false;
+    },
+  });
+});
+</script>
+
+<style>
+.selectize-control.selectize-department-sorter .selectize-input > div .description {
+  opacity: 0.8;
+}
+.selectize-control.selectize-department-sorter .selectize-input > div .name + .description {
+  margin-left: 5px;
+}
+.selectize-control.selectize-department-sorter .selectize-input > div .description:before {
+  content: "<";
+}
+.selectize-control.selectize-department-sorter .selectize-input > div .description:after {
+  content: ">";
+}
+.selectize-control.selectize-department-sorter .selectize-dropdown .caption {
+  font-size: 12px;
+  display: block;
+  color: #a0a0a0;
+}
+</style>
 </body>
 </html>

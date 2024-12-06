@@ -13,15 +13,18 @@ require_once __DIR__ . '/../../includes/Helper.php';
 require_once __DIR__ . '/../../includes/enums/ErrorCode.php';
 require_once __DIR__ . '/../../database/database.php';
 
+require_once __DIR__ . '/../../includes/session.php';
+
 try {
     $employeeDao = new EmployeeDao($pdo);
     $action = $_POST['action'] ?? '';
 
     if ($action === 'fetchAll') {
-        $selectedColumns = ["id", "full_name", "job_title_title", "access_role", "department_name", "email_address", "employee_code", "phone_number", "date_of_hire"];
+        $selectedColumns = ["id", "full_name", "job_title_title", "profile_picture", "access_role", "department_name", "email_address", "employee_code", "phone_number", "date_of_hire", "created_at"];
         $status = isset($_POST['filter_status']) && $_POST['filter_status'] ? $_POST['filter_status'] : null;
         $searchAt = isset($_POST['filter_searchAt']) && $_POST['filter_searchAt'] !== "none" ? $_POST['filter_searchAt'] : null;
         $searchFilter = isset($_POST['filter_search']) ? $_POST['filter_search'] : null;
+        $departmentFilter = isset($_POST['filter_department_id']) && !empty($_POST['filter_department_id']) ? $_POST['filter_department_id'] : null;
         $dateFilterColumn = isset($_POST['filter_date_column']) ? $_POST['filter_date_column'] : null;
         $dateStart = isset($_POST['filter_startDate']) && $dateFilterColumn !== "none" ? $_POST['filter_startDate'] : 0;
         $dateEnd = isset($_POST['filter_endDate']) && $dateFilterColumn !== "none" ? $_POST['filter_endDate'] : 0;
@@ -34,14 +37,12 @@ try {
         if(!empty($status) && $status == 'Archived'){
             $filterCriteria[] = [
                 "column" => "employee.deleted_at",
-                "operator" => "==",
-                "value" => NULL
+                "operator" => "IS NULL"
             ];
         }else{
             $filterCriteria[] = [
                 "column" => "employee.deleted_at",
-                "operator" => "!=",
-                "value" => NULL
+                "operator" => "IS NULL"
             ];
         }
         if(!empty($searchFilter)){
@@ -59,6 +60,14 @@ try {
                 "upper_bound" => $dateEnd
             ];
         }
+        if(!empty($departmentFilter)){
+            $filterCriteria[] = [
+                "column" => "employee.department_id", 
+                "operator" => "=",
+                "value" => $departmentFilter
+            ];
+        }
+
 
 
         $sortCriteria = [

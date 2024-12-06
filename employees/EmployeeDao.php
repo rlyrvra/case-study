@@ -500,7 +500,7 @@ class EmployeeDao
             WHERE
                 id = :employee_id
         ";
-
+        
         try {
             $this->pdo->beginTransaction();
 

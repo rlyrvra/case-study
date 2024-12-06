@@ -2,15 +2,26 @@
     <?php foreach ($employees as $row): ?>
 <div class="card p-3 col-auto mx-3 my-3">
     <div class="d-flex justify-content-between align-items-center"
-    data-id="<?php echo htmlspecialchars($row['id']); ?>"
+    data-id="<?php echo htmlspecialchars(md5($row['id'])); ?>"
     >
         <div class="d-flex align-items-center">
-            <div class="placeholder-img"><img src="assets/img/avatars/1.png" alt="Profile Picture" class="w-px-100 h-auto rounded-circle"></div>
+            <div class="placeholder-img">
+                <?php
+                if(!isset($row['profile_picture']) && !empty($row['profile_picture'])){
+                    echo "<img src='https://via.placeholder.com/100' alt='Profile Picture' class='w-px-100 h-auto rounded-circle' />";
+                    return;
+                }
+                // Render the image
+                $imageData = base64_encode($row['profile_picture']);
+
+                echo "<img src='data:image/jpg;base64,$imageData' alt='Profile Picture' class='w-px-100 h-auto rounded-circle' />";
+                ?>
+            </div>
             <div class="ms-3">
-            <p class="mb-1"><strong>Name: <?php echo htmlspecialchars($row['full_name']); ?></strong></p>
-            <p class="mb-1"><strong>Job Title: <?php echo htmlspecialchars($row['job_title_title']); ?></strong></p>
-            <p class="mb-1"><strong>Role: <?php echo htmlspecialchars($row['access_role']); ?></strong></p>
-            <p class="mb-0"><strong>Department: <?php echo htmlspecialchars($row['department_name']); ?></strong></p>
+            <p class="mb-1"><strong>Name:</strong> <?php echo htmlspecialchars($row['full_name']); ?></p>
+            <p class="mb-1"><strong>Job Title: </strong> <?php echo htmlspecialchars($row['job_title_title']); ?></p>
+            <p class="mb-1"><strong>Role: </strong><?php echo htmlspecialchars($row['access_role']); ?></p>
+            <p class="mb-0"><strong>Department: </strong><?php echo htmlspecialchars($row['department_name']); ?></p>
             </div>
         </div>
         <button 
@@ -21,9 +32,9 @@
             Actions
         </button>
         <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#"><i class="bx bx-user"></i>View</a></li>
-            <li><a class="dropdown-item" href="#"><i class="bx bx-edit-alt"></i>Edit</a></li>
-            <li><a class="dropdown-item" href="#"><i class="bx bx-trash"></i>Delete</a></li>
+            <li><a class="dropdown-item" href="add-employee.php?m=v&token=<?php echo htmlspecialchars(md5($row['id']));?>"><i class="bx bx-user"></i>View</a></li>
+            <li><a class="dropdown-item" href="add-employee.php?m=u&token=<?php echo htmlspecialchars(md5($row['id']));?>"><i class="bx bx-edit-alt"></i>Edit</a></li>
+            <li><a class="dropdown-item" href="javascript:void(0)>" onclick="confirmDeleteEmployee(this)"><i class="bx bx-trash"></i>Delete</a></li>
         </ul>
         </div>
         <hr class="mt-4 mb-4">
@@ -49,7 +60,7 @@
 <?php endforeach; ?>
 <?php else: ?>
 
-<h1 class="display-1 align-text-center">NO RECORDS AVAILABLE</h1>
+<h1 class="display-1 text-center">NO RECORDS AVAILABLE</h1>
 
 <?php endif; ?>
 
