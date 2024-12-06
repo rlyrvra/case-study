@@ -337,6 +337,7 @@ class EmployeeDao
         if (empty($filterCriteria)) {
             $whereClauses[] = "employee.deleted_at is NULL";
         } else {
+            $index = 0;
             foreach ($filterCriteria as $filterCriterion) {
                 $column   = $filterCriterion["column"];
                 $operator = $filterCriterion["operator"];
@@ -362,8 +363,9 @@ class EmployeeDao
                         break;
                 }
 
-                if (isset($filterCriterion["boolean"])) {
+                if ($index > 0 && isset($filterCriterion["boolean"])) {
                     $whereClauses[] = " {$boolean} ";
+                    $index++;
                 }
             }
         }
