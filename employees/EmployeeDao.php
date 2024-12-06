@@ -210,7 +210,6 @@ class EmployeeDao
             "first_name"                      => "employee.first_name                      AS first_name"                     ,
             "middle_name"                     => "employee.middle_name                     AS middle_name"                    ,
             "last_name"                       => "employee.last_name                       AS last_name"                      ,
-            "full_name"                       => "employee.full_name                       AS full_name"                      ,
             "date_of_birth"                   => "employee.date_of_birth                   AS date_of_birth"                  ,
             "gender"                          => "employee.gender                          AS gender"                         ,
             "marital_status"                  => "employee.marital_status                  AS marital_status"                 ,
@@ -337,7 +336,6 @@ class EmployeeDao
         if (empty($filterCriteria)) {
             $whereClauses[] = "employee.deleted_at is NULL";
         } else {
-            $index = 0;
             foreach ($filterCriteria as $filterCriterion) {
                 $column   = $filterCriterion["column"];
                 $operator = $filterCriterion["operator"];
@@ -347,6 +345,7 @@ class EmployeeDao
 
                 switch ($operator) {
                     case "="   :
+                    case "!="  :
                     case "LIKE":
                         $whereClauses   [] = "{$column} {$operator} ?";
                         $queryParameters[] = $filterCriterion["value"];
@@ -361,12 +360,12 @@ class EmployeeDao
                         $queryParameters[] = $filterCriterion["lower_bound"];
                         $queryParameters[] = $filterCriterion["upper_bound"];
                         break;
+
+                    default:
+                        // Do nothing
                 }
 
-                if ($index > 0 && isset($filterCriterion["boolean"])) {
-                    $whereClauses[] = " {$boolean} ";
-                    $index++;
-                }
+                $whereClauses[] = " {$boolean}";
             }
         }
 
@@ -423,8 +422,8 @@ class EmployeeDao
             {$limitClause}
             {$offsetClause}
         ";
-        echo "<pre> $query </pre>";
-
+        echo '<pre>';
+        echo $query;
         try {
             $statement = $this->pdo->prepare($query);
 
@@ -511,7 +510,7 @@ class EmployeeDao
             WHERE
                 id = :employee_id
         ";
-        
+
         try {
             $this->pdo->beginTransaction();
 
