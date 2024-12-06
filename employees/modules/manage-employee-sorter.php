@@ -35,7 +35,7 @@
     </div>  
     <div class="search col-auto d-flex flex-column flex-lg-row mx-2">
         <select class="form-select" id="search_at" name="search_at" placeholder="Search At">
-            <option value="none" selected>Search At</option>
+            <option value="none" selected>All</option>
             <option value="full_name">Name</option>
             <option value="title">Job Title</option>
             <option value="email">Email</option>

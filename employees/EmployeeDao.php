@@ -424,12 +424,16 @@ class EmployeeDao
             {$offsetClause}
         ";
 
+        
+
         try {
             $statement = $this->pdo->prepare($query);
 
             foreach ($queryParameters as $index => $parameter) {
                 $statement->bindValue($index + 1, $parameter, Helper::getPdoParameterType($parameter));
             }
+
+            
 
             $statement->execute();
 

@@ -48,9 +48,29 @@ try {
 
         if(empty($searchAt) && !empty($searchFilter)){
             $filterCriteria[] = [
-                ['column' => 'employee.full_name', 'operator' => 'LIKE', 'value' => "%$searchFilter%", 'boolean' => 'OR'],
-                ['column' => 'job_title.title', 'operator' => 'LIKE', 'value' => "%$searchFilter%", 'boolean' => 'OR'],
-                ['column' => 'employee.email_address', 'operator' => 'LIKE', 'value' => "%$searchFilter%", 'boolean' => 'OR']
+                'column' => 'employee.full_name', 
+                'operator' => 'LIKE', 
+                'value' => "%$searchFilter%", 
+                'boolean' => 'OR'
+
+            ];
+            $filterCriteria[] = [
+                'column' => 'job_title.title', 
+                'operator' => 'LIKE', 
+                'value' => "%$searchFilter%", 
+                'boolean' => 'OR'
+            ];
+            $filterCriteria[] = [
+                'column' => 'employee.email_address', 
+                'operator' => 'LIKE', 
+                'value' => "%$searchFilter%", 
+                'boolean' => 'OR'
+            ];
+            $filterCriteria[] = [
+                'column' => 'employee.employee_code', 
+                'operator' => 'LIKE', 
+                'value' => "%$searchFilter%", 
+                'boolean' => 'OR'
             ];
         }
 
@@ -66,6 +86,8 @@ try {
                 "operator" => "LIKE",
                 "value" => "%$searchFilter%"
             ];
+        }else{
+
         }
 
         if((!empty($dateFilterColumn) && $dateFilterColumn !== "none") && !empty($dateStart) && !empty($dateEnd)){
@@ -85,7 +107,6 @@ try {
             ];
         }
         
-        print_r($filterCriteria);
 
 
 
