@@ -61,7 +61,7 @@ function fetchAllEmployees(page = 1) {
 }
 
 function deleteEmployee(button){
-    const row = button.closest('div');  // Get the closest row
+    const row = button;  // Get the closest row
     const employeeData = {
         token: row.getAttribute('data-id'),
     };

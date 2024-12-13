@@ -1,3 +1,55 @@
+<?php
+
+require_once __DIR__ . '/../EmployeeDao.php';
+require_once __DIR__ . '/../EmployeeService.php';
+require_once __DIR__ . '/../EmployeeRepository.php';
+require_once __DIR__ . '/../Employee.php';
+
+require_once __DIR__ . '/../../includes/Helper.php';
+require_once __DIR__ . '/../../includes/enums/ErrorCode.php';
+require_once __DIR__ . '/../../database/database.php';
+
+function getEmployeesAllColumns($pdo, $token){
+    try {
+        $employeeDao = new EmployeeDao($pdo);
+
+        
+        $filterCriteria = [
+            [
+            "column" => "MD5(employee.id)", 
+            "operator" => "=",
+            "value" => $token
+            ],
+        ];
+    
+    
+        
+        $employeeRepository = new EmployeeRepository($employeeDao);
+        $employeeService = new EmployeeService($employeeRepository);
+        $result = $employeeService->fetchAllEmployees([], $filterCriteria, [], 1);
+        if ($result !== ActionResult::FAILURE) {
+            $employees = $result['result_set'];
+        }
+        return $result;
+    } catch (Exception $e) {
+        echo "Error: " . $e->getMessage();
+        return 0;
+    }
+}
+
+$resultSet = getEmployeesAllColumns($pdo, $token);
+$employees;
+if($resultSet["total_row_count"] <= 0){
+    header("Location: ". $SMARTWAGE_LOCATION . "/manage-employee.php?e=404");
+    exit;
+}else{
+    $employees = $resultSet['result_set'];
+}
+
+
+
+
+?>
 <div class="tab-pane fade show active" id="navs-pills-personal-information" role="tabpanel">
     <!-- Form -->
     <div class="form-container p-4">
@@ -6,60 +58,55 @@
         <div class="row mb-3">
         <div class="col-md-4">
             <label for="firstName" class="form-label">First Name*</label>
-            <input type="text" class="form-control" id="firstName" placeholder="First Name" required>
+            <input type="text" class="form-control" id="firstName" placeholder="First Name" value='<?php echo $employees[0]['first_name'];?>'>
         </div>
         <div class="col-md-4">
             <label for="middleName" class="form-label">Middle Name</label>
-            <input type="text" class="form-control" id="middleName" placeholder="Middle Name" required>
+            <input type="text" class="form-control" id="middleName" placeholder="Middle Name" value='<?php echo $employees[0]['middle_name'];?>'>
         </div>
         <div class="col-md-4">
             <label for="lastName" class="form-label">Last Name*</label>
-            <input type="text" class="form-control" id="lastName" placeholder="Last Name" required>
+            <input type="text" class="form-control" id="lastName" placeholder="Last Name" value='<?php echo $employees[0]['last_name'];?>'>
         </div>
         </div>
         <div class="row mb-3">
         <div class="col-md-4">
             <label for="dob" class="form-label">Date of Birth*</label>
-            <input type="date" class="form-control" id="dob" required>
+            <input type="date" class="form-control" id="dob" value='<?php echo $employees[0]['date_of_birth'];?>'>
         </div>
         <div class="col-md-4">
             <label for="gender" class="form-label">Gender*</label>
-            <select id="gender" class="form-select" require>
-                <option value="" selected disabled>Choose...</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Other">Other</option>
+            <select id="gender" class="form-select">
+                <option disabled <?php echo empty($employees[0]['gender']) ? 'selected' : ''; ?>>Choose...</option>
+                <option value="Male" <?php echo $employees[0]['gender'] === 'Male' ? 'selected' : ''; ?>>Male</option>
+                <option value="Female" <?php echo $employees[0]['gender'] === 'Female' ? 'selected' : ''; ?>>Female</option>
+                <option value="Other" <?php echo $employees[0]['gender'] === 'Other' ? 'selected' : ''; ?>>Other</option>
             </select>
         </div>
         <div class="col-md-4">
             <label for="maritalStatus" class="form-label">Marital Status*</label>
-            <select id="maritalStatus" class="form-select" require>
-                <option value="" selected disabled>Choose...</option>
-                <option value="Single">Single</option>
-                <option value="Married">Married</option>
-                <option value="Divorced">Divorced</option>
+            <select id="maritalStatus" class="form-select">
+                <option disabled>Choose...</option>
+                <option value="Single" <?php echo $employees[0]['marital_status'] === 'Single' ? 'selected' : ''; ?>>Single</option>
+                <option value="Married" <?php echo $employees[0]['marital_status'] === 'Married' ? 'selected' : ''; ?>>Married</option>
+                <option value="Divorced" <?php echo $employees[0]['marital_status'] === 'Divorced' ? 'selected' : ''; ?>>Divorced</option>
             </select>
         </div>
         </div>
         <div class="row mb-3">
         <div class="col-md-6">
             <label for="nationality" class="form-label">Nationality*</label>
-            <input type="text" class="form-control" id="nationality" placeholder="Nationality" required>
+            <input type="text" class="form-control" id="nationality" placeholder="Nationality" value='<?php echo $employees[0]['nationality'];?>'>
         </div>
         <div class="col-md-6">
             <label for="religion" class="form-label">Religion</label>
-            <input type="text" class="form-control" id="religion" placeholder="Religion">
+            <input type="text" class="form-control" id="religion" placeholder="Religion" value='<?php echo $employees[0]['religion'];?>'>
         </div>
         </div>
         <div class="row mb-3">
         <div class="col-md-12">
             <label for="profilePicture" class="form-label">Profile Picture</label>
             <input type="file" class="form-control" id="profilePicture" accept=".jpg" onchange="previewImage(event)">
-        </div>
-        </div>
-        <div class="row mb-3">
-        <div class="col-md-12 justify-content-end d-flex">
-            <button type="submit" class="btn btn-primary" id="personal_info_submit" onclick="nextForm(2, this)" data-form="personal_information">Submit</button>
         </div>
         </div>
     </form>
@@ -71,16 +118,11 @@
     <form onsubmit="event.preventDefault()" id="login_credentials">
         <div class="mb-3">
         <label for="username" class="form-label">Username*:</label>
-        <input type="text" class="form-control" id="username" placeholder="Enter your username" required>
+        <input type="text" class="form-control" id="username" placeholder="Enter your username" value='<?php echo $employees[0]['username'];?>'>
         </div>
         <div class="mb-3">
         <label for="password" class="form-label">Password*:</label>
-        <input type="password" class="form-control" id="password" placeholder="Enter your password" required>
-        </div>
-        <div class="row mb-3">
-        <div class="col-md-12 justify-content-end d-flex">
-            <button type="submit" class="btn btn-primary" id="login_credentials_submit" onclick="nextForm(3, this)" data-form="login_credentials">Submit</button>
-        </div>
+        <input type="password" class="form-control" id="password" placeholder="Enter your password" value='<?php echo $employees[0]['password'];?>'>
         </div>
     </form>
     </div>
@@ -92,47 +134,42 @@
         <div class="row mb-3">
         <div class="col-md-6">
             <label for="phone" class="form-label">Phone Number*</label>
-            <input type="text" class="form-control" id="phone" placeholder="Enter phone number" required>
+            <input type="text" class="form-control" id="phone" placeholder="Enter phone number" value='<?php echo $employees[0]['phone_number'];?>'>
         </div>
         <div class="col-md-6">
             <label for="email" class="form-label">Email Address*</label>
-            <input type="email" class="form-control" id="email" placeholder="Enter email address" required>
+            <input type="email" class="form-control" id="email" placeholder="Enter email address" value='<?php echo $employees[0]['email_address'];?>'>
         </div>
         </div>
         <div class="mb-3">
         <label for="address" class="form-label">Address*</label>
-        <textarea class="form-control" id="address" placeholder="Enter address" required></textarea>
+        <textarea class="form-control" id="address" placeholder="Enter address" value='<?php echo $employees[0]['address'];?>'></textarea>
         </div>
 
         <h3 class="form-title">Emergency Contact Information:</h3>
         <div class="row mb-3">
         <div class="col-md-6">
             <label for="emergency-name" class="form-label">Name*</label>
-            <input type="text" class="form-control" id="emergency-name" placeholder="Enter name" required>
+            <input type="text" class="form-control" id="emergency-name" placeholder="Enter name" value='<?php echo $employees[0]['emergency_contact_name'];?>'>
         </div>
         <div class="col-md-6">
             <label for="relationship" class="form-label">Relationship*</label>
-            <input type="text" class="form-control" id="relationship" placeholder="Enter relationship" required>
+            <input type="text" class="form-control" id="relationship" placeholder="Enter relationship" value='<?php echo $employees[0]['emergency_contact_relationship'];?>'>
         </div>
         </div>
         <div class="row mb-3">
         <div class="col-md-6">
             <label for="emergency-phone" class="form-label">Phone Number*</label>
-            <input type="text" class="form-control" id="emergency-phone" placeholder="Enter phone number" required>
+            <input type="text" class="form-control" id="emergency-phone" placeholder="Enter phone number" value='<?php echo $employees[0]['emergency_contact_phone_number'];?>'>
         </div>
         <div class="col-md-6">
             <label for="emergency-email" class="form-label">Email Address</label>
-            <input type="email" class="form-control" id="emergency-email" placeholder="Enter email address">
+            <input type="email" class="form-control" id="emergency-email" placeholder="Enter email address" value='<?php echo $employees[0]['emergency_contact_email_address'];?>'>
         </div>
         </div>
         <div class="mb-3">
         <label for="emergency-address" class="form-label">Address</label>
-        <input type="text" class="form-control" id="emergency-address" placeholder="Enter address">
-        </div>
-        <div class="row mb-3">
-        <div class="col-md-12 justify-content-end d-flex">
-            <button type="submit" class="btn btn-primary" id="contact_information_submit" onclick="nextForm(4, this)" data-form="contact_information">Submit</button>
-        </div>
+        <input type="text" class="form-control" id="emergency-address" placeholder="Enter address" value='<?php echo $employees[0]['emergency_contact_address'];?>'>
         </div>
     </form>
     </div>
@@ -144,28 +181,31 @@
         <div class="row mb-3">
         <div class="col-md-6">
             <label for="rfid" class="form-label">RFID Tag*</label>
-            <input type="text" class="form-control" id="rfid" placeholder="Enter RFID Tag" required>
+            <input type="text" class="form-control" id="rfid" placeholder="Enter RFID Tag" value='<?php echo $employees[0]['rfid_uid'];?>'>
         </div>
         <div class="col-md-6">
             <label for="employee-code" class="form-label">Employee Code*</label>
-            <input type="text" class="form-control" id="employee-code" placeholder="Enter Employee Code" readonly>
+            <input type="text" class="form-control" id="employee-code" placeholder="Enter Employee Code" value='<?php echo $employees[0]['employee_code'];?>'>
         </div>
         </div>
         <div class="row mb-3">
         <div class="col-md-4">
             <label for="job-title" class="form-label">Job Title*</label>
             <select class="form-select selectize_job_title" id="job-title" name="job-title">
+                <option value="<?php echo $employees[0]['job_title_id']; ?>" selected><?php echo $employees[0]['job_title_title']; ?></option>
             </select>
         </div>
         <div class="col-md-4">
             <label for="department" class="form-label">Department*</label>
             <select class="form-select selectize_department" id="department" name="departments">
+                <option value="<?php echo $employees[0]['department_id']; ?>" selected><?php echo $employees[0]['department_name']; ?></option>
             </select>
         </div>
         <div class="col-md-4">
             <label for="employment-type" class="form-label">Employment Type*</label>
-            <select class="form-select" id="employment-type" required>
+            <select class="form-select" id="employment-type">
             <option selected disabled>Select Type</option>
+            <option value="<?php echo $employees[0]['employment_type']; ?>" selected><?php echo $employees[0]['employment_type']; ?></option>
             <option value="Regular / Permanent">Regular / Permanent</option>
             <option value="Casual">Casual</option>
             <option value="Contractual">Contractual</option>
@@ -187,36 +227,50 @@
         <div class="row mb-3">
         <div class="col-md-6">
             <label for="date-of-hire" class="form-label">Date of Hire*</label>
-            <input type="date" class="form-control" id="date-of-hire" required>
+            <input type="date" class="form-control" id="date-of-hire" <?php echo $employees[0]['date_of_hire']; ?>>
         </div>
         <div class="col-md-6">
             <label for="supervisor" class="form-label">Supervisor</label>
-            <select class="form-select selectize_supervisors" id="supervisor">
+            <select class="form-select selectize_supervisors" id="supervisor" disabled>
+                <option value="<?php
+                if(isset($employees[0]['supervisor_id'])){
+                    echo $employees[0]['supervisor_id']; 
+                }
+                // }else if(isset($employees[0]['manager_id'])){
+                //     echo $employees[0]['manager_id']; 
+                // }
+                
+                ?>" selected><?php 
+                if(isset($employees[0]['supervisor_id'])){
+                    echo $employees[0]['supervisor_first_name'] . " " . $employees[0]['supervisor_last_name'];
+                }
+                // }else if(isset($employees[0]['manager_id'])){
+                //     echo $employees[0]['manager_first_name'] . " " . $employees[0]['manager_last_name'];
+                // }
+                ?> </option>
             </select>
         </div>
         </div>
         <div class="row mb-3">
-        <label class="form-label">Role*</label>
-        <div class="form-check">
-            <input class="form-check-input" type="radio" name="role" id="role-staff" value="Staff" checked>
+            <label class="form-label">Role*</label>
+            <div class="form-check">
+            <input class="form-check-input" type="radio" name="role" id="role-staff" value="Staff" <?php echo ($employees[0]['access_role'] == 'Staff') ? 'checked' : ''; ?>>
             <label class="form-check-label" for="role-staff">Staff</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="radio" name="role" id="role-supervisor" value="Supervisor">
-            <label class="form-check-label" for="role-supervisor">Supervisor</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="radio" name="role" id="role-manager" value="Manager">
-            <label class="form-check-label" for="role-manager">Manager</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="radio" name="role" id="role-admin" value="Admin">
-            <label class="form-check-label" for="role-admin">Admin</label>
-        </div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-md-12 justify-content-end d-flex">
-                <button type="submit" class="btn btn-primary" id="contact_information_submit" onclick="nextForm(5, this)" data-form="employment_information">Submit</button>
+            </div>
+
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="role" id="role-supervisor" value="Supervisor" <?php echo ($employees[0]['access_role'] == 'Supervisor') ? 'checked' : ''; ?>>
+                <label class="form-check-label" for="role-supervisor">Supervisor</label>
+            </div>
+
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="role" id="role-manager" value="Manager" <?php echo ($employees[0]['access_role'] == 'Manager') ? 'checked' : ''; ?>>
+                <label class="form-check-label" for="role-manager">Manager</label>
+            </div>
+
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="role" id="role-admin" value="Admin" <?php echo ($employees[0]['access_role'] == 'Admin') ? 'checked' : ''; ?>>
+                <label class="form-check-label" for="role-admin">Admin</label>
             </div>
         </div>
     </form>
@@ -229,7 +283,7 @@
         <div class="row mb-4">
         <div class="col-md-4">
             <label for="payrollGroup" class="form-label">Select Payroll Group*:</label>
-            <select class="form-select" id="payrollGroup" required>
+            <select class="form-select" id="payrollGroup">
                 <option value="" disabled selected>Choose...</option>
                 <option value="Daily">Daily</option>
                 <option value="Weekly">Weekly</option>
@@ -240,7 +294,12 @@
         </div>
         <div class="col-md-4">
             <label for="hourlyRate" class="form-label">Hourly Rate*:</label>
-            <input type="number" id="hourlyRate" class="form-control" placeholder="Enter hourly wage" required onchange="samplePayroll()">
+            <input type="number" id="hourlyRate" class="form-control" placeholder="Enter hourly wage" value="<?php echo $employees[0]['hourly_rate']; ?>" onchange="samplePayroll()">
+            <script>
+                $(document).ready(function () {
+                    samplePayroll();
+                });
+            </script>
         </div>
         </div>
 
@@ -292,26 +351,21 @@
         <div class="row mb-3">
             <div class="col-md-6">
                 <label for="bankName" class="form-label">Bank Name*:</label>
-                <input type="text" id="bankName" class="form-control" placeholder="Enter bank name" required>
+                <input type="text" id="bankName" class="form-control" placeholder="Enter bank name" value="<?php echo $employees[0]['bank_name']; ?>">
             </div>
             <div class="col-md-6">
                 <label for="branchName" class="form-label">Branch Name*:</label>
-                <input type="text" id="branchName" class="form-control" placeholder="Enter branch name" required>
+                <input type="text" id="branchName" class="form-control" placeholder="Enter branch name" value="<?php echo $employees[0]['bank_branch_name']; ?>">
             </div>
         </div>
-        <div class="row mb-3">
+        <div class="row">
             <div class="col-md-6">
                 <label for="accountNumber" class="form-label">Account Number*:</label>
-                <input type="number" id="accountNumber" class="form-control" placeholder="Enter account number" required>
+                <input type="number" id="accountNumber" class="form-control" placeholder="Enter account number" value="<?php echo $employees[0]['bank_account_number']; ?>">
             </div>
             <div class="col-md-6">
                 <label for="accountType" class="form-label">Account Type*:</label>
-                <input type="text" id="accountType" class="form-control" placeholder="Enter account type" required>
-            </div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-md-12 justify-content-end d-flex">
-                <button type="submit" class="btn btn-primary" id="contact_information_submit" onclick="nextForm(6, this)" data-form="pay_information">Submit</button>
+                <input type="text" id="accountType" class="form-control" placeholder="Enter account type" value="<?php echo $employees[0]['bank_account_type']; ?>">
             </div>
         </div>
         </div>
@@ -322,32 +376,27 @@
     <div class="form-container p-4">
         <h3 class="form-title">Government Information: (6/6)</h3>
         <form onsubmit="event.preventDefault()" id="government-information">
-        <div class="row mb-3">
-            <div class="col-md-6">
-            <label for="tinNumber" class="form-label">TIN Number*:</label>
-            <input type="number" id="tinNumber" class="form-control" placeholder="Enter TIN Number" required>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                <label for="tinNumber" class="form-label">TIN Number*:</label>
+                <input type="number" id="tinNumber" class="form-control" placeholder="Enter TIN Number" value="<?php echo $employees[0]['tin_number']; ?>">
+                </div>
+                <div class="col-md-6">
+                <label for="SSSNumber" class="form-label">SSS Number*:</label>
+                <input type="number" id="SSSNumber" class="form-control" placeholder="Enter SSS Number" value="<?php echo $employees[0]['sss_number']; ?>">
+                </div>
+                
             </div>
-            <div class="col-md-6">
-            <label for="SSSNumber" class="form-label">SSS Number*:</label>
-            <input type="number" id="SSSNumber" class="form-control" placeholder="Enter SSS Number" required>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                <label for="PhilHealthNumber" class="form-label">PhilHealth Number*:</label>
+                <input type="number" id="PhilHealthNumber" class="form-control" placeholder="Enter PhilHealth Number" value="<?php echo $employees[0]['philhealth_number']; ?>">
+                </div>
+                <div class="col-md-6">
+                <label for="PagIBIGNumber" class="form-label">Pag-IBIG Number*:</label>
+                <input type="number" id="PagIBIGNumber" class="form-control" placeholder="Enter Pag-IBIG Number" value="<?php echo $employees[0]['pagibig_fund_number']; ?>">
+                </div>
             </div>
-            
-        </div>
-        <div class="row mb-3">
-            <div class="col-md-6">
-            <label for="PhilHealthNumber" class="form-label">PhilHealth Number*:</label>
-            <input type="number" id="PhilHealthNumber" class="form-control" placeholder="Enter PhilHealth Number" required>
-            </div>
-            <div class="col-md-6">
-            <label for="PagIBIGNumber" class="form-label">Pag-IBIG Number*:</label>
-            <input type="number" id="PagIBIGNumber" class="form-control" placeholder="Enter Pag-IBIG Number" required>
-            </div>
-        </div>
-        <div class="row mb-3">
-            <div class="col-md-12 justify-content-end d-flex">
-                <button type="submit" class="btn btn-primary" id="contact_information_submit" onclick="employeeCreate()">Finish</button>
-            </div>
-        </div>
         </form>
     </div>
 </div>

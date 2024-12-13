@@ -2,7 +2,6 @@
     <?php foreach ($employees as $row): ?>
 <div class="card p-3 col-auto mx-3 my-3">
     <div class="d-flex justify-content-between align-items-center"
-    data-id="<?php echo htmlspecialchars($row['id']); ?>"
     >
         <div class="d-flex align-items-center">
             <div class="placeholder-img">
@@ -34,7 +33,7 @@
         <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="add-employees.php?m=v&token=<?php echo htmlspecialchars(md5($row['id']));?>"><i class="bx bx-user"></i>View</a></li>
             <li><a class="dropdown-item" href="add-employees.php?m=u&token=<?php echo htmlspecialchars(md5($row['id']));?>"><i class="bx bx-edit-alt"></i>Edit</a></li>
-            <li><a class="dropdown-item" href="#" onclick="confirmDeleteEmployee(this)"><i class="bx bx-trash"></i>Delete</a></li>
+            <li><a class="dropdown-item" href="#" onclick="confirmDeleteEmployee(this)"><i class="bx bx-trash" data-id="<?php echo htmlspecialchars($row['id']); ?>"></i>Delete</a></li>
         </ul>
         </div>
         <hr class="mt-4 mb-4">

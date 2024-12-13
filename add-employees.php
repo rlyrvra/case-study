@@ -72,7 +72,7 @@ if(isset($_GET['m']) && $_GET['m'] === 'u'){
 <!-- Ajax -->
 <!-- <script src="departments/modules/departments-ajax.js?v1.2"></script> -->
 <!-- Scripts -->
-<script src="employees/modules/add-employee-scripts.js?v1.1"></script>
+<script src="employees/modules/add-employee-scripts.js?v1.4"></script>
 
 
 
@@ -145,7 +145,7 @@ if(isset($_GET['m']) && $_GET['m'] === 'u'){
                 }else if($mode === 'view'){
                   include_once __DIR__ . '/employees/modules/add-employee-header-view.php';
                 }else if($mode === 'update'){
-                  
+                  include_once __DIR__ . '/employees/modules/add-employee-header-update.php';
                 }else{
                   include_once __DIR__ . '/employees/modules/add-employee-header-add.php';
                 }
@@ -160,6 +160,7 @@ if(isset($_GET['m']) && $_GET['m'] === 'u'){
                         type="button"
                         class="nav-link active"
                         role="tab"
+                        id="personal_information_btn"
                         data-bs-toggle="tab"
                         data-bs-target="#navs-pills-personal-information"
                         aria-controls="navs-pills-personal-information"
@@ -171,8 +172,9 @@ if(isset($_GET['m']) && $_GET['m'] === 'u'){
                     <li class="nav-item">
                       <button
                         type="button"
-                        class="nav-link"
+                        class="nav-link <?php if(!isset($_GET['m'])) echo 'disabled'; ?>"
                         role="tab"
+                        id="login_credential_btn"
                         data-bs-toggle="tab"
                         data-bs-target="#navs-pills-login-credentials"
                         aria-controls="navs-pills-login-credentials"
@@ -184,8 +186,9 @@ if(isset($_GET['m']) && $_GET['m'] === 'u'){
                     <li class="nav-item">
                       <button
                         type="button"
-                        class="nav-link"
+                        class="nav-link <?php if(!isset($_GET['m'])) echo 'disabled'; ?>"
                         role="tab"
+                        id="contact_information_btn"
                         data-bs-toggle="tab"
                         data-bs-target="#navs-pills-contact-information"
                         aria-controls="navs-pills-contact-information"
@@ -197,8 +200,9 @@ if(isset($_GET['m']) && $_GET['m'] === 'u'){
                     <li class="nav-item">
                       <button
                         type="button"
-                        class="nav-link"
+                        class="nav-link <?php if(!isset($_GET['m'])) echo 'disabled'; ?>"
                         role="tab"
+                        id="employment_information_btn"
                         data-bs-toggle="tab"
                         data-bs-target="#navs-pills-employment-information"
                         aria-controls="navs-pills-employment-information"
@@ -210,8 +214,9 @@ if(isset($_GET['m']) && $_GET['m'] === 'u'){
                     <li class="nav-item">
                       <button
                         type="button"
-                        class="nav-link"
+                        class="nav-link <?php if(!isset($_GET['m'])) echo 'disabled'; ?>"
                         role="tab"
+                        id="pay_information_btn"
                         data-bs-toggle="tab"
                         data-bs-target="#navs-pills-pay-information"
                         aria-controls="navs-pills-pay-information"
@@ -223,8 +228,9 @@ if(isset($_GET['m']) && $_GET['m'] === 'u'){
                     <li class="nav-item">
                       <button
                         type="button"
-                        class="nav-link"
+                        class="nav-link <?php if(!isset($_GET['m'])) echo 'disabled'; ?>"
                         role="tab"
+                        id="government_information_btn"
                         data-bs-toggle="tab"
                         data-bs-target="#navs-pills-government-information"
                         aria-controls="navs-pills-government-information"
@@ -241,7 +247,7 @@ if(isset($_GET['m']) && $_GET['m'] === 'u'){
                     }else if($mode === 'view'){
                       include_once __DIR__ . '/employees/modules/add-employee-form-view.php';
                     }else if($mode === 'update'){
-                      
+                      include_once __DIR__ . '/employees/modules/add-employee-form-update.php';
                     }else{
                       include_once __DIR__ . '/employees/modules/add-employee-form-add.php';
                     }
