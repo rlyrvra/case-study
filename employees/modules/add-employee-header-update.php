@@ -56,7 +56,7 @@ if($resultSet["total_row_count"] <= 0){
     // Render the image
     $imageData = base64_encode($employees[0]['profile_picture']);
 
-    echo "<img src='data:image/jpg;base64,$imageData' alt='Profile Picture' class='w-px-35 h-auto rounded-circle' id='profileImage' />";
+    echo "<img src='data:image/jpg;base64,$imageData' alt='Profile Picture' class='w-px-35 h-auto rounded-circle' id='profileImage' data-img='$imageData'/>";
     ?>
     <div>
         <h5 class="display-5"><?php echo $employees[0]['full_name']; ?></h5>

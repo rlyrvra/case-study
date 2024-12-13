@@ -70,7 +70,7 @@ if(isset($_GET['m']) && $_GET['m'] === 'u'){
 />
 
 <!-- Ajax -->
-<!-- <script src="departments/modules/departments-ajax.js?v1.2"></script> -->
+<script src="employees/modules/add-employee-ajax.js?v1.2"></script>
 <!-- Scripts -->
 <script src="employees/modules/add-employee-scripts.js?v1.4"></script>
 
@@ -319,6 +319,12 @@ if(isset($_GET['m']) && $_GET['m'] === 'u'){
 <?php include_once __DIR__ . '/employees/modules/add-employee-fetch-departments.php'; ?>
 <?php include_once __DIR__ . '/employees/modules/add-employee-fetch-job-titles.php'; ?>
 <?php include_once __DIR__ . '/employees/modules/add-employee-fetch-supervisors.php'; ?>
+<?php include_once __DIR__ . '/employees/modules/add-employee-fetch-payroll-groups.php'; ?>
+<script>
+  $(document).ready(function() {
+    populatePayrollGroupsSelect(document.getElementById("payrollGroup"));
+  });
+</script>
 <script>
 
 </script>

@@ -181,7 +181,7 @@ if($resultSet["total_row_count"] <= 0){
         <div class="row mb-3">
         <div class="col-md-6">
             <label for="rfid" class="form-label">RFID Tag*</label>
-            <input type="text" class="form-control" id="rfid" placeholder="Enter RFID Tag" value='<?php echo $employees[0]['rfid_uid'];?>'>
+            <input type="number" class="form-control" id="rfid" placeholder="Enter RFID Tag" value='<?php echo $employees[0]['rfid_uid'];?>'>
         </div>
         <div class="col-md-6">
             <label for="employee-code" class="form-label">Employee Code*</label>
@@ -284,12 +284,7 @@ if($resultSet["total_row_count"] <= 0){
         <div class="col-md-4">
             <label for="payrollGroup" class="form-label">Select Payroll Group*:</label>
             <select class="form-select" id="payrollGroup">
-                <option value="" disabled selected>Choose...</option>
-                <option value="Daily">Daily</option>
-                <option value="Weekly">Weekly</option>
-                <option value="Bi-Weekly">Bi-Weekly</option>
-                <option value="Semi-Monthly">Semi-Monthly</option>
-                <option value="Monthly">Monthly</option>
+                <option value="<?php echo $employees[0]['payroll_group_id']; ?>" selected><?php echo $employees[0]['payroll_group_id']; ?></option>
             </select>
         </div>
         <div class="col-md-4">
@@ -398,5 +393,11 @@ if($resultSet["total_row_count"] <= 0){
                 </div>
             </div>
         </form>
+    </div>
+</div>
+
+<div class="row mt-3">
+    <div class="col-md-12 justify-content-end d-flex">
+        <button type="button" class="btn btn-info" id="personal_info_submit" onclick="updateEmployee(this)" data-token="<?php echo $token; ?>"><i class="bx bx-edit-alt"></i>Submit</button>
     </div>
 </div>

@@ -35,7 +35,7 @@ function nextForm(page = 1, button){
     page = page - 1;
 
     if(page > maxPageForm){
-        maxPage = page;
+        maxPageForm = page;
         for(i = 0; i < maxPageForm; i++){
             buttons[i].classList.remove("disabled");
         }

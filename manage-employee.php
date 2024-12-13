@@ -7,6 +7,11 @@ require_once __DIR__ . '/login-checker.php';
 
 if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager'){
   header("Location: ". $SMARTWAGE_LOCATION ."/smartWage-index.php?aR=true");
+  exit;
+}
+
+if(isset($_GET['e']) && $_GET['e'] === '404'){
+  include_once __DIR__ . '/sweet-alert-toasts/employees/add-employee-not-found.php';
 }
 
 ?>
