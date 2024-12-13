@@ -27,6 +27,7 @@
 
     <!-- Departments -->
     <?php
+    ob_start();
     if($_SESSION['access_role'] == 'Admin'){
         echo '
     <li class="menu-item" id="departments-menu">

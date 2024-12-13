@@ -1,0 +1,343 @@
+<div class="tab-pane fade show active" id="navs-pills-personal-information" role="tabpanel">
+    <!-- Form -->
+    <div class="form-container p-4">
+    <h3 class="form-title">Personal Information: (1/6)</h3>
+    <form onsubmit="event.preventDefault()" id="personal_information">
+        <div class="row mb-3">
+        <div class="col-md-4">
+            <label for="firstName" class="form-label">First Name*</label>
+            <input type="text" class="form-control" id="firstName" placeholder="First Name" required>
+        </div>
+        <div class="col-md-4">
+            <label for="middleName" class="form-label">Middle Name</label>
+            <input type="text" class="form-control" id="middleName" placeholder="Middle Name" required>
+        </div>
+        <div class="col-md-4">
+            <label for="lastName" class="form-label">Last Name*</label>
+            <input type="text" class="form-control" id="lastName" placeholder="Last Name" required>
+        </div>
+        </div>
+        <div class="row mb-3">
+        <div class="col-md-4">
+            <label for="dob" class="form-label">Date of Birth*</label>
+            <input type="date" class="form-control" id="dob" required>
+        </div>
+        <div class="col-md-4">
+            <label for="gender" class="form-label">Gender*</label>
+            <select id="gender" class="form-select" require>
+            <option selected disabled>Choose...</option>
+            <option>Male</option>
+            <option>Female</option>
+            <option>Other</option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label for="maritalStatus" class="form-label">Marital Status*</label>
+            <select id="maritalStatus" class="form-select" require>
+            <option selected disabled>Choose...</option>
+            <option>Single</option>
+            <option>Married</option>
+            <option>Divorced</option>
+            </select>
+        </div>
+        </div>
+        <div class="row mb-3">
+        <div class="col-md-6">
+            <label for="nationality" class="form-label">Nationality*</label>
+            <input type="text" class="form-control" id="nationality" placeholder="Nationality" required>
+        </div>
+        <div class="col-md-6">
+            <label for="religion" class="form-label">Religion</label>
+            <input type="text" class="form-control" id="religion" placeholder="Religion">
+        </div>
+        </div>
+        <div class="row mb-3">
+        <div class="col-md-12">
+            <label for="profilePicture" class="form-label">Profile Picture</label>
+            <input type="file" class="form-control" id="profilePicture" accept=".jpg">
+        </div>
+        </div>
+        <div class="row mb-3">
+        <div class="col-md-12 justify-content-end d-flex">
+            <button type="submit" class="btn btn-primary" id="personal_info_submit" onclick="nextForm(2)">Submit</button>
+        </div>
+        </div>
+    </form>
+    </div>
+</div>
+<div class="tab-pane fade" id="navs-pills-login-credentials" role="tabpanel">
+    <div class="form-container p-4">
+    <h3 class="form-title">Login Credentials: (2/6)</h3>
+    <form onsubmit="event.preventDefault()" id="login_credentials">
+        <div class="mb-3">
+        <label for="username" class="form-label">Username*:</label>
+        <input type="text" class="form-control" id="username" placeholder="Enter your username" required>
+        </div>
+        <div class="mb-3">
+        <label for="password" class="form-label">Password*:</label>
+        <input type="password" class="form-control" id="password" placeholder="Enter your password" required>
+        </div>
+        <div class="row mb-3">
+        <div class="col-md-12 justify-content-end d-flex">
+            <button type="submit" class="btn btn-primary" id="login_credentials_submit" onclick="nextForm(3)">Submit</button>
+        </div>
+        </div>
+    </form>
+    </div>
+</div>
+<div class="tab-pane fade" id="navs-pills-contact-information" role="tabpanel">
+    <div class="form-container p-4">
+    <h3 class="form-title">Contact Information: (3/6)</h3>
+    <form onsubmit="event.preventDefault()" id="contact_information">
+        <div class="row mb-3">
+        <div class="col-md-6">
+            <label for="phone" class="form-label">Phone Number*</label>
+            <input type="text" class="form-control" id="phone" placeholder="Enter phone number" required>
+        </div>
+        <div class="col-md-6">
+            <label for="email" class="form-label">Email Address*</label>
+            <input type="email" class="form-control" id="email" placeholder="Enter email address" required>
+        </div>
+        </div>
+        <div class="mb-3">
+        <label for="address" class="form-label">Address*</label>
+        <textarea class="form-control" id="address" placeholder="Enter address" required></textarea>
+        </div>
+
+        <h3 class="form-title">Emergency Contact Information:</h3>
+        <div class="row mb-3">
+        <div class="col-md-6">
+            <label for="emergency-name" class="form-label">Name*</label>
+            <input type="text" class="form-control" id="emergency-name" placeholder="Enter name" required>
+        </div>
+        <div class="col-md-6">
+            <label for="relationship" class="form-label">Relationship*</label>
+            <input type="text" class="form-control" id="relationship" placeholder="Enter relationship" required>
+        </div>
+        </div>
+        <div class="row mb-3">
+        <div class="col-md-6">
+            <label for="emergency-phone" class="form-label">Phone Number*</label>
+            <input type="text" class="form-control" id="emergency-phone" placeholder="Enter phone number" required>
+        </div>
+        <div class="col-md-6">
+            <label for="emergency-email" class="form-label">Email Address</label>
+            <input type="email" class="form-control" id="emergency-email" placeholder="Enter email address">
+        </div>
+        </div>
+        <div class="mb-3">
+        <label for="emergency-address" class="form-label">Address</label>
+        <input type="text" class="form-control" id="emergency-address" placeholder="Enter address">
+        </div>
+        <div class="row mb-3">
+        <div class="col-md-12 justify-content-end d-flex">
+            <button type="submit" class="btn btn-primary" id="contact_information_submit" onclick="nextForm(4)">Submit</button>
+        </div>
+        </div>
+    </form>
+    </div>
+</div>
+<div class="tab-pane fade" id="navs-pills-employment-information" role="tabpanel">
+    <div class="form-container p-4">
+    <h3 class="form-title">Employment Information: (4/6)</h3>
+    <form onsubmit="event.preventDefault()" id="employment_information">
+        <div class="row mb-3">
+        <div class="col-md-6">
+            <label for="rfid" class="form-label">RFID Tag*</label>
+            <input type="text" class="form-control" id="rfid" placeholder="Enter RFID Tag" required>
+        </div>
+        <div class="col-md-6">
+            <label for="employee-code" class="form-label">Employee Code*</label>
+            <input type="text" class="form-control" id="employee-code" placeholder="Enter Employee Code" readonly>
+        </div>
+        </div>
+        <div class="row mb-3">
+        <div class="col-md-4">
+            <label for="job-title" class="form-label">Job Title*</label>
+            <select class="form-select selectize_job_title" id="job-title" name="job-title">
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label for="department" class="form-label">Department*</label>
+            <select class="form-select selectize_department" id="department" name="departments">
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label for="employment-type" class="form-label">Employment Type*</label>
+            <select class="form-select" id="employment-type" required>
+            <option selected disabled>Select Type</option>
+            <option>Regular / Permanent</option>
+            <option>Casual</option>
+            <option>Contractual</option>
+            <option>Project-Based</option>
+            <option>Seasonal</option>
+            <option>Fixed-Term</option>
+            <option>Probationary</option>
+            <option>Part-Time</option>
+            <option>Self-Employment</option>
+            <option>Freelance</option>
+            <option>Internship</option>
+            <option>Consultancy</option>
+            <option>Apprenticeship</option>
+            <option>Traineeship</option>
+            <option>Gig</option>
+            </select>
+        </div>
+        </div>
+        <div class="row mb-3">
+        <div class="col-md-6">
+            <label for="date-of-hire" class="form-label">Date of Hire*</label>
+            <input type="date" class="form-control" id="date-of-hire" required>
+        </div>
+        <div class="col-md-6">
+            <label for="supervisor" class="form-label">Supervisor</label>
+            <select class="form-select selectize_supervisors" id="supervisor">
+            </select>
+        </div>
+        </div>
+        <div class="row mb-3">
+        <label class="form-label">Role*</label>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="role" id="role-staff" value="Staff" checked>
+            <label class="form-check-label" for="role-staff">Staff</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="role" id="role-supervisor" value="Supervisor">
+            <label class="form-check-label" for="role-supervisor">Supervisor</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="role" id="role-manager" value="Manager">
+            <label class="form-check-label" for="role-manager">Manager</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="role" id="role-admin" value="Admin">
+            <label class="form-check-label" for="role-admin">Admin</label>
+        </div>
+        </div>
+        <div class="row mb-3">
+        <div class="col-md-12 justify-content-end d-flex">
+            <button type="submit" class="btn btn-primary" id="contact_information_submit" onclick="nextForm(5)">Submit</button>
+        </div>
+        </div>
+    </form>
+    </div>
+</div>
+<div class="tab-pane fade" id="navs-pills-pay-information" role="tabpanel">
+    <div class="form-container p-4">
+    <h3 class="form-title">Pay Information: (5/6)</h3>
+    <form onsubmit="event.preventDefault()" id="pay_information">
+        <div class="row mb-4">
+        <div class="col-md-4">
+            <label for="payrollGroup" class="form-label">Select Payroll Group*:</label>
+            <select class="form-select" id="payrollGroup" required>
+                <option value="" disabled selected>Choose...</option>
+                <option value="Daily">Daily</option>
+                <option value="Weekly">Weekly</option>
+                <option value="Bi-Weekly">Bi-Weekly</option>
+                <option value="Semi-Monthly">Semi-Monthly</option>
+                <option value="Monthly">Monthly</option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label for="hourlyRate" class="form-label">Hourly Rate*:</label>
+            <input type="text" id="hourlyRate" class="form-control" placeholder="Enter hourly wage" required>
+        </div>
+        </div>
+
+        <div class="form-container p-3 mb-4">
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="annual" class="form-label">Annually:</label>
+                    <input type="text" id="annual" class="form-control" placeholder="Annual amount" readonly>
+                </div>
+                <div class="col-md-6">
+                    <label for="weekly" class="form-label">Weekly:</label>
+                    <input type="text" id="weekly" class="form-control" placeholder="Weekly amount" readonly>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="monthly" class="form-label">Monthly:</label>
+                    <input type="text" id="monthly" class="form-control" placeholder="Monthly amount" readonly>
+                </div>
+                <div class="col-md-6">
+                    <label for="daily" class="form-label">Daily:</label>
+                    <input type="text" id="daily" class="form-control" placeholder="Daily amount" readonly>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="semiMonthly" class="form-label">Semi-Monthly:</label>
+                    <input type="text" id="semiMonthly" class="form-control" placeholder="Semi-monthly amount" readonly>
+                </div>
+                <div class="col-md-6">
+                    <label for="hour" class="form-label">Hour:</label>
+                    <input type="text" id="hour" class="form-control" placeholder="Hourly amount" readonly>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="biWeekly" class="form-label">Bi-Weekly:</label>
+                    <input type="text" id="biWeekly" class="form-control" placeholder="Bi-weekly amount" readonly>
+                </div>
+                <div class="col-md-6">
+                    <label for="perMinute" class="form-label">Per Minute:</label>
+                    <input type="text" id="perMinute" class="form-control" placeholder="Per-minute amount" readonly>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bank Details Section -->
+        <div class="bank-details">
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="bankName" class="form-label">Bank Name*:</label>
+                <input type="text" id="bankName" class="form-control" placeholder="Enter bank name">
+            </div>
+            <div class="col-md-6">
+                <label for="branchName" class="form-label">Branch Name*:</label>
+                <input type="text" id="branchName" class="form-control" placeholder="Enter branch name">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <label for="accountNumber" class="form-label">Account Number*:</label>
+                <input type="number" id="accountNumber" class="form-control" placeholder="Enter account number">
+            </div>
+            <div class="col-md-6">
+                <label for="accountType" class="form-label">Account Type*:</label>
+                <input type="text" id="accountType" class="form-control" placeholder="Enter account type">
+            </div>
+        </div>
+        </div>
+    </form>
+    </div>
+</div>
+<div class="tab-pane fade" id="navs-pills-government-information" role="tabpanel">
+    <div class="form-container p-4">
+        <h3 class="form-title">Government Information: (6/6)</h3>
+        <form onsubmit="event.preventDefault()" id="government-information">
+        <div class="row mb-3">
+            <div class="col-md-6">
+            <label for="tinNumber" class="form-label">TIN Number*:</label>
+            <input type="number" id="tinNumber" class="form-control" placeholder="Enter TIN Number">
+            </div>
+            <div class="col-md-6">
+            <label for="SSSNumber" class="form-label">SSS Number*:</label>
+            <input type="number" id="SSSNumber" class="form-control" placeholder="Enter SSS Number">
+            </div>
+            
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-6">
+            <label for="PhilHealthNumber" class="form-label">PhilHealth Number*:</label>
+            <input type="number" id="PhilHealthNumber" class="form-control" placeholder="Enter PhilHealth Number">
+            </div>
+            <div class="col-md-6">
+            <label for="PagIBIGNumber" class="form-label">Pag-IBIG Number*:</label>
+            <input type="number" id="PagIBIGNumber" class="form-control" placeholder="Enter Pag-IBIG Number">
+            </div>
+        </div>
+        </form>
+    </div>
+</div>

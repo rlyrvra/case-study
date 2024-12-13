@@ -72,7 +72,7 @@ if(isset($_GET['m']) && $_GET['m'] === 'u'){
 <!-- Ajax -->
 <!-- <script src="departments/modules/departments-ajax.js?v1.2"></script> -->
 <!-- Scripts -->
-<script src="employees/modules/add-employee-scripts.js?v1.2"></script>
+<script src="employees/modules/add-employee-scripts.js?v1.1"></script>
 
 
 
@@ -139,14 +139,18 @@ if(isset($_GET['m']) && $_GET['m'] === 'u'){
             <div class="container-fluid card pt-5 pb-5 mt-5 mb-5">
               <div class="row justify-content-center">
                 <!-- Header -->
-                <div class="profile-header col-auto">
-                  <img src="https://via.placeholder.com/50" alt="Profile Picture">
-                  <div>
-                    <h5 class="display-5">Employee’s Name</h5>
-                    <p class="mb-0">Department</p>
-                    <p class="mb-0">Job Title</p>
-                  </div>
-                </div>
+                <?php
+                if(empty($mode)){
+                  include_once __DIR__ . '/employees/modules/add-employee-header-add.php';
+                }else if($mode === 'view'){
+                  include_once __DIR__ . '/employees/modules/add-employee-header-view.php';
+                }else if($mode === 'update'){
+                  
+                }else{
+                  include_once __DIR__ . '/employees/modules/add-employee-header-add.php';
+                }
+                ?>
+
               </div>
               <div class="row">
                 <div class="col-12 d-flex justify-content-center flex-column flex-lg-row">
@@ -209,11 +213,11 @@ if(isset($_GET['m']) && $_GET['m'] === 'u'){
                         class="nav-link"
                         role="tab"
                         data-bs-toggle="tab"
-                        data-bs-target="#navs-pills-contact-information"
-                        aria-controls="navs-pills-contact-information"
+                        data-bs-target="#navs-pills-pay-information"
+                        aria-controls="navs-pills-pay-information"
                         aria-selected="false"
                       >
-                        Salary Information
+                        Pay Information
                       </button>
                     </li>
                     <li class="nav-item">
@@ -222,8 +226,8 @@ if(isset($_GET['m']) && $_GET['m'] === 'u'){
                         class="nav-link"
                         role="tab"
                         data-bs-toggle="tab"
-                        data-bs-target="#navs-pills-contact-information"
-                        aria-controls="navs-pills-contact-information"
+                        data-bs-target="#navs-pills-government-information"
+                        aria-controls="navs-pills-government-information"
                         aria-selected="false"
                       >
                         Government Information
@@ -231,225 +235,18 @@ if(isset($_GET['m']) && $_GET['m'] === 'u'){
                     </li>
                   </ul>
                   <div class="col-9 tab-content flex-fill">
-                    <div class="tab-pane fade show active" id="navs-pills-personal-information" role="tabpanel">
-                      <!-- Form -->
-                      <div class="form-container p-4">
-                        <h3 class="form-title">Personal Information: (1/5)</h3>
-                        <form onsubmit="event.preventDefault()" id="personal_information">
-                          <div class="row mb-3">
-                            <div class="col-md-4">
-                              <label for="firstName" class="form-label">First Name*</label>
-                              <input type="text" class="form-control" id="firstName" placeholder="First Name" required>
-                            </div>
-                            <div class="col-md-4">
-                              <label for="middleName" class="form-label">Middle Name</label>
-                              <input type="text" class="form-control" id="middleName" placeholder="Middle Name" required>
-                            </div>
-                            <div class="col-md-4">
-                              <label for="lastName" class="form-label">Last Name*</label>
-                              <input type="text" class="form-control" id="lastName" placeholder="Last Name" required>
-                            </div>
-                          </div>
-                          <div class="row mb-3">
-                            <div class="col-md-4">
-                              <label for="dob" class="form-label">Date of Birth*</label>
-                              <input type="date" class="form-control" id="dob" required>
-                            </div>
-                            <div class="col-md-4">
-                              <label for="gender" class="form-label">Gender*</label>
-                              <select id="gender" class="form-select" require>
-                                <option selected disabled>Choose...</option>
-                                <option>Male</option>
-                                <option>Female</option>
-                                <option>Other</option>
-                              </select>
-                            </div>
-                            <div class="col-md-4">
-                              <label for="maritalStatus" class="form-label">Marital Status*</label>
-                              <select id="maritalStatus" class="form-select" require>
-                                <option selected disabled>Choose...</option>
-                                <option>Single</option>
-                                <option>Married</option>
-                                <option>Divorced</option>
-                              </select>
-                            </div>
-                          </div>
-                          <div class="row mb-3">
-                            <div class="col-md-6">
-                              <label for="nationality" class="form-label">Nationality*</label>
-                              <input type="text" class="form-control" id="nationality" placeholder="Nationality" required>
-                            </div>
-                            <div class="col-md-6">
-                              <label for="religion" class="form-label">Religion</label>
-                              <input type="text" class="form-control" id="religion" placeholder="Religion">
-                            </div>
-                          </div>
-                          <div class="row mb-3">
-                            <div class="col-md-12">
-                              <label for="profilePicture" class="form-label">Profile Picture</label>
-                              <input type="file" class="form-control" id="profilePicture" accept=".jpg">
-                            </div>
-                          </div>
-                          <div class="row mb-3">
-                            <div class="col-md-12 justify-content-end d-flex">
-                              <button type="submit" class="btn btn-primary" id="personal_info_submit" onclick="nextForm(2)">Submit</button>
-                            </div>
-                          </div>
-                        </form>
-                      </div>
-                    </div>
-                    <div class="tab-pane fade" id="navs-pills-login-credentials" role="tabpanel">
-                      <div class="form-container p-4">
-                        <h3 class="form-title">Login Credentials:</h3>
-                        <form onsubmit="event.preventDefault()" id="login_credentials">
-                          <div class="mb-3">
-                            <label for="username" class="form-label">Username*:</label>
-                            <input type="text" class="form-control" id="username" placeholder="Enter your username" required>
-                          </div>
-                          <div class="mb-3">
-                            <label for="password" class="form-label">Password*:</label>
-                            <input type="password" class="form-control" id="password" placeholder="Enter your password" required>
-                          </div>
-                          <div class="row mb-3">
-                            <div class="col-md-12 justify-content-end d-flex">
-                              <button type="submit" class="btn btn-primary" id="login_credentials_submit" onclick="nextForm(3)">Submit</button>
-                            </div>
-                          </div>
-                        </form>
-                      </div>
-                    </div>
-                    <div class="tab-pane fade" id="navs-pills-contact-information" role="tabpanel">
-                      <div class="form-container p-4">
-                        <h3 class="form-title">Contact Information:</h3>
-                        <form onsubmit="event.preventDefault()" id="contact_information">
-                          <div class="row mb-3">
-                            <div class="col-md-6">
-                              <label for="phone" class="form-label">Phone Number*</label>
-                              <input type="text" class="form-control" id="phone" placeholder="Enter phone number" required>
-                            </div>
-                            <div class="col-md-6">
-                              <label for="email" class="form-label">Email Address*</label>
-                              <input type="email" class="form-control" id="email" placeholder="Enter email address" required>
-                            </div>
-                          </div>
-                          <div class="mb-3">
-                            <label for="address" class="form-label">Address*</label>
-                            <textarea class="form-control" id="address" placeholder="Enter address" required></textarea>
-                          </div>
+                    <?php 
+                    if(empty($mode)){
+                      include_once __DIR__ . '/employees/modules/add-employee-form-add.php';
+                    }else if($mode === 'view'){
+                      include_once __DIR__ . '/employees/modules/add-employee-form-view.php';
+                    }else if($mode === 'update'){
+                      
+                    }else{
+                      include_once __DIR__ . '/employees/modules/add-employee-form-add.php';
+                    }
+                    ?>
 
-                          <h3 class="form-title">Emergency Contact Information:</h3>
-                          <div class="row mb-3">
-                            <div class="col-md-6">
-                              <label for="emergency-name" class="form-label">Name*</label>
-                              <input type="text" class="form-control" id="emergency-name" placeholder="Enter name" required>
-                            </div>
-                            <div class="col-md-6">
-                              <label for="relationship" class="form-label">Relationship*</label>
-                              <input type="text" class="form-control" id="relationship" placeholder="Enter relationship" required>
-                            </div>
-                          </div>
-                          <div class="row mb-3">
-                            <div class="col-md-6">
-                              <label for="emergency-phone" class="form-label">Phone Number*</label>
-                              <input type="text" class="form-control" id="emergency-phone" placeholder="Enter phone number" required>
-                            </div>
-                            <div class="col-md-6">
-                              <label for="emergency-email" class="form-label">Email Address</label>
-                              <input type="email" class="form-control" id="emergency-email" placeholder="Enter email address">
-                            </div>
-                          </div>
-                          <div class="mb-3">
-                            <label for="emergency-address" class="form-label">Address</label>
-                            <input type="text" class="form-control" id="emergency-address" placeholder="Enter address">
-                          </div>
-                          <div class="row mb-3">
-                            <div class="col-md-12 justify-content-end d-flex">
-                              <button type="submit" class="btn btn-primary" id="contact_information_submit" onclick="nextForm(4)">Submit</button>
-                            </div>
-                          </div>
-                        </form>
-                      </div>
-                    </div>
-                    <div class="tab-pane fade" id="navs-pills-employment-information" role="tabpanel">
-                      <div class="form-container p-4">
-                        <h3 class="form-title">Employment Information:</h3>
-                        <form onsubmit="event.preventDefault()" id="employment_information">
-                          <div class="row mb-3">
-                            <div class="col-md-6">
-                              <label for="rfid" class="form-label">RFID Tag*</label>
-                              <input type="text" class="form-control" id="rfid" placeholder="Enter RFID Tag" required>
-                            </div>
-                            <div class="col-md-6">
-                              <label for="employee-code" class="form-label">Employee Code*</label>
-                              <input type="text" class="form-control" id="employee-code" placeholder="Enter Employee Code" readonly>
-                            </div>
-                          </div>
-                          <div class="row mb-3">
-                            <div class="col-md-4">
-                              <label for="job-title" class="form-label">Job Title*</label>
-                              <select class="form-select selectize_job_title" id="job-title" name="job-title">
-                              </select>
-                            </div>
-                            <div class="col-md-4">
-                              <label for="department" class="form-label">Department*</label>
-                              <select class="form-select selectize_department" id="department" name="departments">
-                              </select>
-                            </div>
-                            <div class="col-md-4">
-                              <label for="employment-type" class="form-label">Employment Type*</label>
-                              <select class="form-select" id="employment-type" required>
-                                <option selected disabled>Select Type</option>
-                                <option>Regular / Permanent</option>
-                                <option>Casual</option>
-                                <option>Contractual</option>
-                                <option>Project-Based</option>
-                                <option>Seasonal</option>
-                                <option>Fixed-Term</option>
-                                <option>Probationary</option>
-                                <option>Part-Time</option>
-                                <option>Self-Employment</option>
-                                <option>Freelance</option>
-                                <option>Internship</option>
-                                <option>Consultancy</option>
-                                <option>Apprenticeship</option>
-                                <option>Traineeship</option>
-                                <option>Gig</option>
-                              </select>
-                            </div>
-                          </div>
-                          <div class="row mb-3">
-                            <div class="col-md-6">
-                              <label for="date-of-hire" class="form-label">Date of Hire*</label>
-                              <input type="date" class="form-control" id="date-of-hire" required>
-                            </div>
-                            <div class="col-md-6">
-                              <label for="supervisor" class="form-label">Supervisor</label>
-                              <select class="form-select selectize_supervisors" id="supervisor">
-                              </select>
-                            </div>
-                          </div>
-                          <div class="mb-3">
-                            <label class="form-label">Role*</label>
-                            <div class="form-check">
-                              <input class="form-check-input" type="radio" name="role" id="role-staff" value="Staff" checked>
-                              <label class="form-check-label" for="role-staff">Staff</label>
-                            </div>
-                            <div class="form-check">
-                              <input class="form-check-input" type="radio" name="role" id="role-supervisor" value="Supervisor">
-                              <label class="form-check-label" for="role-supervisor">Supervisor</label>
-                            </div>
-                            <div class="form-check">
-                              <input class="form-check-input" type="radio" name="role" id="role-manager" value="Manager">
-                              <label class="form-check-label" for="role-manager">Manager</label>
-                            </div>
-                            <div class="form-check">
-                              <input class="form-check-input" type="radio" name="role" id="role-admin" value="Admin">
-                              <label class="form-check-label" for="role-admin">Admin</label>
-                            </div>
-                          </div>
-                        </form>
-                      </div>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -515,6 +312,7 @@ if(isset($_GET['m']) && $_GET['m'] === 'u'){
 
 <?php include_once __DIR__ . '/employees/modules/add-employee-fetch-departments.php'; ?>
 <?php include_once __DIR__ . '/employees/modules/add-employee-fetch-job-titles.php'; ?>
+<?php include_once __DIR__ . '/employees/modules/add-employee-fetch-supervisors.php'; ?>
 <script>
 
 </script>
@@ -713,5 +511,121 @@ $(document).ready(function () {
 </style>
 
 
+<style>
+.selectize-control.selectize_department .selectize-input > div .description {
+  opacity: 0.8;
+}
+.selectize-control.selectize_department .selectize-input > div .name + .description {
+  margin-left: 5px;
+}
+.selectize-control.selectize_department .selectize-input > div .description:before {
+  content: "<";
+}
+.selectize-control.selectize_department .selectize-input > div .description:after {
+  content: ">";
+}
+.selectize-control.selectize_department .selectize-dropdown .caption {
+  font-size: 12px;
+  display: block;
+  color: #a0a0a0;
+}
+</style>
+
+
+
+<script>
+$(document).ready(function () {
+  const REGEX_EMAIL = "([a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@" + "(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)";
+  $("#supervisor").selectize({
+    persist: false,
+    maxItems: 1,
+    placeholder: 'Select a supervisor',
+    allowEmptyOption: true,
+    valueField: "id",
+    labelField: "full_name",
+    searchField: ["full_name", "email_address"],
+    options: supervisors,
+    render: {
+      item: function (item, escape) {
+          return (
+          "<div>" +
+          (item.title
+              ? '<span class="name">' + escape(item.full_name) + "</span>"
+              : "") +
+          (item.description
+              ? '<span class="description">' + escape(item.email_address) + "</span>"
+              : "") +
+          "</div>"
+          );
+      },
+      option: function (item, escape) {
+          var label = item.full_name || item.email_address;
+          var caption = item.full_name ? item.email_address : null;
+          return (
+          "<div>" +
+          '<span class="label">' +
+          escape(label) +
+          "</span>" +
+          (caption
+              ? '<span class="caption">' + escape(caption) + "</span>"
+              : "") +
+          "</div>"
+          );
+      },
+    },
+    createFilter: function (input) {
+      var match, regex;
+
+      // email@address.com
+      regex = new RegExp("^" + REGEX_EMAIL + "$", "i");
+      match = input.match(regex);
+      if (match) return !this.options.hasOwnProperty(match[0]);
+
+      // name <email@address.com>
+      regex = new RegExp("^([^<]*)<" + REGEX_EMAIL + ">$", "i");
+      match = input.match(regex);
+      if (match) return !this.options.hasOwnProperty(match[2]);
+
+      return false;
+    },
+    create: function (input) {
+      if (new RegExp("^" + REGEX_EMAIL + "$", "i").test(input)) {
+          return { email: input };
+      }
+      var match = input.match(
+          new RegExp("^([^<]*)<" + REGEX_EMAIL + ">$", "i")
+      );
+      if (match) {
+          return {
+          email: match[2],
+          name: $.trim(match[1]),
+          };
+      }
+      alert("Invalid email address.");
+      return false;
+    },
+  });
+});
+</script>
+
+<style>
+.selectize-control.selectize_supervisors .selectize-input > div .description {
+  opacity: 0.8;
+}
+.selectize-control.selectize_supervisors .selectize-input > div .name + .description {
+  margin-left: 5px;
+}
+.selectize-control.selectize_supervisors .selectize-input > div .description:before {
+  content: "<";
+}
+.selectize-control.selectize_supervisors .selectize-input > div .description:after {
+  content: ">";
+}
+.selectize-control.selectize_supervisors .selectize-dropdown .caption {
+  font-size: 12px;
+  display: block;
+  color: #a0a0a0;
+}
+</style>
 </body>
 </html>

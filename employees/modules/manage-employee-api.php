@@ -46,6 +46,22 @@ try {
             ];
         }
 
+        if($_SESSION['access_role'] === 'Admin'){
+            // do nothing
+        }else if($_SESSION['access_role'] === 'Manager'){
+            $filterCriteria[] = [
+                "column" => "employee.manager_id" ,
+                "operator" => "=",
+                "value" => $_SESSION['id']
+            ];
+        }else if($_SESSION['access_role'] === 'Supervisor'){
+            $filterCriteria[] = [
+                "column" => "employee.supervisor_id" ,
+                "operator" => "=",
+                "value" => $_SESSION['id']
+            ];
+        }
+
         if(empty($searchAt) && !empty($searchFilter)){
             $filterCriteria[] = [
                 'column' => 'employee.full_name', 
@@ -127,6 +143,20 @@ try {
         $totalEmployees = $result["total_row_count"];
         $totalPages = ceil($totalEmployees / $limit);
         include __DIR__ . '/manage-employee-table.php';
+        return;
+    }
+
+    if($action == 'delete'){
+        $hashed_id = $_POST['md5_id'] ?? null;
+        $employeeRepository = new EmployeeRepository($employeeDao);
+        $employeeService = new EmployeeService($employeeRepository);
+        $deleteResult = $employeeService->deleteEmployee($hashed_id);
+
+        if ($deleteResult) {
+            echo "Employee deleted successfully!";
+        } else {
+            echo "Failed to delete employee. Please try again.";
+        }
         return;
     }
 

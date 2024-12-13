@@ -36,3 +36,24 @@ function getMaxPageValue() {
 
     return maxPage;
 }
+
+function confirmDeleteEmployee(button) {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "Do you want to delete this employee?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+        deleteEmployee(button);
+        Swal.fire(
+            'Deleted!',
+            'The department has been deleted.',
+            'success'
+        );
+        }
+    });
+}

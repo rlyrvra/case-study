@@ -60,3 +60,26 @@ function fetchAllEmployees(page = 1) {
     });
 }
 
+function deleteEmployee(button){
+    const row = button.closest('div');  // Get the closest row
+    const employeeData = {
+        token: row.getAttribute('data-id'),
+    };
+    
+    $.ajax({
+        url: 'employees/modules/manage-employee-api.php',
+        type: 'POST',
+        data: {
+            action: 'delete',
+            md5_id: employeeData.token
+        },
+        success: function(response) {
+            $('#manage-employee-table').html(response);
+            fetchAllEmployees();
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log("AJAX Error: " + textStatus + ": " + errorThrown);
+        }
+    });
+    
+}

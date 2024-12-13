@@ -109,7 +109,7 @@ try {
         $hashed_id = $_POST['md5_id'] ?? null;
         $departmentRepository = new DepartmentRepository($departmentDao);
         $departmentService = new DepartmentService($departmentRepository);
-        $updateResult = $departmentService->deleteDepartment($hashed_id);
+        $deleteResult = $departmentService->deleteDepartment($hashed_id);
 
         if ($deleteResult) {
             echo "Department deleted successfully!";

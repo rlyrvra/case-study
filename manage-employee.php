@@ -38,7 +38,7 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
 <!-- Ajax -->
 <script src="employees/modules/manage-employee-ajax.js?v1.1"></script>
 <!-- Scripts -->
-<script src="employees/modules/manage-employee-scripts.js?v1.1"></script>
+<script src="employees/modules/manage-employee-scripts.js?v1.2"></script>
 
 
 
