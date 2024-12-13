@@ -18,11 +18,13 @@ class EmployeeBreakDao
         $query = "
             INSERT INTO employee_breaks (
                 break_schedule_id,
-                start_time
+                start_time       ,
+                created_at
             )
             VALUES (
                 :break_schedule_id,
-                :start_time
+                :start_time       ,
+                :created_at
             )
         ";
 
@@ -33,6 +35,7 @@ class EmployeeBreakDao
 
             $statement->bindValue(":break_schedule_id", $employeeBreak->getBreakScheduleId(), Helper::getPdoParameterType($employeeBreak->getBreakScheduleId()));
             $statement->bindValue(":start_time"       , $employeeBreak->getStartTime()      , Helper::getPdoParameterType($employeeBreak->getStartTime()      ));
+            $statement->bindValue(":created_at"       , $employeeBreak->getCreatedAt()      , Helper::getPdoParameterType($employeeBreak->getCreatedAt()      ));
 
             $statement->execute();
 
@@ -131,8 +134,8 @@ class EmployeeBreakDao
 
         $joinClauses = "";
 
-        if (array_key_exists("work_schedule_id"                 , $selectedColumns) ||
-            array_key_exists("break_type_id"                    , $selectedColumns) ||
+        if (array_key_exists("work_schedule_id"                  , $selectedColumns) ||
+            array_key_exists("break_type_id"                     , $selectedColumns) ||
             array_key_exists("break_schedule_is_flexible"        , $selectedColumns) ||
             array_key_exists("break_schedule_earliest_start_time", $selectedColumns) ||
             array_key_exists("break_schedule_earliest_end_time"  , $selectedColumns) ||
@@ -318,7 +321,8 @@ class EmployeeBreakDao
                 AND employee_break.created_at BETWEEN :start_date AND :end_date
             ORDER BY
                 CASE
-                    WHEN break_schedule.start_time IS NULL THEN break_schedule.earliest_start_time
+                    WHEN employee_break.start_time IS NOT NULL THEN employee_break.start_time
+                    WHEN break_schedule.start_time IS NULL     THEN break_schedule.earliest_start_time
                     ELSE break_schedule.start_time
                 END ASC,
                 break_schedule.earliest_start_time ASC
@@ -326,7 +330,7 @@ class EmployeeBreakDao
 
         try {
             $statement = $this->pdo->prepare($query);
-            
+
             $statement->bindValue(':work_schedule_id', $workScheduleId, Helper::getPdoParameterType($workScheduleId));
             $statement->bindValue(':employee_id'     , $employeeId    , Helper::getPdoParameterType($employeeId    ));
             $statement->bindValue(':start_date'      , $startDate     , Helper::getPdoParameterType($startDate     ));

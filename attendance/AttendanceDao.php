@@ -117,6 +117,7 @@ class AttendanceDao
             "work_schedule_start_time"          => "work_schedule.start_time                   AS work_schedule_start_time"         ,
             "work_schedule_end_time"            => "work_schedule.end_time                     AS work_schedule_end_time"           ,
             "work_schedule_is_flextime"         => "work_schedule.is_flextime                  AS work_schedule_is_flextime"        ,
+            "work_schedule_total_work_hours"    => "work_schedule.total_work_hours             AS work_schedule_total_work_hours"   ,
 
             "employee_id"                       => "work_schedule.employee_id                  AS employee_id"                      ,
             "employee_code"                     => "employee.employee_code                     AS employee_code"                    ,
@@ -154,21 +155,22 @@ class AttendanceDao
 
         $joinClauses = "";
 
-        if (array_key_exists("work_schedule_start_time" , $selectedColumns) ||
-            array_key_exists("work_schedule_end_time"   , $selectedColumns) ||
-            array_key_exists("work_schedule_is_flextime", $selectedColumns) ||
+        if (array_key_exists("work_schedule_start_time"      , $selectedColumns) ||
+            array_key_exists("work_schedule_end_time"        , $selectedColumns) ||
+            array_key_exists("work_schedule_is_flextime"     , $selectedColumns) ||
+            array_key_exists("work_schedule_total_work_hours", $selectedColumns) ||
 
-            array_key_exists("employee_id"              , $selectedColumns) ||
-            array_key_exists("employee_code"            , $selectedColumns) ||
-            array_key_exists("employee_full_name"       , $selectedColumns) ||
-            array_key_exists("employee_supervisor_id"   , $selectedColumns) ||
-            array_key_exists("employee_manager_id"      , $selectedColumns) ||
+            array_key_exists("employee_id"                   , $selectedColumns) ||
+            array_key_exists("employee_code"                 , $selectedColumns) ||
+            array_key_exists("employee_full_name"            , $selectedColumns) ||
+            array_key_exists("employee_supervisor_id"        , $selectedColumns) ||
+            array_key_exists("employee_manager_id"           , $selectedColumns) ||
 
-            array_key_exists("department_id"            , $selectedColumns) ||
-            array_key_exists("department_name"          , $selectedColumns) ||
+            array_key_exists("department_id"                 , $selectedColumns) ||
+            array_key_exists("department_name"               , $selectedColumns) ||
 
-            array_key_exists("job_title_id"             , $selectedColumns) ||
-            array_key_exists("job_title"                , $selectedColumns)) {
+            array_key_exists("job_title_id"                  , $selectedColumns) ||
+            array_key_exists("job_title"                     , $selectedColumns)) {
             $joinClauses .= "
                 LEFT JOIN
                     work_schedules AS work_schedule
@@ -177,14 +179,17 @@ class AttendanceDao
             ";
         }
 
-        if (array_key_exists("employee_code"     , $selectedColumns) ||
-            array_key_exists("employee_full_name", $selectedColumns) ||
+        if (array_key_exists("employee_id"           , $selectedColumns) ||
+            array_key_exists("employee_code"         , $selectedColumns) ||
+            array_key_exists("employee_full_name"    , $selectedColumns) ||
+            array_key_exists("employee_supervisor_id", $selectedColumns) ||
+            array_key_exists("employee_manager_id"   , $selectedColumns) ||
 
-            array_key_exists("department_id"     , $selectedColumns) ||
-            array_key_exists("department_name"   , $selectedColumns) ||
+            array_key_exists("department_id"         , $selectedColumns) ||
+            array_key_exists("department_name"       , $selectedColumns) ||
 
-            array_key_exists("job_title_id"      , $selectedColumns) ||
-            array_key_exists("job_title"         , $selectedColumns)) {
+            array_key_exists("job_title_id"          , $selectedColumns) ||
+            array_key_exists("job_title"             , $selectedColumns)) {
             $joinClauses .= "
                 LEFT JOIN
                     employees AS employee
@@ -314,7 +319,7 @@ class AttendanceDao
         } catch (PDOException $exception) {
             error_log("Database Error: An error occurred while fetching the attendance records. " .
                       "Exception: {$exception->getMessage()}");
-echo $exception->getMessage();
+
             return ActionResult::FAILURE;
         }
     }
@@ -324,14 +329,16 @@ echo $exception->getMessage();
         $query = "
             UPDATE attendance
             SET
-                check_in_time      = :check_in_time     ,
-                check_out_time     = :check_out_time    ,
-                total_hours_worked = :total_hours_worked,
-                late_check_in      = :late_check_in     ,
-                early_check_out    = :early_check_out   ,
-                overtime_hours     = :overtime_hours    ,
-                attendance_status  = :attendance_status ,
-                remarks            = :remarks
+                check_in_time                   = :check_in_time                  ,
+                check_out_time                  = :check_out_time                 ,
+                total_break_duration_in_minutes = :total_break_duration_in_minutes,
+                total_hours_worked              = :total_hours_worked             ,
+                late_check_in                   = :late_check_in                  ,
+                early_check_out                 = :early_check_out                ,
+                overtime_hours                  = :overtime_hours                 ,
+                is_overtime_approved            = :is_overtime_approved           ,
+                attendance_status               = :attendance_status              ,
+                remarks                         = :remarks
             WHERE
                 id = :attendance_id
         ";
@@ -341,15 +348,17 @@ echo $exception->getMessage();
 
             $statement = $this->pdo->prepare($query);
 
-            $statement->bindValue(":check_in_time"     , $attendance->getCheckInTime()     , Helper::getPdoParameterType($attendance->getCheckInTime()     ));
-            $statement->bindValue(":check_out_time"    , $attendance->getCheckOutTime()    , Helper::getPdoParameterType($attendance->getCheckOutTime()    ));
-            $statement->bindValue(":total_hours_worked", $attendance->getTotalHoursWorked(), Helper::getPdoParameterType($attendance->getTotalHoursWorked()));
-            $statement->bindValue(":late_check_in"     , $attendance->getLateCheckIn()     , Helper::getPdoParameterType($attendance->getLateCheckIn()     ));
-            $statement->bindValue(":early_check_out"   , $attendance->getEarlyCheckOut()   , Helper::getPdoParameterType($attendance->getEarlyCheckOut()   ));
-            $statement->bindValue(":overtime_hours"    , $attendance->getOvertimeHours()   , Helper::getPdoParameterType($attendance->getOvertimeHours()   ));
-            $statement->bindValue(":attendance_status" , $attendance->getAttendanceStatus(), Helper::getPdoParameterType($attendance->getAttendanceStatus()));
-            $statement->bindValue(":remarks"           , $attendance->getRemarks()         , Helper::getPdoParameterType($attendance->getRemarks()         ));
-            $statement->bindValue(":attendance_id"     , $attendance->getId()              , Helper::getPdoParameterType($attendance->getId()              ));
+            $statement->bindValue(":check_in_time"                  , $attendance->getCheckInTime()                , Helper::getPdoParameterType($attendance->getCheckInTime()                ));
+            $statement->bindValue(":check_out_time"                 , $attendance->getCheckOutTime()               , Helper::getPdoParameterType($attendance->getCheckOutTime()               ));
+            $statement->bindValue(":total_break_duration_in_minutes", $attendance->getTotalBreakDurationInMinutes(), Helper::getPdoParameterType($attendance->getTotalBreakDurationInMinutes()));
+            $statement->bindValue(":total_hours_worked"             , $attendance->getTotalHoursWorked()           , Helper::getPdoParameterType($attendance->getTotalHoursWorked()           ));
+            $statement->bindValue(":late_check_in"                  , $attendance->getLateCheckIn()                , Helper::getPdoParameterType($attendance->getLateCheckIn()                ));
+            $statement->bindValue(":early_check_out"                , $attendance->getEarlyCheckOut()              , Helper::getPdoParameterType($attendance->getEarlyCheckOut()              ));
+            $statement->bindValue(":overtime_hours"                 , $attendance->getOvertimeHours()              , Helper::getPdoParameterType($attendance->getOvertimeHours()              ));
+            $statement->bindValue(":is_overtime_approved"           , $attendance->isOvertimeApproved()            , Helper::getPdoParameterType($attendance->isOvertimeApproved()            ));
+            $statement->bindValue(":attendance_status"              , $attendance->getAttendanceStatus()           , Helper::getPdoParameterType($attendance->getAttendanceStatus()           ));
+            $statement->bindValue(":remarks"                        , $attendance->getRemarks()                    , Helper::getPdoParameterType($attendance->getRemarks()                    ));
+            $statement->bindValue(":attendance_id"                  , $attendance->getId()                         , Helper::getPdoParameterType($attendance->getId()                         ));
 
             $statement->execute();
 

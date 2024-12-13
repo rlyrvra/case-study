@@ -4,7 +4,7 @@ require_once __DIR__ . "/../includes/Helper.php"            ;
 require_once __DIR__ . "/../includes/enums/ActionResult.php";
 require_once __DIR__ . "/../includes/enums/ErrorCode.php"   ;
 
-class EmployeeDeductionDao
+class PayrollGroupDao
 {
     private readonly PDO $pdo;
 
@@ -13,20 +13,18 @@ class EmployeeDeductionDao
         $this->pdo = $pdo;
     }
 
-    public function create(EmployeeDeduction $employeeDeduction): ActionResult
+    public function create(PayrollGroup $payrollGroup): ActionResult
     {
         $query = "
-            INSERT INTO employee_deductions (
-                employee_id ,
-                deduction_id,
-                amount_type ,
-                amount
+            INSERT INTO payroll_groups (
+                name         ,
+                pay_frequency,
+                status
             )
             VALUES (
-                :employee_id ,
-                :deduction_id,
-                :amount_type ,
-                :amount
+                :name         ,
+                :pay_frequency,
+                :status
             )
         ";
 
@@ -35,10 +33,9 @@ class EmployeeDeductionDao
 
             $statement = $this->pdo->prepare($query);
 
-            $statement->bindValue(":employee_id" , $employeeDeduction->getEmployeeId() , Helper::getPdoParameterType($employeeDeduction->getEmployeeId() ));
-            $statement->bindValue(":deduction_id", $employeeDeduction->getDeductionId(), Helper::getPdoParameterType($employeeDeduction->getDeductionId()));
-            $statement->bindValue(":amount_type" , $employeeDeduction->getAmountType() , Helper::getPdoParameterType($employeeDeduction->getAmountType() ));
-            $statement->bindValue(":amount"      , $employeeDeduction->getAmount()     , Helper::getPdoParameterType($employeeDeduction->getAmount()     ));
+            $statement->bindValue(":name"         , $payrollGroup->getName()        , Helper::getPdoParameterType($payrollGroup->getName()        ));
+            $statement->bindValue(":pay_frequency", $payrollGroup->getPayFrequency(), Helper::getPdoParameterType($payrollGroup->getPayFrequency()));
+            $statement->bindValue(":status"       , $payrollGroup->getStatus()      , Helper::getPdoParameterType($payrollGroup->getStatus()      ));
 
             $statement->execute();
 
@@ -49,12 +46,8 @@ class EmployeeDeductionDao
         } catch (PDOException $exception) {
             $this->pdo->rollBack();
 
-            error_log("Database Error: An error occurred while assigning the deduction to employee. " .
+            error_log("Database Error: An error occurred while creating the payroll group. " .
                       "Exception: {$exception->getMessage()}");
-
-            if ( (int) $exception->getCode() === ErrorCode::DUPLICATE_ENTRY->value) {
-                return ActionResult::DUPLICATE_ENTRY_ERROR;
-            }
 
             return ActionResult::FAILURE;
         }
@@ -68,19 +61,13 @@ class EmployeeDeductionDao
         ? int   $offset         = null
     ): ActionResult|array {
         $tableColumns = [
-            "id"                       => "employee_deduction.id           AS id"                      ,
-            "employee_id"              => "employee_deduction.employee_id  AS employee_id"             ,
-
-            "deduction_id"             => "employee_deduction.deduction_id AS deduction_id"            ,
-            "deduction_name"           => "deduction.name                  AS deduction_name"          ,
-            "deduction_is_pre_tax"     => "deduction.is_pre_tax            AS deduction_is_pre_tax"    ,
-            "deduction_frequency"      => "deduction.frequency             AS deduction_frequency"     ,
-            "deduction_status"         => "deduction.status                AS deduction_status"        ,
-
-            "amount_type"              => "employee_deduction.amount_type  AS amount_type"             ,
-            "amount"                   => "employee_deduction.amount       AS amount"                  ,
-            "created_at"               => "employee_deduction.created_at   AS created_at"              ,
-            "deleted_at"               => "employee_deduction.deleted_at   AS deleted_at"
+            "id"            => "payroll_group.id            AS id"           ,
+            "name"          => "payroll_group.name          AS name"         ,
+            "pay_frequency" => "payroll_group.pay_frequency AS pay_frequency",
+            "status"        => "payroll_group.status        AS status"       ,
+            "created_at"    => "payroll_group.created_at    AS created_at"   ,
+            "updated_at"    => "payroll_group.updated_at    AS updated_at"   ,
+            "deleted_at"    => "payroll_group.deleted_at    AS deleted_at"   ,
         ];
 
         $selectedColumns =
@@ -91,28 +78,12 @@ class EmployeeDeductionDao
                     array_flip($columns)
                 );
 
-        $joinClauses = "";
-
-        if (array_key_exists("deduction_name"          , $selectedColumns) ||
-            array_key_exists("deduction_is_pre_tax"    , $selectedColumns) ||
-            array_key_exists("deduction_frequency"     , $selectedColumns) ||
-            array_key_exists("deduction_status"        , $selectedColumns) ||
-            array_key_exists("deduction_effective_date", $selectedColumns) ||
-            array_key_exists("deduction_end_date"      , $selectedColumns)) {
-            $joinClauses = "
-                LEFT JOIN
-                    deductions AS deduction
-                ON
-                    employee_deduction.deduction_id = deduction.id
-            ";
-        }
-
         $queryParameters = [];
 
         $whereClauses = [];
 
         if (empty($filterCriteria)) {
-            $whereClauses[] = "employee_deduction.deleted_at IS NULL";
+            $whereClauses[] = "payroll_group.status <> 'Archived'";
         } else {
             foreach ($filterCriteria as $filterCriterion) {
                 $column   = $filterCriterion["column"  ];
@@ -123,10 +94,6 @@ class EmployeeDeductionDao
                     case "LIKE":
                         $whereClauses   [] = "{$column} {$operator} ?";
                         $queryParameters[] = $filterCriterion["value"];
-                        break;
-
-                    case "IS NULL":
-                        $whereClauses[] = "{$column} {$operator}";
                         break;
 
                     case "BETWEEN":
@@ -143,11 +110,14 @@ class EmployeeDeductionDao
 
         $orderByClauses = [];
 
-        if (!empty($sortCriteria)) {
+        if ( ! empty($sortCriteria)) {
             foreach ($sortCriteria as $sortCriterion) {
                 $column = $sortCriterion["column"];
-                $direction = $sortCriterion["direction"];
-                $orderByClauses[] = "{$column} {$direction}";
+
+                if (isset($sortCriterion["direction"])) {
+                    $direction = $sortCriterion["direction"];
+                    $orderByClauses[] = "{$column} {$direction}";
+                }
             }
         }
 
@@ -167,11 +137,10 @@ class EmployeeDeductionDao
             SELECT SQL_CALC_FOUND_ROWS
                 " . implode(", ", $selectedColumns) . "
             FROM
-                employee_deductions AS employee_deduction
-            {$joinClauses}
+                payroll_groups AS payroll_group
             WHERE
                 " . implode(" AND ", $whereClauses) . "
-            " . (!empty($orderByClauses) ? "ORDER BY " . implode(", ", $orderByClauses) : "") . "
+            " . ( ! empty($orderByClauses) ? "ORDER BY " . implode(", ", $orderByClauses) : "") . "
             {$limitClause}
             {$offsetClause}
         ";
@@ -194,31 +163,28 @@ class EmployeeDeductionDao
             $totalRowCount = $countStatement->fetchColumn();
 
             return [
-                "result_set"      => $resultSet,
+                "result_set"      => $resultSet    ,
                 "total_row_count" => $totalRowCount
             ];
 
         } catch (PDOException $exception) {
-            error_log("Database Error: An error occurred while fetching employee deductions. " .
+            error_log("Database Error: An error occurred while fetching the payroll groups. " .
                       "Exception: {$exception->getMessage()}");
 
             return ActionResult::FAILURE;
         }
     }
 
-    public function delete(int $employeeDeductionId): ActionResult
-    {
-        return $this->softDelete($employeeDeductionId);
-    }
-
-    private function softDelete(int $employeeDeductionId): ActionResult
+    public function update(PayrollGroup $payrollGroup): ActionResult
     {
         $query = "
-            UPDATE employee_deductions
+            UPDATE payroll_groups
             SET
-                deleted_at = CURRENT_TIMESTAMP
+                name          = :name         ,
+                pay_frequency = :pay_frequency,
+                status        = :status
             WHERE
-                id = :employee_deduction_id
+                id = :payroll_group_id
         ";
 
         try {
@@ -226,7 +192,10 @@ class EmployeeDeductionDao
 
             $statement = $this->pdo->prepare($query);
 
-            $statement->bindValue(":employee_deduction_id", $employeeDeductionId, Helper::getPdoParameterType($employeeDeductionId));
+            $statement->bindValue(":name"            , $payrollGroup->getName()        , Helper::getPdoParameterType($payrollGroup->getName()        ));
+            $statement->bindValue(":pay_frequency"   , $payrollGroup->getPayFrequency(), Helper::getPdoParameterType($payrollGroup->getPayFrequency()));
+            $statement->bindValue(":status"          , $payrollGroup->getStatus()      , Helper::getPdoParameterType($payrollGroup->getStatus()      ));
+            $statement->bindValue(":payroll_group_id", $payrollGroup->getId()          , Helper::getPdoParameterType($payrollGroup->getId()          ));
 
             $statement->execute();
 
@@ -237,7 +206,46 @@ class EmployeeDeductionDao
         } catch (PDOException $exception) {
             $this->pdo->rollBack();
 
-            error_log("Database Error: An error occurred while deleting the employee deduction. " .
+            error_log("Database Error: An error occurred while updating the payroll group. " .
+                      "Exception: {$exception->getMessage()}");
+
+            return ActionResult::FAILURE;
+        }
+    }
+
+    public function delete(int $payrollGroupId): ActionResult
+    {
+        return $this->softDelete($payrollGroupId);
+    }
+
+    private function softDelete(int $payrollGroupId): ActionResult
+    {
+        $query = "
+            UPDATE payroll_groups
+            SET
+                status     = 'Archived'       ,
+                deleted_at = CURRENT_TIMESTAMP
+            WHERE
+                id = :payroll_group_id
+        ";
+
+        try {
+            $this->pdo->beginTransaction();
+
+            $statement = $this->pdo->prepare($query);
+
+            $statement->bindValue(":payroll_group_id", $payrollGroupId, Helper::getPdoParameterType($payrollGroupId));
+
+            $statement->execute();
+
+            $this->pdo->commit();
+
+            return ActionResult::SUCCESS;
+
+        } catch (PDOException $exception) {
+            $this->pdo->rollBack();
+
+            error_log("Database Error: An error occurred while deleting the payroll group. " .
                       "Exception: {$exception->getMessage()}");
 
             return ActionResult::FAILURE;

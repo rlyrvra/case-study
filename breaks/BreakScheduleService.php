@@ -2,7 +2,7 @@
 
 require_once __DIR__ . "/BreakScheduleDao.php";
 
-class BreakScheduleRepository
+class BreakScheduleService
 {
     private readonly BreakScheduleDao $breakScheduleDao;
 
@@ -28,7 +28,7 @@ class BreakScheduleRepository
 
     public function updateBreakSchedule(BreakSchedule $breakSchedule): ActionResult
     {
-        return $this->$breakSchedule->update($breakSchedule);
+        return $this->breakScheduleDao->update($breakSchedule);
     }
 
     public function fetchOrderedBreakSchedules(int $workScheduleId): ActionResult|array

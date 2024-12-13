@@ -17,24 +17,20 @@ class AllowanceDao
     {
         $query = "
             INSERT INTO allowances (
-                name          ,
-                amount        ,
-                is_taxable    ,
-                frequency     ,
-                description   ,
-                status        ,
-                effective_date,
-                end_date
+                name       ,
+                amount     ,
+                is_taxable ,
+                frequency  ,
+                description,
+                status
             )
             VALUES (
-                :name          ,
-                :amount        ,
-                :is_taxable    ,
-                :frequency     ,
-                :description   ,
-                :status        ,
-                :effective_date,
-                :end_date
+                :name       ,
+                :amount     ,
+                :is_taxable ,
+                :frequency  ,
+                :description,
+                :status
             )
         ";
 
@@ -43,14 +39,12 @@ class AllowanceDao
 
             $statement = $this->pdo->prepare($query);
 
-            $statement->bindValue(":name"          , $allowance->getName()         , Helper::getPdoParameterType($allowance->getName()         ));
-            $statement->bindValue(":amount"        , $allowance->getAmount()       , Helper::getPdoParameterType($allowance->getAmount()       ));
-            $statement->bindValue(":is_taxable"    , $allowance->getIsTaxable()    , Helper::getPdoParameterType($allowance->getIsTaxable()    ));
-            $statement->bindValue(":frequency"     , $allowance->getFrequency()    , Helper::getPdoParameterType($allowance->getFrequency()    ));
-            $statement->bindValue(":description"   , $allowance->getDescription()  , Helper::getPdoParameterType($allowance->getDescription()  ));
-            $statement->bindValue(":status"        , $allowance->getStatus()       , Helper::getPdoParameterType($allowance->getStatus()       ));
-            $statement->bindValue(":effective_date", $allowance->getEffectiveDate(), Helper::getPdoParameterType($allowance->getEffectiveDate()));
-            $statement->bindValue(":end_date"      , $allowance->getEndDate()      , Helper::getPdoParameterType($allowance->getEndDate()      ));
+            $statement->bindValue(":name"       , $allowance->getName()       , Helper::getPdoParameterType($allowance->getName()       ));
+            $statement->bindValue(":amount"     , $allowance->getAmount()     , Helper::getPdoParameterType($allowance->getAmount()     ));
+            $statement->bindValue(":is_taxable" , $allowance->getIsTaxable()  , Helper::getPdoParameterType($allowance->getIsTaxable()  ));
+            $statement->bindValue(":frequency"  , $allowance->getFrequency()  , Helper::getPdoParameterType($allowance->getFrequency()  ));
+            $statement->bindValue(":description", $allowance->getDescription(), Helper::getPdoParameterType($allowance->getDescription()));
+            $statement->bindValue(":status"     , $allowance->getStatus()     , Helper::getPdoParameterType($allowance->getStatus()     ));
 
             $statement->execute();
 
@@ -214,14 +208,12 @@ class AllowanceDao
         $query = "
             UPDATE allowances
             SET
-                name           = :name          ,
-                amount         = :amount        ,
-                is_taxable     = :is_taxable    ,
-                frequency      = :frequency     ,
-                description    = :description   ,
-                status         = :status        ,
-                effective_date = :effective_date,
-                end_date       = :end_date
+                name        = :name       ,
+                amount      = :amount     ,
+                is_taxable  = :is_taxable ,
+                frequency   = :frequency  ,
+                description = :description,
+                status      = :status
             WHERE
                 id = :allowance_id
         ";
@@ -231,15 +223,13 @@ class AllowanceDao
 
             $statement = $this->pdo->prepare($query);
 
-            $statement->bindValue(":name"          , $allowance->getName()         , Helper::getPdoParameterType($allowance->getName()         ));
-            $statement->bindValue(":amount"        , $allowance->getAmount()       , Helper::getPdoParameterType($allowance->getAmount()       ));
-            $statement->bindValue(":is_taxable"    , $allowance->getIsTaxable()    , Helper::getPdoParameterType($allowance->getIsTaxable()    ));
-            $statement->bindValue(":frequency"     , $allowance->getFrequency()    , Helper::getPdoParameterType($allowance->getFrequency()    ));
-            $statement->bindValue(":description"   , $allowance->getDescription()  , Helper::getPdoParameterType($allowance->getDescription()  ));
-            $statement->bindValue(":status"        , $allowance->getStatus()       , Helper::getPdoParameterType($allowance->getStatus()       ));
-            $statement->bindValue(":effective_date", $allowance->getEffectiveDate(), Helper::getPdoParameterType($allowance->getEffectiveDate()));
-            $statement->bindValue(":end_date"      , $allowance->getEndDate()      , Helper::getPdoParameterType($allowance->getEndDate()      ));
-            $statement->bindValue(":allowance_id"  , $allowance->getId()           , Helper::getPdoParameterType($allowance->getId()           ));
+            $statement->bindValue(":name"        , $allowance->getName()       , Helper::getPdoParameterType($allowance->getName()       ));
+            $statement->bindValue(":amount"      , $allowance->getAmount()     , Helper::getPdoParameterType($allowance->getAmount()     ));
+            $statement->bindValue(":is_taxable"  , $allowance->getIsTaxable()  , Helper::getPdoParameterType($allowance->getIsTaxable()  ));
+            $statement->bindValue(":frequency"   , $allowance->getFrequency()  , Helper::getPdoParameterType($allowance->getFrequency()  ));
+            $statement->bindValue(":description" , $allowance->getDescription(), Helper::getPdoParameterType($allowance->getDescription()));
+            $statement->bindValue(":status"      , $allowance->getStatus()     , Helper::getPdoParameterType($allowance->getStatus()     ));
+            $statement->bindValue(":allowance_id", $allowance->getId()         , Helper::getPdoParameterType($allowance->getId()         ));
 
             $statement->execute();
 

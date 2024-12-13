@@ -98,7 +98,6 @@ class EmployeeDao
                 :access_role                    ,
 
                 :payroll_group_id               ,
-                :annual_salary                  ,
                 :hourly_rate                    ,
 
                 :tin_number                     ,
@@ -154,7 +153,6 @@ class EmployeeDao
             $statement->bindValue(":access_role"                    , $employee->getAccessRole()                  , Helper::getPdoParameterType($employee->getAccessRole()                  ));
 
             $statement->bindValue(":payroll_group_id"               , $employee->getPayrollGroupId()              , Helper::getPdoParameterType($employee->getPayrollGroupId()              ));
-            $statement->bindValue(":annual_salary"                  , $employee->getAnnualSalary()                , Helper::getPdoParameterType($employee->getAnnualSalary()                ));
             $statement->bindValue(":hourly_rate"                    , $employee->getHourlyRate()                  , Helper::getPdoParameterType($employee->getHourlyRate()                  ));
 
             $statement->bindValue(":tin_number"                     , $employee->getTinNumber()                   , Helper::getPdoParameterType($employee->getTinNumber()                   ));
@@ -247,7 +245,6 @@ class EmployeeDao
 
             "payroll_group_id"                => "employee.payroll_group_id                AS payroll_group_id"               ,
             "payroll_group_deleted_at"        => "payroll_group.deleted_at                 AS payroll_group_deleted_at"       ,
-            "annual_salary"                   => "employee.annual_salary                   AS annual_salary"                  ,
             "hourly_rate"                     => "employee.hourly_rate                     AS hourly_rate"                    ,
 
             "tin_number"                      => "employee.tin_number                      AS tin_number"                     ,
@@ -494,7 +491,6 @@ class EmployeeDao
                 access_role                     = :access_role                    ,
 
                 payroll_group_id                = :payroll_group_id               ,
-                annual_salary                   = :annual_salary                  ,
                 hourly_rate                     = :hourly_rate                    ,
 
                 tin_number                      = :tin_number                     ,
@@ -552,7 +548,6 @@ class EmployeeDao
             $statement->bindValue(":access_role"                    , $employee->getAccessRole()                  , Helper::getPdoParameterType($employee->getAccessRole()                  ));
 
             $statement->bindValue(":payroll_group_id"               , $employee->getPayrollGroupId()              , Helper::getPdoParameterType($employee->getPayrollGroupId()              ));
-            $statement->bindValue(":annual_salary"                  , $employee->getAnnualSalary()                , Helper::getPdoParameterType($employee->getAnnualSalary()                ));
             $statement->bindValue(":hourly_rate"                    , $employee->getHourlyRate()                  , Helper::getPdoParameterType($employee->getHourlyRate()                  ));
 
             $statement->bindValue(":tin_number"                     , $employee->getTinNumber()                   , Helper::getPdoParameterType($employee->getTinNumber()                   ));
