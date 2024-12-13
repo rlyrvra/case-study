@@ -19,9 +19,11 @@ function login(){
         dataType: 'json',
         success(response) {
             if (response.success) {
-                window.location.href = "/case-study/smartWage-index.php?s=true";
+                const location = SMARTWAGE_LOCATION + "/smartWage-index.php?s=true"
+                window.location.href = location;
             } else {
-                $.get('/case-study/sweet-alert-toasts/login/login-incorrect.php', function(data) {
+                const location = SMARTWAGE_LOCATION + "/sweet-alert-toasts/login/login-incorrect.php"
+                $.get(location, function(data) {
                     $('#response').html(data); // This loads and runs the script in login-incorrect.php
                 });
             }

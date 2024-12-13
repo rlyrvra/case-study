@@ -264,7 +264,7 @@
 
     <!-- Log Out -->
     <li class="menu-item">
-        <a href="/case-study/requests/login/logout.php" class="menu-link">
+        <a href="requests/login/logout.php" class="menu-link">
         <i class="menu-icon tf-icons bx bx-log-out"></i>
         <div data-i18n="Tables">Log Out</div>
         </a>

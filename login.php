@@ -1,5 +1,6 @@
 <?php require_once __DIR__ . '/includes/header.php'; ?>
 <?php require_once __DIR__ . '/includes/session.php'; ?>
+<?php require_once __DIR__ . '/includes/file-locations.php' ?>
 <?php require_once __DIR__ . '/login-validator.php'; ?>
 <?php
 if(isset($_GET['r']) && $_GET['r']){
@@ -12,7 +13,7 @@ if(isset($_GET['r']) && $_GET['r']){
 
 ?>
 <!-- Scripts -->
-<script src="requests/login/login-ajax-requests.js?v=1.4"></script>
+<script src="requests/login/login-ajax-requests.js?v=1.5"></script>
 <title>
 smartWAGE Login
 </title>
