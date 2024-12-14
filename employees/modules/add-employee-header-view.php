@@ -54,7 +54,7 @@ if($resultSet["total_row_count"] <= 0){
         return;
     }
     // Render the image
-    $imageData = base64_encode($employees[0]['profile_picture']);
+    $imageData = $employees[0]['profile_picture'];
 
     echo "<img src='data:image/jpg;base64,$imageData' alt='Profile Picture' class='w-px-35 h-auto rounded-circle' />";
     ?>

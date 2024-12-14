@@ -39,6 +39,9 @@ function getPayrollGroupsValues(){
 }
 
 function populatePayrollGroupsSelect(select){
+    let optionSaved;
+    if(select.value != null && select.value !== '') optionSaved = select.value;
+    
     clearPayrollGroupSelect(select);
     payroll_groups.forEach(payroll_group => {
         const option = document.createElement("option");
@@ -46,6 +49,7 @@ function populatePayrollGroupsSelect(select){
         option.text = payroll_group.name;
         select.add(option);
     });
+    selectPayrollGroups(optionSaved, select);
 }
 
 function selectPayrollGroups(id, select){

@@ -75,7 +75,7 @@ function calculatePayroll(hourlyRate) {
     
     // Assumptions
     const hoursPerDay = 8;
-    const daysPerWeek = 5;
+    const daysPerWeek = 6;
     const weeksPerYear = 52;
     const daysPerYear = weeksPerYear * daysPerWeek;
     
@@ -142,3 +142,38 @@ function previewImage(event) {
     }
 }
 
+
+function failedUpdateTryAgain(token){
+    Swal.fire({
+        title: 'Error!',
+        text: 'An error has occured. Please try again.',
+        icon: 'error',
+        confirmButtonText: 'OK'
+    }).then((result) => {
+        if(result.isConfirmed){
+            window.location.href = SMARTWAGE_LOCATION + "/add-employees.php?m=v&token=" + token;
+        }
+    });
+}
+
+function missingFieldValues(fieldName){
+    Swal.fire({
+        title: 'Warning!',
+        text: `The ${fieldName} is missing. Please fill it up and try again.`,
+        icon: 'warning',
+        confirmButtonText: 'OK'
+    });
+}
+
+function showSuccessUpdate(token) {
+    Swal.fire({
+        title: 'Success!',
+        text: 'This employee has updated successfully.',
+        icon: 'success',
+        confirmButtonText: 'OK'
+    }).then((result) => {
+        if(result.isConfirmed){
+            window.location.href = SMARTWAGE_LOCATION + "/add-employees.php?m=v&token=" + token;
+        }
+    });
+}

@@ -11,7 +11,7 @@
                     return;
                 }
                 // Render the image
-                $imageData = base64_encode($row['profile_picture']);
+                $imageData = $row['profile_picture'];
 
                 echo "<img src='data:image/jpg;base64,$imageData' alt='Profile Picture' class='w-px-100 h-auto rounded-circle' />";
                 ?>

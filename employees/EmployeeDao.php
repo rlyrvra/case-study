@@ -642,7 +642,7 @@ class EmployeeDao
 
                 notes                           = :notes
             WHERE
-                id = MD5(:employee_id)
+                MD5(id) = :employee_id
         ";
 
         try {
@@ -699,7 +699,7 @@ class EmployeeDao
 
             $statement->bindValue(":notes"                          , $employee->getNotes()                       , Helper::getPdoParameterType($employee->getNotes()                       ));
 
-            $statement->bindValue(":employee_id"                    , $hashed_id                                  , Helper::getPdoParameterType($employee->getId()                          ));
+            $statement->bindValue(":employee_id"                    , $hashed_id                                  , Helper::getPdoParameterType($hashed_id                                  ));
 
             $statement->execute();
 
@@ -709,10 +709,13 @@ class EmployeeDao
 
         } catch (PDOException $exception) {
             $this->pdo->rollBack();
+            
 
             error_log("Database Error: An error occurred while creating the employee. " .
                       "Exception: {$exception->getMessage()}");
+            
 
+            
             if ( (int) $exception->getCode() === ErrorCode::DUPLICATE_ENTRY->value) {
                 $errorMessage = $exception->getMessage();
 
@@ -720,6 +723,7 @@ class EmployeeDao
                     return $matches[1];
                 }
             }
+            echo $exception->getMessage();
 
             return ActionResult::FAILURE;
         }

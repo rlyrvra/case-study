@@ -35,7 +35,7 @@
                         return;
                     }
                     // Render the image
-                    $imageData = base64_encode($_SESSION['profile_picture']);
+                    $imageData = $_SESSION['profile_picture'];
 
                     echo "<img src='data:image/jpg;base64,$imageData' alt='Profile Picture' class='w-px-35 h-auto rounded-circle' />";
                 ?>
@@ -53,7 +53,7 @@
                                 return;
                             }
                             // Render the image
-                            $imageData = base64_encode($_SESSION['profile_picture']);
+                            $imageData = $_SESSION['profile_picture'];
 
                             echo "<img src='data:image/jpg;base64,$imageData' alt='Profile Picture' class='w-px-35 h-auto rounded-circle' />";
                         ?>

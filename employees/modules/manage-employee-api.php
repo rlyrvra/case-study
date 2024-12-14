@@ -46,21 +46,21 @@ try {
             ];
         }
 
-        if($_SESSION['access_role'] === 'Admin'){
-            // do nothing
-        }else if($_SESSION['access_role'] === 'Manager'){
-            $filterCriteria[] = [
-                "column" => "employee.manager_id" ,
-                "operator" => "=",
-                "value" => $_SESSION['id']
-            ];
-        }else if($_SESSION['access_role'] === 'Supervisor'){
-            $filterCriteria[] = [
-                "column" => "employee.supervisor_id" ,
-                "operator" => "=",
-                "value" => $_SESSION['id']
-            ];
-        }
+        // if($_SESSION['access_role'] === 'Admin'){
+        //     // do nothing
+        // }else if($_SESSION['access_role'] === 'Manager'){
+        //     $filterCriteria[] = [
+        //         "column" => "employee.manager_id" ,
+        //         "operator" => "=",
+        //         "value" => $_SESSION['id']
+        //     ];
+        // }else if($_SESSION['access_role'] === 'Supervisor'){
+        //     $filterCriteria[] = [
+        //         "column" => "employee.supervisor_id" ,
+        //         "operator" => "=",
+        //         "value" => $_SESSION['id']
+        //     ];
+        // }
 
         if(empty($searchAt) && !empty($searchFilter)){
             $filterCriteria[] = [

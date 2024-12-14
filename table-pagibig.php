@@ -84,6 +84,11 @@ require_once __DIR__ . '/login-checker.php';
       <!-- Content -->
       <div class="content-wrapper">
         <div class="container-xxl pt-5 pb-5">
+            <div class="container-fluid mb-3 d-flex align-items-center">
+              <h1 class="display-1">Pag-IBIG Fund Table</h1>
+            </div>
+
+            <hr/>
             <table id="pagibig-table" class="table table-responsive table-hover">
               <thead>
                 <tr>

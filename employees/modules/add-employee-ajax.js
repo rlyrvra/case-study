@@ -5,6 +5,7 @@ function updateEmployee(button){
     const token = row.getAttribute('data-token');
     const firstName = document.getElementById("firstName").value;
     const middleName = document.getElementById("middleName").value;
+    const lastName = document.getElementById("lastName").value;
     const dob = document.getElementById("dob").value;
     const gender = document.getElementById("gender").value;
     const maritalStatus = document.getElementById("maritalStatus").value;
@@ -12,13 +13,12 @@ function updateEmployee(button){
     const religion = document.getElementById("religion").value;
     const profilePicture = document.getElementById("profilePicture");
     const profilePictureRaw = profilePicture.files[0];
-    var imageData;
     function getBase64Image(profilePictureRaw) {
         return new Promise((resolve, reject) => {
             if (profilePictureRaw) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    resolve(e.target.result); // Return base64 string
+                    resolve(e.target.result.split(',')[1]); // Return base64 string
                 };
                 reader.onerror = reject; // Handle any errors
                 reader.readAsDataURL(profilePictureRaw); // Start reading file
@@ -45,6 +45,7 @@ function updateEmployee(button){
 
     //form 4
     const rfid = document.getElementById("rfid").value;
+    const employmentType = document.getElementById("employment-type").value;
     const jobTitle = document.getElementById("job-title").value;
     const department = document.getElementById("department").value;
     const dateOfHire = document.getElementById("date-of-hire").value;
@@ -58,6 +59,7 @@ function updateEmployee(button){
     const payrollGroup = document.getElementById("payrollGroup").value;
     const hourlyRate = document.getElementById("hourlyRate").value;
     const bankName = document.getElementById("bankName").value;
+    const branchName = document.getElementById("branchName").value;
     const bankAccountNumber = document.getElementById("accountNumber").value;
     const bankAccountType = document.getElementById("accountType").value;
 
@@ -81,6 +83,7 @@ function updateEmployee(button){
             token: token,
             first_name: firstName,
             middle_name: middleName,
+            last_name: lastName,
             date_of_birth: dob,
             gender: gender,
             marital_status: maritalStatus,
@@ -101,6 +104,7 @@ function updateEmployee(button){
             emergency_address: emergencyAddress,
             //form 4
             rfid: rfid,
+            employment_type: employmentType,
             job_title_id: jobTitle,
             department_id: department,
             date_of_hire: dateOfHire,
@@ -109,6 +113,7 @@ function updateEmployee(button){
             //form 5
             payroll_group_id: payrollGroup,
             hourly_rate: hourlyRate,
+            branch_name: branchName,
             bank_name: bankName,
             bank_account_number: bankAccountNumber,
             bank_account_type: bankAccountType,
@@ -173,8 +178,9 @@ function updateEmployee(button){
         // };
     
         // console.log(employeeData5);
-        return;
         
+        
+
         $.ajax({
             url: 'employees/modules/add-employee-api.php',
             type: 'POST',
@@ -184,7 +190,8 @@ function updateEmployee(button){
                 md5_id: employeeData.token
             },
             success: function(response) {
-                showSuccessUpdate(employeeData.token);
+                $('#response-test').html(response);
+                //showSuccessUpdate(employeeData.token);
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 console.log("AJAX Error: " + textStatus + ": " + errorThrown);
@@ -200,17 +207,4 @@ function updateEmployee(button){
     
     
     
-}
-
-function showSuccessUpdate(token) {
-    Swal.fire({
-        title: 'Success!',
-        text: 'This department has updated successfully.',
-        icon: 'success',
-        confirmButtonText: 'OK'
-    }).then((result) => {
-        if(result.isConfirmed){
-            window.location.href = "/case-study/add-employee.php?m=v&token=" + token;
-        }
-    });
 }

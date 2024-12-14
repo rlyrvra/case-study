@@ -143,7 +143,7 @@ if($resultSet["total_row_count"] <= 0){
         </div>
         <div class="mb-3">
         <label for="address" class="form-label">Address*</label>
-        <textarea class="form-control" id="address" placeholder="Enter address" value='<?php echo $employees[0]['address'];?>' readonly></textarea>
+        <textarea class="form-control" id="address" placeholder="Enter address" value='' readonly><?php echo $employees[0]['address'];?></textarea>
         </div>
 
         <h3 class="form-title">Emergency Contact Information:</h3>
@@ -227,7 +227,7 @@ if($resultSet["total_row_count"] <= 0){
         <div class="row mb-3">
         <div class="col-md-6">
             <label for="date-of-hire" class="form-label">Date of Hire*</label>
-            <input type="date" class="form-control" id="date-of-hire" <?php echo $employees[0]['date_of_hire']; ?> readonly>
+            <input type="date" class="form-control" id="date-of-hire" value='<?php echo $employees[0]['date_of_hire']; ?>' readonly>
         </div>
         <div class="col-md-6">
             <label for="supervisor" class="form-label">Supervisor</label>
@@ -284,12 +284,7 @@ if($resultSet["total_row_count"] <= 0){
         <div class="col-md-4">
             <label for="payrollGroup" class="form-label">Select Payroll Group*:</label>
             <select class="form-select" id="payrollGroup" readonly disabled>
-                <option value="" disabled selected>Choose...</option>
-                <option value="Daily">Daily</option>
-                <option value="Weekly">Weekly</option>
-                <option value="Bi-Weekly">Bi-Weekly</option>
-                <option value="Semi-Monthly">Semi-Monthly</option>
-                <option value="Monthly">Monthly</option>
+                <option value="<?php echo $employees[0]['payroll_group_id']; ?>" selected></option>
             </select>
         </div>
         <div class="col-md-4">

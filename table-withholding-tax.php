@@ -84,6 +84,11 @@ require_once __DIR__ . '/login-checker.php';
       <!-- Content -->
       <div class="content-wrapper">
         <div class="container-xxl pt-5 pb-5">
+          <div class="container-fluid mb-3 d-flex align-items-center">
+            <h1 class="display-1">Withholding Tax Table</h1>
+          </div>
+
+          <hr/>
           <select id="Taxdrop" class="form-select" multiple="">
               <option value="daily" selected>Daily</option>
               <option value="weekly">Weekly</option>

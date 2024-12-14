@@ -84,6 +84,11 @@ require_once __DIR__ . '/login-checker.php';
       <!-- Content -->
       <div class="content-wrapper">
         <div class="container-xxl pt-5 pb-5">
+          <div class="container-fluid mb-3 d-flex align-items-center">
+            <h1 class="display-1">PhilHealth Table</h1>
+          </div>
+
+          <hr/>
           <div class="table-responsive no-wrap">
             <table id="philhealth-table" class="table table-hover">
               <thead>

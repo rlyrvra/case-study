@@ -143,7 +143,7 @@ if($resultSet["total_row_count"] <= 0){
         </div>
         <div class="mb-3">
         <label for="address" class="form-label">Address*</label>
-        <textarea class="form-control" id="address" placeholder="Enter address" value='<?php echo $employees[0]['address'];?>'></textarea>
+        <textarea class="form-control" id="address" placeholder="Enter address"><?php echo $employees[0]['address'];?></textarea>
         </div>
 
         <h3 class="form-title">Emergency Contact Information:</h3>
@@ -227,7 +227,7 @@ if($resultSet["total_row_count"] <= 0){
         <div class="row mb-3">
         <div class="col-md-6">
             <label for="date-of-hire" class="form-label">Date of Hire*</label>
-            <input type="date" class="form-control" id="date-of-hire" <?php echo $employees[0]['date_of_hire']; ?>>
+            <input type="date" class="form-control" id="date-of-hire" value='<?php echo $employees[0]['date_of_hire'];?>'>
         </div>
         <div class="col-md-6">
             <label for="supervisor" class="form-label">Supervisor</label>
@@ -284,7 +284,7 @@ if($resultSet["total_row_count"] <= 0){
         <div class="col-md-4">
             <label for="payrollGroup" class="form-label">Select Payroll Group*:</label>
             <select class="form-select" id="payrollGroup">
-                <option value="<?php echo $employees[0]['payroll_group_id']; ?>" selected><?php echo $employees[0]['payroll_group_id']; ?></option>
+                <option value="<?php echo $employees[0]['payroll_group_id']; ?>" selected></option>
             </select>
         </div>
         <div class="col-md-4">

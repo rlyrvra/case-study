@@ -70,9 +70,9 @@ if(isset($_GET['m']) && $_GET['m'] === 'u'){
 />
 
 <!-- Ajax -->
-<script src="employees/modules/add-employee-ajax.js?v1.2"></script>
+<script src="employees/modules/add-employee-ajax.js?v1.3"></script>
 <!-- Scripts -->
-<script src="employees/modules/add-employee-scripts.js?v1.4"></script>
+<script src="employees/modules/add-employee-scripts.js?v1.6"></script>
 
 
 
@@ -257,13 +257,14 @@ if(isset($_GET['m']) && $_GET['m'] === 'u'){
                 </div>
               </div>
             </div>
-
+            
             <div class="divider text-start">
               <div class="divider-text">
                 
               </div>
             </div>
-
+            <div id="response-test">
+            </div>
             
 
             
@@ -638,6 +639,8 @@ $(document).ready(function () {
   display: block;
   color: #a0a0a0;
 }
+
+
 </style>
 </body>
 </html>
