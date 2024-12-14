@@ -105,7 +105,7 @@
         
         <li class="menu-item">
             <a href="pages-misc-under-maintenance.html" class="menu-link">
-            <div data-i18n="Under Maintenance">Shift Schedules</div>
+            <div data-i18n="Under Maintenance">Work Schedules</div>
             </a>
         </li>
 

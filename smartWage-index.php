@@ -23,6 +23,7 @@ if(isset($_GET['aR']) && $_GET['aR'] == true){
 </style>
 <head>
 <title> Dashboard </title>
+<link rel="icon" type="image/x-icon" href="img/logo-files/logo1.ico" />
 <!-- font-awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <!-- jQuery -->
@@ -39,6 +40,7 @@ if(isset($_GET['aR']) && $_GET['aR'] == true){
 
 <!-- Icons. Uncomment required icon fonts -->
 <link rel="stylesheet" href="assets/vendor/fonts/boxicons.css" />
+<link rel="icon" type="image/x-icon" href="img/logo-files/logo1.ico" />
 
 <!-- Core CSS -->
 <link rel="stylesheet" href="assets/vendor/css/core.css" class="template-customizer-core-css" />

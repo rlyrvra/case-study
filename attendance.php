@@ -4,6 +4,7 @@
 
 
 <title>RFID Reader Example</title>
+<link rel="icon" type="image/x-icon" href="img/logo-files/logo1.ico" />
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Medula+One&family=Onest:wght@100..900&display=swap');

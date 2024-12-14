@@ -58,6 +58,7 @@ if(isset($_GET['e']) && $_GET['e'] === '404'){
 
 <!-- Icons. Uncomment required icon fonts -->
 <link rel="stylesheet" href="assets/vendor/fonts/boxicons.css" />
+<link rel="icon" type="image/x-icon" href="img/logo-files/logo1.ico" />
 
 <!-- Core CSS -->
 <link rel="stylesheet" href="assets/vendor/css/core.css" class="template-customizer-core-css" />
