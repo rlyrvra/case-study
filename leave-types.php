@@ -27,6 +27,11 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
+<!-- Ajax -->
+<script src="leaves/modules/leave-types-ajax.js?v1.3"></script>
+<!-- Scripts -->
+<script src="leaves/modules/leave-types-scripts.js?v1.3"></script>
+
 
 
 <!-- Fonts -->
@@ -78,15 +83,47 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
       document.getElementById("leaves-menu").classList.add("open");
       document.getElementById("leave-types-menu").classList.add("active");
     </script>
-
+    <?php require_once __DIR__ . '/leaves/modules/leave-types-modals-update-form.php' ?>
+    <?php require_once __DIR__ . '/leaves/modules/leave-types-modals-add-form.php' ?>
     <!-- Layout container -->
     <div class="layout-page">
     <?php require_once __DIR__ . '/user.php' ?>
 
       <!-- / Navbar -->
       <div class="content-wrapper">
-        <div class="container-fluid">
-            
+        <div class="container-fluid pt-5 pb-5">
+          <div id="response-test"></div>
+          <div class="container-fluid mb-3 d-flex justify-content-between flex-column flex-lg-row">
+              <h1 class="display-1">Leave Types</h1>
+              <button type="button" class="btn btn-success btn-xl" data-bs-toggle="modal" data-bs-target="#add_leave_types_modal">
+                <i class="bx bx-plus bx-lg"></i>Add Leave Types
+              </button>
+
+          </div>
+
+          <hr/>
+
+          <div class="container-fluid card pt-3 pb-3 mt-5 mb-5">
+              <?php require_once __DIR__ . '/leaves/modules/leave-types-sorter.php' ?>
+          </div>
+
+          <hr/>
+
+          <div class="container-fluid card pt-5 pb-3 mt-5">
+            <div class="card-header">
+              <h5>List of Leave Types
+            </div>
+            <div class="card-body">
+              <div id="leave-types-table" class="table-responsive text-no-wrap"></div>
+            </div>
+          </div>
+
+          <hr/>
+
+          <script>
+              fetchAllLeaveTypes();
+          </script>
+
         </div>
       </div>
       <?php require_once __DIR__ . '/footer.php' ?>

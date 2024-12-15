@@ -51,7 +51,7 @@ class LeaveTypeDao
 
         } catch (PDOException $exception) {
             $this->pdo->rollBack();
-
+            
             error_log("Database Error: An error occurred while creating the leave type. " .
                       "Exception: {$exception->getMessage()}");
 

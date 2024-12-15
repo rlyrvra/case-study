@@ -1,11 +1,12 @@
-<IfModule mod_rewrite.c>
 RewriteEngine On
 RewriteCond %{HTTPS} !=on
 RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
-</IfModule>
 
 # Set the base URL to the subdirectory
 RewriteBase /case-study/
+
+# Exclude /smartWage from global rules
+RewriteRule ^case-study/ - [L]
 
 # Rule to remove .php extension
 RewriteCond %{REQUEST_FILENAME} !-d
@@ -16,10 +17,7 @@ RewriteRule ^(.*)$ $1.php [L,QSA]
 RewriteCond %{THE_REQUEST} \s/case-study/(.*)\.php [NC]
 RewriteRule ^(.*)\.php$ /case-study/$1 [L,R=301]
 
-# Exclude /smartWage from global rules
-RewriteRule ^case-study/ - [L]
-
-# Forbidden
+# Forbidden 403
 
 RewriteRule ^assets/?$ - [F,L]
 RewriteRule ^allowances/?$ - [F,L]

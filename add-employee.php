@@ -5,8 +5,15 @@ require_once __DIR__ . '/includes/file-locations.php';
 require_once __DIR__ . '/login-checker.php';
 
 
-if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager'){
-  header("Location: ". $SMARTWAGE_LOCATION ."/smartWage-index.php?aR=true");
+if($_SESSION['access_role'] === 'Staff' || $_SESSION['access_role'] === 'Supervisor'){
+  if(
+    (isset($_GET['m']) && $_GET['m'] === 'v') && (isset($_GET['token']))
+  ){
+    $mode = 'view';
+    $token = $_GET['token'];
+  }else{
+    header("Location: ". $SMARTWAGE_LOCATION ."/smartWage-index.php?aR=true");
+  }
 }
 
 $mode = '';
@@ -70,9 +77,9 @@ if(isset($_GET['m']) && $_GET['m'] === 'u'){
 />
 
 <!-- Ajax -->
-<script src="employees/modules/add-employee-ajax.js?v1.3"></script>
+<script src="employees/modules/add-employee-ajax.js?v1.4"></script>
 <!-- Scripts -->
-<script src="employees/modules/add-employee-scripts.js?v1.4"></script>
+<script src="employees/modules/add-employee-scripts.js?v1.5"></script>
 
 
 

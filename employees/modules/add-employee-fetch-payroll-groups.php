@@ -41,21 +41,21 @@ function getPayrollGroupsValues(){
 function populatePayrollGroupsSelect(select){
     let optionSaved;
     if(select.value != null && select.value !== '') optionSaved = select.value;
-    
     clearPayrollGroupSelect(select);
+    
     const optionNone = document.createElement("option");
     optionNone.value = "";
     optionNone.text = "Select payroll group..."
     optionNone.selected = true;
-    optionNone.disabled = true;
     select.add(optionNone);
+
     payroll_groups.forEach(payroll_group => {
         const option = document.createElement("option");
         option.value = payroll_group.id;
         option.text = payroll_group.name;
         select.add(option);
     });
-    if(select.value != null && select.value !== '') selectPayrollGroups(optionSaved, select);
+    if(optionSaved != null && optionSaved !== '') selectPayrollGroups(optionSaved, select);
 }
 
 function selectPayrollGroups(id, select){

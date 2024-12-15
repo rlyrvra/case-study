@@ -50,13 +50,13 @@ if($resultSet["total_row_count"] <= 0){
 <div class="profile-header col-auto">
     <?php 
     if(!isset($employees[0]['profile_picture'])){
-        echo "<img src='https://via.placeholder.com/50' alt='Profile Picture' class='w-px-35 h-auto rounded-circle' id='profileImage' />";
+        echo "<img src='https://via.placeholder.com/50' alt='Profile Picture' class='w-px-75 h-auto rounded-circle' id='profileImage' />";
         return;
     }
     // Render the image
     $imageData = $employees[0]['profile_picture'];
 
-    echo "<img src='data:image/jpg;base64,$imageData' alt='Profile Picture' class='w-px-35 h-auto rounded-circle' id='profileImage' data-img='$imageData'/>";
+    echo "<img src='data:image/jpg;base64,$imageData' alt='Profile Picture' class='w-px-75 h-auto rounded-circle' id='profileImage' data-img='$imageData'/>";
     ?>
     <div>
         <h5 class="display-5"><?php echo $employees[0]['full_name']; ?></h5>

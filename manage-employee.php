@@ -116,6 +116,8 @@ if(isset($_GET['e']) && $_GET['e'] === '404'){
             <?php require_once __DIR__ . '/employees/modules/manage-employee-sorter.php' ?>
           </div>
 
+          <hr/>
+
           <div id="manage-employee-table" class="row flex-column flex-lg-row justify-content-center">
             
             

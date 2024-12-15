@@ -87,11 +87,7 @@ if(isset($_GET['s']) && $_GET['s'] == true){
             <div class="container-fluid mb-3 d-flex align-items-center">
                 <h1 class="text-center mb-4 mx-auto">Apply Leave</h1>
             </div>
-            <div class="divider text-start">
-              <div class="divider-text">
-                
-              </div>
-            </div>
+            <hr/>
             <div class="row">
               <!-- Form Section -->
               <div class="col-md-4">
