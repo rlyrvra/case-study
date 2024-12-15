@@ -105,16 +105,12 @@ if(isset($_GET['e']) && $_GET['e'] === '404'){
       <!-- / Navbar -->
       <div class="content-wrapper">
         <div class="container-fluid pt-5 pb-5">
-            <div class="container-fluid mb-3">
-              <h1 class="display-1">Manage Employees</h1>
-            </div>
-
-
-          <div class="divider text-start">
-            <div class="divider-text">
-              
-            </div>
+          <div class="container-fluid mb-3">
+            <h1 class="display-1">Manage Employees</h1>
           </div>
+
+
+          <hr/>
 
           <div class="card py-4 container-xxl row mx-auto">
             <?php require_once __DIR__ . '/employees/modules/manage-employee-sorter.php' ?>
@@ -136,7 +132,7 @@ if(isset($_GET['e']) && $_GET['e'] === '404'){
             
             
           </div>
-
+          <hr/>
           <div id="response-test"></div>
           
         </div>

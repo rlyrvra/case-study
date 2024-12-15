@@ -30,7 +30,7 @@ function fetchAllDepartments(page = 1) {
 
         
     $.ajax({
-        url: 'departments/modules/departments-api.php',
+        url: 'departments/modules/departments-api',
         type: 'POST',
         data: {
             action: 'fetchAll',
@@ -69,7 +69,7 @@ function createDepartment() {
     };
 
     $.ajax({
-        url: 'departments/modules/departments-api.php',
+        url: 'departments/modules/departments-api',
         method: 'POST',
         data: {
             action: 'create',
@@ -94,7 +94,7 @@ function deleteDepartment(button){
     };
     
     $.ajax({
-        url: 'departments/modules/departments-api.php',
+        url: 'departments/modules/departments-api',
         type: 'POST',
         data: {
             action: 'delete',
@@ -125,7 +125,7 @@ function updateDepartment(button){
         Department Status: ${departmentStatus}`);
 
     $.ajax({
-        url: 'departments/modules/departments-api.php',
+        url: 'departments/modules/departments-api',
         type: 'POST',
         data: {
             action: 'update',

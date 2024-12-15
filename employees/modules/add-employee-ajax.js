@@ -182,7 +182,7 @@ function updateEmployee(button){
         
 
         $.ajax({
-            url: 'employees/modules/add-employee-api.php',
+            url: 'employees/modules/add-employee-api',
             type: 'POST',
             data: {
                 action: 'update',
@@ -385,7 +385,7 @@ function createEmployee(){
         
 
         $.ajax({
-            url: 'employees/modules/add-employee-api.php',
+            url: 'employees/modules/add-employee-api',
             type: 'POST',
             data: {
                 action: 'create',

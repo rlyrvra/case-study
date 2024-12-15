@@ -9,7 +9,7 @@ function login(){
 
     console.log(`Username: ${username}, Password: ${password}, Remember: ${remember}`);
     $.ajax({
-        url: 'requests/login/login-api.php',
+        url: 'requests/login/login-api',
         method: 'POST',
         data: {
             username: username,
@@ -19,10 +19,10 @@ function login(){
         dataType: 'json',
         success(response) {
             if (response.success) {
-                const location = SMARTWAGE_LOCATION + "/smartWage-index.php?s=true"
+                const location = SMARTWAGE_LOCATION + "/smartWage-index?s=true"
                 window.location.href = location;
             } else {
-                const location = SMARTWAGE_LOCATION + "/sweet-alert-toasts/login/login-incorrect.php"
+                const location = SMARTWAGE_LOCATION + "/sweet-alert-toasts/login/login-incorrect"
                 $.get(location, function(data) {
                     $('#response').html(data); // This loads and runs the script in login-incorrect.php
                 });

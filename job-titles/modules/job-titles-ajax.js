@@ -30,7 +30,7 @@ function fetchAllJobTitles(page = 1) {
 
         
     $.ajax({
-        url: 'job-titles/modules/job-titles-api.php',
+        url: 'job-titles/modules/job-titles-api',
         type: 'POST',
         data: {
             action: 'fetchAll',
@@ -73,7 +73,7 @@ function createJobTitle() {
     };
 
     $.ajax({
-        url: 'job-titles/modules/job-titles-api.php',
+        url: 'job-titles/modules/job-titles-api',
         method: 'POST',
         data: {
             action: 'create',
@@ -104,7 +104,7 @@ function updateJobTitle(button){
         Job Title Status: ${jobTitleStatus}`);
 
     $.ajax({
-        url: 'job-titles/modules/job-titles-api.php',
+        url: 'job-titles/modules/job-titles-api',
         type: 'POST',
         data: {
             action: 'update',
@@ -136,7 +136,7 @@ function deleteJobTitle(button){
     };
     
     $.ajax({
-        url: 'job-titles/modules/job-titles-api.php',
+        url: 'job-titles/modules/job-titles-api',
         type: 'POST',
         data: {
             action: 'delete',

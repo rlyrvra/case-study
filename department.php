@@ -34,9 +34,9 @@ if($_SESSION['access_role'] !== 'Admin'){
 
 
 <!-- Ajax -->
-<script src="departments/modules/departments-ajax.js?v1.2"></script>
+<script src="departments/modules/departments-ajax.js?v1.3"></script>
 <!-- Scripts -->
-<script src="departments/modules/departments-scripts.js?v1.2"></script>
+<script src="departments/modules/departments-scripts.js?v1.4"></script>
 
 
 <!-- Fonts -->
@@ -96,21 +96,25 @@ if($_SESSION['access_role'] !== 'Admin'){
               
             </div>
 
-            <div class="divider text-start">
+            <!-- <div class="divider text-start">
               <div class="divider-text">
                 
               </div>
-            </div>
+            </div> -->
+
+            <hr/>
 
             <div class="container-fluid card pt-3 pb-3 mt-5 mb-5">
               <?php require_once __DIR__ . '/departments/modules/departments-sorter.php' ?>
             </div>
 
-            <div class="divider text-start">
+            <!-- <div class="divider text-start">
               <div class="divider-text">
                 
               </div>
-            </div>
+            </div> -->
+
+            <hr/>
 
             <div class="container-fluid card pt-5 pb-3 mt-5">
               <div class="card-header">
@@ -121,7 +125,7 @@ if($_SESSION['access_role'] !== 'Admin'){
               </div>
             </div>
 
-            
+            <hr/>
 
             
             <script>

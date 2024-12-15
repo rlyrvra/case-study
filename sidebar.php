@@ -19,7 +19,7 @@
     <ul class="menu-inner py-1">
     <!-- Dashboard -->
     <li class="menu-item" id="dashboard-menu">
-        <a href="smartWage-index.php" class="menu-link">
+        <a href="smartWage-index" class="menu-link">
         <i class="menu-icon tf-icons bx bx-home-circle"></i>
         <div data-i18n="Analytics">Dashboard</div>
         </a>
@@ -31,7 +31,7 @@
     if($_SESSION['access_role'] == 'Admin'){
         echo '
     <li class="menu-item" id="departments-menu">
-    <a href="departments.php" class="menu-link ">
+    <a href="department" class="menu-link ">
     <i class="menu-icon tf-icons bx bx-layout"></i>
     <div data-i18n="Layouts">Departments</div>
     </a>
@@ -46,7 +46,7 @@
     if($_SESSION['access_role'] == 'Admin'){
         echo '
     <li class="menu-item" id="job-titles-menu">
-    <a href="job-titles.php" class="menu-link">
+    <a href="job-title" class="menu-link">
     <i class="menu-icon tf-icons bx bx-vector"></i>
         <div>Job Title </div>
     
@@ -70,12 +70,12 @@
         
         <ul class="menu-sub">
         <li class="menu-item" id="add-employees-menu">
-            <a href="add-employees.php" class="menu-link">
+            <a href="add-employee" class="menu-link">
             <div>Add Employee</div>
             </a>
         </li>
         <li class="menu-item" id="manage-employees-menu">
-            <a href="manage-employee.php" class="menu-link">
+            <a href="manage-employee" class="menu-link">
             <div>Manage Employee</div>
             </a>
         </li>
@@ -138,7 +138,7 @@
         if($_SESSION['access_role'] == 'Admin' || $_SESSION['access_role'] == 'Manager'){
         echo '
         <li class="menu-item" id="leave-types-menu">
-            <a href="leave-types.php" class="menu-link">
+            <a href="leave-types" class="menu-link">
             <div data-i18n="Accordion">Leave Types</div>
             </a>
         </li>
@@ -192,7 +192,7 @@
         if($_SESSION['access_role'] == 'Admin' || $_SESSION['access_role'] == 'Manager'){
         echo '
         <li class="menu-item" id="allowances-menu">
-            <a href="allowances.php" class="menu-link">
+            <a href="allowance" class="menu-link">
             <div>Allowances</div>
             </a>
         </li>
@@ -264,7 +264,7 @@
 
     <!-- Log Out -->
     <li class="menu-item">
-        <a href="requests/login/logout.php" class="menu-link">
+        <a href="requests/login/logout" class="menu-link">
         <i class="menu-icon tf-icons bx bx-log-out"></i>
         <div data-i18n="Tables">Log Out</div>
         </a>

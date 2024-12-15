@@ -35,7 +35,7 @@ function fetchAllEmployees(page = 1) {
 
         
     $.ajax({
-        url: 'employees/modules/manage-employee-api.php',
+        url: 'employees/modules/manage-employee-api',
         type: 'POST',
         data: {
             action: 'fetchAll',
@@ -67,7 +67,7 @@ function deleteEmployee(button){
     };
     
     $.ajax({
-        url: 'employees/modules/manage-employee-api.php',
+        url: 'employees/modules/manage-employee-api',
         type: 'POST',
         data: {
             action: 'delete',

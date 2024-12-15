@@ -151,7 +151,7 @@ function failedUpdateTryAgain(token){
         confirmButtonText: 'OK'
     }).then((result) => {
         if(result.isConfirmed){
-            window.location.href = SMARTWAGE_LOCATION + "/add-employees.php?m=v&token=" + token;
+            window.location.href = SMARTWAGE_LOCATION + "/add-employee?m=v&token=" + token;
         }
     });
 }
@@ -173,7 +173,7 @@ function showSuccessUpdate(token) {
         confirmButtonText: 'OK'
     }).then((result) => {
         if(result.isConfirmed){
-            window.location.href = SMARTWAGE_LOCATION + "/add-employees.php?m=v&token=" + token;
+            window.location.href = SMARTWAGE_LOCATION + "/add-employee?m=v&token=" + token;
         }
     });
 }

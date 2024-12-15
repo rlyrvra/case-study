@@ -130,11 +130,7 @@ if(isset($_GET['m']) && $_GET['m'] === 'u'){
               <h1 class="display-1">Employees</h1>
             </div>
 
-            <div class="divider text-start">
-              <div class="divider-text">
-                
-              </div>
-            </div>
+            <hr/>
 
             <div class="container-fluid card pt-5 pb-5 mt-5 mb-5">
               <div class="row justify-content-center">
@@ -258,11 +254,8 @@ if(isset($_GET['m']) && $_GET['m'] === 'u'){
               </div>
             </div>
             
-            <div class="divider text-start">
-              <div class="divider-text">
-                
-              </div>
-            </div>
+            <hr/>
+            
             <div id="response-test">
             </div>
             
