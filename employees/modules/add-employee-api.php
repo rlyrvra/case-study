@@ -264,12 +264,12 @@ try {
         if ($updateResult === ActionResult::SUCCESS) {
             echo "
             <script> 
-            showSuccessCreate(); 
+            showSuccessUpdate('$hashed_id'); 
             </script>";
         } else if ($updateResult === ActionResult::FAILURE){
             echo "
             <script> 
-            failedUpdateTryAgain(''); 
+            failedUpdateTryAgain('$hashed_id'); 
             </script>";
         }
         return;

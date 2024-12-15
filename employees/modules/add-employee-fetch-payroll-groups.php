@@ -43,13 +43,19 @@ function populatePayrollGroupsSelect(select){
     if(select.value != null && select.value !== '') optionSaved = select.value;
     
     clearPayrollGroupSelect(select);
+    const optionNone = document.createElement("option");
+    optionNone.value = "";
+    optionNone.text = "Select payroll group..."
+    optionNone.selected = true;
+    optionNone.disabled = true;
+    select.add(optionNone);
     payroll_groups.forEach(payroll_group => {
         const option = document.createElement("option");
         option.value = payroll_group.id;
         option.text = payroll_group.name;
         select.add(option);
     });
-    selectPayrollGroups(optionSaved, select);
+    if(select.value != null && select.value !== '') selectPayrollGroups(optionSaved, select);
 }
 
 function selectPayrollGroups(id, select){
