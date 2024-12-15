@@ -24,14 +24,14 @@ function fetchAllEmployees(page = 1) {
     var filterByDepartment = $("#selectize_department_sorter").val();
 
     
-    console.log(`
-        Number of Entries: ${numberEntries}, 
-        Sort By Column: ${sortByColumn}, 
-        Page Number: ${pageNumber}, 
-        Sort Order By: ${sortOrderBy}, 
-        Search At Column: ${searchColumn}, 
-        Search Text: ${search},
-        Department ID: ${filterByDepartment}`);
+    // console.log(`
+    //     Number of Entries: ${numberEntries}, 
+    //     Sort By Column: ${sortByColumn}, 
+    //     Page Number: ${pageNumber}, 
+    //     Sort Order By: ${sortOrderBy}, 
+    //     Search At Column: ${searchColumn}, 
+    //     Search Text: ${search},
+    //     Department ID: ${filterByDepartment}`);
 
         
     $.ajax({
@@ -74,8 +74,8 @@ function deleteEmployee(button){
             md5_id: employeeData.token
         },
         success: function(response) {
-            $('#manage-employee-table').html(response);
-            fetchAllEmployees();
+            $('#response-test').html(response);
+            //fetchAllEmployees();
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log("AJAX Error: " + textStatus + ": " + errorThrown);

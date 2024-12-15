@@ -11,6 +11,7 @@ require_once __DIR__ . '/../Employee.php';
 
 require_once __DIR__ . '/../../includes/Helper.php';
 require_once __DIR__ . '/../../includes/enums/ErrorCode.php';
+require_once __DIR__ . "/../../includes/enums/ActionResult.php";
 require_once __DIR__ . '/../../database/database.php';
 
 require_once __DIR__ . '/../../includes/session.php';
@@ -152,7 +153,7 @@ try {
         $employeeService = new EmployeeService($employeeRepository);
         $deleteResult = $employeeService->deleteEmployee($hashed_id);
 
-        if ($deleteResult) {
+        if ($deleteResult === ActionResult::SUCCESS) {
             echo "Employee deleted successfully!";
         } else {
             echo "Failed to delete employee. Please try again.";

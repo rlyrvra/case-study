@@ -24,7 +24,7 @@
         </div>
         <div class="col-md-4">
             <label for="gender" class="form-label">Gender*</label>
-            <select id="gender" class="form-select" require>
+            <select id="gender" class="form-select" required>
                 <option value="" selected disabled>Choose...</option>
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
@@ -33,7 +33,7 @@
         </div>
         <div class="col-md-4">
             <label for="maritalStatus" class="form-label">Marital Status*</label>
-            <select id="maritalStatus" class="form-select" require>
+            <select id="maritalStatus" class="form-select" required>
                 <option value="" selected disabled>Choose...</option>
                 <option value="Single">Single</option>
                 <option value="Married">Married</option>
@@ -165,22 +165,22 @@
         <div class="col-md-4">
             <label for="employment-type" class="form-label">Employment Type*</label>
             <select class="form-select" id="employment-type" required>
-            <option selected disabled>Select Type</option>
-            <option value="Regular / Permanent">Regular / Permanent</option>
-            <option value="Casual">Casual</option>
-            <option value="Contractual">Contractual</option>
-            <option value="Project-Based">Project-Based</option>
-            <option value="Seasonal">Seasonal</option>
-            <option value="Fixed-Term">Fixed-Term</option>
-            <option value="Probationary">Probationary</option>
-            <option value="Part-Time">Part-Time</option>
-            <option value="Self-Employment">Self-Employment</option>
-            <option value="Freelance">Freelance</option>
-            <option value="Internship">Internship</option>
-            <option value="Consultancy">Consultancy</option>
-            <option value="Apprenticeship">Apprenticeship</option>
-            <option value="Traineeship">Traineeship</option>
-            <option value="Gig">Gig</option>
+                <option value="" selected disabled>Select Type</option>
+                <option value="Regular / Permanent">Regular / Permanent</option>
+                <option value="Casual">Casual</option>
+                <option value="Contractual">Contractual</option>
+                <option value="Project-Based">Project-Based</option>
+                <option value="Seasonal">Seasonal</option>
+                <option value="Fixed-Term">Fixed-Term</option>
+                <option value="Probationary">Probationary</option>
+                <option value="Part-Time">Part-Time</option>
+                <option value="Self-Employment">Self-Employment</option>
+                <option value="Freelance">Freelance</option>
+                <option value="Internship">Internship</option>
+                <option value="Consultancy">Consultancy</option>
+                <option value="Apprenticeship">Apprenticeship</option>
+                <option value="Traineeship">Traineeship</option>
+                <option value="Gig">Gig</option>
             </select>
         </div>
         </div>
@@ -230,12 +230,7 @@
         <div class="col-md-4">
             <label for="payrollGroup" class="form-label">Select Payroll Group*:</label>
             <select class="form-select" id="payrollGroup" required>
-                <option value="" disabled selected>Choose...</option>
-                <option value="Daily">Daily</option>
-                <option value="Weekly">Weekly</option>
-                <option value="Bi-Weekly">Bi-Weekly</option>
-                <option value="Semi-Monthly">Semi-Monthly</option>
-                <option value="Monthly">Monthly</option>
+                <option value="" disabled selected>Select payroll group...</option>
             </select>
         </div>
         <div class="col-md-4">
@@ -345,7 +340,7 @@
         </div>
         <div class="row mb-3">
             <div class="col-md-12 justify-content-end d-flex">
-                <button type="submit" class="btn btn-primary" id="contact_information_submit" onclick="employeeCreate()">Finish</button>
+                <button type="submit" class="btn btn-primary" id="contact_information_submit" onclick="createEmployee()">Finish</button>
             </div>
         </div>
         </form>

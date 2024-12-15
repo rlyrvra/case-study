@@ -177,3 +177,16 @@ function showSuccessUpdate(token) {
         }
     });
 }
+
+function showSuccessCreate() {
+    Swal.fire({
+        title: 'Success!',
+        text: 'This employee has been created successfully.',
+        icon: 'success',
+        confirmButtonText: 'OK'
+    }).then((result) => {
+        if(result.isConfirmed){
+            window.location.href = SMARTWAGE_LOCATION + "/manage-employee";
+        }
+    });
+}

@@ -48,7 +48,6 @@ class EmployeeDao
                 access_role                    ,
 
                 payroll_group_id               ,
-                annual_salary                   ,
                 hourly_rate                    ,
 
                 tin_number                     ,
@@ -64,7 +63,7 @@ class EmployeeDao
                 username                       ,
                 password                       ,
 
-                notes                          ,
+                notes                          
             )
             VALUES (
                 :rfid_uid                       ,
@@ -113,9 +112,11 @@ class EmployeeDao
                 :username                       ,
                 :password                       ,
 
-                :notes                          ,
-            )
+                :notes                          
+            );
         ";
+        echo $query;
+        
 
         try {
             $this->pdo->beginTransaction();
@@ -169,10 +170,11 @@ class EmployeeDao
             $statement->bindValue(":password"                       , $employee->getPassword()                    , Helper::getPdoParameterType($employee->getPassword()                    ));
 
             $statement->bindValue(":notes"                          , $employee->getNotes()                       , Helper::getPdoParameterType($employee->getNotes()                       ));
-
+            
             $statement->execute();
 
             $this->pdo->commit();
+            
 
             return ActionResult::SUCCESS;
 
@@ -189,7 +191,7 @@ class EmployeeDao
                     return $matches[1];
                 }
             }
-
+            echo $exception->getMessage();
             return ActionResult::FAILURE;
         }
     }
@@ -792,6 +794,39 @@ class EmployeeDao
     public function delete(int $employeeId): ActionResult
     {
         return $this->softDelete($employeeId);
+    }
+
+    public function deleteThruHash($hashed_id): ActionResult
+    {
+        $query = "
+            UPDATE employees
+            SET
+                deleted_at = CURRENT_TIMESTAMP
+            WHERE
+                MD5(id) = :employee_id
+        ";
+
+        try {
+            $this->pdo->beginTransaction();
+
+            $statement = $this->pdo->prepare($query);
+
+            $statement->bindValue(":employee_id", $hashed_id, Helper::getPdoParameterType($hashed_id));
+
+            $statement->execute();
+
+            $this->pdo->commit();
+
+            return ActionResult::SUCCESS;
+
+        } catch (PDOException $exception) {
+            $this->pdo->rollBack();
+
+            error_log("Database Error: An error occurred while deleting the employee. " .
+                      "Exception: {$exception->getMessage()}");
+            echo $exception->getMessage();
+            return ActionResult::FAILURE;
+        }
     }
 
     private function softDelete(int $employeeId): ActionResult

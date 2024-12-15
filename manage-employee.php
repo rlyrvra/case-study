@@ -41,9 +41,9 @@ if(isset($_GET['e']) && $_GET['e'] === '404'){
 />
 
 <!-- Ajax -->
-<script src="employees/modules/manage-employee-ajax.js?v1.1"></script>
+<script src="employees/modules/manage-employee-ajax.js?v1.2"></script>
 <!-- Scripts -->
-<script src="employees/modules/manage-employee-scripts.js?v1.2"></script>
+<script src="employees/modules/manage-employee-scripts.js?v1.3"></script>
 
 
 
@@ -136,6 +136,8 @@ if(isset($_GET['e']) && $_GET['e'] === '404'){
             
             
           </div>
+
+          <div id="response-test"></div>
           
         </div>
       </div>

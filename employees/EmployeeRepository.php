@@ -36,6 +36,11 @@ class EmployeeRepository
         return $this->employeeDao->updateThruHash($employee, $hashed_id);
     }
 
+    public function deleteEmployeeThruHash($hashed_id): ActionResult
+    {
+        return $this->employeeDao->deleteThruHash($hashed_id);
+    }
+
     public function getEmployeeIdBy(string $column, string $value): ActionResult|int
     {
         $filterCriteria = [

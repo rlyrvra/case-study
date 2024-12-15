@@ -51,7 +51,7 @@ function confirmDeleteEmployee(button) {
         deleteEmployee(button);
         Swal.fire(
             'Deleted!',
-            'The department has been deleted.',
+            'The employee has been deleted.',
             'success'
         );
         }

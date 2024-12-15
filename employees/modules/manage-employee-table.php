@@ -33,7 +33,7 @@
         <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="add-employees.php?m=v&token=<?php echo htmlspecialchars(md5($row['id']));?>"><i class="bx bx-user"></i>View</a></li>
             <li><a class="dropdown-item" href="add-employees.php?m=u&token=<?php echo htmlspecialchars(md5($row['id']));?>"><i class="bx bx-edit-alt"></i>Edit</a></li>
-            <li><a class="dropdown-item" href="#" onclick="confirmDeleteEmployee(this)"><i class="bx bx-trash" data-id="<?php echo htmlspecialchars($row['id']); ?>"></i>Delete</a></li>
+            <li><a class="dropdown-item" href="#" onclick="confirmDeleteEmployee(this)" data-id="<?php echo htmlspecialchars($row['id']); ?>"><i class="bx bx-trash"></i>Delete</a></li>
         </ul>
         </div>
         <hr class="mt-4 mb-4">
@@ -69,19 +69,19 @@
     <ul class="pagination pagination-lg">
       <!-- Previous Button -->
       <li class="page-item <?= $page <= 1 ? 'disabled' : '' ?>">
-        <a class="page-link" onclick="fetchAllDepartments('prev')" aria-label="Previous">
+        <a class="page-link" onclick="fetchAllEmployees('prev')" aria-label="Previous">
           <span aria-hidden="true">&laquo;</span>
         </a>
       </li>
       <?php for ($i = 1; $i <= $totalPages; $i++): ?>
         <!-- Page Numbers -->
         <li class="page-item <?= $i === $page ? 'active' : '' ?>">
-          <a class="page-link" onclick="fetchAllDepartments(<?php echo $i ?>)" ><?= $i ?></a>
+          <a class="page-link" onclick="fetchAllEmployees(<?php echo $i ?>)" ><?= $i ?></a>
         </li>
       <?php endfor; ?>
       <!-- Next Button -->
       <li class="page-item <?= $page >= $totalPages ? 'disabled' : '' ?>">
-        <a class="page-link" onclick="fetchAllDepartments('next')" aria-label="Next">
+        <a class="page-link" onclick="fetchAllEmployees('next')" aria-label="Next">
           <span aria-hidden="true">&raquo;</span>
         </a>
       </li>

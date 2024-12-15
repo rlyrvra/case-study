@@ -21,7 +21,6 @@ try {
     $action = $_POST['action'] ?? '';
 
     if($action == 'create'){
-        $hashed_id = $_POST['md5_id'] ?? null;
         if(!isset($_POST['employeeData'])){
             return;
         }
@@ -80,17 +79,7 @@ try {
         $employeeRepository = new EmployeeRepository($employeeDao);
         $employeeService = new EmployeeService($employeeRepository);
 
-        $empCode = $employeeService->fetchAllEmployees(
-            ['employee_code'], 
-            [
-                [
-                "column" => "MD5(employee.id)",
-                "operator" => "=",
-                "value" => $hashed_id
-                ]
-            ], [], 1
-        );
-        $updatedEmployee = new Employee(
+        $newEmployee = new Employee(
             id: null,
             rfidUid: $rfid,
             firstName: $first_name,
@@ -110,7 +99,7 @@ try {
             emergencyContactPhoneNumber: $emergency_phone,
             emergencyContactEmailAddress: $emergency_email,
             emergencyContactAddress: $emergency_address,
-            employeeCode: "EMP-" . str_pad($employeeService->countTotalRecords(), 4, "0" ,STR_PAD_LEFT),
+            employeeCode: "EMP-" . str_pad(($employeeService->countTotalRecords() + 1), 4, "0", STR_PAD_LEFT),
             jobTitleId: $job_title_id,
             departmentId: $department_id,
             employmentType: $employment_type,
@@ -137,17 +126,17 @@ try {
         );
 
 
-        $updateResult = $employeeService->updateEmployeeThruHash($updatedEmployee, $hashed_id);
+        $createResult = $employeeService->createEmployee($newEmployee);
 
-        if ($updateResult === ActionResult::SUCCESS) {
+        if ($createResult === ActionResult::SUCCESS) {
             echo "
             <script> 
-            showSuccessUpdate('$hashed_id'); 
+            showSuccessCreate(); 
             </script>";
-        } else if ($updateResult === ActionResult::FAILURE){
+        } else if ($createResult === ActionResult::FAILURE){
             echo "
             <script> 
-            failedUpdateTryAgain('$hashed_id'); 
+            failedUpdateTryAgain(); 
             </script>";
         }
         return;
@@ -275,12 +264,12 @@ try {
         if ($updateResult === ActionResult::SUCCESS) {
             echo "
             <script> 
-            showSuccessUpdate('$hashed_id'); 
+            showSuccessCreate(); 
             </script>";
         } else if ($updateResult === ActionResult::FAILURE){
             echo "
             <script> 
-            failedUpdateTryAgain('$hashed_id'); 
+            failedUpdateTryAgain(''); 
             </script>";
         }
         return;
