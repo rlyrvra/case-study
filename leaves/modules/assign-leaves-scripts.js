@@ -38,7 +38,6 @@ function clearSelectedLeaveTypes(){
 function leaveTypeInputTest(){
     const selectedLeaveTypes = getSelectedLeaveTypes();
     assignLeaves(selectedLeaveTypes);
-    console.log(selectedLeaveTypes);
     clearSelectedLeaveTypes();
 }
 
@@ -62,9 +61,71 @@ function getSelectedLeaveTypes() {
     return selectedLeaveTypes;
 }
 
+function showSelectedEmployee(){
+    const selectedToken = parseInt(document.getElementById("select_employee").value, 10);
+
+    const matchingEmployee = employees.find(employee => selectedToken === employee.id);
+    if(!matchingEmployee){
+        document.getElementById("leaveEntitlementModalLabel").innerHTML = "WARNING! No Selected Employee";
+        return;
+    }
+    document.getElementById("leaveEntitlementModalLabel").innerHTML = matchingEmployee.full_name + " <br/> " + "<span class='display-6'>" + matchingEmployee.email_address + "</span>"
+}
+
+
  
 
 document.addEventListener('DOMContentLoaded', function() {
     // Call the render function
     renderLeaveTypes(document.getElementById('leaveTableBody'));
 });
+
+function confirmDeleteEmployeeLeave(button){
+    $('#assign_leave_types_modal').modal('hide');
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "Do you want to remove this assigned leave from the employee?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!',
+    }).then((result) => {
+        if (result.isConfirmed) {
+        deleteEmployeeLeave(button);
+
+        } else {
+            $('#assign_leave_types_modal').modal('show');
+        }
+    });
+}
+
+function showSuccessLeaveEntitlement() {
+    $('#assign_leave_types_modal').modal('hide');
+    $('#leaveEntitlementModal').modal('hide');
+    Swal.fire({
+        title: 'Success!',
+        text: 'The leaves have been assigned successfully.',
+        icon: 'success',
+        confirmButtonText: 'OK'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $('#assign_leave_types_modal').modal('show');
+        }
+    });
+}
+
+function showSuccessDeleteLeaveEntitlement(){
+    $('#assign_leave_types_modal').modal('hide');
+    Swal.fire({
+        title: 'Success!',
+        text: 'This leaves type has been removed from this employee.',
+        icon: 'success',
+        timer: 2000,
+        confirmButtonText: 'OK'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $('#assign_leave_types_modal').modal('show');
+        }
+    });
+}

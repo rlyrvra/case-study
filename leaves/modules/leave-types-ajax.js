@@ -16,17 +16,17 @@ function fetchAllLeaveTypes(page = 1){
     var search = $("#searchText").val();
 
     
-    console.log(`
-        Number of Entries: ${numberEntries}, 
-        Sort By Column: ${sortByColumn}, 
-        Page Number: ${pageNumber}, 
-        Sort Order By: ${sortOrderBy}, 
-        Filter Status: ${filterStatus}, 
-        Search At Column: ${searchColumn},
-        Date Column: ${dateColumn}, 
-        Start Date: ${startDate}, 
-        End Date: ${endDate}, 
-        Search Text: ${search}`);
+    // console.log(`
+    //     Number of Entries: ${numberEntries}, 
+    //     Sort By Column: ${sortByColumn}, 
+    //     Page Number: ${pageNumber}, 
+    //     Sort Order By: ${sortOrderBy}, 
+    //     Filter Status: ${filterStatus}, 
+    //     Search At Column: ${searchColumn},
+    //     Date Column: ${dateColumn}, 
+    //     Start Date: ${startDate}, 
+    //     End Date: ${endDate}, 
+    //     Search Text: ${search}`);
 
 
     $.ajax({

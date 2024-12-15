@@ -196,7 +196,7 @@ class LeaveEntitlementDao
             {$limitClause}
             {$offsetClause}
         ";
-
+        //echo "<pre> $query </pre>";
         try {
             $statement = $this->pdo->prepare($query);
 

@@ -25,12 +25,21 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <!-- Sweet Alert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
+<!-- Selectize -->
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/css/selectize.default.min.css"
+  integrity="sha512-pTaEn+6gF1IeWv3W1+7X7eM60TFu/agjgoHmYhAfLEU8Phuf6JKiiE8YmsNC0aCgQv4192s4Vai8YZ6VNM6vyQ=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+/>
 
 <!-- Ajax -->
 <script src="leaves/modules/leave-types-ajax.js?v1.3"></script>
+<script src="leaves/modules/assign-leaves-ajax.js?v1.3"></script>
 <!-- Scripts -->
 <script src="leaves/modules/leave-types-scripts.js?v1.3"></script>
+<script src="leaves/modules/assign-leaves-scripts.js?v1.3"></script>
 
 
 
@@ -85,6 +94,9 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
     </script>
     <?php require_once __DIR__ . '/leaves/modules/leave-types-modals-update-form.php' ?>
     <?php require_once __DIR__ . '/leaves/modules/leave-types-modals-add-form.php' ?>
+    <div id="assign-leaves">
+      <?php require_once __DIR__ . '/leaves/modules/assign-leaves-modals-assign-form.php' ?>
+    </div>
     <!-- Layout container -->
     <div class="layout-page">
     <?php require_once __DIR__ . '/user.php' ?>
@@ -93,6 +105,17 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
       <div class="content-wrapper">
         <div class="container-fluid pt-5 pb-5">
           <div id="response-test"></div>
+
+          <div class="container-fluid mb-3 d-flex justify-content-between flex-column flex-lg-row">
+              <h1 class="display-1">Assign Leaves</h1>
+              <button type="button" class="btn btn-success btn-xl" data-bs-toggle="modal" data-bs-target="#assign_leave_types_modal">
+                <i class="bx bx-label bx-lg"></i>Assign Leave Types
+              </button>
+
+          </div>
+
+          <hr/>
+
           <div class="container-fluid mb-3 d-flex justify-content-between flex-column flex-lg-row">
               <h1 class="display-1">Leave Types</h1>
               <button type="button" class="btn btn-success btn-xl" data-bs-toggle="modal" data-bs-target="#add_leave_types_modal">
@@ -111,7 +134,7 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
 
           <div class="container-fluid card pt-5 pb-3 mt-5">
             <div class="card-header">
-              <h5>List of Leave Types
+              <h5>List of Leave Types</h5>
             </div>
             <div class="card-body">
               <div id="leave-types-table" class="table-responsive text-no-wrap"></div>
@@ -159,5 +182,14 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
 
 <!-- Place this tag in your head or just before your close body tag. -->
 <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+<!-- Selectize -->
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/js/selectize.min.js"
+  integrity="sha512-IOebNkvA/HZjMM7MxL0NYeLYEalloZ8ckak+NDtOViP7oiYzG5vn6WVXyrJDiJPhl4yRdmNAG49iuLmhkUdVsQ=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+></script>
+
 </body>
 </html>
