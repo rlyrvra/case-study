@@ -547,7 +547,7 @@ class EmployeeDao
 
             $statement->bindValue(":notes"                          , $employee->getNotes()                       , Helper::getPdoParameterType($employee->getNotes()                       ));
 
-            $statement->bindValue(":employee_id"                    , $employee->getId()                          , Helper::getPdoParameterType($employee->getId()                          ));
+            
 
             $statement->execute();
 

@@ -105,7 +105,6 @@ try {
             employmentType: $employment_type,
             dateOfHire: $date_of_hire,
             supervisorId: $supervisor_id,
-            managerId: null,
             accessRole: $access_role,
             payrollGroupId: $payroll_group_id,
             hourlyRate: $hourly_rate,
@@ -238,7 +237,6 @@ try {
             employmentType: $employment_type,
             dateOfHire: $date_of_hire,
             supervisorId: $supervisor_id,
-            managerId: null,
             accessRole: $access_role,
             payrollGroupId: $payroll_group_id,
             hourlyRate: $hourly_rate,
@@ -259,7 +257,7 @@ try {
         );
 
 
-        $updateResult = $employeeService->updateEmployeeThruHash($updatedEmployee, $hashed_id);
+        $updateResult = $employeeService->updateEmployee($updatedEmployee, true);
 
         if ($updateResult === ActionResult::SUCCESS) {
             echo "
