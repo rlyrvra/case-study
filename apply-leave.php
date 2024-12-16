@@ -33,6 +33,11 @@ if(isset($_GET['s']) && $_GET['s'] == true){
   rel="stylesheet"
 />
 
+<!-- Ajax -->
+<script src="leaves/apply-leave/modules/apply-leave-ajax.js?v1.1"></script>
+<!-- Scripts -->
+<script src="leaves/apply-leave/modules/apply-leave-scripts.js?v1.3"></script>
+
 <!-- Icons. Uncomment required icon fonts -->
 <link rel="stylesheet" href="assets/vendor/fonts/boxicons.css" />
 <link rel="icon" type="image/x-icon" href="img/logo-files/logo1.ico" />
@@ -85,35 +90,32 @@ if(isset($_GET['s']) && $_GET['s'] == true){
         <div class="container-fluid">
           <div class="container-xxl card p-5 mt-5">
             <div class="container-fluid mb-3 d-flex align-items-center">
-                <h1 class="text-center mb-4 mx-auto">Apply Leave</h1>
+                <h1 class="text-center mb-4 mx-auto display-1">Apply Leave</h1>
             </div>
             <hr/>
             <div class="row">
               <!-- Form Section -->
+              <div id="response-test"></div>
               <div class="col-md-4">
-                  <div class="form-section">
-                      <h5>Apply for Leave</h5>
-                      <form action="submit-leave.php" method="POST">
+                  <div class="form-section border card p-4">
+                      <h5>Apply for Leave Form</h5>
+                      <form onsubmit="event.preventDefault()" id="apply_leave_form">
                           <div class="mb-3">
                               <label for="leaveType" class="form-label">Select Leave Type*</label>
-                              <select class="form-select" id="leaveType" name="leaveType" required>
-                                  <option value="" disabled selected>Select Leave Type</option>
-                                  <option value="Medical Leave">Medical Leave</option>
-                                  <option value="Casual Leave">Casual Leave</option>
-                                  <option value="Annual Leave">Annual Leave</option>
+                              <select class="form-select" id="leaveType" name="leaveType" required onchange="selectEmployeeLeaves();">
                               </select>
                           </div>
                           <div class="mb-3">
                               <label for="remainingBalance" class="form-label">Remaining Leave Balance:</label>
-                              <input type="text" class="form-control" id="remainingBalance" name="remainingBalance" readonly value="10">
+                              <input type="text" class="form-control" id="remainingBalance" name="remainingBalance" readonly value="0">
                           </div>
                           <div class="mb-3">
                               <label for="startDate" class="form-label">Start Date*</label>
-                              <input type="date" class="form-control" id="startDate" name="startDate" required>
+                              <input type="date" class="form-control" id="startDate" name="startDate" required onchange="setEndDateMin(this)">
                           </div>
                           <div class="mb-3">
                               <label for="endDate" class="form-label">End Date*</label>
-                              <input type="date" class="form-control" id="endDate" name="endDate" required>
+                              <input type="date" class="form-control" id="endDate" name="endDate" required onchange="calculateTotalNumberOfDays()" disabled>
                           </div>
                           <div class="mb-3">
                               <label for="totalDays" class="form-label">Total Number of Days:</label>
@@ -123,38 +125,16 @@ if(isset($_GET['s']) && $_GET['s'] == true){
                               <label for="reason" class="form-label">Reason:</label>
                               <textarea class="form-control" id="reason" name="reason" rows="3" required></textarea>
                           </div>
-                          <button type="submit" class="btn btn-primary w-100">Apply for Leave</button>
+                          <button type="submit" class="btn btn-primary w-100" onclick="createLeaveRequest()">Apply for Leave</button>
                       </form>
                   </div>
               </div>
               <!-- Table Section -->
-              <div class="col-md-8">
+              <div class="col-md-8 p-4">
                   <div class="table-section">
                       <h5>My Leaves</h5>
-                      <div class="table-responsive">
-                          <table id="leavesTable" class="table table-striped table-bordered">
-                              <thead>
-                                  <tr>
-                                      <th>#</th>
-                                      <th>Type</th>
-                                      <th>Start Date</th>
-                                      <th>End Date</th>
-                                      <th>Reason</th>
-                                      <th>Status</th>
-                                  </tr>
-                              </thead>
-                              <tbody>
-                                  <tr>
-                                      <td>1</td>
-                                      <td>Medical Leave</td>
-                                      <td>2024-04-15</td>
-                                      <td>2024-10-15</td>
-                                      <td>I was hit by a stray bullet and am requesting a one-week medical leave.</td>
-                                      <td><span class="badge bg-success">Approved</span></td>
-                                  </tr>
-                                  <!-- Additional rows can be added dynamically from the database -->
-                              </tbody>
-                          </table>
+                      <div class="table-responsive" id="apply_leaves_table">
+                        <?php require_once __DIR__ . '/leaves/apply-leave/modules/apply-leave-employee-table.php' ?>
                       </div>
                   </div>
               </div>
@@ -172,6 +152,14 @@ if(isset($_GET['s']) && $_GET['s'] == true){
 </div>
 <!-- / Layout wrapper -->
 
+
+<?php require_once __DIR__ . '/leaves/apply-leave/modules/apply-leave-fetch-employee-leave-types.php' ?>
+<script>
+$(document).ready(function() {
+  populateEmployeeLeaveTypesSelect(document.getElementById("leaveType"));
+  fetchLeaveRequests();
+});
+</script>
 
 
 <!-- Core JS -->

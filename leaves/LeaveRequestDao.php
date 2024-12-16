@@ -243,7 +243,7 @@ class LeaveRequestDao
                 {$limitClause}
                 {$offsetClause}
         ";
-
+        echo "<pre> $query </pre>";
         try {
             $statement = $this->pdo->prepare($query);
 
@@ -269,7 +269,7 @@ class LeaveRequestDao
         } catch (PDOException $exception) {
             error_log("Database Error: An error occurred while fetching the leave requests. " .
                       "Exception: {$exception->getMessage()}");
-
+            echo $exception->getMessage();
             return ActionResult::FAILURE;
         }
     }

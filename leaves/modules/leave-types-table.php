@@ -47,7 +47,7 @@
           <?php 
           if($row['status'] === "Active"){
             echo "bg-label-primary";
-          }else if($row['status'] === "Inctive"){
+          }else if($row['status'] === "Inactive"){
             echo "bg-label-warning";
           }else{
             echo "bg-label-danger";
