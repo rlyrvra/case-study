@@ -40,6 +40,7 @@ try {
         $result = $leaveRequestService->getAllLeaveRequests([], $filterCriteria);
         $employeeLeaveRequests;
         $employeeLeaveRequests = $result['result_set'];
+
         $totalEmployeeLeaves = $result["total_row_count"];
         //$totalPages = ceil($totalEmployeeLeaves / $_POST['numberEntries']);
         include __DIR__ . '/apply-leave-employee-table.php';

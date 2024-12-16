@@ -26,9 +26,10 @@ class EmployeeRepository
         return $this->employeeDao->fetchAll($columns, $filterCriteria, $sortCriteria, $limit, $offset);
     }
 
-    public function updateEmployee(Employee $employee): ActionResult
+    public function updateEmployee(Employee $employee, bool $isHashedId): ActionResult
     {
-        return $this->employeeDao->update($employee);
+        return $this->employeeDao->update($employee, $isHashedId);
+<<<<<<< HEAD
     }
 
     public function updateEmployeeThruHash(Employee $employee, $hashed_id): ActionResult
@@ -39,10 +40,16 @@ class EmployeeRepository
     public function deleteEmployeeThruHash($hashed_id): ActionResult
     {
         return $this->employeeDao->deleteThruHash($hashed_id);
+=======
+>>>>>>> upstream/main
     }
 
     public function getEmployeeIdBy(string $column, string $value): ActionResult|int
     {
+        $columns = [
+            'id'
+        ];
+
         $filterCriteria = [
             [
                 'column'   => $column,
@@ -52,7 +59,7 @@ class EmployeeRepository
         ];
 
         $result = $this->fetchAllEmployees(
-            columns       : ['id']         ,
+            columns       : $columns       ,
             filterCriteria: $filterCriteria,
             limit         : 1
         );
@@ -61,7 +68,9 @@ class EmployeeRepository
             return ActionResult::FAILURE;
         }
 
-        return (int) $result['result_set'][0]['id'];
+        return empty($result['result_set'])
+            ? ActionResult::NO_RECORD_FOUND
+            : (int) $result['result_set'][0]['id'];
     }
 
     public function changePassword(int $employeeId, string $newHashedPassword): ActionResult

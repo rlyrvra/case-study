@@ -26,9 +26,10 @@ class EmployeeService
         return $this->employeeRepository->fetchAllEmployees($columns, $filterCriteria, $sortCriteria, $limit, $offset);
     }
 
-    public function updateEmployee(Employee $employee): ActionResult
+    public function updateEmployee(Employee $employee, bool $isHashedId): ActionResult
     {
-        return $this->employeeRepository->updateEmployee($employee);
+        return $this->employeeRepository->updateEmployee($employee, $isHashedId);
+<<<<<<< HEAD
     }
 
     public function updateEmployeeThruHash(Employee $employee, $hashed_id): ActionResult
@@ -39,29 +40,13 @@ class EmployeeService
     public function deleteEmployeeThruHash($hashed_id): ActionResult
     {
         return $this->employeeRepository->deleteEmployeeThruHash($hashed_id);
+=======
+>>>>>>> upstream/main
     }
 
     public function getEmployeeIdBy(string $column, string $value): ActionResult|int
     {
-        $filterCriteria = [
-            [
-                'column'   => $column,
-                'operator' => '='    ,
-                'value'    => $value
-            ],
-        ];
-
-        $result = $this->fetchAllEmployees(
-            columns       : ['id']         ,
-            filterCriteria: $filterCriteria,
-            limit         : 1
-        );
-
-        if ($result === ActionResult::FAILURE) {
-            return ActionResult::FAILURE;
-        }
-
-        return (int) $result['result_set'][0]['id'];
+        return $this->employeeRepository->getEmployeeIdBy($column, $value);
     }
 
     public function changePassword(int $employeeId, string $newHashedPassword): ActionResult
