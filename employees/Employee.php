@@ -3,7 +3,7 @@
 class Employee
 {
     public function __construct(
-        private readonly   int|string $id                           = null,
+        private readonly   mixed      $id                           = null,
         private readonly   string     $rfidUid                            ,
 
         private readonly   string     $firstName                          ,
@@ -57,7 +57,7 @@ class Employee
     ) {
     }
 
-    public function getId(): ?int {
+    public function getId(): mixed {
         return $this->id;
     }
 

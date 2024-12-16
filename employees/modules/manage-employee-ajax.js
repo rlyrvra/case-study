@@ -75,7 +75,7 @@ function deleteEmployee(button){
         },
         success: function(response) {
             $('#response-test').html(response);
-            //fetchAllEmployees();
+            fetchAllEmployees();
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log("AJAX Error: " + textStatus + ": " + errorThrown);

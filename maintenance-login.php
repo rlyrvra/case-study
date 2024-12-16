@@ -78,7 +78,7 @@ require_once __DIR__ . '/login-checker.php';
 
       <!-- / Navbar -->
       <div class="content-wrapper">
-        <div class="container-xxl d-flex justify-content-center align-items-center vh-100">
+        <div class="container-xxl d-flex justify-content-center align-items-center content-wrapper">
           <div class="misc-wrapper text-center">
             <h2 class="mb-2">Under Maintenance!</h2>
             <p class="mb-4">Sorry for the inconvenience but we're performing some maintenance at the moment</p>

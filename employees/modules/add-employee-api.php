@@ -24,10 +24,8 @@ try {
         if(!isset($_POST['employeeData'])){
             return;
         }
-        // Retrieve employee data from POST request
         $employeeData = isset($_POST['employeeData']) ? $_POST['employeeData'] : [];
 
-        // Validate and assign each field
         $first_name = isset($employeeData['first_name']) ? validateInput($employeeData['first_name'], 'Personal Information: First Name') : '';
         $middle_name = isset($employeeData['middle_name']) ? $employeeData['middle_name'] : null;
         $last_name = isset($employeeData['last_name']) ? validateInput($employeeData['last_name'], 'Personal Information:  Last Name') : '';
@@ -124,7 +122,6 @@ try {
             deletedAt: null
         );
 
-
         $createResult = $employeeService->createEmployee($newEmployee);
 
         if ($createResult === ActionResult::SUCCESS) {
@@ -135,7 +132,7 @@ try {
         } else if ($createResult === ActionResult::FAILURE){
             echo "
             <script> 
-            failedUpdateTryAgain(); 
+            //failedCreateUpdateTryAgain(); 
             </script>";
         }
         return;

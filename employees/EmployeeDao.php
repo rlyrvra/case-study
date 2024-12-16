@@ -47,7 +47,6 @@ class EmployeeDao
                 access_role                    ,
 
                 payroll_group_id               ,
-                annual_salary                  ,
                 hourly_rate                    ,
 
                 tin_number                     ,
@@ -63,7 +62,7 @@ class EmployeeDao
                 username                       ,
                 password                       ,
 
-                notes                          ,
+                notes                          
             )
             VALUES (
                 :rfid_uid                       ,
@@ -111,9 +110,10 @@ class EmployeeDao
                 :username                       ,
                 :password                       ,
 
-                :notes                          ,
+                :notes                          
             )
         ";
+        
 
         try {
             $this->pdo->beginTransaction();
@@ -178,7 +178,7 @@ class EmployeeDao
 
             error_log("Database Error: An error occurred while creating the employee. " .
                       "Exception: {$exception->getMessage()}");
-
+            echo $exception->getMessage();
             return ActionResult::FAILURE;
         }
     }
@@ -420,7 +420,7 @@ class EmployeeDao
         } catch (PDOException $exception) {
             error_log("Database Error: An error occurred while fetching the employees. " .
                       "Exception: {$exception->getMessage()}");
-
+            echo $exception->getMessage();
             return ActionResult::FAILURE;
         }
     }
@@ -589,7 +589,7 @@ class EmployeeDao
 
             error_log("Database Error: An error occurred while changing the password. " .
                       "Exception: {$exception->getMessage()}");
-
+            
             return ActionResult::FAILURE;
         }
     }

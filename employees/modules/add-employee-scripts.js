@@ -142,6 +142,15 @@ function previewImage(event) {
     }
 }
 
+function failedCreateUpdateTryAgain(){
+    Swal.fire({
+        title: 'Error!',
+        text: 'An error has occured. Please try again.',
+        icon: 'error',
+        confirmButtonText: 'OK'
+    });
+}
+
 
 function failedUpdateTryAgain(token){
     Swal.fire({
@@ -151,7 +160,7 @@ function failedUpdateTryAgain(token){
         confirmButtonText: 'OK'
     }).then((result) => {
         if(result.isConfirmed){
-            window.location.href = SMARTWAGE_LOCATION + "/add-employee?m=v&token=" + token;
+            window.location.href = "add-employee?m=v&token=" + token;
         }
     });
 }
