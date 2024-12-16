@@ -93,30 +93,30 @@
         </a>
         <ul class="menu-sub">
         <li class="menu-item">
-            <a href="pages-misc-error.html" class="menu-link">
+            <a href="maintenance-login" class="menu-link">
             <div data-i18n="Error">My Attendance</div>
             </a>
         </li>
         <li class="menu-item">
-            <a href="pages-misc-under-maintenance.html" class="menu-link">
+            <a href="maintenance-login" class="menu-link">
             <div data-i18n="Under Maintenance">Attendance</div>
             </a>
         </li>
         
         <li class="menu-item">
-            <a href="pages-misc-under-maintenance.html" class="menu-link">
+            <a href="maintenance-login" class="menu-link">
             <div data-i18n="Under Maintenance">Work Schedules</div>
             </a>
         </li>
 
         <li class="menu-item">
-            <a href="pages-misc-under-maintenance.html" class="menu-link">
+            <a href="maintenance-login" class="menu-link">
             <div data-i18n="Under Maintenance">Overtime Rates</div>
             </a>
         </li>
 
         <li class="menu-item">
-            <a href="pages-misc-under-maintenance.html" class="menu-link">
+            <a href="maintenance-login" class="menu-link">
             <div data-i18n="Under Maintenance">Holidays</div>
             </a>
         </li>
@@ -129,7 +129,7 @@
 
     <!-- Leaves -->
     <li class="menu-item" id="leaves-menu">
-        <a href="javascript:void(0)" class="menu-link menu-toggle">
+        <a href="javascript:void(0);" class="menu-link menu-toggle">
         <i class="menu-icon tf-icons bx bx-briefcase-alt-2"></i>
         <div data-i18n="User interface">Leaves</div>
         </a>
@@ -146,18 +146,13 @@
         }
         ?>
         <li class="menu-item" id="apply-leave-menu">
-            <a href="apply-leave.php" class="menu-link">
+            <a href="apply-leave" class="menu-link">
             <div data-i18n="Alerts">Apply Leave</div>
             </a>
         </li>
         <li class="menu-item">
-            <a href="ui-badges.html" class="menu-link">
-            <div data-i18n="Badges">My Leaves</div>
-            </a>
-        </li>
-        <li class="menu-item">
-            <a href="ui-buttons.html" class="menu-link">
-            <div data-i18n="Buttons">Leave Request</div>
+            <a href="maintenance-login" class="menu-link">
+            <div data-i18n="Buttons">Leave Requests</div>
             </a>
         
         </li>
@@ -173,12 +168,12 @@
         </a>
         <ul class="menu-sub">
         <li class="menu-item">
-            <a href="forms-basic-inputs.html" class="menu-link">
+            <a href="maintenance-login" class="menu-link">
             <div data-i18n="Basic Inputs">My Payslips</div>
             </a>
         </li>
         <li class="menu-item">
-            <a href="forms-input-groups.html" class="menu-link">
+            <a href="maintenance-login" class="menu-link">
             <div data-i18n="Input groups">Generate Payslips</div>
             </a>
         </li>
@@ -200,7 +195,7 @@
         }
         ?>
         <li class="menu-item">
-            <a href="forms-input-groups.html" class="menu-link">
+            <a href="maintenance-login" class="menu-link">
             <div data-i18n="Input groups">Deductions</div>
             </a>
         </li>
@@ -216,7 +211,7 @@
         </a>
         <ul class="menu-sub">
         <li class="menu-item">
-            <a href="form-layouts-vertical.html" class="menu-link">
+            <a href="maintenance-login" class="menu-link">
             <div data-i18n="Vertical Form">Company Profile</div>
             </a>
             
