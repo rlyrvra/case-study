@@ -47,10 +47,7 @@ class EmployeeDao
                 access_role                    ,
 
                 payroll_group_id               ,
-<<<<<<< HEAD
-=======
                 annual_salary                  ,
->>>>>>> upstream/main
                 hourly_rate                    ,
 
                 tin_number                     ,
@@ -66,7 +63,7 @@ class EmployeeDao
                 username                       ,
                 password                       ,
 
-                notes                          
+                notes                          ,
             )
             VALUES (
                 :rfid_uid                       ,
@@ -114,11 +111,9 @@ class EmployeeDao
                 :username                       ,
                 :password                       ,
 
-                :notes                          
-            );
+                :notes                          ,
+            )
         ";
-        echo $query;
-        
 
         try {
             $this->pdo->beginTransaction();
@@ -171,11 +166,10 @@ class EmployeeDao
             $statement->bindValue(":password"                       , $employee->getPassword()                    , Helper::getPdoParameterType($employee->getPassword()                    ));
 
             $statement->bindValue(":notes"                          , $employee->getNotes()                       , Helper::getPdoParameterType($employee->getNotes()                       ));
-            
+
             $statement->execute();
 
             $this->pdo->commit();
-            
 
             return ActionResult::SUCCESS;
 
@@ -192,7 +186,7 @@ class EmployeeDao
                     return $matches[1];
                 }
             }
-            echo $exception->getMessage();
+
             return ActionResult::FAILURE;
         }
     }
@@ -416,8 +410,6 @@ class EmployeeDao
                 $statement->bindValue($index + 1, $parameter, Helper::getPdoParameterType($parameter));
             }
 
-            
-
             $statement->execute();
 
             $resultSet = [];
@@ -436,7 +428,7 @@ class EmployeeDao
         } catch (PDOException $exception) {
             error_log("Database Error: An error occurred while fetching the employees. " .
                       "Exception: {$exception->getMessage()}");
-            echo $exception->getMessage();
+
             return ActionResult::FAILURE;
         }
     }
@@ -581,154 +573,6 @@ class EmployeeDao
         }
     }
 
-<<<<<<< HEAD
-    public function updateThruHash(Employee $employee, $hashed_id): ActionResult|string
-=======
-    public function update(Employee $employee, bool $isHashedId): ActionResult|string
->>>>>>> upstream/main
-    {
-        $query = "
-            UPDATE employees
-            SET
-                rfid_uid                        = :rfid_uid                       ,
-
-                first_name                      = :first_name                     ,
-                middle_name                     = :middle_name                    ,
-                last_name                       = :last_name                      ,
-                date_of_birth                   = :date_of_birth                  ,
-                gender                          = :gender                         ,
-                marital_status                  = :marital_status                 ,
-                nationality                     = :nationality                    ,
-                religion                        = :religion                       ,
-                phone_number                    = :phone_number                   ,
-                email_address                   = :email_address                  ,
-                address                         = :address                        ,
-                profile_picture                 = :profile_picture                ,
-
-                emergency_contact_name          = :emergency_contact_name         ,
-                emergency_contact_relationship  = :emergency_contact_relationship ,
-                emergency_contact_phone_number  = :emergency_contact_phone_number ,
-                emergency_contact_email_address = :emergency_contact_email_address,
-                emergency_contact_address       = :emergency_contact_address      ,
-
-                employee_code                   = :employee_code                  ,
-                job_title_id                    = :job_title_id                   ,
-                department_id                   = :department_id                  ,
-                employment_type                 = :employment_type                ,
-                date_of_hire                    = :date_of_hire                   ,
-                supervisor_id                   = :supervisor_id                  ,
-                access_role                     = :access_role                    ,
-
-                payroll_group_id                = :payroll_group_id               ,
-                hourly_rate                     = :hourly_rate                    ,
-
-                tin_number                      = :tin_number                     ,
-                sss_number                      = :sss_number                     ,
-                philhealth_number               = :philhealth_number              ,
-                pagibig_fund_number             = :pagibig_fund_number            ,
-
-                bank_name                       = :bank_name                      ,
-                bank_branch_name                = :bank_branch_name               ,
-                bank_account_number             = :bank_account_number            ,
-                bank_account_type               = :bank_account_type              ,
-
-                username                        = :username                       ,
-                password                        = :password                       ,
-
-                notes                           = :notes
-            WHERE
-                MD5(id) = :employee_id
-        ";
-
-        if ($isHashedId) {
-            $query .= " MD5(id) = :employee_id";
-        } else {
-            $query .= " id = :employee_id";
-        }
-
-        try {
-            $this->pdo->beginTransaction();
-
-            $statement = $this->pdo->prepare($query);
-
-
-            $statement->bindValue(":rfid_uid"                       , $employee->getRfidUid()                     , Helper::getPdoParameterType($employee->getRfidUid()                     ));
-
-            $statement->bindValue(":first_name"                     , $employee->getFirstName()                   , Helper::getPdoParameterType($employee->getFirstName()                   ));
-            $statement->bindValue(":middle_name"                    , $employee->getMiddleName()                  , Helper::getPdoParameterType($employee->getMiddleName()                  ));
-            $statement->bindValue(":last_name"                      , $employee->getLastName()                    , Helper::getPdoParameterType($employee->getLastName()                    ));
-            $statement->bindValue(":date_of_birth"                  , $employee->getDateOfBirth()                 , Helper::getPdoParameterType($employee->getDateOfBirth()                 ));
-            $statement->bindValue(":gender"                         , $employee->getGender()                      , Helper::getPdoParameterType($employee->getGender()                      ));
-            $statement->bindValue(":marital_status"                 , $employee->getMaritalStatus()               , Helper::getPdoParameterType($employee->getMaritalStatus()               ));
-            $statement->bindValue(":nationality"                    , $employee->getNationality()                 , Helper::getPdoParameterType($employee->getNationality()                 ));
-            $statement->bindValue(":religion"                       , $employee->getReligion()                    , Helper::getPdoParameterType($employee->getReligion()                    ));
-            $statement->bindValue(":phone_number"                   , $employee->getPhoneNumber()                 , Helper::getPdoParameterType($employee->getPhoneNumber()                 ));
-            $statement->bindValue(":email_address"                  , $employee->getEmailAddress()                , Helper::getPdoParameterType($employee->getEmailAddress()                ));
-            $statement->bindValue(":address"                        , $employee->getAddress()                     , Helper::getPdoParameterType($employee->getAddress()                     ));
-            $statement->bindValue(":profile_picture"                , $employee->getProfilePicture()              , Helper::getPdoParameterType($employee->getProfilePicture()              ));
-
-            $statement->bindValue(":emergency_contact_name"         , $employee->getEmergencyContactName()        , Helper::getPdoParameterType($employee->getEmergencyContactName()        ));
-            $statement->bindValue(":emergency_contact_relationship" , $employee->getEmergencyContactRelationship(), Helper::getPdoParameterType($employee->getEmergencyContactRelationship()));
-            $statement->bindValue(":emergency_contact_phone_number" , $employee->getEmergencyContactPhoneNumber() , Helper::getPdoParameterType($employee->getEmergencyContactPhoneNumber() ));
-            $statement->bindValue(":emergency_contact_email_address", $employee->getEmergencyContactEmailAddress(), Helper::getPdoParameterType($employee->getEmergencyContactEmailAddress()));
-            $statement->bindValue(":emergency_contact_address"      , $employee->getEmergencyContactAddress()     , Helper::getPdoParameterType($employee->getEmergencyContactAddress()     ));
-
-            $statement->bindValue(":employee_code"                  , $employee->getEmployeeCode()                , Helper::getPdoParameterType($employee->getEmployeeCode()                ));
-            $statement->bindValue(":job_title_id"                   , $employee->getJobTitleId()                  , Helper::getPdoParameterType($employee->getJobTitleId()                  ));
-            $statement->bindValue(":department_id"                  , $employee->getDepartmentId()                , Helper::getPdoParameterType($employee->getDepartmentId()                ));
-            $statement->bindValue(":employment_type"                , $employee->getEmploymentType()              , Helper::getPdoParameterType($employee->getEmploymentType()              ));
-            $statement->bindValue(":date_of_hire"                   , $employee->getDateOfHire()                  , Helper::getPdoParameterType($employee->getDateOfHire()                  ));
-            $statement->bindValue(":supervisor_id"                  , $employee->getSupervisorId()                , Helper::getPdoParameterType($employee->getSupervisorId()                ));
-            $statement->bindValue(":access_role"                    , $employee->getAccessRole()                  , Helper::getPdoParameterType($employee->getAccessRole()                  ));
-
-            $statement->bindValue(":payroll_group_id"               , $employee->getPayrollGroupId()              , Helper::getPdoParameterType($employee->getPayrollGroupId()              ));
-            $statement->bindValue(":hourly_rate"                    , $employee->getHourlyRate()                  , Helper::getPdoParameterType($employee->getHourlyRate()                  ));
-
-            $statement->bindValue(":tin_number"                     , $employee->getTinNumber()                   , Helper::getPdoParameterType($employee->getTinNumber()                   ));
-            $statement->bindValue(":sss_number"                     , $employee->getSssNumber()                   , Helper::getPdoParameterType($employee->getSssNumber()                   ));
-            $statement->bindValue(":philhealth_number"              , $employee->getPhilhealthNumber()            , Helper::getPdoParameterType($employee->getPhilhealthNumber()            ));
-            $statement->bindValue(":pagibig_fund_number"            , $employee->getPagibigFundNumber()           , Helper::getPdoParameterType($employee->getPagibigFundNumber()           ));
-
-            $statement->bindValue(":bank_name"                      , $employee->getBankName()                    , Helper::getPdoParameterType($employee->getBankName()                    ));
-            $statement->bindValue(":bank_branch_name"               , $employee->getBankBranchName()              , Helper::getPdoParameterType($employee->getBankBranchName()              ));
-            $statement->bindValue(":bank_account_number"            , $employee->getBankAccountNumber()           , Helper::getPdoParameterType($employee->getBankAccountNumber()           ));
-            $statement->bindValue(":bank_account_type"              , $employee->getBankAccountType()             , Helper::getPdoParameterType($employee->getBankAccountType()             ));
-
-            $statement->bindValue(":username"                       , $employee->getUsername()                    , Helper::getPdoParameterType($employee->getUsername()                    ));
-            $statement->bindValue(":password"                       , $employee->getPassword()                    , Helper::getPdoParameterType($employee->getPassword()                    ));
-
-            $statement->bindValue(":notes"                          , $employee->getNotes()                       , Helper::getPdoParameterType($employee->getNotes()                       ));
-
-            $statement->bindValue(":employee_id"                    , $hashed_id                                  , Helper::getPdoParameterType($hashed_id                                  ));
-
-            $statement->execute();
-
-            $this->pdo->commit();
-
-            return ActionResult::SUCCESS;
-
-        } catch (PDOException $exception) {
-            $this->pdo->rollBack();
-            
-
-            error_log("Database Error: An error occurred while creating the employee. " .
-                      "Exception: {$exception->getMessage()}");
-            
-
-            
-            if ( (int) $exception->getCode() === ErrorCode::DUPLICATE_ENTRY->value) {
-                $errorMessage = $exception->getMessage();
-
-                if (preg_match("/Duplicate entry '[^']+' for key '([^']+)'/", $errorMessage, $matches)) {
-                    return $matches[1];
-                }
-            }
-            echo $exception->getMessage();
-
-            return ActionResult::FAILURE;
-        }
-    }
-
     public function changePassword(int $employeeId, string $newHashedPassword): ActionResult
     {
         $query = "
@@ -792,39 +636,6 @@ class EmployeeDao
     public function delete(int $employeeId): ActionResult
     {
         return $this->softDelete($employeeId);
-    }
-
-    public function deleteThruHash($hashed_id): ActionResult
-    {
-        $query = "
-            UPDATE employees
-            SET
-                deleted_at = CURRENT_TIMESTAMP
-            WHERE
-                MD5(id) = :employee_id
-        ";
-
-        try {
-            $this->pdo->beginTransaction();
-
-            $statement = $this->pdo->prepare($query);
-
-            $statement->bindValue(":employee_id", $hashed_id, Helper::getPdoParameterType($hashed_id));
-
-            $statement->execute();
-
-            $this->pdo->commit();
-
-            return ActionResult::SUCCESS;
-
-        } catch (PDOException $exception) {
-            $this->pdo->rollBack();
-
-            error_log("Database Error: An error occurred while deleting the employee. " .
-                      "Exception: {$exception->getMessage()}");
-            echo $exception->getMessage();
-            return ActionResult::FAILURE;
-        }
     }
 
     private function softDelete(int $employeeId): ActionResult

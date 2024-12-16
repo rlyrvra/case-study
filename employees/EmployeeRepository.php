@@ -29,19 +29,6 @@ class EmployeeRepository
     public function updateEmployee(Employee $employee, bool $isHashedId): ActionResult
     {
         return $this->employeeDao->update($employee, $isHashedId);
-<<<<<<< HEAD
-    }
-
-    public function updateEmployeeThruHash(Employee $employee, $hashed_id): ActionResult
-    {
-        return $this->employeeDao->updateThruHash($employee, $hashed_id);
-    }
-
-    public function deleteEmployeeThruHash($hashed_id): ActionResult
-    {
-        return $this->employeeDao->deleteThruHash($hashed_id);
-=======
->>>>>>> upstream/main
     }
 
     public function getEmployeeIdBy(string $column, string $value): ActionResult|int

@@ -15,51 +15,20 @@ class LeaveEntitlementDao
 
     public function create(LeaveEntitlement $leaveEntitlement): ActionResult
     {
-<<<<<<< HEAD
-        // Update the record if it exists and deleted_at IS NULL
-        $updateQuery = '
-            UPDATE leave_entitlements
-            SET 
-                number_of_entitled_days = :number_of_entitled_days,
-                number_of_days_taken = :number_of_days_taken,
-                remaining_days = :remaining_days,
-                updated_at = CURRENT_TIMESTAMP
-            WHERE 
-                employee_id = :employee_id
-                AND leave_type_id = :leave_type_id
-                AND deleted_at IS NULL;
-        ';
-
-        // Insert a new record if no matching record exists
-        $insertQuery = '
-=======
         $insertQuery = "
->>>>>>> upstream/main
             INSERT INTO leave_entitlements (
-                employee_id,
-                leave_type_id,
+                employee_id            ,
+                leave_type_id          ,
                 number_of_entitled_days,
-                number_of_days_taken,
+                number_of_days_taken   ,
                 remaining_days
-            )
-<<<<<<< HEAD
-            SELECT 
-                :employee_id,
-                :leave_type_id,
+            ) VALUES (
+                :employee_id            ,
+                :leave_type_id          ,
                 :number_of_entitled_days,
-                :number_of_days_taken,
+                :number_of_days_taken   ,
                 :remaining_days
-            FROM DUAL
-            WHERE NOT EXISTS (
-                SELECT 1
-                FROM leave_entitlements
-                WHERE 
-                    employee_id = :employee_id
-                    AND leave_type_id = :leave_type_id
-                    AND deleted_at IS NULL
-            );
-        ';
-=======
+            )
         ";
 
         $updateQuery = "
@@ -75,24 +44,10 @@ class LeaveEntitlementDao
             AND
                 deleted_at IS NULL
         ";
->>>>>>> upstream/main
 
         try {
-            // Begin a transaction
             $this->pdo->beginTransaction();
 
-<<<<<<< HEAD
-            $updateStmt = $this->pdo->prepare($updateQuery);
-            $updateStmt->bindValue(':employee_id', $leaveEntitlement->getEmployeeId(), Helper::getPdoParameterType($leaveEntitlement->getEmployeeId()));
-            $updateStmt->bindValue(':leave_type_id', $leaveEntitlement->getLeaveTypeId(), Helper::getPdoParameterType($leaveEntitlement->getLeaveTypeId()));
-            $updateStmt->bindValue(':number_of_entitled_days', $leaveEntitlement->getNumberOfEntitledDays(), Helper::getPdoParameterType($leaveEntitlement->getNumberOfEntitledDays()));
-            $updateStmt->bindValue(':number_of_days_taken', $leaveEntitlement->getNumberOfDaysTaken(), Helper::getPdoParameterType($leaveEntitlement->getNumberOfDaysTaken()));
-            $updateStmt->bindValue(':remaining_days', $leaveEntitlement->getRemainingDays(), Helper::getPdoParameterType($leaveEntitlement->getRemainingDays()));
-
-            $updateStmt->execute();
-            $updateStmt->closeCursor(); // Close the cursor explicitly to free the connection
-
-=======
             $updateStatement = $this->pdo->prepare($updateQuery);
 
             $updateStatement->bindValue(':number_of_entitled_days', $leaveEntitlement->getNumberOfEntitledDays(), Helper::getPdoParameterType($leaveEntitlement->getNumberOfEntitledDays()));
@@ -114,35 +69,17 @@ class LeaveEntitlementDao
 
                 $insertStatement->execute();
             }
->>>>>>> upstream/main
 
-            $insertStmt = $this->pdo->prepare($insertQuery);
-            $insertStmt->bindValue(':employee_id', $leaveEntitlement->getEmployeeId(), Helper::getPdoParameterType($leaveEntitlement->getEmployeeId()));
-            $insertStmt->bindValue(':leave_type_id', $leaveEntitlement->getLeaveTypeId(), Helper::getPdoParameterType($leaveEntitlement->getLeaveTypeId()));
-            $insertStmt->bindValue(':number_of_entitled_days', $leaveEntitlement->getNumberOfEntitledDays(), Helper::getPdoParameterType($leaveEntitlement->getNumberOfEntitledDays()));
-            $insertStmt->bindValue(':number_of_days_taken', $leaveEntitlement->getNumberOfDaysTaken(), Helper::getPdoParameterType($leaveEntitlement->getNumberOfDaysTaken()));
-            $insertStmt->bindValue(':remaining_days', $leaveEntitlement->getRemainingDays(), Helper::getPdoParameterType($leaveEntitlement->getRemainingDays()));
-
-            $insertStmt->execute();
-
-            // Commit the transaction
             $this->pdo->commit();
 
             return ActionResult::SUCCESS;
 
         } catch (PDOException $exception) {
-            // Rollback the transaction on error
             $this->pdo->rollBack();
 
-<<<<<<< HEAD
-            error_log('Database Error: An error occurred while creating or updating the leave entitlement. ' .
-                    'Exception: ' . $exception->getMessage());
-            echo $exception->getMessage();
-=======
             error_log("Database Error: An error occurred while creating or updating the leave entitlement. " .
                       "Exception: {$exception->getMessage()}");
 
->>>>>>> upstream/main
             return ActionResult::FAILURE;
         }
     }
@@ -284,7 +221,7 @@ class LeaveEntitlementDao
             {$limitClause}
             {$offsetClause}
         ";
-        //echo "<pre> $query </pre>";
+
         try {
             $statement = $this->pdo->prepare($query);
 
@@ -310,7 +247,7 @@ class LeaveEntitlementDao
         } catch (PDOException $exception) {
             error_log("Database Error: An error occurred while fetching leave entitlements. " .
                       "Exception: {$exception->getMessage()}");
-            echo $exception->getMessage();
+
             return ActionResult::FAILURE;
         }
     }
