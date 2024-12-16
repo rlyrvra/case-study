@@ -23,9 +23,9 @@ try {
     if($action == 'fetchAll'){
         $employeeId = $_SESSION['id'];
         // $status = $_POST['filter_status'];
-        // $page = isset($_POST['page']) ? (int)$_POST['page'] : 1;
-        // $limit = isset($_POST['numberEntries']) ? $_POST['numberEntries'] : 5;
-        // $offset = ($page - 1) * $limit;
+        $page = isset($_POST['page']) ? (int) $_POST['page'] : 1;
+        $limit = isset($_POST['numberEntries']) ? (int) $_POST['numberEntries'] : 5;
+        $offset = ($page - 1) * $limit;
 
         $filterCriteria = [];
 
@@ -42,7 +42,7 @@ try {
         $employeeLeaveRequests = $result['result_set'];
 
         $totalEmployeeLeaves = $result["total_row_count"];
-        //$totalPages = ceil($totalEmployeeLeaves / $_POST['numberEntries']);
+        $totalPages = ceil($totalEmployeeLeaves / $limit);
         include __DIR__ . '/apply-leave-employee-table.php';
         return;
     }   

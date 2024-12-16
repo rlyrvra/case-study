@@ -25,6 +25,7 @@ function createLeaveRequest(){
             $('#response-test').html(response);
             document.getElementById('apply_leave_form').reset();
             document.getElementById('leaveType').value = "";
+            fetchLeaveRequests();
         },
         error(xhr, status, error) {
             console.error("Error creating leave types:", error);

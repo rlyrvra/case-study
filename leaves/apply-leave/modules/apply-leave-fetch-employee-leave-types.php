@@ -57,14 +57,18 @@ function populateEmployeeLeaveTypesSelect(select){
     select.add(optionNone);
     employeeLeaves.forEach(employeeLeave => {
         const option = document.createElement("option");
-        option.value = employeeLeave.id;
+        option.value = employeeLeave.leave_type_id;
+        option.setAttribute("data-token", employeeLeave.id);
         option.text = employeeLeave.leave_type_name;
         select.add(option);
     });
 }
 
 function selectEmployeeLeaves(){
-    const selectedToken = parseInt(document.getElementById("leaveType").value, 10);
+    let selectElement = document.getElementById("leaveType");
+    let selectedOption = selectElement.options[selectElement.selectedIndex];
+    let dataToken = selectedOption.getAttribute('data-token')
+    const selectedToken = parseInt(dataToken, 10);
     const matchingLeave = employeeLeaves.find(employeeLeave => selectedToken === employeeLeave.id);
     if(!matchingLeave){
         console.log("WARNING! No Selected Leave");

@@ -241,6 +241,7 @@ class LeaveRequestDao
                 {$limitClause}
                 {$offsetClause}
         ";
+        
         try {
             $statement = $this->pdo->prepare($query);
 
