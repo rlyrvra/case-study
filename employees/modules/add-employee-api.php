@@ -212,7 +212,7 @@ try {
             ], [], 1
         );
         $updatedEmployee = new Employee(
-            id: null,
+            id: $hashed_id,
             rfidUid: $rfid,
             firstName: $first_name,
             middleName: $middle_name,
@@ -262,12 +262,12 @@ try {
         if ($updateResult === ActionResult::SUCCESS) {
             echo "
             <script> 
-            showSuccessUpdate('$hashed_id'); 
+                showSuccessUpdate('$hashed_id'); 
             </script>";
         } else if ($updateResult === ActionResult::FAILURE){
             echo "
             <script> 
-            failedUpdateTryAgain('$hashed_id'); 
+                failedUpdateTryAgain('$hashed_id'); 
             </script>";
         }
         return;

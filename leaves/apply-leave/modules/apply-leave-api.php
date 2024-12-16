@@ -37,7 +37,7 @@ try {
 
         $leaveRequestRepo = new LeaveRequestRepository($leaveRequestDao);
         $leaveRequestService = new LeaveRequestService($leaveRequestRepo);
-        $result = $leaveRequestService->getAllLeaveRequests([], $filterCriteria);
+        $result = $leaveRequestService->fetchAllLeaveRequests([], $filterCriteria);
         $employeeLeaveRequests;
         $employeeLeaveRequests = $result['result_set'];
 
