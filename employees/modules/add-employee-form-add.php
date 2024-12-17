@@ -75,8 +75,8 @@
         <input type="text" class="form-control" id="username" placeholder="Enter your username" required>
         </div>
         <div class="mb-3">
-        <label for="password" class="form-label">Password*:</label>
-        <input type="password" class="form-control" id="password" placeholder="Enter your password" required>
+            <label for="password" class="form-label">Password*:</label>
+            <input type="password" class="form-control" id="password" placeholder="Enter your password" required>
         </div>
         <div class="row mb-3">
         <div class="col-md-12 justify-content-end d-flex">

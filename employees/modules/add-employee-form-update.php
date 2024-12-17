@@ -118,12 +118,12 @@ if($resultSet["total_row_count"] <= 0){
     <h3 class="form-title">Login Credentials: (2/6)</h3>
     <form onsubmit="event.preventDefault()" id="login_credentials">
         <div class="mb-3">
-        <label for="username" class="form-label">Username*:</label>
-        <input type="text" class="form-control" id="username" placeholder="Enter your username" value='<?php echo $employees[0]['username'];?>'>
+            <label for="username" class="form-label">Username*:</label>
+            <input type="text" class="form-control" id="username" placeholder="Enter your username" value='<?php echo $employees[0]['username'];?>'>
         </div>
         <div class="mb-3">
-        <label for="password" class="form-label">Password*:</label>
-        <input type="password" class="form-control" id="password" placeholder="Enter your password" value='<?php echo $employees[0]['password'];?>'>
+            <label for="password" class="form-label">Password*:</label>
+            <input type="password" class="form-control" id="password" placeholder="Enter your password" value='<?php echo $employees[0]['password'];?>'>
         </div>
     </form>
     </div>

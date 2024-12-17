@@ -121,10 +121,6 @@ if($resultSet["total_row_count"] <= 0){
         <label for="username" class="form-label">Username*:</label>
         <input type="text" class="form-control" id="username" placeholder="Enter your username" value='<?php echo $employees[0]['username'];?>' readonly>
         </div>
-        <div class="mb-3">
-        <label for="password" class="form-label">Password*:</label>
-        <input type="password" class="form-control" id="password" placeholder="Enter your password" value='<?php echo $employees[0]['password'];?>' readonly>
-        </div>
     </form>
     </div>
 </div>

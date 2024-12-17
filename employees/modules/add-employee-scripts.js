@@ -86,7 +86,7 @@ function calculatePayroll(hourlyRate) {
     const weekly = hourlyRate * hoursPerDay * daysPerWeek;
     
     // Monthly (anually / 12)
-    const monthly = anually / 12;
+    const monthly = annually / 12;
     
     // Daily
     const daily = hourlyRate * hoursPerDay;
