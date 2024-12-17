@@ -264,7 +264,7 @@ try {
         } else if ($updateResult === ActionResult::FAILURE){
             echo "
             <script> 
-                //failedUpdateTryAgain('$hashed_id'); 
+                failedUpdateTryAgain('$hashed_id'); 
             </script>";
         }
         return;

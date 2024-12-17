@@ -231,7 +231,7 @@ if($resultSet["total_row_count"] <= 0){
         </div>
         <div class="col-md-6">
             <label for="supervisor" class="form-label">Supervisor</label>
-            <select class="form-select selectize_supervisors" id="supervisor" disabled>
+            <select class="form-select selectize_supervisors" id="supervisor">
                 <option value="<?php
                 if(isset($employees[0]['supervisor_id'])){
                     echo $employees[0]['supervisor_id']; 
