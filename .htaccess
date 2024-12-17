@@ -1,43 +1,21 @@
-# Set HOSTED 
-SetEnv HOSTED true
-
-# Enable Rewrite Engine
 RewriteEngine On
 RewriteCond %{HTTPS} !=on
 RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
-# Check if HOSTED is true → Use /smartWage
-RewriteCond %{ENV:HOSTED} =true
-RewriteRule ^ - [E=BASE_DIR:smartWage]
+# Set the base URL to the subdirectory
+RewriteBase /smartWage/
 
-# Default to /case-study
-RewriteCond %{ENV:HOSTED} !=true
-RewriteRule ^ - [E=BASE_DIR:case-study]
+# Exclude /smartWage from global rules
+RewriteRule ^smartWage/ - [L]
 
-# Rules for hosted=true (smartWage)
-RewriteCond %{ENV:HOSTED} =true
-RewriteCond %{REQUEST_URI} !^/smartWage/
-RewriteRule ^(.*)$ /smartWage/$1 [L]
-
-# Rules for hosted=false (case-study)
-RewriteCond %{ENV:HOSTED} !=true
-RewriteCond %{REQUEST_URI} !^/case-study/
-RewriteRule ^(.*)$ /case-study/$1 [L]
-
-# Remove .php extension
+# Rule to remove .php extension
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME}\.php -f
 RewriteRule ^(.*)$ $1.php [L,QSA]
 
-# Redirect .php to extension-less URLs (smartWage)
-RewriteCond %{ENV:HOSTED} =true
+# Redirect .php to extension-less URLs
 RewriteCond %{THE_REQUEST} \s/smartWage/(.*)\.php [NC]
-RewriteRule ^(.*)\.php$ /%1/$2 [L,R=301]
-
-# Redirect .php to extension-less URLs (case-study)
-RewriteCond %{ENV:HOSTED} !=true
-RewriteCond %{THE_REQUEST} \s/case-study/(.*)\.php [NC]
-RewriteRule ^(.*)\.php$ /%1/$2 [L,R=301]
+RewriteRule ^(.*)\.php$ /smartWage/$1 [L,R=301]
 
 # Forbidden 403
 
