@@ -125,6 +125,7 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
 
           <div class="container-fluid card pt-3 pb-3 mt-5 mb-5">
               <?php require_once __DIR__ . '/leaves/modules/leave-types-sorter.php' ?>
+              <div class="visually-hidden spinner-border spinner-border-lg text-primary text-center w-px-25 h-px-25" role="status" id="loadingSpinner"></div>
           </div>
 
           <hr/>
@@ -134,7 +135,9 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
               <h5>List of Leave Types</h5>
             </div>
             <div class="card-body">
-              <div id="leave-types-table" class="table-responsive text-no-wrap"></div>
+              <div id="leave-types-table" class="table-responsive text-no-wrap">
+                <div class="spinner-border spinner-border-lg text-primary text-center w-px-700 h-px-700" role="status"></div>
+              </div>
             </div>
           </div>
 

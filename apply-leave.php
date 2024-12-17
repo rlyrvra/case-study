@@ -134,7 +134,7 @@ if(isset($_GET['s']) && $_GET['s'] == true){
                   <div class="table-section">
                       <h5>My Leaves</h5>
                       <div class="table-responsive" id="apply_leaves_table">
-                        <?php require_once __DIR__ . '/leaves/apply-leave/modules/apply-leave-employee-table.php' ?>
+                        <div class="spinner-border spinner-border-lg text-primary text-center w-px-700 h-px-700" role="status"></div>
                       </div>
                   </div>
               </div>

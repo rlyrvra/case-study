@@ -15,6 +15,8 @@ function fetchAllLeaveTypes(page = 1){
     }
     var search = $("#searchText").val();
 
+    var loadingSpinner = document.getElementById("loadingSpinner");
+    loadingSpinner.classList.remove("visually-hidden");
     
     // console.log(`
     //     Number of Entries: ${numberEntries}, 
@@ -46,6 +48,7 @@ function fetchAllLeaveTypes(page = 1){
             filter_endDate: endDate
         },
         success: function(response) {
+            loadingSpinner.classList.add("visually-hidden");
             $('#leave-types-table').html(response);
         },
         error: function(jqXHR, textStatus, errorThrown) {

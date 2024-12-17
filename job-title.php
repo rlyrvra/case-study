@@ -105,6 +105,7 @@ if($_SESSION['access_role'] !== 'Admin'){
 
             <div class="container-fluid card pt-3 pb-3 mt-5 mb-5">
               <?php require_once __DIR__ . '/job-titles/modules/job-titles-sorter.php' ?>
+              <div class="visually-hidden spinner-border spinner-border-lg text-primary text-center w-px-25 h-px-25" role="status" id="loadingSpinner"></div>
             </div>
 
             <!-- <div class="divider text-start">
@@ -119,7 +120,9 @@ if($_SESSION['access_role'] !== 'Admin'){
                 <h5>List of Job Titles
               </div>
               <div class="card-body">
-                <div id="job-titles-table" class="table-responsive text-no-wrap"></div>
+                <div id="job-titles-table" class="table-responsive text-no-wrap">
+                  <div class="spinner-border spinner-border-lg text-primary text-center w-px-700 h-px-700" role="status"></div>
+                </div>
               </div>
             </div>
 

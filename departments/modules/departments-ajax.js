@@ -16,18 +16,20 @@ function fetchAllDepartments(page = 1) {
     var search = $("#searchText").val();
 
     
-    console.log(`
-        Number of Entries: ${numberEntries}, 
-        Sort By Column: ${sortByColumn}, 
-        Page Number: ${pageNumber}, 
-        Sort Order By: ${sortOrderBy}, 
-        Filter Status: ${filterStatus}, 
-        Search At Column: ${searchColumn}, 
-        Date Column: ${dateColumn}, 
-        Start Date: ${startDate}, 
-        End Date: ${endDate}, 
-        Search Text: ${search}`);
+    // console.log(`
+    //     Number of Entries: ${numberEntries}, 
+    //     Sort By Column: ${sortByColumn}, 
+    //     Page Number: ${pageNumber}, 
+    //     Sort Order By: ${sortOrderBy}, 
+    //     Filter Status: ${filterStatus}, 
+    //     Search At Column: ${searchColumn}, 
+    //     Date Column: ${dateColumn}, 
+    //     Start Date: ${startDate}, 
+    //     End Date: ${endDate}, 
+    //     Search Text: ${search}`);
 
+    var loadingSpinner = document.getElementById("loadingSpinner");
+    loadingSpinner.classList.remove("visually-hidden");
         
     $.ajax({
         url: 'departments/modules/departments-api',
@@ -46,6 +48,7 @@ function fetchAllDepartments(page = 1) {
             filter_endDate: endDate
         },
         success: function(response) {
+            loadingSpinner.classList.add("visually-hidden");
             $('#departments-table').html(response);
         },
         error: function(jqXHR, textStatus, errorThrown) {
