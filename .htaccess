@@ -2,11 +2,24 @@ RewriteEngine On
 RewriteCond %{HTTPS} !=on
 RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
-# Set the base URL to the subdirectory
-RewriteBase /case-study/
+# Set Env
+SetEnv HOSTED true
 
-# Exclude /smartWage from global rules
-RewriteRule ^case-study/ - [L]
+# Enable Rewrite Engine
+RewriteEngine On
+
+# Dynamically set BASE_DIR variable
+RewriteCond %{ENV:HOSTED} =true
+RewriteRule ^ - [E=BASE_DIR:smartWage]
+
+RewriteCond %{ENV:HOSTED} !=true
+RewriteRule ^ - [E=BASE_DIR:case-study]
+
+# Use BASE_DIR as the base URL for RewriteBase
+RewriteBase /%{ENV:BASE_DIR}/
+
+# Exclude /smartWage or /case-study from global rules
+RewriteRule ^%{ENV:BASE_DIR}/ - [L]
 
 # Rule to remove .php extension
 RewriteCond %{REQUEST_FILENAME} !-d
@@ -14,8 +27,8 @@ RewriteCond %{REQUEST_FILENAME}\.php -f
 RewriteRule ^(.*)$ $1.php [L,QSA]
 
 # Redirect .php to extension-less URLs
-RewriteCond %{THE_REQUEST} \s/case-study/(.*)\.php [NC]
-RewriteRule ^(.*)\.php$ /case-study/$1 [L,R=301]
+RewriteCond %{THE_REQUEST} \s/%{ENV:BASE_DIR}/(.*)\.php [NC]
+RewriteRule ^(.*)\.php$ /%{ENV:BASE_DIR}/$1 [L,R=301]
 
 # Forbidden 403
 
