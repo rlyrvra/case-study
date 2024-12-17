@@ -84,7 +84,7 @@
                         <div class="dropdown-divider"></div>
                     </li>
                     <li>
-                        <a class="dropdown-item" href="add-employee?m=v&token=<?php echo htmlspecialchars(hash('sha256', ($_SESSION['id']))); ?>">
+                        <a class="dropdown-item" href="#" onclick="window.location.href='add-employee?m=v&token=<?php echo htmlspecialchars(hash('sha256', ($_SESSION['id']))); ?>'">
                             <i class="bx bx-user me-2"></i>
                             <span class="align-middle">My Profile</span>
                         </a>
