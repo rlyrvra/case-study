@@ -169,6 +169,56 @@ $(document).ready(function() {
     });
 });
 
+$(document).ready(function() {
+    // Maximum file size in bytes (2 MB = 2 * 1024 * 1024 = 2097152 bytes)
+    const MAX_FILE_SIZE = 2 * 1024 * 1024;  // 2 MB
+    const fileInput = document.getElementById('profilePicture');
+    fileInput.addEventListener('change', function(event) {
+        
+
+        // Check if a file is selected
+        if (fileInput.files.length === 0) {
+            return;
+        }
+
+        const file = fileInput.files[0];
+        const VALID_EXTENSIONS = ['.jpg', '.jpeg'];  // Allowed file extensions
+
+        // Check the file extension
+        const fileExtension = file.name.toLowerCase().split('.').pop();
+        if (!VALID_EXTENSIONS.includes(`.${fileExtension}`)) {
+            showInvalidProfilePicture();
+            fileInput.value = '';  // Reset file input field
+        }
+
+        // Check the file size
+        if (file.size > MAX_FILE_SIZE) {
+            showProfilePictureSizeExceed();
+            fileInput.value = '';
+        }
+    });
+});
+
+
+function showInvalidProfilePicture(){
+    Swal.fire({
+        title: 'Error!',
+        text: 'This is not a supported profile picture.',
+        icon: 'error',
+        confirmButtonText: 'OK'
+    });
+}
+
+function showProfilePictureSizeExceed(){
+    Swal.fire({
+        title: 'Warning!',
+        text: 'Profile Picture size exceeds the maximum limit of 2 MB.',
+        icon: 'warning',
+        confirmButtonText: 'OK'
+    });
+}
+
+
 function failedCreateUpdateTryAgain(){
     Swal.fire({
         title: 'Error!',
@@ -177,6 +227,7 @@ function failedCreateUpdateTryAgain(){
         confirmButtonText: 'OK'
     });
 }
+
 
 
 function failedUpdateTryAgain(token){

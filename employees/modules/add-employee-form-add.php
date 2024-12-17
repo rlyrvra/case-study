@@ -54,7 +54,7 @@
         </div>
         <div class="row mb-3">
         <div class="col-md-12">
-            <label for="profilePicture" class="form-label">Profile Picture</label>
+            <label for="profilePicture" class="form-label">Profile Picture (MAX: 2MB)</label>
             <input type="file" class="form-control" id="profilePicture" accept=".jpg" onchange="previewImage(event)">
         </div>
         </div>
