@@ -327,22 +327,22 @@
         <div class="row mb-3">
             <div class="col-md-6">
             <label for="tinNumber" class="form-label">TIN Number*:</label>
-            <input type="number" id="tinNumber" class="form-control" placeholder="Enter TIN Number" required>
+            <input type="number" id="tinNumber" class="form-control no-spinners" placeholder="Enter TIN Number" required>
             </div>
             <div class="col-md-6">
             <label for="SSSNumber" class="form-label">SSS Number*:</label>
-            <input type="number" id="SSSNumber" class="form-control" placeholder="Enter SSS Number" required>
+            <input type="number" id="SSSNumber" class="form-control no-spinners" placeholder="Enter SSS Number" required>
             </div>
             
         </div>
         <div class="row mb-3">
             <div class="col-md-6">
             <label for="PhilHealthNumber" class="form-label">PhilHealth Number*:</label>
-            <input type="number" id="PhilHealthNumber" class="form-control" placeholder="Enter PhilHealth Number" required>
+            <input type="number" id="PhilHealthNumber" class="form-control no-spinners" placeholder="Enter PhilHealth Number" required>
             </div>
             <div class="col-md-6">
             <label for="PagIBIGNumber" class="form-label">Pag-IBIG Number*:</label>
-            <input type="number" id="PagIBIGNumber" class="form-control" placeholder="Enter Pag-IBIG Number" required>
+            <input type="number" id="PagIBIGNumber" class="form-control no-spinners" placeholder="Enter Pag-IBIG Number" required>
             </div>
         </div>
         <div class="row mb-3">
@@ -352,4 +352,11 @@
         </div>
         </form>
     </div>
+    <style>
+        .no-spinners::-webkit-outer-spin-button,
+        .no-spinners::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+        }
+    </style>
 </div>
