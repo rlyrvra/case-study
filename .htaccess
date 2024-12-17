@@ -2,32 +2,32 @@ RewriteEngine On
 RewriteCond %{HTTPS} !=on
 RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
-# Set the base URL to the subdirectory
-RewriteBase /case-study/
+# # Set the base URL to the subdirectory
+# RewriteBase /case-study/
 
-# Exclude /smartWage from global rules
-RewriteRule ^case-study/ - [L]
+# # Exclude /smartWage from global rules
+# RewriteRule ^case-study/ - [L]
 
-# Rule to remove .php extension
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_FILENAME}\.php -f
-RewriteRule ^(.*)$ $1.php [L,QSA]
-
-# Redirect .php to extension-less URLs
-RewriteCond %{THE_REQUEST} \s/case-study/(.*)\.php [NC]
-RewriteRule ^(.*)\.php$ /case-study/$1 [L,R=301]
-
-
-# RewriteBase /smartWage/
-
-# RewriteRule ^smartWage/ - [L]
-
+# # Rule to remove .php extension
 # RewriteCond %{REQUEST_FILENAME} !-d
 # RewriteCond %{REQUEST_FILENAME}\.php -f
 # RewriteRule ^(.*)$ $1.php [L,QSA]
 
-# RewriteCond %{THE_REQUEST} \s/smartWage/(.*)\.php [NC]
-# RewriteRule ^(.*)\.php$ /smartWage/$1 [L,R=301]
+# # Redirect .php to extension-less URLs
+# RewriteCond %{THE_REQUEST} \s/case-study/(.*)\.php [NC]
+# RewriteRule ^(.*)\.php$ /case-study/$1 [L,R=301]
+
+
+RewriteBase /smartWage/
+
+RewriteRule ^smartWage/ - [L]
+
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}\.php -f
+RewriteRule ^(.*)$ $1.php [L,QSA]
+
+RewriteCond %{THE_REQUEST} \s/smartWage/(.*)\.php [NC]
+RewriteRule ^(.*)\.php$ /smartWage/$1 [L,R=301]
 
 
 # Forbidden 403
