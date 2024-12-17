@@ -25,7 +25,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="create_department_head" class="form-label">Department Head</label>
-                        <select class="form-select" id="create_department_head" name="create_department_head" placeholder="Enter Department" require></select>
+                        <select class="form-select" id="create_department_head" name="create_department_head" placeholder="Enter Department"></select>
                     </div>
                     <div class="mb-3">
                         <label for="create_department_description" class="form-label">Department Description</label>

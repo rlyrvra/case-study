@@ -30,7 +30,7 @@
     </div>  
     <div class="dropdown filter col-auto flex-fill mx-2">
         <div class="input-group">
-        <span class="input-group-text"><i class="bx bx-filter fs-4 lh-0"></i></span>
+            <span class="input-group-text"><i class="bx bx-filter fs-4 lh-0"></i></span>
             <select class="form-select selectize-department-sorter" id="selectize_department_sorter" name="selectize-department-sorter" placeholder="Filter Department" onchange="fetchAllEmployees();">
                 
             </select>

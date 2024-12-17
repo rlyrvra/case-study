@@ -45,8 +45,9 @@ function getSupervisors(){
 function populateSupervisorsSelect(select){
     clearSupervisors(select);
     const optionNone = document.createElement("option");
-    optionNone.value = "None";
-    optionNone.text = "None";
+    optionNone.value = "";
+    optionNone.text = "Select a supervisor...";
+    optionNone.selected = true;
     select.add(optionNone);
     supervisors.forEach(supervisor => {
         const option = document.createElement("option");

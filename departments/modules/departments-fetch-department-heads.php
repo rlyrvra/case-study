@@ -45,8 +45,10 @@ function getDepartmentHeads(){
 function populateDepartmentHeadsSelect(select){
     clearDepartmentHeads(select);
     const optionNone = document.createElement("option");
-    optionNone.value = "None";
-    optionNone.text = "None";
+    optionNone.value = "";
+    optionNone.text = "Select a department head";
+    optionNone.disabled = true;
+    optionNone.selected = true;
     select.add(optionNone);
     departmentHeads.forEach(departmentHead => {
         const option = document.createElement("option");

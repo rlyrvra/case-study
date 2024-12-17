@@ -31,9 +31,9 @@
             Actions
         </button>
         <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="add-employee?m=v&token=<?php echo htmlspecialchars(hash('sha256', $row['id']));?>"><i class="bx bx-user"></i>View</a></li>
-            <li><a class="dropdown-item" href="add-employee?m=u&token=<?php echo htmlspecialchars(hash('sha256', $row['id']));?>"><i class="bx bx-edit-alt"></i>Edit</a></li>
-            <li><a class="dropdown-item" href="#" onclick="confirmDeleteEmployee(this)" data-id="<?php echo htmlspecialchars($row['id']); ?>"><i class="bx bx-trash"></i>Delete</a></li>
+            <li><a class="dropdown-item" href="add-employee?m=v&token=<?php echo htmlspecialchars(hash('sha256', $row['id']));?>"><i class="bx bx-user"></i> View</a></li>
+            <li><a class="dropdown-item" href="add-employee?m=u&token=<?php echo htmlspecialchars(hash('sha256', $row['id']));?>"><i class="bx bx-edit-alt"></i> Edit</a></li>
+            <li><a class="dropdown-item" href="#" onclick="confirmDeleteEmployee(this)" data-id="<?php echo htmlspecialchars($row['id']); ?>"><i class="bx bx-trash"></i> Delete</a></li>
         </ul>
         </div>
         <hr class="mt-4 mb-4">

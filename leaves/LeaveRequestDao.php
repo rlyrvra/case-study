@@ -76,6 +76,7 @@ class LeaveRequestDao
             "employee_full_name"       => "employee.full_name          AS employee_full_name"      ,
             "employee_department_id"   => "employee.department_id      AS employee_department_id"  ,
             "employee_department_name" => "department.name             AS employee_department_name",
+            "employee_profile_picture" => "employee.profile_picture    AS employee_profile_picture",
             "employee_job_title_id"    => "employee.job_title_id       AS employee_job_title_id"   ,
             "employee_job_title"       => "job_title.title             AS employee_job_title"      ,
             "employee_supervisor_id"   => "employee.supervisor_id      AS employee_supervisor_id"  ,

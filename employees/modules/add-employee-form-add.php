@@ -197,23 +197,17 @@
         </div>
         </div>
         <div class="row mb-3">
-        <label class="form-label">Role*</label>
-        <div class="form-check">
-            <input class="form-check-input" type="radio" name="role" id="role-staff" value="Staff" checked>
-            <label class="form-check-label" for="role-staff">Staff</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="radio" name="role" id="role-supervisor" value="Supervisor">
-            <label class="form-check-label" for="role-supervisor">Supervisor</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="radio" name="role" id="role-manager" value="Manager">
-            <label class="form-check-label" for="role-manager">Manager</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="radio" name="role" id="role-admin" value="Admin">
-            <label class="form-check-label" for="role-admin">Admin</label>
-        </div>
+            <div class="btn-group">
+                <label class="display-5 pe-4">Role*:</label>
+                <input class="btn-check" type="radio" name="role" id="role-staff" value="Staff">
+                <label class="btn btn-outline-primary" for="role-staff">Staff</label>
+                <input class="btn-check" type="radio" name="role" id="role-supervisor" value="Supervisor">
+                <label class="btn btn-outline-primary" for="role-supervisor">Supervisor</label>
+                <input class="btn-check" type="radio" name="role" id="role-manager" value="Manager">
+                <label class="btn btn-outline-primary" for="role-manager">Manager</label>
+                <input class="btn-check" type="radio" name="role" id="role-admin" value="Admin">
+                <label class="btn btn-outline-primary" for="role-admin">Admin</label>
+            </div>
         </div>
         <div class="row mb-3">
             <div class="col-md-12 justify-content-end d-flex">

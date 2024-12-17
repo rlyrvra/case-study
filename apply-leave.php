@@ -34,7 +34,7 @@ if(isset($_GET['s']) && $_GET['s'] == true){
 />
 
 <!-- Ajax -->
-<script src="leaves/apply-leave/modules/apply-leave-ajax.js?v1.1"></script>
+<script src="leaves/apply-leave/modules/apply-leave-ajax.js?v1.2"></script>
 <!-- Scripts -->
 <script src="leaves/apply-leave/modules/apply-leave-scripts.js?v1.3"></script>
 

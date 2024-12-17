@@ -40,6 +40,12 @@ function getJobTitlesValues(){
 
 function populateJobTitleSelect(select){
     clearJobTitleSelect(select);
+    const optionNone = document.createElement("option");
+    optionNone.value = "";
+    optionNone.text = "Select a job title";
+    optionNone.disabled = true;
+    optionNone.selected = true;
+    select.add(optionNone);
     jobTitles.forEach(jobTitle => {
         const option = document.createElement("option");
         option.value = jobTitle.id;

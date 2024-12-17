@@ -1,7 +1,7 @@
 function fetchAllLeaveRequests(page = 1){
     var pageNumber = getPage(page);
     $.ajax({
-        url: 'leaves/apply-leave/modules/apply-leave-api',
+        url: 'leaves/leave-approvals/modules/leave-requests-api',
         type: 'POST',
         data: {
             action: 'fetchAll'

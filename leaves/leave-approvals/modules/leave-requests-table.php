@@ -1,7 +1,9 @@
 <table id="leavesTable" class="table table-bordered table-hover table-striped">
     <thead>
         <tr>
-            <th>#</th>
+            <th>Profile</th>
+            <th>Requester</th>
+            <th>Department</th>
             <th>Type</th>
             <th>Start Date</th>
             <th>End Date</th>
@@ -11,15 +13,46 @@
         </tr>
     </thead>
     <tbody>
-    <?php $i = 0; if (!empty($employeeLeaveRequests)): ?>
-        <?php foreach ($employeeLeaveRequests as $row): ?>
+    <?php if (!empty($leaveRequests)): ?>
+        <?php foreach ($leaveRequests as $row): ?>
         <tr>
-            <td><?php $i++; echo $i;?></td>
-            <td><?php echo htmlspecialchars($row['leave_type_name']); ?></td>
-            <td><?php echo htmlspecialchars($row['start_date']); ?></td>
-            <td><?php echo htmlspecialchars($row['end_date']); ?></td>
-            <td><?php echo htmlspecialchars($row['reason']); ?></td>
-            <td><span class="badge 
+            <td>
+            <?php 
+                if(!isset($row['employee_profile_picture'])){
+                    echo "<img src='https://via.placeholder.com/50' alt='Profile Picture' class='w-px-50 h-auto rounded-circle' />";
+                    return;
+                }
+                // Render the image
+                $imageData = $row['employee_profile_picture'];
+
+                echo "<img src='data:image/jpg;base64,$imageData' alt='Profile Picture' class='w-px-50 h-auto rounded-circle' />";
+            ?>
+            </td>
+            <td>
+              <?php echo htmlspecialchars($row['employee_full_name']); ?>
+            </td>
+            <td>
+              <?php echo htmlspecialchars($row['employee_department_name']); ?>
+            </td>
+            <td>
+              <?php echo htmlspecialchars($row['leave_type_name']); ?>
+            </td>
+            <td>
+              <?php echo htmlspecialchars($row['start_date']); ?>
+            </td>
+            <td>
+              <?php echo htmlspecialchars($row['end_date']); ?>
+            </td>
+            <td>
+              <button class="btn btn-info" 
+              title="See Reason..." 
+              data-bs-toggle="modal" 
+              data-bs-target="#R<?php echo htmlspecialchars($row['id']); ?>"> 
+                  <i class="bx bx-edit-alt"></i>
+              </button> 
+              <?php include __DIR__ . '/leave-requests-modal-reason.php'; ?>
+            </td>
+            <td><span class="badge
             <?php 
             if($row['status'] === "Approved"){
                 echo "bg-success";
@@ -35,7 +68,7 @@
             ?>"><?php echo htmlspecialchars($row['status']); ?></span></td>
             <td><?php 
             $button = '';
-            if($row['status'] === "Pending" || $row['status'] === "Canceled"){
+            if($row['status'] !== "Approved" || $row['status'] !== "Canceled" || $row['status'] !== "Rejected"){
                 $button .= '
                 <button 
                 class="btn btn-primary dropdown-toggle" 
@@ -45,7 +78,8 @@
                     Actions
                 </button>
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#"><i class="bx bx-edit-alt"></i> Edit</a></li>
+                    <li><a class="text-success dropdown-item" href="#"><i class="bx bx-check-circle"></i> Approve this request</a></li>
+                    <li><a class="text-danger dropdown-item" href="#"><i class="bx bx-x-circle"></i> Reject this request</a></li>
                 </ul>';
             }
             echo $button;
@@ -87,7 +121,7 @@
   </nav>
 </div>
 <style>
-    .page-item:hover{
+    .page-item:hover:not(.disabled){
         cursor: pointer !important;
     }
 </style>

@@ -40,6 +40,12 @@ function getDepartmentValues(){
 
 function populateDepartmentSelect(select){
     clearDepartmentSelect(select);
+    const optionNone = document.createElement("option");
+    optionNone.value = "";
+    optionNone.text = "Select a department";
+    optionNone.disabled = true;
+    optionNone.selected = true;
+    select.add(optionNone);
     departments.forEach(department => {
         const option = document.createElement("option");
         option.value = department.id;

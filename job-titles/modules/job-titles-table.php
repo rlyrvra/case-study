@@ -97,3 +97,9 @@
     </ul>
   </nav>
 </div>
+
+<style>
+    .page-item:hover:not(.disabled){
+        cursor: pointer !important;
+    }
+</style>

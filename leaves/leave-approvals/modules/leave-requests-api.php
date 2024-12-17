@@ -31,12 +31,12 @@ try {
         $leaveRequestRepo = new LeaveRequestRepository($leaveRequestDao);
         $leaveRequestService = new LeaveRequestService($leaveRequestRepo);
         $result = $leaveRequestService->fetchAllLeaveRequests([], $filterCriteria);
-        $employeeLeaveRequests;
-        $employeeLeaveRequests = $result['result_set'];
+        $leaveRequests;
+        $leaveRequests = $result['result_set'];
 
         $totalEmployeeLeaves = $result["total_row_count"];
         $totalPages = ceil($totalEmployeeLeaves / $limit);
-        include __DIR__ . '/apply-leave-employee-table.php';
+        include __DIR__ . '/leave-requests-table.php';
         return;
     }
 
@@ -57,8 +57,10 @@ function validateInput($input, $fieldName) {
     // Check if input is empty after trimming
     if (empty($input)) {
         die("
+        error
+        missingFieldValues('{$escapedFieldName}');
         <script>
-            missingFieldValues('{$escapedFieldName}');
+            
         </script>
         ");
     }
