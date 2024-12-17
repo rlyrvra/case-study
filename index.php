@@ -123,7 +123,7 @@ require_once __DIR__ . '/includes/header.php';
       <!-- Use d-flex for mobile and d-lg-flex-row for horizontal layout on large screens -->
       <div class="d-flex flex-column flex-lg-row w-100 justify-content-between">
         <button type="button" id="smartWageBtn" class="btn flex-fill mb-2 mb-lg-0" onclick="window.location.href='login.php'">smartWAGE</button>
-        <button type="button" id="attendanceBtn" class="btn flex-fill mb-2 mb-lg-0" onclick="window.location.href='attendance.php'">Attendance</button>
+        <button type="button" id="attendanceBtn" class="btn flex-fill mb-2 mb-lg-0" onclick="window.location.href='attendances.php'">Attendance</button>
         <button type="button" id="aboutUsBtn" class="btn flex-fill mb-2 mb-lg-0" onclick="scrollToSection('aboutUs')">About Us</button>
         <button type="button" id="principlesBtn" class="btn flex-fill mb-2 mb-lg-0" onclick="scrollToSection('principles')">Principles</button>
         <button type="button" id="complianceBtn" class="btn flex-fill mb-2 mb-lg-0" onclick="scrollToSection('compliance')">Compliance & Policies</button>
