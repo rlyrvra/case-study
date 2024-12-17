@@ -6,7 +6,7 @@ require_once __DIR__ . '/login-checker.php';
 
 
 if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager'){
-  header("Location: https://". $SMARTWAGE_LOCATION ."/smartWage-index.php?aR=true");
+  header("Location: ". $SMARTWAGE_LOCATION ."/smartWage-index.php?aR=true");
 }
 ?>
 <!DOCTYPE html>

@@ -12,7 +12,7 @@ if($_SESSION['access_role'] === 'Staff' || $_SESSION['access_role'] === 'Supervi
     $mode = 'view';
     $token = $_GET['token'];
   }else{
-    header("Location: https://". $SMARTWAGE_LOCATION ."/smartWage-index.php?aR=true");
+    header("Location: ". $SMARTWAGE_LOCATION ."/smartWage-index.php?aR=true");
   }
 }
 
