@@ -1,5 +1,13 @@
 <?php
-$SMARTWAGE_LOCATION = "/case-study";
+$hosted = true;
+$SMARTWAGE_LOCATION = "";
+
+if($hosted){
+    $SMARTWAGE_LOCATION .= "/smartWage";
+}else{
+    $SMARTWAGE_LOCATION .= "/case-study";
+}
+
 
 
 
