@@ -1,11 +1,29 @@
 $(document).ready(function() {
     const startDate = document.getElementById('startDate');
+    const today = new Date();
+    const formattedDate = today.toISOString().split('T')[0];
+    const future = new Date();
+    future.setFullYear(future.getFullYear() + 300); // Add 300 years
+    const futureformattedDate = future.toISOString().split('T')[0];
     // Function to disable past dates based on the selected date
     startDate.addEventListener('focus', function() {
-        const today = new Date();
-        const formattedDate = today.toISOString().split('T')[0];
         startDate.setAttribute('min', formattedDate);
+        startDate.setAttribute('max', futureformattedDate);
     });
+    
+
+    startDate.addEventListener("input", function () {
+        const minDate = new Date(this.min);
+        const maxDate = new Date(this.max);
+        const currentDate = new Date(this.value);
+
+        if (currentDate < minDate || currentDate > maxDate) {
+            console.log("Hello");
+            alert(`Please select a date between ${formattedDate} and ${futureformattedDate}.`);
+            this.value = ""; // Clear invalid input
+        }
+    });
+
 });
 
 function setEndDateMin(date){
@@ -22,6 +40,18 @@ function setEndDateMin(date){
     endDate.setAttribute('min', formattedDate);
     endDate.value = "";
     endDate.disabled = false;
+    endDate.removeEventListener("input", function () {
+        
+    });
+    endDate.addEventListener("input", function () {
+        const minDate = limitDate;
+        const currentDate = new Date(this.value);
+
+        if (currentDate < minDate) {
+            alert(`Please select a date beyond ${formattedDate}`);
+            this.value = ""; // Clear invalid input
+        }
+    });
 }
 
 function calculateTotalNumberOfDays(){

@@ -361,7 +361,7 @@ if($resultSet["total_row_count"] <= 0){
             </div>
             <div class="col-md-6">
                 <label for="accountType" class="form-label">Account Type*:</label>
-                <select id="accountType" class="form-control" placeholder="Enter account type">
+                <select id="accountType" class="form-select" placeholder="Enter account type">
                     <option value="" disabled>Select Payroll Account</option>
                     <option value="Payroll Account" <?php echo ($employees[0]['bank_account_type'] == 'Payroll Account') ? 'selected' : ''; ?>>Payroll Account</option>
                     <option value="Current Account" <?php echo ($employees[0]['bank_account_type'] == 'Current Account') ? 'selected' : ''; ?>>Current Account</option>

@@ -85,8 +85,8 @@ function calculatePayroll(hourlyRate) {
     // Weekly
     const weekly = hourlyRate * hoursPerDay * daysPerWeek;
     
-    // Monthly (assuming 4.33 weeks in a month on average)
-    const monthly = weekly * 4.33;
+    // Monthly (anually / 12)
+    const monthly = anually / 12;
     
     // Daily
     const daily = hourlyRate * hoursPerDay;
@@ -143,12 +143,29 @@ function previewImage(event) {
 }
 
 $(document).ready(function() {
-    const startDate = document.getElementById('dob');
+    const dateOfBirth = document.getElementById('dob');
     // Function to disable past dates based on the selected date
-    startDate.addEventListener('focus', function() {
-        const today = new Date();
-        const formattedDate = today.toISOString().split('T')[0];
-        startDate.setAttribute('max', formattedDate);
+    const today = new Date();
+    let pastToday = new Date();
+    pastToday.setFullYear(pastToday.getFullYear() - 300); // Subtract 300 years
+    const formattedDate = today.toISOString().split('T')[0];
+    let pastformattedDate = pastToday.toISOString().split('T')[0]; // Format as 'YYYY-MM-DD'
+    dateOfBirth.addEventListener('focus', function() {
+        dateOfBirth.setAttribute('max', formattedDate);
+        dateOfBirth.setAttribute('min', pastformattedDate);
+    });
+
+    const dateInput = document.getElementById("dob");
+
+    dateInput.addEventListener("input", function () {
+        const minDate = new Date(this.min);
+        const maxDate = new Date(this.max);
+        const currentDate = new Date(this.value);
+
+        if (currentDate < minDate || currentDate > maxDate) {
+            alert(`Please select a date between ${pastformattedDate} and ${formattedDate}.`);
+            this.value = ""; // Clear invalid input
+        }
     });
 });
 

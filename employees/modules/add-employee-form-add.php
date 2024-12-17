@@ -298,7 +298,7 @@
         <div class="row mb-3">
             <div class="col-md-6">
                 <label for="accountNumber" class="form-label">Account Number*:</label>
-                <input type="number" id="accountNumber" class="form-control" placeholder="Enter account number" required>
+                <input type="number" id="accountNumber" class="form-select" placeholder="Enter account number" required>
             </div>
             <div class="col-md-6">
                 <label for="accountType" class="form-label">Account Type*:</label>

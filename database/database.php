@@ -2,7 +2,7 @@
 
 date_default_timezone_set('Asia/Manila');
 
-$hosted = true;
+$hosted = false;
 
 $dataSourceName = 'mysql:host=localhost;port=3306;dbname=smart_wage;charset=utf8mb4';
 $dataSourceNameHosted = 'mysql:host=localhost;port=3306;dbname=u227551606_smartwage_db;charset=utf8mb4';
