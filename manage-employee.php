@@ -31,13 +31,10 @@ if(isset($_GET['e']) && $_GET['e'] === '404'){
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <!-- Sweet Alert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<!-- Selectize -->
+<!-- Selectize CSS -->
 <link
   rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/css/selectize.default.min.css"
-  integrity="sha512-pTaEn+6gF1IeWv3W1+7X7eM60TFu/agjgoHmYhAfLEU8Phuf6JKiiE8YmsNC0aCgQv4192s4Vai8YZ6VNM6vyQ=="
-  crossorigin="anonymous"
-  referrerpolicy="no-referrer"
+  href="assets/vendor/css/selectize.bootstrap5.css"
 />
 
 <!-- Ajax -->
@@ -112,7 +109,7 @@ if(isset($_GET['e']) && $_GET['e'] === '404'){
 
           <hr/>
 
-          <div class="card py-4 container-xxl row mx-auto">
+          <div class="card py-4 container-xxl row mx-auto text-no-wrap">
             <?php require_once __DIR__ . '/employees/modules/manage-employee-sorter.php' ?>
           </div>
 
@@ -193,6 +190,7 @@ $(document).ready(function (){
 $(document).ready(function () {
   const REGEX_EMAIL = "([a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@" + "(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)";
   $("#selectize_department_sorter").selectize({
+    theme: 'bootstrap5',
     persist: false,
     maxItems: 1,
     valueField: "id",

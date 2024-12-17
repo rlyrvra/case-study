@@ -21,19 +21,12 @@ try {
     $action = $_POST['action'] ?? '';
 
     if($action == 'fetchAll'){
-        $employeeId = $_SESSION['id'];
         // $status = $_POST['filter_status'];
         $page = isset($_POST['page']) ? (int) $_POST['page'] : 1;
         $limit = isset($_POST['numberEntries']) ? (int) $_POST['numberEntries'] : 10;
         $offset = ($page - 1) * $limit;
 
         $filterCriteria = [];
-
-        $filterCriteria[] = [
-            "column" => "leave_request.employee_id",
-            "operator" => "=",
-            "value" => $employeeId
-        ];
 
         $leaveRequestRepo = new LeaveRequestRepository($leaveRequestDao);
         $leaveRequestService = new LeaveRequestService($leaveRequestRepo);
@@ -44,45 +37,6 @@ try {
         $totalEmployeeLeaves = $result["total_row_count"];
         $totalPages = ceil($totalEmployeeLeaves / $limit);
         include __DIR__ . '/apply-leave-employee-table.php';
-        return;
-    }   
-
-    if($action === 'create'){
-        $leaveRequestData = $_POST['leave_request'] ?? null;
-        if ($leaveRequestData == null) {
-            return;
-        }
-        $employeeId = $_SESSION['id'];
-        $leave_type_id = isset($leaveRequestData['leave_type_id']) ? (int) validateInput($leaveRequestData['leave_type_id'], 'Leave Type') : '';
-        $start_date = isset($leaveRequestData['start_date']) ?  validateInput($leaveRequestData['start_date'], 'Start Date') : '';
-        $end_date = isset($leaveRequestData['end_date']) ? validateInput($leaveRequestData['end_date'], 'End Date') : '';
-        $reason = isset($leaveRequestData['reason']) ? validateInput($leaveRequestData['reason'], 'Reason') : '';
-        $status = "Pending";
-        $newLeaveRequest = new LeaveRequest(
-            id: null,
-            employeeId: $employeeId,
-            leaveTypeId: $leave_type_id,
-            startDate: $start_date,
-            endDate: $end_date,
-            reason: $reason,
-            status: $status
-        );
-        $leaveRequestRepo = new LeaveRequestRepository($leaveRequestDao);
-        $leaveRequestService = new LeaveRequestService($leaveRequestRepo);
-        $createResult = $leaveRequestService->createLeaveRequest($newLeaveRequest);
-        if($createResult === ActionResult::SUCCESS){
-            echo "
-            <script>
-                showSuccessRequest();
-            </script>
-            ";
-        }else{
-            echo "
-            <script>
-                showError();
-            </script>
-            ";
-        }
         return;
     }
 

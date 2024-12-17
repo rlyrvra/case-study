@@ -150,7 +150,7 @@ function updateLeaveTypeClick(button){
 
     txtLeaveTypeName.value = leaveTypeData.name;
     txtMaxNumber.value = leaveTypeData.maxNumberOfDays;
-    cbIsPaid.checked = leaveTypeData.isPaid; 
+    cbIsPaid.checked = leaveTypeData.isPaid == '0' ? false : true; 
     txtDescription.value = leaveTypeData.description;
     txtStatus.value = leaveTypeData.status;
     btnUpdateLeaveType.setAttribute('data-token', leaveTypeData.token);

@@ -253,25 +253,16 @@ if($resultSet["total_row_count"] <= 0){
         </div>
         </div>
         <div class="row mb-3">
-            <label class="form-label">Role*</label>
-            <div class="form-check">
-            <input class="form-check-input" type="radio" name="role" id="role-staff" value="Staff" <?php echo ($employees[0]['access_role'] == 'Staff') ? 'checked' : ''; ?> disabled>
-            <label class="form-check-label" for="role-staff">Staff</label>
-            </div>
-
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="role" id="role-supervisor" value="Supervisor" <?php echo ($employees[0]['access_role'] == 'Supervisor') ? 'checked' : ''; ?> disabled>
-                <label class="form-check-label" for="role-supervisor">Supervisor</label>
-            </div>
-
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="role" id="role-manager" value="Manager" <?php echo ($employees[0]['access_role'] == 'Manager') ? 'checked' : ''; ?> disabled>
-                <label class="form-check-label" for="role-manager">Manager</label>
-            </div>
-
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="role" id="role-admin" value="Admin" <?php echo ($employees[0]['access_role'] == 'Admin') ? 'checked' : ''; ?> disabled>
-                <label class="form-check-label" for="role-admin">Admin</label>
+            <div class="btn-group">
+                <label class="display-5 pe-4">Role*:</label>
+                <input class="btn-check" type="radio" name="role" id="role-staff" value="Staff" <?php echo ($employees[0]['access_role'] == 'Staff') ? 'checked' : ''; ?> readonly disabled>
+                <label class="btn btn-outline-primary" for="role-staff">Staff</label>
+                <input class="btn-check" type="radio" name="role" id="role-supervisor" value="Supervisor" <?php echo ($employees[0]['access_role'] == 'Supervisor') ? 'checked' : ''; ?> readonly disabled>
+                <label class="btn btn-outline-primary" for="role-supervisor">Supervisor</label>
+                <input class="btn-check" type="radio" name="role" id="role-manager" value="Manager" <?php echo ($employees[0]['access_role'] == 'Manager') ? 'checked' : ''; ?> readonly disabled>
+                <label class="btn btn-outline-primary" for="role-manager">Manager</label>
+                <input class="btn-check" type="radio" name="role" id="role-admin" value="Admin" <?php echo ($employees[0]['access_role'] == 'Admin') ? 'checked' : ''; ?> readonly disabled>
+                <label class="btn btn-outline-primary" for="role-admin">Admin</label>
             </div>
         </div>
     </form>

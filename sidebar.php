@@ -150,7 +150,7 @@
             </a>
         </li>
         <li class="menu-item">
-            <a href="maintenance-login" class="menu-link">
+            <a href="leave-requests" class="menu-link" id="leave-requests-menu">
             <div data-i18n="Buttons">Leave Requests</div>
             </a>
         

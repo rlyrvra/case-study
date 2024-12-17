@@ -11,28 +11,31 @@
     </div>
     
     <div class="dropdown sort col-auto flex-fill mx-2">
-    <button
-        class="btn btn-outline-primary dropdown-toggle"
-        type="button"
-        data-bs-toggle="dropdown"
-        aria-expanded="false"
-    >
-        Sort By <span class="tf-icons bx bx-sort"></span>
-    </button>
-    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="dropdownMenuButton">
-        <li><a class="dropdown-item" href="#" data-group="sort_by" data-value="full_name">Name</a></li>
-        <li><a class="dropdown-item selected" href="#" data-group="sort_by" data-value="created_at">Date Created</a></li>
-        <li><a class="dropdown-item" href="#" data-group="sort_by" data-value="updated_at">Date Modified</a></li>
-        <li><hr/></li>
-        <li><a class="dropdown-item" href="#" data-group="order_by" data-value="ASC">Ascending</a></li>
-        <li><a class="dropdown-item selected" href="#" data-group="order_by" data-value="DESC">Descending</a></li>
-    </ul>
+        <button
+            class="btn btn-primary dropdown-toggle"
+            type="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+        >
+            Sort By <span class="tf-icons bx bx-sort"></span>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="dropdownMenuButton">
+            <li><a class="dropdown-item" href="#" data-group="sort_by" data-value="full_name">Name</a></li>
+            <li><a class="dropdown-item selected" href="#" data-group="sort_by" data-value="created_at">Date Created</a></li>
+            <li><a class="dropdown-item" href="#" data-group="sort_by" data-value="updated_at">Date Modified</a></li>
+            <li><hr/></li>
+            <li><a class="dropdown-item" href="#" data-group="order_by" data-value="ASC">Ascending</a></li>
+            <li><a class="dropdown-item selected" href="#" data-group="order_by" data-value="DESC">Descending</a></li>
+        </ul>
     </div>  
     <div class="dropdown filter col-auto flex-fill mx-2">
         <div class="input-group">
-        <span class="input-group-text"><i class="bx bx-filter fs-4 lh-0"></i></span>
-            <select class="form-select selectize-department-sorter" id="selectize_department_sorter" name="selectize-department-sorter" placeholder="Filter Department" onchange="fetchAllEmployees();">
-                
+            <span class="input-group-text"><i class="bx bx-category-alt fs-4 lh-0"></i></span>
+            <select class="form-select" id="status" name="status" placeholder="Filter Department" onchange="">
+                <option value="" selected>All</option>
+                <option value="Approved">Approved</option>
+                <option value="Rejected">Rejected</option>
+                <option value="Canceled">Canceled</option>
             </select>
         </div>
     </div>  
@@ -41,13 +44,16 @@
             <span class="input-group-text"><i class="bx bx-category fs-4 lh-0"></i></span>
             <select class="form-select" id="search_at" name="search_at" placeholder="Search At">
                 <option value="none" selected>All</option>
-                <option value="full_name">Name</option>
+                <option value="name">Leave Type</option>
+                <option value="full_name">Employee Name</option>
                 <option value="title">Job Title</option>
                 <option value="email">Email</option>
-                <option value="employee_code">Employee Code</option>
             </select>
+        </div>
+        <div class="input-group ms-lg-3">
+            <span class="input-group-text"><i class="bx bx-search-alt-2 fs-4 lh-0"></i></span>
             <input type="text" class="form-control" id="searchText" />
-            <button id="openModalBtn" class="btn btn-success" onclick="fetchAllEmployees()"> Search
+            <button id="openModalBtn" class="btn btn-success" onclick=""> Search
             </button>
         </div>
     </div>
@@ -86,7 +92,7 @@ dropdownItems.forEach(item => {
     .filter(val => val)
     .map(val => val.replace('option', 'Option '))
     .join(', ');
-    fetchAllEmployees();
+    //fetchAllEmployees();
 
     });
 });
