@@ -320,7 +320,7 @@ class LeaveRequestDao
         }
     }
 
-    public function updateStatus(int $leaveRequestId, string $status, bool $isHashedId = false): ActionResult
+    public function updateStatus(int|string $leaveRequestId, string $status, bool $isHashedId = false): ActionResult
     {
         $query = "
             UPDATE leave_requests
@@ -362,7 +362,7 @@ class LeaveRequestDao
     public function updateLeaveRequestStatuses(): ActionResult
     {
         $query = "
-            UPDATE leave_requests
+            UPDATE leave_requests AS leave_request
             SET
                 status = CASE
                     WHEN leave_request.status = 'Canceled'                                                                               THEN 'Canceled'
@@ -390,7 +390,7 @@ class LeaveRequestDao
         }
     }
 
-    public function isEmployeeOnLeave(int $employeeId, bool $isHashedId = false): ActionResult|bool
+    public function isEmployeeOnLeave(int|string $employeeId, bool $isHashedId = false): ActionResult|bool
     {
         $query = "
             SELECT
@@ -429,12 +429,12 @@ class LeaveRequestDao
         }
     }
 
-    public function delete(int $leaveRequestId, bool $isHashedId = false): ActionResult
+    public function delete(int|string $leaveRequestId, bool $isHashedId = false): ActionResult
     {
         return $this->softDelete($leaveRequestId, $isHashedId);
     }
 
-    private function softDelete(int $leaveRequestId, bool $isHashedId = false): ActionResult
+    private function softDelete(int|string $leaveRequestId, bool $isHashedId = false): ActionResult
     {
         $query = "
             UPDATE leave_requests

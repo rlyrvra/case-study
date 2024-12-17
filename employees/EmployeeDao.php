@@ -47,6 +47,7 @@ class EmployeeDao
                 access_role                    ,
 
                 payroll_group_id               ,
+                annual_salary                  ,
                 hourly_rate                    ,
 
                 tin_number                     ,
@@ -62,7 +63,7 @@ class EmployeeDao
                 username                       ,
                 password                       ,
 
-                notes                          
+                notes
             )
             VALUES (
                 :rfid_uid                       ,
@@ -110,10 +111,9 @@ class EmployeeDao
                 :username                       ,
                 :password                       ,
 
-                :notes                          
+                :notes
             )
         ";
-        
 
         try {
             $this->pdo->beginTransaction();
@@ -178,7 +178,7 @@ class EmployeeDao
 
             error_log("Database Error: An error occurred while creating the employee. " .
                       "Exception: {$exception->getMessage()}");
-            echo $exception->getMessage();
+
             return ActionResult::FAILURE;
         }
     }
@@ -420,7 +420,7 @@ class EmployeeDao
         } catch (PDOException $exception) {
             error_log("Database Error: An error occurred while fetching the employees. " .
                       "Exception: {$exception->getMessage()}");
-            echo $exception->getMessage();
+
             return ActionResult::FAILURE;
         }
     }
@@ -489,7 +489,7 @@ class EmployeeDao
             $this->pdo->beginTransaction();
 
             $statement = $this->pdo->prepare($query);
-            $statement->bindValue(":employee_id"                    , $employee->getId()                          , Helper::getPdoParameterType($employee->getId()                          ));
+
             $statement->bindValue(":rfid_uid"                       , $employee->getRfidUid()                     , Helper::getPdoParameterType($employee->getRfidUid()                     ));
 
             $statement->bindValue(":first_name"                     , $employee->getFirstName()                   , Helper::getPdoParameterType($employee->getFirstName()                   ));
@@ -537,7 +537,7 @@ class EmployeeDao
 
             $statement->bindValue(":notes"                          , $employee->getNotes()                       , Helper::getPdoParameterType($employee->getNotes()                       ));
 
-            
+            $statement->bindValue(":employee_id"                    , $employee->getId()                          , Helper::getPdoParameterType($employee->getId()                          ));
 
             $statement->execute();
 
@@ -550,12 +550,12 @@ class EmployeeDao
 
             error_log("Database Error: An error occurred while creating the employee. " .
                       "Exception: {$exception->getMessage()}");
-            echo $exception->getMessage();
+
             return ActionResult::FAILURE;
         }
     }
 
-    public function changePassword(int $employeeId, string $newHashedPassword, bool $isHashedId = false): ActionResult
+    public function changePassword(int|string $employeeId, string $newHashedPassword, bool $isHashedId = false): ActionResult
     {
         $query = "
             UPDATE employees
@@ -589,7 +589,7 @@ class EmployeeDao
 
             error_log("Database Error: An error occurred while changing the password. " .
                       "Exception: {$exception->getMessage()}");
-            
+
             return ActionResult::FAILURE;
         }
     }
@@ -620,12 +620,12 @@ class EmployeeDao
         }
     }
 
-    public function delete(int $employeeId, bool $isHashedId = false): ActionResult
+    public function delete(int|string $employeeId, bool $isHashedId = false): ActionResult
     {
         return $this->softDelete($employeeId, $isHashedId);
     }
 
-    private function softDelete(int $employeeId, bool $isHashedId = false): ActionResult
+    private function softDelete(int|string $employeeId, bool $isHashedId = false): ActionResult
     {
         $query = "
             UPDATE employees
