@@ -202,7 +202,7 @@ try {
             ['employee_code'], 
             [
                 [
-                "column" => "MD5(employee.id)",
+                "column" => "SHA2(employee.id, 256)",
                 "operator" => "=",
                 "value" => $hashed_id
                 ]
@@ -228,7 +228,7 @@ try {
             emergencyContactPhoneNumber: $emergency_phone,
             emergencyContactEmailAddress: $emergency_email,
             emergencyContactAddress: $emergency_address,
-            employeeCode: $empCode['result_set'][0]['employee_code'],
+            employeeCode: (string) $empCode['result_set'][0]['employee_code'],
             jobTitleId: $job_title_id,
             departmentId: $department_id,
             employmentType: $employment_type,
@@ -264,7 +264,7 @@ try {
         } else if ($updateResult === ActionResult::FAILURE){
             echo "
             <script> 
-                failedUpdateTryAgain('$hashed_id'); 
+                //failedUpdateTryAgain('$hashed_id'); 
             </script>";
         }
         return;

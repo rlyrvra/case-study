@@ -16,7 +16,7 @@ function getEmployeesAllColumns($pdo, $token){
         
         $filterCriteria = [
             [
-            "column" => "MD5(employee.id)", 
+            "column" => "SHA2(employee.id, 256)", 
             "operator" => "=",
             "value" => $token
             ],

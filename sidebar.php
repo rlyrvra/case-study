@@ -1,5 +1,5 @@
 <!-- Menu -->
-
+<?php ob_start(); ?>
 <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
     <div class="app-brand demo">
     <a href="index.php" class="app-brand-link">
@@ -27,7 +27,6 @@
 
     <!-- Departments -->
     <?php
-    ob_start();
     if($_SESSION['access_role'] == 'Admin'){
         echo '
     <li class="menu-item" id="departments-menu">

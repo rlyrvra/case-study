@@ -489,7 +489,7 @@ class EmployeeDao
             $this->pdo->beginTransaction();
 
             $statement = $this->pdo->prepare($query);
-
+            $statement->bindValue(":employee_id"                    , $employee->getId()                          , Helper::getPdoParameterType($employee->getId()                          ));
             $statement->bindValue(":rfid_uid"                       , $employee->getRfidUid()                     , Helper::getPdoParameterType($employee->getRfidUid()                     ));
 
             $statement->bindValue(":first_name"                     , $employee->getFirstName()                   , Helper::getPdoParameterType($employee->getFirstName()                   ));
@@ -550,7 +550,7 @@ class EmployeeDao
 
             error_log("Database Error: An error occurred while creating the employee. " .
                       "Exception: {$exception->getMessage()}");
-
+            echo $exception->getMessage();
             return ActionResult::FAILURE;
         }
     }
