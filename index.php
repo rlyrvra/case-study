@@ -134,7 +134,7 @@ require_once __DIR__ . '/includes/header.php';
 </nav>
 <div class="indexContainer">
     <section class="indexSections h-100" id="top">
-        <img src="img/wallpaperSample.jpg" alt="wallpaper">
+        <img src="img/wallpaperSample2.jpg" alt="wallpaper">
         
     </section>
     <section class="indexSections d-flex justify-content-center h-100" id="aboutUs">
@@ -172,7 +172,7 @@ require_once __DIR__ . '/includes/header.php';
                     <p><i class="fa-solid fa-users"></i> Over <?php echo htmlspecialchars($companySize[0]); ?> employees</p>
                 </div>
                 <div class="col-sm p-2" >
-                    <img src="img/wallpaperSample.jpg" alt="wallpaper" style="max-width: 60vh; max-height: 70vh;">
+                    <img src="img/wallpaperSample2.jpg" alt="wallpaper" style="max-width: 60vh; max-height: 70vh;">
                 </div>
                 <script>
                     var simplemde = new SimpleMDE();
