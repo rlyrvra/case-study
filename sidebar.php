@@ -258,7 +258,7 @@
 
     <!-- Log Out -->
     <li class="menu-item">
-        <a href="requests/login/logout" class="menu-link">
+        <a href="#" class="menu-link" onclick="window.location.href='requests/login/logout'">
         <i class="menu-icon tf-icons bx bx-log-out"></i>
         <div data-i18n="Tables">Log Out</div>
         </a>
