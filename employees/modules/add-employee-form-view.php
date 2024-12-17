@@ -90,6 +90,7 @@ if($resultSet["total_row_count"] <= 0){
                 <option value="Single" <?php echo $employees[0]['marital_status'] === 'Single' ? 'selected' : ''; ?>>Single</option>
                 <option value="Married" <?php echo $employees[0]['marital_status'] === 'Married' ? 'selected' : ''; ?>>Married</option>
                 <option value="Divorced" <?php echo $employees[0]['marital_status'] === 'Divorced' ? 'selected' : ''; ?>>Divorced</option>
+                <option value="Widowed" <?php echo $employees[0]['marital_status'] === 'Widowed' ? 'selected' : ''; ?>>Widowed</option>
             </select>
         </div>
         </div>
@@ -360,7 +361,13 @@ if($resultSet["total_row_count"] <= 0){
             </div>
             <div class="col-md-6">
                 <label for="accountType" class="form-label">Account Type*:</label>
-                <input type="text" id="accountType" class="form-control" placeholder="Enter account type" value="<?php echo $employees[0]['bank_account_type']; ?>" readonly>
+                <select id="accountType" class="form-control" placeholder="Enter account type" disabled readonly>
+                    <option value="" disabled>Select Payroll Account</option>
+                    <option value="Payroll Account" <?php echo ($employees[0]['bank_account_type'] == 'Payroll Account') ? 'selected' : ''; ?>>Payroll Account</option>
+                    <option value="Current Account" <?php echo ($employees[0]['bank_account_type'] == 'Current Account') ? 'selected' : ''; ?>>Current Account</option>
+                    <option value="Checking Account" <?php echo ($employees[0]['bank_account_type'] == 'Checking Account') ? 'selected' : ''; ?>>Checking Account</option>
+                    <option value="Savings Account" <?php echo ($employees[0]['bank_account_type'] == 'Savings Account') ? 'selected' : ''; ?>>Savings Account</option>
+                </select>
             </div>
         </div>
         </div>

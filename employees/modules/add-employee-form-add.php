@@ -38,6 +38,7 @@
                 <option value="Single">Single</option>
                 <option value="Married">Married</option>
                 <option value="Divorced">Divorced</option>
+                <option value="Widowed">Widowed</option>
             </select>
         </div>
         </div>
@@ -148,7 +149,7 @@
         </div>
         <div class="col-md-6">
             <label for="employee-code" class="form-label">Employee Code*</label>
-            <input type="text" class="form-control" id="employee-code" placeholder="Enter Employee Code" readonly>
+            <input type="text" class="form-control" id="employee-code" placeholder="Enter Employee Code" readonly value="Auto-generated">
         </div>
         </div>
         <div class="row mb-3">
@@ -301,7 +302,13 @@
             </div>
             <div class="col-md-6">
                 <label for="accountType" class="form-label">Account Type*:</label>
-                <input type="text" id="accountType" class="form-control" placeholder="Enter account type" required>
+                <select id="accountType" class="form-control" placeholder="Enter account type" value="">
+                    <option value="" disabled selected>Select Payroll Account</option>
+                    <option value="Payroll Account">Payroll Account</option>
+                    <option value="Current Account">Current Account</option>
+                    <option value="Checking Account">Checking Account</option>
+                    <option value="Savings Account">Savings Account</option>
+                </select>
             </div>
         </div>
         <div class="row mb-3">

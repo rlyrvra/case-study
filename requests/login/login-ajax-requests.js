@@ -19,10 +19,10 @@ function login(){
         dataType: 'json',
         success(response) {
             if (response.success) {
-                const location = SMARTWAGE_LOCATION + "/smartWage-index?s=true"
+                const location = "smartWage-index?s=true"
                 window.location.href = location;
             } else {
-                const location = SMARTWAGE_LOCATION + "/sweet-alert-toasts/login/login-incorrect"
+                const location = "sweet-alert-toasts/login/login-incorrect"
                 $.get(location, function(data) {
                     $('#response').html(data); // This loads and runs the script in login-incorrect.php
                 });

@@ -3,11 +3,11 @@
 date_default_timezone_set('Asia/Manila');
 
 $dataSourceName = 'mysql:host=localhost;port=3306;dbname=smart_wage;charset=utf8mb4';
-$dataSourceNameHosted = 'mysql:host=localhost;port=3306;dbname=u227551606_db_smartWage;charset=utf8mb4';
+$dataSourceNameHosted = 'mysql:host=localhost;port=3306;dbname=u227551606_smartwage_db;charset=utf8mb4';
 
 $username = 'root';
 $password = ''    ;
-$usernameHosted = 'u227551606_db_smartWage';
+$usernameHosted = 'u227551606_smartwage_user';
 $passwordHosted = 'smartWageaA@1'    ;
 
 $options = [

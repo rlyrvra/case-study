@@ -12,7 +12,7 @@ if($_SESSION['access_role'] === 'Staff' || $_SESSION['access_role'] === 'Supervi
     $mode = 'view';
     $token = $_GET['token'];
   }else{
-    header("Location: ". $SMARTWAGE_LOCATION ."/smartWage-index.php?aR=true");
+    header("Location: https://". $SMARTWAGE_LOCATION ."/smartWage-index.php?aR=true");
   }
 }
 
@@ -158,7 +158,7 @@ if(isset($_GET['m']) && $_GET['m'] === 'u'){
               </div>
               <div class="row">
                 <div class="col-12 d-flex justify-content-center flex-column flex-lg-row">
-                  <ul class="col-3 menu-vertical nav nav-pills pt-4 pb-4" role="tablist">
+                  <ul class="col-12 col-lg-3 flex-column nav nav-pills pt-4 pb-4 flex-grow-1" role="tablist">
                     <li class="nav-item">
                       <button
                         type="button"
@@ -244,7 +244,7 @@ if(isset($_GET['m']) && $_GET['m'] === 'u'){
                       </button>
                     </li>
                   </ul>
-                  <div class="col-9 tab-content flex-fill">
+                  <div class="col-12 col-lg-9  tab-content">
                     <?php 
                     if(empty($mode)){
                       include_once __DIR__ . '/employees/modules/add-employee-form-add.php';

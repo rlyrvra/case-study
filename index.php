@@ -11,8 +11,6 @@ require_once __DIR__ . '/includes/header.php';
     <title>smartWage Landing Page</title>
     <link rel="icon" type="image/x-icon" href="img/logo-files/logo1.ico" />
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/e82c3ed260.js" crossorigin="anonymous"></script>
     <!-- SimpleMDE for text editors -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
@@ -98,13 +96,10 @@ require_once __DIR__ . '/includes/header.php';
 
         }
         .history .col-sm h1{
-            font-family: "Medula One";
-            font-size: 5vh;
-            border-left: 10px solid black;
-            padding-left: 10px;
+            font-family: "Medula One" !important;
+            border-left: 10px solid black !important;
         }
         .history .col-sm p{
-            font-size: 1.5vh;
             text-align: justify;
         }
         .inside .row{
@@ -116,7 +111,12 @@ require_once __DIR__ . '/includes/header.php';
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
   <div class="container-fluid">
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" 
+    data-bs-toggle="collapse" 
+    data-bs-target="#navbarNav" 
+    aria-controls="navbarNav" 
+    aria-expanded="false"
+    aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
@@ -146,7 +146,7 @@ require_once __DIR__ . '/includes/header.php';
             </div>
             <div class="row history">
                 <div class="col-sm">
-                    <h1> History </h1>
+                    <h1 class="display-1 ps-2"> History </h1>
                     <?php 
                     $companyProfile = new CompanyProfile($pdo);
                     $results = $companyProfile->fetchCompanyInformation();
@@ -165,7 +165,7 @@ require_once __DIR__ . '/includes/header.php';
                     
                     <div id="preview"></div>
                     <textarea id="markdownInput" style="visibility:hidden; height: 0; width: 0; display: none;"><?php echo htmlspecialchars($companyInfo[0]); ?></textarea>
-                    <h1> Details </h1>
+                    <h1 class="display-1 ps-2"> Details </h1>
                     <p><i class="fa-solid fa-location-dot"></i> <?php echo htmlspecialchars($companyLocation[0]); ?></p>
                     <p><i class="fa-solid fa-industry"></i> <?php echo htmlspecialchars($companyIndustry[0]); ?></p>
                     <p><i class="fa-solid fa-building"></i> <?php echo htmlspecialchars($companyBusinessType[0]); ?></p>
@@ -232,8 +232,6 @@ sections.forEach(section => observer.observe(section));
         bsCollapse.hide(); // Manually collapse the navbar
     }
 </script>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 
 <script>

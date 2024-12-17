@@ -36,7 +36,7 @@ function nextForm(page = 1, button){
 
     if(page > maxPageForm){
         maxPageForm = page;
-        for(i = 0; i < maxPageForm; i++){
+        for(i = 0; i < maxPageForm + 1; i++){
             buttons[i].classList.remove("disabled");
         }
     }
@@ -142,6 +142,16 @@ function previewImage(event) {
     }
 }
 
+$(document).ready(function() {
+    const startDate = document.getElementById('dob');
+    // Function to disable past dates based on the selected date
+    startDate.addEventListener('focus', function() {
+        const today = new Date();
+        const formattedDate = today.toISOString().split('T')[0];
+        startDate.setAttribute('max', formattedDate);
+    });
+});
+
 function failedCreateUpdateTryAgain(){
     Swal.fire({
         title: 'Error!',
@@ -199,3 +209,4 @@ function showSuccessCreate() {
         }
     });
 }
+
