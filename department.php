@@ -36,6 +36,9 @@ if($_SESSION['access_role'] !== 'Admin'){
 <script src="departments/modules/departments-scripts.js?v1.4"></script>
 
 
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
 <!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

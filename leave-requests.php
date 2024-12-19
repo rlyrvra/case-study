@@ -44,6 +44,8 @@ if(isset($_GET['aR']) && $_GET['aR'] == true){
 <script src="leaves/leave-approvals/modules/leave-requests-scripts.js?v1.1"></script>
 
 
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
 <!-- Icons. Uncomment required icon fonts -->
 <link rel="stylesheet" href="assets/vendor/fonts/boxicons.css" />
 <link rel="icon" type="image/x-icon" href="img/logo-files/logo1.ico" />

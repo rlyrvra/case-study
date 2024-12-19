@@ -28,6 +28,8 @@ require_once __DIR__ . '/login-checker.php';
   rel="stylesheet"
 />
 
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
 <!-- Icons. Uncomment required icon fonts -->
 <link rel="stylesheet" href="assets/vendor/fonts/boxicons.css" />
 <link rel="icon" type="image/x-icon" href="img/logo-files/logo1.ico" />

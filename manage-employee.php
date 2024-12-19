@@ -42,7 +42,7 @@ if(isset($_GET['e']) && $_GET['e'] === '404'){
 <!-- Scripts -->
 <script src="employees/modules/manage-employee-scripts.js?v1.3"></script>
 
-
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
 
 <!-- Fonts -->
