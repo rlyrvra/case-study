@@ -87,8 +87,24 @@ if(isset($_GET['aR']) && $_GET['aR'] == true){
 
       <!-- / Navbar -->
       <div class="content-wrapper">
-        <div class="container-xxl">
-            
+        <div class="container-fluid">
+            <?php
+            switch($_SESSION['access_role']){
+              case 'Admin':
+                include_once __DIR__ . "/dashboard-admin.php";
+                break;
+              case 'Supervisor':
+                include_once __DIR__ . "/dashboard-supervisor.php";
+                break;
+              case 'Staff':
+                include_once __DIR__ . "/dashboard-staff.php";
+                break;
+              case 'Manager':
+                include_once __DIR__ . "/dashboard-manager.php";
+                break;
+              case 'default':
+                break;
+            }?>
         </div>
       </div>
       <?php require_once __DIR__ . '/footer.php' ?>
