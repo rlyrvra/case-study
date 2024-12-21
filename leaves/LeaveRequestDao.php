@@ -22,6 +22,7 @@ class LeaveRequestDao
                 start_date   ,
                 end_date     ,
                 reason       ,
+                is_half_day  ,
                 status
             )
             VALUES (
@@ -30,6 +31,7 @@ class LeaveRequestDao
                 :start_date   ,
                 :end_date     ,
                 :reason       ,
+                :is_half_day  ,
                 :status
             )
         ";
@@ -44,6 +46,7 @@ class LeaveRequestDao
             $statement->bindValue(":start_date"   , $leaveRequest->getStartDate()  , Helper::getPdoParameterType($leaveRequest->getStartDate()  ));
             $statement->bindValue(":end_date"     , $leaveRequest->getEndDate()    , Helper::getPdoParameterType($leaveRequest->getEndDate()    ));
             $statement->bindValue(":reason"       , $leaveRequest->getReason()     , Helper::getPdoParameterType($leaveRequest->getReason()     ));
+            $statement->bindValue(":is_half_day"  , $leaveRequest->isHalfDay()     , Helper::getPdoParameterType($leaveRequest->isHalfDay()     ));
             $statement->bindValue(":status"       , $leaveRequest->getStatus()     , Helper::getPdoParameterType($leaveRequest->getStatus()     ));
 
             $statement->execute();
@@ -88,6 +91,7 @@ class LeaveRequestDao
             "start_date"               => "leave_request.start_date    AS start_date"              ,
             "end_date"                 => "leave_request.end_date      AS end_date"                ,
             "reason"                   => "leave_request.reason        AS reason"                  ,
+            "is_half_day"              => "leave_request.is_half_day   AS is_half_day"             ,
             "status"                   => "leave_request.status        AS status"                  ,
 
             "approved_at"              => "leave_request.approved_at   AS approved_at"             ,
@@ -282,6 +286,7 @@ class LeaveRequestDao
                 leave_type_id = :leave_type_id,
                 start_date    = :start_date   ,
                 end_date      = :end_date     ,
+                is_half_day   = :is_half_day  ,
                 reason        = :reason
             WHERE
         ";
@@ -302,6 +307,7 @@ class LeaveRequestDao
             $statement->bindValue(":start_date"      , $leaveRequest->getStartDate()  , Helper::getPdoParameterType($leaveRequest->getStartDate()  ));
             $statement->bindValue(":end_date"        , $leaveRequest->getEndDate()    , Helper::getPdoParameterType($leaveRequest->getEndDate()    ));
             $statement->bindValue(":reason"          , $leaveRequest->getReason()     , Helper::getPdoParameterType($leaveRequest->getReason()     ));
+            $statement->bindValue(":is_half_day"     , $leaveRequest->isHalfDay()     , Helper::getPdoParameterType($leaveRequest->isHalfDay()     ));
             $statement->bindValue(":leave_request_id", $leaveRequest->getId()         , Helper::getPdoParameterType($leaveRequest->getId()         ));
 
             $statement->execute();
@@ -359,30 +365,37 @@ class LeaveRequestDao
         }
     }
 
-    public function updateLeaveRequestStatuses(): ActionResult
+    public function updateLeaveRequestStatuses(string $currentDate): ActionResult
     {
         $query = "
-            UPDATE leave_requests AS leave_request
+            UPDATE leave_requests
             SET
                 status = CASE
-                    WHEN leave_request.status = 'Canceled'                                                                               THEN 'Canceled'
-                    WHEN leave_request.status = 'Rejected'                                                                               THEN 'Rejected'
-                    WHEN CURDATE() >= leave_request.start_date AND leave_request.status = 'Pending'                                      THEN 'Expired'
-                    WHEN leave_request.status = 'Approved'     AND CURDATE() BETWEEN leave_request.start_date AND leave_request.end_date THEN 'In Progress'
-                    WHEN leave_request.status = 'Approved'     AND CURDATE() > leave_request.end_date                                    THEN 'Completed'
-                    WHEN leave_request.status = 'Approved'     AND CURDATE() < leave_request.start_date                                  THEN 'Approved'
-                                                                                                                                         ELSE 'Pending'
-                                                                                                                                         END
+                    WHEN status IN ('Canceled', 'Rejected', 'Expired', 'In Progress', 'Completed', 'Approved') THEN status
+                    WHEN :current_date > end_date         AND              status = 'Approved'                 THEN 'Completed'
+                    WHEN :current_date BETWEEN start_date AND end_date AND status = 'Approved'                 THEN 'In Progress'
+                    WHEN :current_date < start_date       AND              status = 'Approved'                 THEN 'Approved'
+                    WHEN :current_date > start_date       AND              status = 'Pending'                  THEN 'Expired'
+                    ELSE 'Pending'
+                END
         ";
 
         try {
+            $this->pdo->beginTransaction();
+
             $statement = $this->pdo->prepare($query);
 
+            $statement->bindValue(":current_date", $currentDate, Helper::getPdoParameterType($currentDate));
+
             $statement->execute();
+
+            $this->pdo->commit();
 
             return ActionResult::SUCCESS;
 
         } catch (PDOException $exception) {
+            $this->pdo->rollBack();
+
             error_log("Database Error: An error occurred while updating the leave request statuses. " .
                       "Exception: {$exception->getMessage()}");
 
@@ -390,11 +403,11 @@ class LeaveRequestDao
         }
     }
 
-    public function isEmployeeOnLeave(int|string $employeeId, bool $isHashedId = false): ActionResult|bool
+    public function isEmployeeOnLeave(int|string $employeeId, bool $isHashedId = false): ActionResult|array|null
     {
         $query = "
             SELECT
-                COUNT(*)
+                is_half_day
             FROM
                 leave_requests
             WHERE
@@ -419,7 +432,11 @@ class LeaveRequestDao
 
             $statement->execute();
 
-            return $statement->fetchColumn() > 0;
+            $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+            return empty($result)
+                ? null
+                : $result[0];
 
         } catch (PDOException $exception) {
             error_log("Database Error: An error occurred while checking if the employee is on leave. " .
