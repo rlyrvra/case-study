@@ -1,8 +1,8 @@
 <?php
 
-require_once __DIR__ . "/../../includes/Helper.php"            ;
-require_once __DIR__ . "/../../includes/enums/ActionResult.php";
-require_once __DIR__ . "/../../includes/enums/ErrorCode.php"   ;
+require_once __DIR__ . "/../includes/Helper.php"            ;
+require_once __DIR__ . "/../includes/enums/ActionResult.php";
+require_once __DIR__ . "/../includes/enums/ErrorCode.php"   ;
 
 class LeaveRequestAttachmentDao
 {
@@ -45,7 +45,7 @@ class LeaveRequestAttachmentDao
 
             error_log("Database Error: An error occurred while creating the attachment. " .
                       "Exception: {$exception->getMessage()}");
-
+            echo $exception->getMessage();
             return ActionResult::FAILURE;
         }
     }
@@ -176,7 +176,7 @@ class LeaveRequestAttachmentDao
         } catch (PDOException $exception) {
             error_log("Database Error: An error occurred while fetching the attachments. " .
                       "Exception: {$exception->getMessage()}");
-
+            echo $exception->getMessage();
             return ActionResult::FAILURE;
         }
     }

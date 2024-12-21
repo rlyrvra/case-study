@@ -21,16 +21,13 @@
             <td><?php echo htmlspecialchars($row['reason']); ?></td>
             <td><span class="badge 
             <?php 
-            if($row['status'] === "Approved"){
-                echo "bg-success";
-            }else if($row['status'] === "Pending"){
-                echo "bg-label-warning";
-            }else if($row['status'] === "Rejected"){
-                echo "bg-label-danger";
-            }else if($row['status'] === "Canceled"){
-                echo "bg-label-secondary";
-            }else{
-
+            switch($row['status']){
+              case 'Approved': echo htmlspecialchars("bg-success"); break;
+              case 'Pending': echo htmlspecialchars("bg-label-warning"); break;
+              case 'Rejected': echo htmlspecialchars("bg-label-danger"); break;
+              case 'Canceled': echo htmlspecialchars("bg-label-secondary"); break;
+              case 'Expired': echo htmlspecialchars("bg-label-dark"); break;
+              default: echo htmlspecialchars("bg-label-warning"); break;
             }
             ?>"><?php echo htmlspecialchars($row['status']); ?></span></td>
             <td><?php 

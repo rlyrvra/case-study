@@ -105,3 +105,5 @@
         </div>
     </nav>
 </div>
+
+<?php ob_end_flush(); ?>

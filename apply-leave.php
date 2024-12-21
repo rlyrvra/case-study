@@ -4,10 +4,10 @@ require_once __DIR__ . '/includes/session.php';
 require_once __DIR__ . '/includes/file-locations.php';
 require_once __DIR__ . '/login-checker.php';
 
-
 if(isset($_GET['s']) && $_GET['s'] == true){
   include_once __DIR__ . '/sweet-alert-toasts/login/login-success.php';
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -34,7 +34,7 @@ if(isset($_GET['s']) && $_GET['s'] == true){
 />
 
 <!-- Ajax -->
-<script src="leaves/apply-leave/modules/apply-leave-ajax.js?v1.2"></script>
+<script src="leaves/apply-leave/modules/apply-leave-ajax.js?v1.5"></script>
 <!-- Scripts -->
 <script src="leaves/apply-leave/modules/apply-leave-scripts.js?v1.3"></script>
 
@@ -126,6 +126,10 @@ if(isset($_GET['s']) && $_GET['s'] == true){
                           <div class="mb-3">
                               <label for="reason" class="form-label">Reason:</label>
                               <textarea class="form-control" id="reason" name="reason" rows="3" required></textarea>
+                          </div>
+                          <div class="mb-3">
+                              <label for="files" class="form-label">Attachments:</label>
+                              <input type="file" class="form-control" id="files" name="files">
                           </div>
                           <button type="submit" class="btn btn-primary w-100" onclick="createLeaveRequest()">Apply for Leave</button>
                       </form>

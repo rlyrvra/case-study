@@ -4,6 +4,9 @@ require_once __DIR__ . '/../../LeaveRequest.php';
 require_once __DIR__ . '/../../LeaveRequestDao.php';
 require_once __DIR__ . '/../../LeaveRequestRepository.php';
 require_once __DIR__ . '/../../LeaveRequestService.php';
+require_once __DIR__ . '/../../LeaveRequestAttachment.php';
+require_once __DIR__ . '/../../LeaveRequestAttachmentDao.php';
+require_once __DIR__ . '/../../LeaveRequestAttachmentRepository.php';
 require_once __DIR__ . '/../../../includes/Helper.php';
 require_once __DIR__ . '/../../../includes/enums/ErrorCode.php';
 require_once __DIR__ . '/../../../includes/enums/ActionResult.php';
@@ -18,6 +21,7 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
 
 try {
     $leaveRequestDao = new LeaveRequestDao($pdo);
+    $leaveRequestAttachmentDao = new LeaveRequestAttachmentDao($pdo);
     $action = $_POST['action'] ?? '';
 
     if($action == 'fetchAll'){
@@ -29,7 +33,8 @@ try {
         $filterCriteria = [];
 
         $leaveRequestRepo = new LeaveRequestRepository($leaveRequestDao);
-        $leaveRequestService = new LeaveRequestService($leaveRequestRepo);
+        $leaveRequestAttachmentRepo = new LeaveRequestAttachmentRepository($leaveRequestAttachmentDao);
+        $leaveRequestService = new LeaveRequestService($leaveRequestRepo, $leaveRequestAttachmentRepo);
         $result = $leaveRequestService->fetchAllLeaveRequests([], $filterCriteria);
         $leaveRequests;
         $leaveRequests = $result['result_set'];

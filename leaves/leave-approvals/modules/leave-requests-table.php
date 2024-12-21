@@ -7,9 +7,8 @@
             <th>Type</th>
             <th>Start Date</th>
             <th>End Date</th>
-            <th>Reason</th>
             <th>Status</th>
-            <th>Action</th>
+            <th>Review</th>
         </tr>
     </thead>
     <tbody>
@@ -43,15 +42,6 @@
             <td>
               <?php echo htmlspecialchars($row['end_date']); ?>
             </td>
-            <td>
-              <button class="btn btn-info" 
-              title="See Reason..." 
-              data-bs-toggle="modal" 
-              data-bs-target="#R<?php echo htmlspecialchars($row['id']); ?>"> 
-                  <i class="bx bx-edit-alt"></i>
-              </button> 
-              <?php include __DIR__ . '/leave-requests-modal-reason.php'; ?>
-            </td>
             <td><span class="badge
             <?php 
             if($row['status'] === "Approved"){
@@ -62,28 +52,22 @@
                 echo "bg-label-danger";
             }else if($row['status'] === "Canceled"){
                 echo "bg-label-secondary";
+            }else if($row['status'] === "Expired"){
+                echo "bg-label-dark";
             }else{
 
             }
-            ?>"><?php echo htmlspecialchars($row['status']); ?></span></td>
-            <td><?php 
-            $button = '';
-            if($row['status'] !== "Approved" || $row['status'] !== "Canceled" || $row['status'] !== "Rejected"){
-                $button .= '
-                <button 
-                class="btn btn-primary dropdown-toggle" 
-                type="button" 
-                data-bs-toggle="dropdown" 
-                aria-expanded="false">
-                    Actions
-                </button>
-                <ul class="dropdown-menu">
-                    <li><a class="text-success dropdown-item" href="#"><i class="bx bx-check-circle"></i> Approve this request</a></li>
-                    <li><a class="text-danger dropdown-item" href="#"><i class="bx bx-x-circle"></i> Reject this request</a></li>
-                </ul>';
-            }
-            echo $button;
-            ?></td>
+            ?>"><?php echo htmlspecialchars($row['status']); ?></span>
+            </td>
+            <td>
+            <button class="btn btn-info" 
+              title="See Reason..." 
+              data-bs-toggle="modal" 
+              data-bs-target="#R<?php echo htmlspecialchars($row['id']); ?>"> 
+                  <i class="bx bx-edit-alt"></i>
+            </button> 
+            <?php include __DIR__ . '/leave-requests-modal-reason.php'; ?>
+            </td>
         </tr>
         <!-- Additional rows can be added dynamically from the database -->
         <?php endforeach; ?>
