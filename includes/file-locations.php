@@ -1,5 +1,5 @@
 <?php
-$hosted = true;
+$hosted = ($_SERVER['HTTP_HOST'] !== 'localhost' && $_SERVER['HTTP_HOST'] !== '127.0.0.1');
 $SMARTWAGE_LOCATION = "";
 
 if($hosted){
