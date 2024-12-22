@@ -18,14 +18,14 @@ function fetchEmployeeLeaves(){
 }
 
 function assignLeaves(selectedLeavesTypes){
-    const employeeId = document.getElementById('select_employee').value;
+    const employment_type = document.getElementById('employment-type').value;
 
     $.ajax({
         url: 'leaves/modules/assign-leaves-api',
         type: 'POST',
         data: {
             action: 'assignLeaves',
-            employee_id: employeeId,
+            employment_type: employment_type,
             selected_leaves: selectedLeavesTypes
         },
         success: function(response) {

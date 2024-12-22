@@ -14,47 +14,76 @@ class EmploymentTypeBenefitDao
     }
 
     public function create(EmploymentTypeBenefit $benefit): ActionResult
-    {
-        $query = "
+{
+    try {
+        $this->pdo->beginTransaction();
+
+        // Check for duplicates under the specified conditions
+        $duplicateCheckQuery = "
+            SELECT 1
+            FROM employment_type_benefits
+            WHERE 
+                employment_type = :employment_type
+                AND (
+                    (leave_type_id = :leave_type_id AND deleted_at IS NULL) OR
+                    (allowance_id = :allowance_id AND deleted_at IS NULL) OR
+                    (deduction_id = :deduction_id AND deleted_at IS NULL)
+                )
+        ";
+
+        $checkStmt = $this->pdo->prepare($duplicateCheckQuery);
+        $checkStmt->bindValue(":employment_type", $benefit->getEmploymentType(), Helper::getPdoParameterType($benefit->getEmploymentType()));
+        $checkStmt->bindValue(":leave_type_id", $benefit->getLeaveTypeId(), Helper::getPdoParameterType($benefit->getLeaveTypeId()));
+        $checkStmt->bindValue(":allowance_id", $benefit->getAllowanceId(), Helper::getPdoParameterType($benefit->getAllowanceId()));
+        $checkStmt->bindValue(":deduction_id", $benefit->getDeductionId(), Helper::getPdoParameterType($benefit->getDeductionId()));
+
+        $checkStmt->execute();
+
+        // Skip the insert if a duplicate exists
+        if ($checkStmt->fetchColumn()) {
+            $this->pdo->commit(); // Commit to end transaction since no insert is needed
+            return ActionResult::SUCCESS; // Consider this success as no action is required
+        }
+
+        // Insert the record if no duplicates found
+        $insertQuery = "
             INSERT INTO employment_type_benefits (
                 employment_type,
-                leave_type_id  ,
-                allowance_id   ,
+                leave_type_id,
+                allowance_id,
                 deduction_id
             )
             VALUES (
                 :employment_type,
-                :leave_type_id  ,
-                :allowance_id   ,
+                :leave_type_id,
+                :allowance_id,
                 :deduction_id
             )
         ";
 
-        try {
-            $this->pdo->beginTransaction();
+        $insertStmt = $this->pdo->prepare($insertQuery);
+        $insertStmt->bindValue(":employment_type", $benefit->getEmploymentType(), Helper::getPdoParameterType($benefit->getEmploymentType()));
+        $insertStmt->bindValue(":leave_type_id", $benefit->getLeaveTypeId(), Helper::getPdoParameterType($benefit->getLeaveTypeId()));
+        $insertStmt->bindValue(":allowance_id", $benefit->getAllowanceId(), Helper::getPdoParameterType($benefit->getAllowanceId()));
+        $insertStmt->bindValue(":deduction_id", $benefit->getDeductionId(), Helper::getPdoParameterType($benefit->getDeductionId()));
 
-            $statement = $this->pdo->prepare($query);
+        $insertStmt->execute();
 
-            $statement->bindValue(":employment_type", $benefit->getEmploymentType(), Helper::getPdoParameterType($benefit->getEmploymentType()));
-            $statement->bindValue(":leave_type_id"  , $benefit->getLeaveTypeId()   , Helper::getPdoParameterType($benefit->getLeaveTypeId()   ));
-            $statement->bindValue(":allowance_id"   , $benefit->getAllowanceId()   , Helper::getPdoParameterType($benefit->getAllowanceId()   ));
-            $statement->bindValue(":deduction_id"   , $benefit->getDeductionId()   , Helper::getPdoParameterType($benefit->getDeductionId()   ));
+        // Commit the transaction
+        $this->pdo->commit();
 
-            $statement->execute();
+        return ActionResult::SUCCESS;
 
-            $this->pdo->commit();
+    } catch (PDOException $exception) {
+        // Rollback the transaction on failure
+        $this->pdo->rollBack();
 
-            return ActionResult::SUCCESS;
+        error_log("Database Error: An error occurred while creating the employment type benefit. " .
+                  "Exception: {$exception->getMessage()}");
 
-        } catch (PDOException $exception) {
-            $this->pdo->rollBack();
-
-            error_log("Database Error: An error occurred while creating the employment type benefit. " .
-                      "Exception: {$exception->getMessage()}");
-
-            return ActionResult::FAILURE;
-        }
+        return ActionResult::FAILURE;
     }
+}
 
     public function fetchAll(
         ? array $columns        = null,

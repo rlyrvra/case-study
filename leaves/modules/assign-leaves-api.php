@@ -8,6 +8,14 @@ require_once __DIR__ . '/../LeaveEntitlement.php';
 require_once __DIR__ . '/../LeaveEntitlementRepository.php';
 require_once __DIR__ . '/../LeaveEntitlementService.php';
 require_once __DIR__ . '/../LeaveEntitlementDao.php';
+require_once __DIR__ . '/../../employees/Employee.php';
+require_once __DIR__ . '/../../employees/EmployeeDao.php';
+require_once __DIR__ . '/../../employees/EmployeeRepository.php';
+require_once __DIR__ . '/../../employees/EmployeeService.php';
+require_once __DIR__ . '/../../employment-type-benefits/EmploymentTypeBenefit.php';
+require_once __DIR__ . '/../../employment-type-benefits/EmploymentTypeBenefitDao.php';
+require_once __DIR__ . '/../../employment-type-benefits/EmploymentTypeBenefitRepository.php';
+require_once __DIR__ . '/../../employment-type-benefits/EmploymentTypeBenefitService.php';
 require_once __DIR__ . '/../../includes/Helper.php';
 require_once __DIR__ . '/../../includes/enums/ActionResult.php';
 require_once __DIR__ . '/../../includes/enums/ErrorCode.php';
@@ -15,6 +23,8 @@ require_once __DIR__ . '/../../database/database.php';
 
 try{
     $leaveEntitlementDao = new LeaveEntitlementDao($pdo);
+    $employmentTypeDao = new EmploymentTypeBenefitDao($pdo);
+    $employeeDao = new EmployeeDao($pdo);
     $action = $_POST['action'] ?? '';
 
     if($action === 'fetchEmployeeLeave'){
@@ -52,23 +62,65 @@ try{
         if(!$employeeLeavesData){
             return;
         }
-        $employeeId = $_POST['employee_id'];
-        $deleteResult;
-        forEach($employeeLeavesData as $employeeLeaves){
-            $newLeaveEntitlement = new LeaveEntitlement(
-                id: null,
-                employeeId: $employeeId,
-                leaveTypeId: $employeeLeaves['id'],
-                numberOfEntitledDays: $employeeLeaves['credits'],
-                numberOfDaysTaken: 0,
-                remainingDays: $employeeLeaves['credits']
-            );
-            $leaveRepo = new LeaveEntitlementRepository($leaveEntitlementDao);
-            $leaveService = new LeaveEntitlementService($leaveRepo);
-            $deleteresult = $leaveService->createLeaveEntitlement($newLeaveEntitlement);
-            
+        $employmentType = $_POST['employment_type'] ?? '';
+        if(empty($employmentType)){
+            return;
         }
-        if ($deleteresult === ActionResult::SUCCESS){
+
+        
+
+        $assignResult;
+        $employmentTypeRepo = new EmploymentTypeBenefitRepository($employmentTypeDao);
+        $employmentTypeService = new EmploymentTypeBenefitService($employmentTypeRepo);
+        $employeeRepo = new EmployeeRepository($employeeDao);
+        $employeeService = new EmployeeService($employeeRepo);
+        $leaveRepo = new LeaveEntitlementRepository($leaveEntitlementDao);
+        $leaveService = new LeaveEntitlementService($leaveRepo);
+
+        $fetchEmployeeTypesResult = $employeeService->fetchAllEmployees(["id"], [
+            [
+                "column" => "employee.employment_type",
+                "operator" => "=",
+                "value" => $employmentType
+            ]
+        ]);
+
+        $matchingEmployees = $fetchEmployeeTypesResult['result_set'];
+
+        print_r($matchingEmployees);
+
+        foreach ($employeeLeavesData as $employeeLeaves) {
+            $newEmploymentTypeLeave = new EmploymentTypeBenefit(
+                id: null,
+                employmentType: $employmentType,
+                leaveTypeId: $employeeLeaves['id'],
+                allowanceId: null,
+                deductionId: null
+            );
+
+
+            $createEmploymentTypeServiceResult = $employmentTypeService->createEmploymentTypeBenefit($newEmploymentTypeLeave);
+
+
+            foreach ($matchingEmployees as $matchingEmployee) {
+                $newLeaveEntitlement = new LeaveEntitlement(
+                    id: null,
+                    employeeId: $matchingEmployee['id'],
+                    leaveTypeId: $employeeLeaves['id'],
+                    numberOfEntitledDays: $employeeLeaves['credits'],
+                    numberOfDaysTaken: 0,
+                    remainingDays: $employeeLeaves['credits']
+                );
+
+                $assignResult = $leaveService->createLeaveEntitlement($newLeaveEntitlement);
+            }
+        }
+        
+        
+
+        
+
+        if ($assignResult === ActionResult::SUCCESS) {
             echo "
             <script>
                 showSuccessLeaveEntitlement();

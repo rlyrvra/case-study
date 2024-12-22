@@ -23,12 +23,11 @@
                     <hr/>
                     <div class="row mb-4 justify-content-center">
                         <button type="button" class="btn-lg btn-info col-auto mx-auto" 
-                        onclick="showSelectedEmployee()"
                         data-bs-target="#leaveEntitlementModal"
                         data-bs-toggle="modal" 
                         data-bs-dismiss="modal"
                         >
-                        <i class="bx bx-label bx-sm"></i>Assign Leave</button>
+                        <i class="bx bx-label bx-sm"></i>Assign Leaves by Employment Type</button>
                         <button type="button" class="btn-lg btn-primary col-auto mx-auto" 
                         onclick="fetchEmployeeLeaves()"
                         >

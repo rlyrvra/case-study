@@ -36,6 +36,7 @@ function clearSelectedLeaveTypes(){
 }
 
 function leaveTypeInputTest(){
+    
     const selectedLeaveTypes = getSelectedLeaveTypes();
     assignLeaves(selectedLeaveTypes);
     clearSelectedLeaveTypes();

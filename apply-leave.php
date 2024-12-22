@@ -128,7 +128,7 @@ if(isset($_GET['s']) && $_GET['s'] == true){
                               <textarea class="form-control" id="reason" name="reason" rows="3" required></textarea>
                           </div>
                           <div class="mb-3">
-                              <label for="files" class="form-label">Attachments:</label>
+                              <label for="files" class="form-label">Attachments (jpg, png, pdf):</label>
                               <input type="file" class="form-control" id="files" name="files">
                           </div>
                           <button type="submit" class="btn btn-primary w-100" onclick="createLeaveRequest()">Apply for Leave</button>
