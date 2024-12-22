@@ -203,21 +203,6 @@ if($resultSet["total_row_count"] <= 0){
             <select class="form-select" id="employment-type" readonly disabled>
             <option selected disabled>Select Type</option>
             <option value="<?php echo $employees[0]['employment_type']; ?>" selected><?php echo $employees[0]['employment_type']; ?></option>
-            <option value="Regular / Permanent">Regular / Permanent</option>
-            <option value="Casual">Casual</option>
-            <option value="Contractual">Contractual</option>
-            <option value="Project-Based">Project-Based</option>
-            <option value="Seasonal">Seasonal</option>
-            <option value="Fixed-Term">Fixed-Term</option>
-            <option value="Probationary">Probationary</option>
-            <option value="Part-Time">Part-Time</option>
-            <option value="Self-Employment">Self-Employment</option>
-            <option value="Freelance">Freelance</option>
-            <option value="Internship">Internship</option>
-            <option value="Consultancy">Consultancy</option>
-            <option value="Apprenticeship">Apprenticeship</option>
-            <option value="Traineeship">Traineeship</option>
-            <option value="Gig">Gig</option>
             </select>
         </div>
         </div>
@@ -276,8 +261,8 @@ if($resultSet["total_row_count"] <= 0){
             </select>
         </div>
         <div class="col-md-4">
-            <label for="hourlyRate" class="form-label">Hourly Rate*:</label>
-            <input type="number" id="hourlyRate" class="form-control" placeholder="Enter hourly wage" value="<?php echo $employees[0]['hourly_rate']; ?>" onchange="samplePayroll()" readonly>
+            <label for="hourlyRate" class="form-label">Basic Salary (per month)*:</label>
+            <input type="number" id="hourlyRate" class="form-control" placeholder="Enter hourly wage" value="<?php echo $employees[0]['basic_salary']; ?>" onchange="samplePayroll()" readonly>
             <script>
                 $(document).ready(function () {
                     samplePayroll();

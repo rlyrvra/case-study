@@ -74,9 +74,9 @@ if(isset($_GET['m']) && $_GET['m'] === 'u'){
 />
 
 <!-- Ajax -->
-<script src="employees/modules/add-employee-ajax.js?v1.4"></script>
+<script src="employees/modules/add-employee-ajax.js?v1.5"></script>
 <!-- Scripts -->
-<script src="employees/modules/add-employee-scripts.js?v1.5"></script>
+<script src="employees/modules/add-employee-scripts.js?v1.6"></script>
 
 
 

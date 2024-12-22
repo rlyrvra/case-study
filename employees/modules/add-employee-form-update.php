@@ -207,21 +207,24 @@ if($resultSet["total_row_count"] <= 0){
             <select class="form-select" id="employment-type">
             <option selected disabled>Select Type</option>
             <option value="<?php echo $employees[0]['employment_type']; ?>" selected><?php echo $employees[0]['employment_type']; ?></option>
-            <option value="Regular / Permanent">Regular / Permanent</option>
-            <option value="Casual">Casual</option>
-            <option value="Contractual">Contractual</option>
-            <option value="Project-Based">Project-Based</option>
-            <option value="Seasonal">Seasonal</option>
-            <option value="Fixed-Term">Fixed-Term</option>
-            <option value="Probationary">Probationary</option>
-            <option value="Part-Time">Part-Time</option>
-            <option value="Self-Employment">Self-Employment</option>
-            <option value="Freelance">Freelance</option>
-            <option value="Internship">Internship</option>
-            <option value="Consultancy">Consultancy</option>
-            <option value="Apprenticeship">Apprenticeship</option>
-            <option value="Traineeship">Traineeship</option>
-            <option value="Gig">Gig</option>
+            <option value="Regular" <?php echo $employees[0]['employment_type'] === 'Regular' ? 'selected' : ''; ?>>Regular</option>
+            <option value="Regular Permanent" <?php echo $employees[0]['employment_type'] === 'Regular Permanent' ? 'selected' : ''; ?>>Regular Permanent</option>
+            <option value="Casual" <?php echo $employees[0]['employment_type'] === 'Casual' ? 'selected' : ''; ?>>Casual</option>
+            <option value="Contractual" <?php echo $employees[0]['employment_type'] === 'Contractual' ? 'selected' : ''; ?>>Contractual</option>
+            <option value="Project-Based" <?php echo $employees[0]['employment_type'] === 'Project-Based' ? 'selected' : ''; ?>>Project-Based</option>
+            <option value="Seasonal" <?php echo $employees[0]['employment_type'] === 'Seasonal' ? 'selected' : ''; ?>>Seasonal</option>
+            <option value="Fixed-Term" <?php echo $employees[0]['employment_type'] === 'Fixed-Term' ? 'selected' : ''; ?>>Fixed-Term</option>
+            <option value="Probationary" <?php echo $employees[0]['employment_type'] === 'Probationary' ? 'selected' : ''; ?>>Probationary</option>
+            <option value="Part-Time" <?php echo $employees[0]['employment_type'] === 'Part-Time' ? 'selected' : ''; ?>>Part-Time</option>
+            <option value="Regular Part-Time" <?php echo $employees[0]['employment_type'] === 'Regular Part-Time' ? 'selected' : ''; ?>>Regular Part-Time</option>
+            <option value="Part-Time Permanent" <?php echo $employees[0]['employment_type'] === 'Part-Time Permanent' ? 'selected' : ''; ?>>Part-Time Permanent</option>
+            <option value="Self-Employment" <?php echo $employees[0]['employment_type'] === 'Self-Employment' ? 'selected' : ''; ?>>Self-Employment</option>
+            <option value="Freelance" <?php echo $employees[0]['employment_type'] === 'Freelance' ? 'selected' : ''; ?>>Freelance</option>
+            <option value="Internship" <?php echo $employees[0]['employment_type'] === 'Internship' ? 'selected' : ''; ?>>Internship</option>
+            <option value="Consultancy" <?php echo $employees[0]['employment_type'] === 'Consultancy' ? 'selected' : ''; ?>>Consultancy</option>
+            <option value="Apprenticeship" <?php echo $employees[0]['employment_type'] === 'Apprenticeship' ? 'selected' : ''; ?>>Apprenticeship</option>
+            <option value="Traineeship" <?php echo $employees[0]['employment_type'] === 'Traineeship' ? 'selected' : ''; ?>>Traineeship</option>
+            <option value="Gig" <?php echo $employees[0]['employment_type'] === 'Gig' ? 'selected' : ''; ?>>Gig</option>
             </select>
         </div>
         </div>
@@ -280,8 +283,8 @@ if($resultSet["total_row_count"] <= 0){
             </select>
         </div>
         <div class="col-md-4">
-            <label for="hourlyRate" class="form-label">Hourly Rate*:</label>
-            <input type="number" id="hourlyRate" class="form-control" placeholder="Enter hourly wage" value="<?php echo $employees[0]['hourly_rate']; ?>" onchange="samplePayroll()">
+            <label for="hourlyRate" class="form-label">Basic Salary (per month)*:</label>
+            <input type="number" id="hourlyRate" class="form-control" placeholder="Enter hourly wage" value="<?php echo $employees[0]['basic_salary']; ?>" onchange="samplePayroll()" required>
             <script>
                 $(document).ready(function () {
                     samplePayroll();

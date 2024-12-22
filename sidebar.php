@@ -149,8 +149,8 @@
             <div data-i18n="Alerts">Apply Leave</div>
             </a>
         </li>
-        <li class="menu-item">
-            <a href="leave-requests" class="menu-link" id="leave-requests-menu">
+        <li class="menu-item" id="leave-requests-menu">
+            <a href="leave-requests" class="menu-link">
             <div data-i18n="Buttons">Leave Requests</div>
             </a>
         

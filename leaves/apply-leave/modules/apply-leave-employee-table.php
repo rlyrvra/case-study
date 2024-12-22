@@ -13,7 +13,13 @@
     <tbody>
     <?php $i = 0; if (!empty($employeeLeaveRequests)): ?>
         <?php foreach ($employeeLeaveRequests as $row): ?>
-        <tr>
+        <tr 
+        data-token="<?php echo htmlspecialchars($row['leave_type_id']); ?>"
+        data-leave-type-name="<?php echo htmlspecialchars($row['leave_type_name']); ?>"
+        data-start-date="<?php echo htmlspecialchars($row['start_date']); ?>"
+        data-end-date="<?php echo htmlspecialchars($row['end_date']); ?>"
+        data-reason="<?php echo htmlspecialchars($row['reason']); ?>"
+        >
             <td><?php $i++; echo $i;?></td>
             <td><?php echo htmlspecialchars($row['leave_type_name']); ?></td>
             <td><?php echo htmlspecialchars($row['start_date']); ?></td>
@@ -42,7 +48,9 @@
                     Actions
                 </button>
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#"><i class="bx bx-edit-alt"></i> Edit</a></li>
+                    <!--<li><a class="dropdown-item" href="#" onclick="updateLeaveRequestClick(this)"><i class="bx bx-edit-alt"></i> Edit</a></li>-->
+                    <li><a class="dropdown-item" href="#" data-token="'. $row['id'] .'" onclick="deleteLeaveRequest(this)"><i class="bx bx-trash"></i> Delete</a></li>
+                    <li><a class="dropdown-item" href="#" data-token="'. $row['id'] .'" onclick="cancelLeaveRequest(this)"><i class="bx bx-x"></i> Cancel</a></li>
                 </ul>';
             }
             echo $button;

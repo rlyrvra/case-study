@@ -76,6 +76,31 @@ function calculateTotalNumberOfDays(){
 
 }
 
+function updateLeaveRequestClick(button){
+    const row = button.closest('tr');  // Get the closest row
+    const leaveRequestData = {
+        token: row.getAttribute('data-token'),
+        name: row.getAttribute('data-leave-type-name'),
+        start_date: row.getAttribute('data-start-date'),
+        end_date: row.getAttribute('data-end-date'),
+        reason: row.getAttribute('data-reason')
+    };
+
+    //console.log(leaveRequestData);
+
+    const leaveTypeName = $("#leaveType");
+    const startDate = $("#startDate");
+    const endDate = $("#endDate");
+    const reason = $("#reason");
+
+    leaveTypeName.val(leaveRequestData.token);
+    startDate.val(leaveRequestData.start_date);
+    endDate.val(leaveRequestData.end_date);
+    reason.val(leaveRequestData.reason);
+    document.getElementById("form_indicator").innerHTML = "Update My Leave";
+    calculateTotalNumberOfDays();
+}
+
 function showInvalidBalance(){
     Swal.fire({
         title: 'Error!',
@@ -101,6 +126,15 @@ function showSuccessRequest(){
             document.getElementById('apply_leave_form').reset();
             document.getElementById('leaveType').value = "";
         }
+    });
+}
+
+function showSuccessDeleteRequest(){
+    Swal.fire({
+        title: 'Success!',
+        text: 'Your leave request has been deleted.',
+        icon: 'success',
+        confirmButtonText: 'OK'
     });
 }
 

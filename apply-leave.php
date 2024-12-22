@@ -34,9 +34,9 @@ if(isset($_GET['s']) && $_GET['s'] == true){
 />
 
 <!-- Ajax -->
-<script src="leaves/apply-leave/modules/apply-leave-ajax.js?v1.5"></script>
+<script src="leaves/apply-leave/modules/apply-leave-ajax.js?v1.6"></script>
 <!-- Scripts -->
-<script src="leaves/apply-leave/modules/apply-leave-scripts.js?v1.3"></script>
+<script src="leaves/apply-leave/modules/apply-leave-scripts.js?v1.5"></script>
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -100,7 +100,7 @@ if(isset($_GET['s']) && $_GET['s'] == true){
               <div id="response-test"></div>
               <div class="col-md-4">
                   <div class="form-section border card p-4">
-                      <h5>Apply for Leave Form</h5>
+                      <h5 id="form_indicator">Apply for Leave Form</h5>
                       <form onsubmit="event.preventDefault()" id="apply_leave_form">
                           <div class="mb-3">
                               <label for="leaveType" class="form-label">Select Leave Type*</label>

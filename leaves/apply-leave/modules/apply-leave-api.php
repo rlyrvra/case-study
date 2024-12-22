@@ -39,6 +39,11 @@ try {
             "value" => $employeeId
         ];
 
+        $filterCriteria[] = [
+            "column" => "leave_request.deleted_at",
+            "operator" => "IS NULL"
+        ];
+
         $leaveRequestRepo = new LeaveRequestRepository($leaveRequestDao);
         $leaveRequestAttachmentRepo = new LeaveRequestAttachmentRepository($leaveRequestAttachmentDao);
         $leaveRequestService = new LeaveRequestService($leaveRequestRepo, $leaveRequestAttachmentRepo);
@@ -78,17 +83,17 @@ try {
         $createResult = $leaveRequestService->createLeaveRequest($newLeaveRequest);
 
         if($createResult === ActionResult::SUCCESS){
-            // echo "
-            // <script>
-            //     showSuccessRequest();
-            // </script>
-            // ";
+            echo "
+            <script>
+                showSuccessRequest();
+            </script>
+            ";
         }else{
-            // echo "
-            // <script>
-            //     showError();
-            // </script>
-            // ";
+            echo "
+            <script>
+                showError();
+            </script>
+            ";
         }
 
         $fetchLastCreated = new LeaveRequestService($leaveRequestRepo, $leaveRequestAttachmentRepo);
@@ -178,6 +183,29 @@ try {
             } else {
                 echo "Some attachments failed to upload. Check logs for details.";
             }
+        }
+        return;
+    }
+
+    if($action === 'delete'){
+        $hashed_id = $_POST['md5_id'] ?? null;
+        $leaveRequestRepo = new LeaveRequestRepository($leaveRequestDao);
+        $leaveRequestAttachmentRepo = new LeaveRequestAttachmentRepository($leaveRequestAttachmentDao);
+        $leaveRequestService = new LeaveRequestService($leaveRequestRepo, $leaveRequestAttachmentRepo);
+        $deleteResult = $leaveRequestService->deleteLeaveRequest($hashed_id);
+        $deleteAttachmentsResult = $leaveRequestService->deleteLeaveRequestAttachment($hashed_id);
+        if($deleteResult === ActionResult::SUCCESS){
+            echo "
+            <script>
+                showSuccessDeleteRequest();
+            </script>
+            ";
+        }else{
+            echo "
+            <script>
+                showError();
+            </script>
+            ";
         }
         return;
     }

@@ -71,7 +71,7 @@ function showWarningIncompleteForm() {
 }
 
 
-function calculatePayroll(hourlyRate) {
+function calculatePayroll(basicSalary) {
     
     // Assumptions
     const hoursPerDay = 8;
@@ -79,29 +79,29 @@ function calculatePayroll(hourlyRate) {
     const weeksPerYear = 52;
     const daysPerYear = weeksPerYear * daysPerWeek;
     
-    // Annually
-    const annually = hourlyRate * hoursPerDay * daysPerYear;
+    // Annually (basic salary for the year)
+    const annually = basicSalary * 12;
     
-    // Weekly
-    const weekly = hourlyRate * hoursPerDay * daysPerWeek;
+    // Weekly (annual salary divided by 52 weeks)
+    const weekly = annually / weeksPerYear;
     
-    // Monthly (anually / 12)
-    const monthly = annually / 12;
+    // Monthly (provided directly as input)
+    const monthly = basicSalary;
     
-    // Daily
-    const daily = hourlyRate * hoursPerDay;
+    // Daily (annual salary divided by total days in a year)
+    const daily = annually / daysPerYear;
     
     // Semi-Monthly (typically 24 pay periods in a year)
     const semiMonthly = annually / 24;
     
-    // Hourly (provided directly as input)
-    const hourly = hourlyRate;
+    // Hourly (annual salary divided by total hours worked in a year)
+    const hourly = annually / (hoursPerDay * daysPerYear);
     
     // Bi-Weekly (2 weeks of work)
     const biWeekly = weekly * 2;
     
-    // Per-Minute (since 1 hour = 60 minutes)
-    const perMinute = hourlyRate / 60;
+    // Per-Minute (hourly divided by 60 minutes)
+    const perMinute = hourly / 60;
     
     return {
         annually,

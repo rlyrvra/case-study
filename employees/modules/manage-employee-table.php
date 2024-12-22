@@ -1,6 +1,8 @@
-<?php if (!empty($employees)): ?>
+<?php $i = 0; if (!empty($employees)): ?>
     <?php foreach ($employees as $row): ?>
 <div class="card p-3 col-auto mx-3 my-3">
+    <span class="display-6">#<?php $i++; echo $i;  ?></span>
+    <hr/>
     <div class="d-flex justify-content-between align-items-center"
     >
         <div class="d-flex align-items-center">
