@@ -38,7 +38,7 @@
             ?>"><?php echo htmlspecialchars($row['status']); ?></span></td>
             <td><?php 
             $button = '';
-            if($row['status'] === "Pending" || $row['status'] === "Canceled"){
+            if($row['status'] === "Pending"){
                 $button .= '
                 <button 
                 class="btn btn-primary dropdown-toggle" 

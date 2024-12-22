@@ -210,6 +210,52 @@ try {
         return;
     }
 
+
+    if($action === 'delete'){
+        $hashed_id = $_POST['md5_id'] ?? null;
+        $leaveRequestRepo = new LeaveRequestRepository($leaveRequestDao);
+        $leaveRequestAttachmentRepo = new LeaveRequestAttachmentRepository($leaveRequestAttachmentDao);
+        $leaveRequestService = new LeaveRequestService($leaveRequestRepo, $leaveRequestAttachmentRepo);
+        $deleteResult = $leaveRequestService->deleteLeaveRequest($hashed_id);
+        $deleteAttachmentsResult = $leaveRequestService->deleteLeaveRequestAttachment($hashed_id);
+        if($deleteResult === ActionResult::SUCCESS){
+            echo "
+            <script>
+                showSuccessDeleteRequest();
+            </script>
+            ";
+        }else{
+            echo "
+            <script>
+                showError();
+            </script>
+            ";
+        }
+        return;
+    }
+
+    if($action === 'cancel'){
+        $hashed_id = $_POST['md5_id'] ?? null;
+        $leaveRequestRepo = new LeaveRequestRepository($leaveRequestDao);
+        $leaveRequestAttachmentRepo = new LeaveRequestAttachmentRepository($leaveRequestAttachmentDao);
+        $leaveRequestService = new LeaveRequestService($leaveRequestRepo, $leaveRequestAttachmentRepo);
+        $deleteResult = $leaveRequestService->updateLeaveRequestStatus($hashed_id, "Canceled");
+        if($deleteResult === ActionResult::SUCCESS){
+            echo "
+            <script>
+                showSuccessDeleteRequest();
+            </script>
+            ";
+        }else{
+            echo "
+            <script>
+                showError();
+            </script>
+            ";
+        }
+        return;
+    }
+
     echo "Invalid action specified.";
 } catch (Exception $e) {
     echo "Error: " . $e->getMessage();

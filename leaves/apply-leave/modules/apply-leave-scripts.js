@@ -103,7 +103,7 @@ function updateLeaveRequestClick(button){
 
 function showInvalidBalance(){
     Swal.fire({
-        title: 'Error!',
+        title: 'Error Request!',
         text: 'Your requested days is greater than your balance.',
         icon: 'error',
         confirmButtonText: 'OK'
@@ -117,7 +117,7 @@ function showInvalidBalance(){
 
 function showSuccessRequest(){
     Swal.fire({
-        title: 'Success!',
+        title: 'Request Success!',
         text: 'Your leave request has been filed.',
         icon: 'success',
         confirmButtonText: 'OK'
@@ -131,7 +131,7 @@ function showSuccessRequest(){
 
 function showSuccessDeleteRequest(){
     Swal.fire({
-        title: 'Success!',
+        title: 'Delete Success!',
         text: 'Your leave request has been deleted.',
         icon: 'success',
         confirmButtonText: 'OK'

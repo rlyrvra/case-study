@@ -5,7 +5,7 @@
         <th scope="col">Allowed</th>
         <th scope="col">Days Taken</th>
         <th scope="col">Available</th>
-        <th scope="col" style="width: 9%;">Actions</th>
+        <!-- <th scope="col" style="width: 9%;">Actions</th> -->
         </tr>
     </thead>
     <tbody id="employee-leave-body">
@@ -16,11 +16,11 @@
             <td><?php echo htmlspecialchars($row['number_of_entitled_days']); ?></td>
             <td><?php echo htmlspecialchars($row['number_of_days_taken']); ?></td>
             <td><?php echo htmlspecialchars($row['remaining_days']); ?></td>
-            <td>
-              <button class="btn btn-danger" title="Click to Delete" onclick="confirmDeleteEmployeeLeave(this)" data-id="<?php echo htmlspecialchars($row['id']); ?>">
+            <!-- <td>
+              <button class="btn btn-danger" title="Click to Delete" onclick="confirmDeleteEmployeeLeave(this)" data-id="<?php //echo htmlspecialchars($row['id']); ?>">
                 <i class="bx bx-trash"></i>
               </button> 
-            </td>
+            </td> -->
         </tr>
         <?php endforeach; ?>
     <?php else: ?>

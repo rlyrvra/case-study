@@ -225,12 +225,15 @@ class EmploymentTypeBenefitDao
                 " . implode(", ", $selectedColumns) . "
             FROM
                 employment_type_benefits AS employment_type_benefit
+            {$joinClauses}
             WHERE
             " . implode(" AND ", $whereClauses) . "
             " . (!empty($orderByClauses) ? "ORDER BY " . implode(", ", $orderByClauses) : "") . "
             {$limitClause}
             {$offsetClause}
         ";
+
+        //echo "<pre> $query </pre>";
 
         try {
             $statement = $this->pdo->prepare($query);

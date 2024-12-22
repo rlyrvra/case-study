@@ -22,7 +22,7 @@ if(isset($_GET['aR']) && $_GET['aR'] == true){
 
 </style>
 <head>
-<title> Dashboard </title>
+<title> Leave Requests </title>
 <link rel="icon" type="image/x-icon" href="img/logo-files/logo1.ico" />
 <!-- font-awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -39,9 +39,9 @@ if(isset($_GET['aR']) && $_GET['aR'] == true){
 />
 
 <!-- Ajax -->
-<script src="leaves/leave-approvals/modules/leave-requests-ajax.js?v1.1"></script>
+<script src="leaves/leave-approvals/modules/leave-requests-ajax.js?v1.2"></script>
 <!-- Scripts -->
-<script src="leaves/leave-approvals/modules/leave-requests-scripts.js?v1.1"></script>
+<script src="leaves/leave-approvals/modules/leave-requests-scripts.js?v1.3"></script>
 
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -95,6 +95,7 @@ if(isset($_GET['aR']) && $_GET['aR'] == true){
 
       <!-- / Navbar -->
       <div class="content-wrapper">
+        <div id="response-test"></div>
         <div class="container-fluid pt-5 pb-5">
           <div class="container-fluid mb-3 d-flex justify-content-between flex-column flex-lg-row">
             <h1 class="display-1">All Leave Requests</h1>

@@ -60,12 +60,23 @@
             ?>"><?php echo htmlspecialchars($row['status']); ?></span>
             </td>
             <td>
+            <?php if(!($row['status'] === "Approved" || 
+            $row['status'] === "Expired" || 
+            $row['status'] === "Completed" || 
+            $row['status'] === "In Progress" ||
+            $row['status'] === "Canceled")): ?>
             <button class="btn btn-info" 
               title="See Reason..." 
               data-bs-toggle="modal" 
               data-bs-target="#R<?php echo htmlspecialchars($row['id']); ?>"> 
                   <i class="bx bx-edit-alt"></i>
             </button> 
+            <?php endif; ?>
+            <?php if($row['status'] === "Approved" || 
+            $row['status'] === "Expired" || 
+            $row['status'] === "Completed" || 
+            $row['status'] === "In Progress" ||
+            $row['status'] === "Canceled") continue; ?>
             <?php include __DIR__ . '/leave-requests-modal-reason.php'; ?>
             </td>
         </tr>

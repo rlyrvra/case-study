@@ -36,7 +36,7 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
 <script src="leaves/modules/assign-leaves-ajax.js?v1.4"></script>
 <!-- Scripts -->
 <script src="leaves/modules/leave-types-scripts.js?v1.3"></script>
-<script src="leaves/modules/assign-leaves-scripts.js?v1.4"></script>
+<script src="leaves/modules/assign-leaves-scripts.js?v1.5"></script>
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 

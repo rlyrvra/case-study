@@ -47,8 +47,8 @@
                     <p><strong>Leave Current Status</strong>: <?php echo $row['status'] ?>
                 
                 </div>
-                <label for="update_status" class="form-label">Status*</label>
-                <select id="update_status" data-token="<?php echo htmlspecialchars($row['id']); ?>" class="form-select" required>
+                <label for="update_status<?php echo htmlspecialchars($row['id']); ?>" class="form-label">Status*</label>
+                <select id="update_status<?php echo htmlspecialchars($row['id']); ?>" class="form-select" required>
                     <option value="Pending" <?php echo $row['status'] === 'Pending' ? 'selected' : ''; ?>>Pending</option>
                     <option value="Approved" <?php echo $row['status'] === 'Approved' ? 'selected' : ''; ?>>Approved</option>
                     <option value="Rejected" <?php echo $row['status'] === 'Rejected' ? 'selected' : ''; ?>>Rejected</option>
@@ -57,7 +57,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Save Review</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" data-token="<?php echo htmlspecialchars($row['id']); ?>" onclick="reviewStatus(this)">Save Review</button>
             </div>
         </div>
     </div>

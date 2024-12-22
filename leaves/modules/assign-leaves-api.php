@@ -58,10 +58,13 @@ try{
     }
 
     if($action === 'assignLeaves'){
+        $assignResult = null;
         $employeeLeavesData = $_POST['selected_leaves'] ?? null;
         if(!$employeeLeavesData){
             return;
         }
+
+        
         $employmentType = $_POST['employment_type'] ?? '';
         if(empty($employmentType)){
             return;
@@ -69,7 +72,6 @@ try{
 
         
 
-        $assignResult;
         $employmentTypeRepo = new EmploymentTypeBenefitRepository($employmentTypeDao);
         $employmentTypeService = new EmploymentTypeBenefitService($employmentTypeRepo);
         $employeeRepo = new EmployeeRepository($employeeDao);
@@ -170,6 +172,18 @@ try{
             echo "
             <script>
                 showSuccessLeaveEntitlement();
+            </script>
+            ";
+        } else if ($assignResult === null) {
+            echo "
+            <script>
+                showNoEmployeePresent();
+            </script>
+            ";
+        } else {
+            echo "
+            <script>
+                showError();
             </script>
             ";
         }

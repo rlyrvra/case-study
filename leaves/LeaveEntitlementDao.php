@@ -128,7 +128,7 @@ class LeaveEntitlementDao
 
             error_log("Database Error: An error occurred while creating or updating the leave entitlement. " .
                       "Exception: {$exception->getMessage()}");
-
+            echo $exception->getMessage();
             return ActionResult::FAILURE;
         }
     }
@@ -324,6 +324,8 @@ class LeaveEntitlementDao
                 leave_type_id = :leave_type_id
             ";
         }
+
+        //echo "<pre> $query </pre>";
 
         try {
             $this->pdo->beginTransaction();

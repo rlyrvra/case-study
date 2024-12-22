@@ -16,7 +16,8 @@
                     <label for="employment-type" class="form-label">Employment Type*</label>
                     <select class="form-select" id="employment-type" required>
                         <option value="" selected disabled>Select Type</option>
-                        <option value="Regular / Permanent">Regular / Permanent</option>
+                        <option value="Regular">Regular</option>
+                        <option value="Regular Permanent">Regular Permanent</option>
                         <option value="Casual">Casual</option>
                         <option value="Contractual">Contractual</option>
                         <option value="Project-Based">Project-Based</option>
@@ -24,6 +25,8 @@
                         <option value="Fixed-Term">Fixed-Term</option>
                         <option value="Probationary">Probationary</option>
                         <option value="Part-Time">Part-Time</option>
+                        <option value="Regular Part-Time">Regular Part-Time</option>
+                        <option value="Part-Time Permanent">Part-Time Permanent</option>
                         <option value="Self-Employment">Self-Employment</option>
                         <option value="Freelance">Freelance</option>
                         <option value="Internship">Internship</option>

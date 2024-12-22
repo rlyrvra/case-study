@@ -130,3 +130,36 @@ function showSuccessDeleteLeaveEntitlement(){
         }
     });
 }
+
+function showNoEmployeePresent(){
+    $('#assign_leave_types_modal').modal('hide');
+    $('#leaveEntitlementModal').modal('hide');
+    Swal.fire({
+        title: 'Error!',
+        text: 'The selected employment type has no employee present.',
+        icon: 'error',
+        timer: 2000,
+        confirmButtonText: 'OK'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $('#assign_leave_types_modal').modal('show');
+        }
+    });
+}
+
+
+function showError(){
+    $('#assign_leave_types_modal').modal('hide');
+    $('#leaveEntitlementModal').modal('hide');
+    Swal.fire({
+        title: 'Error!',
+        text: 'An error has occured.',
+        icon: 'error',
+        timer: 2000,
+        confirmButtonText: 'OK'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $('#assign_leave_types_modal').modal('show');
+        }
+    });
+}

@@ -26,3 +26,12 @@ function getMaxPageValue() {
 
     return maxPage;
 }
+
+function showReviewSuccess(){
+    Swal.fire({
+        title: 'Review Success!',
+        text: 'This request has been successfully reviewed.',
+        icon: 'success',
+        confirmButtonText: 'OK'
+    });
+}

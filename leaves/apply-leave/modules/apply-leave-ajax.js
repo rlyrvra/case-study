@@ -127,3 +127,22 @@ function deleteLeaveRequest(button){
         }
     });
 }
+
+function cancelLeaveRequest(button){
+    const token = button.getAttribute("data-token");
+    $.ajax({
+        url: 'leaves/apply-leave/modules/apply-leave-api',
+        type: 'POST',
+        data: {
+            action: 'cancel',
+            md5_id: token
+        },
+        success: function(response) {
+            $('#response-test').html(response);
+            fetchLeaveRequests();
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log("AJAX Error: " + textStatus + ": " + errorThrown);
+        }
+    });
+}
