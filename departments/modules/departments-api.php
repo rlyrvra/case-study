@@ -38,13 +38,31 @@ try {
                 "value" => $status
             ];
         }
-        if(!empty($searchFilter)){
+
+        if(empty($searchAt) && !empty($searchFilter)){
+            $filterCriteria[] = [
+                "column" => "department.name", 
+                "operator" => "LIKE",
+                "value" => "%$searchFilter%", 
+                'boolean' => 'OR'
+
+            ];
+            $filterCriteria[] = [
+                "column" => "department.description", 
+                "operator" => "LIKE",
+                "value" => "%$searchFilter%", 
+                'boolean' => 'OR'
+            ];
+        }
+
+        if(!empty($searchFilter) && !empty($searchAt)){
             $filterCriteria[] = [
                 "column" => "department." . $searchAt, 
                 "operator" => "LIKE",
                 "value" => "%$searchFilter%"
             ];
         }
+
         if((!empty($dateFilterColumn) && $dateFilterColumn !== "none") && !empty($dateStart) && !empty($dateEnd)){
             $filterCriteria[] = [
                 "column" => "department." . $dateFilterColumn,

@@ -1,4 +1,5 @@
-<div class="controls d-flex justify-content-between flex-column flex-lg-row"> <!--Entries Per Page Text-->
+<div class="controls d-flex justify-content-between flex-column flex-lg-row"> 
+    <!--Entries Per Page Text-->
     <div class="display-6 align col-auto flex-fill mx-2"> 
         <label for="entries-per-page">Show:</label>
         <select id="entries-per-page">
@@ -10,6 +11,7 @@
         <label for="entries-per-page">Entries</label>  
     </div>
     
+    <!-- Sort By -->
     <div class="dropdown sort col-auto flex-fill mx-2">
     <button
         class="btn btn-outline-primary dropdown-toggle"

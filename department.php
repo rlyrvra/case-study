@@ -31,9 +31,9 @@ if($_SESSION['access_role'] !== 'Admin'){
 
 
 <!-- Ajax -->
-<script src="departments/modules/departments-ajax.js?v1.3"></script>
+<script src="departments/modules/departments-ajax.js?v1.4"></script>
 <!-- Scripts -->
-<script src="departments/modules/departments-scripts.js?v1.4"></script>
+<script src="departments/modules/departments-scripts.js?v1.6"></script>
 
 
 <meta name="viewport" content="width=device-width, initial-scale=1">

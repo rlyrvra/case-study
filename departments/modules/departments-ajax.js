@@ -1,15 +1,22 @@
 function fetchAllDepartments(page = 1) {
-    var numberEntries = $("#entries").val();
-    var sortByColumn = $("#sortBy").val();
+    var numberEntries = $("#entries-per-page").val();
+    var sortByColumn = getSortByColumn();
     var pageNumber = getPage(page);
-    if(sortByColumn == null) return;
-    var sortOrderBy = $("#orderBy").val();
-    if(sortOrderBy == null) return;
+    if(sortByColumn == null){
+        sortByColumn = "created_at";
+    };
+    var sortOrderBy = getOrderBy();
+    if(sortOrderBy == null) {
+        sortOrderBy = "DESC";
+    };
     var filterStatus = $("#status").val();
-    var searchColumn = $("#searchColumn").val();
-    var dateColumn = $("#dateColumn").val();
+    var searchColumn = $("#search_at").val();
+    if(searchColumn == 'none'){
+        searchColumn = "";
+    };
+    var dateColumn = getByDate();
     var startDate, endDate;
-    if(dateColumn !== "none"){
+    if(dateColumn){
         startDate = $("#dateStart").val();
         endDate = $("#dateEnd").val();
     }
@@ -30,7 +37,6 @@ function fetchAllDepartments(page = 1) {
 
     var loadingSpinner = document.getElementById("loadingSpinner");
     loadingSpinner.classList.remove("visually-hidden");
-        
     $.ajax({
         url: 'departments/modules/departments-api',
         type: 'POST',

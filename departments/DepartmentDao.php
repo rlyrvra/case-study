@@ -106,6 +106,9 @@ class DepartmentDao
             foreach ($filterCriteria as $filterCriterion) {
                 $column   = $filterCriterion["column"  ];
                 $operator = $filterCriterion["operator"];
+                $boolean  = isset($filterCriterion["boolean"])
+                    ? strtoupper($filterCriterion["boolean"])
+                    : 'AND';
 
                 switch ($operator) {
                     case "="   :
@@ -123,7 +126,14 @@ class DepartmentDao
                     default:
                         // Do nothing
                 }
+
+                $whereClauses[] = " {$boolean}";
             }
+
+        }
+
+        if (in_array(trim(end($whereClauses)), ['AND', 'OR'], true)) {
+            array_pop($whereClauses);
         }
 
         $orderByClauses = [];
@@ -170,7 +180,7 @@ class DepartmentDao
                 departments AS department
             {$joinClauses}
             WHERE
-            " . implode(" AND ", $whereClauses) . "
+            " . implode(" ", $whereClauses) . "
             " . (!empty($orderByClauses) ? "ORDER BY " . implode(", ", $orderByClauses) : "") . "
             {$limitClause}
             {$offsetClause}
@@ -201,7 +211,7 @@ class DepartmentDao
         } catch (PDOException $exception) {
             error_log("Database Error: An error occurred while fetching the departments. " .
                       "Exception: {$exception->getMessage()}");
-
+            echo $exception->getMessage();
             return ActionResult::FAILURE;
         }
     }
