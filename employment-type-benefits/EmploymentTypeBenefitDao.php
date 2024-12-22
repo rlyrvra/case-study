@@ -139,7 +139,7 @@ class EmploymentTypeBenefitDao
             ";
         }
 
-        if (array_key_exists("deduction_name"           , $selectedColumns) ||
+        if (array_key_exists("deduction_name"       , $selectedColumns) ||
             array_key_exists("deduction_amount"     , $selectedColumns) ||
             array_key_exists("deduction_frequency"  , $selectedColumns) ||
             array_key_exists("deduction_description", $selectedColumns) ||
