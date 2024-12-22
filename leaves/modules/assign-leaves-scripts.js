@@ -36,10 +36,31 @@ function clearSelectedLeaveTypes(){
 }
 
 function leaveTypeInputTest(){
+    const employment_type = document.getElementById('employment-type').value;
+    if(!employment_type){
+        return;
+    }
+    $('#assign_leave_types_modal').modal('hide');
+    $('#leaveEntitlementModal').modal('hide');
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "This action is irreversible and will affect all employees with selected employment type.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const selectedLeaveTypes = getSelectedLeaveTypes();
+            assignLeaves(selectedLeaveTypes);
+            clearSelectedLeaveTypes();
+        } else {
+            $('#assign_leave_types_modal').modal('show');
+        }
+    });
     
-    const selectedLeaveTypes = getSelectedLeaveTypes();
-    assignLeaves(selectedLeaveTypes);
-    clearSelectedLeaveTypes();
+    
 }
 
 
@@ -94,7 +115,6 @@ function confirmDeleteEmployeeLeave(button){
     }).then((result) => {
         if (result.isConfirmed) {
         deleteEmployeeLeave(button);
-
         } else {
             $('#assign_leave_types_modal').modal('show');
         }
@@ -135,9 +155,9 @@ function showNoEmployeePresent(){
     $('#assign_leave_types_modal').modal('hide');
     $('#leaveEntitlementModal').modal('hide');
     Swal.fire({
-        title: 'Error!',
-        text: 'The selected employment type has no employee present.',
-        icon: 'error',
+        title: 'Warning!',
+        text: 'The selected employment type has no employee present but its leaves have been successfully assigned.',
+        icon: 'warning',
         timer: 2000,
         confirmButtonText: 'OK'
     }).then((result) => {

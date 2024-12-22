@@ -19,7 +19,6 @@ function fetchEmployeeLeaves(){
 
 function assignLeaves(selectedLeavesTypes){
     const employment_type = document.getElementById('employment-type').value;
-
     $.ajax({
         url: 'leaves/modules/assign-leaves-api',
         type: 'POST',

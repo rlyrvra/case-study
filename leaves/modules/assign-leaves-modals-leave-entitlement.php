@@ -59,7 +59,6 @@
                 <i class="bx bx-arrow-back bx-sm"></i>Back
                 </button>
                 <button type="button" class="btn btn-primary" onclick="leaveTypeInputTest()" 
-                data-bs-target="#assign_leave_types_modal"
                 data-bs-toggle="modal"
                 data-bs-dismiss="modal" 
                 >

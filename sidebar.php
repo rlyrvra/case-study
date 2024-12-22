@@ -85,7 +85,7 @@
     ?>
 
     <!-- Attendance -->
-    <li class="menu-item">
+    <li class="menu-item" id="attendance-menu">
         <a href="javascript:void(0);" class="menu-link menu-toggle">
         <i class="menu-icon tf-icons bx bx-calendar"></i>
         <div data-i18n="Misc">Attendance</div>
@@ -102,8 +102,8 @@
             </a>
         </li>
         
-        <li class="menu-item">
-            <a href="maintenance-login" class="menu-link">
+        <li class="menu-item" id="work-schedules-menu">
+            <a href="work-schedule.php" class="menu-link">
             <div data-i18n="Under Maintenance">Work Schedules</div>
             </a>
         </li>
