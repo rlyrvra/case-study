@@ -296,7 +296,7 @@ class LeaveEntitlementDao
         } catch (PDOException $exception) {
             error_log("Database Error: An error occurred while fetching leave entitlements. " .
                       "Exception: {$exception->getMessage()}");
-
+            echo $exception->getMessage();
             return ActionResult::FAILURE;
         }
     }

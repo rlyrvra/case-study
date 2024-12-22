@@ -87,8 +87,33 @@ try{
 
         $matchingEmployees = $fetchEmployeeTypesResult['result_set'];
 
-        print_r($matchingEmployees);
+        $fetchExistingLeaves = $employmentTypeService->fetchAllEmploymentTypeBenefits(['leave_type_id'],
+        [
+            [
+                "column" => "employment_type_benefit.employment_type",
+                "operator" => "=",
+                "value" => $employmentType
+            ]
+        ]
+        );
 
+        $matchingLeaves = $fetchExistingLeaves['result_set'];
+        
+        $onQueueDeletionLeaves = [];
+        // Extract `id` values from $employeeLeavesData into a new array
+        $employeeLeaveIds = array_map('intval', array_column($employeeLeavesData, 'id'));
+        foreach ($matchingLeaves as $leave) {
+            if (!in_array($leave['leave_type_id'], $employeeLeaveIds, true)) {
+                $onQueueDeletionLeaves[] = $leave;
+            }
+            
+        }
+        // print_r($matchingLeaves);
+        // echo "<br>";
+        // print_r($employeeLeaveIds);
+        // echo "<br>";
+        // print_r($onQueueDeletionLeaves);
+        // echo "<br>";
         foreach ($employeeLeavesData as $employeeLeaves) {
             $newEmploymentTypeLeave = new EmploymentTypeBenefit(
                 id: null,
@@ -114,7 +139,31 @@ try{
 
                 $assignResult = $leaveService->createLeaveEntitlement($newLeaveEntitlement);
             }
+
         }
+
+        foreach ($onQueueDeletionLeaves as $deletedLeaveId){
+            // print_r($deletedLeaveId);
+            // echo $deletedLeaveId['leave_type_id'];
+            $currentDeletedId = (int) $deletedLeaveId['leave_type_id'];
+            $deleteEmploymentTypeServiceResult = $employmentTypeService->deleteEmploymentTypeBenefit($currentDeletedId);
+            $fetchLeaveTypeIdByEntitlement = $leaveService->getAllLeaveEntitlements(["id"],
+                [
+                    [
+                    "column" => "leave_entitlement.leave_type_id",
+                    "operator" => "=",
+                    "value" => $currentDeletedId
+                    ],
+                ]
+                );
+            $matchingLeaveEntitlements = $fetchLeaveTypeIdByEntitlement['result_set'];
+            foreach ($matchingLeaveEntitlements as $matchingLeaveEntitlement) {
+                $matchingLeaveEntitlementId = (int) $matchingLeaveEntitlement['id'];
+                $deleteResult = $leaveService->deleteLeaveEntitlement($matchingLeaveEntitlementId);
+            }
+        }
+
+
         
         
 

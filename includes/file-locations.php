@@ -1,5 +1,5 @@
 <?php
-$hosted = false;
+$hosted = true;
 $SMARTWAGE_LOCATION = "";
 
 if($hosted){
