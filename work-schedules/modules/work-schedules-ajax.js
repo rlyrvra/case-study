@@ -84,7 +84,7 @@ function createWorkSchedule(){
         start_date: start_date
     };
 
-    console.log(work_schedule);
+    //console.log(work_schedule);
 
     $.ajax({
         url: 'work-schedules/modules/work-schedules-api',

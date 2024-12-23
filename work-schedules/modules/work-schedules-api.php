@@ -88,22 +88,44 @@ try {
         if (!$workScheduleData) {
             return;
         } 
-        print_r($workScheduleData);
 
 
         $employee = isset($workScheduleData['employee']) ? validateInput($workScheduleData['employee'], 'Employee') : '';
-        $start_time = isset($workScheduleData['start_time']) ? validateInput($workScheduleData['start_time'], 'Start Time') : '';
-        $end_time = isset($workScheduleData['end_time']) ? validateInput($workScheduleData['end_time'], 'End Time') : '';
+        $start_time = isset($workScheduleData['start_time']) ? 
+            date('Y-m-d H:i:s', strtotime(validateInput($workScheduleData['start_time'], 'Start Time'))) : '1970-01-01 00:00:00';
+        $end_time = isset($workScheduleData['end_time']) ? 
+            date('Y-m-d H:i:s', strtotime(validateInput($workScheduleData['end_time'], 'End Time'))) : '1970-01-01 00:00:00';
         $is_flex_time = isset($workScheduleData['is_flex_time']) ? validateInput($workScheduleData['is_flex_time'], 'Is Flex Time') : null;
         $core_start_time = null; $core_end_time = null; $total_hrs_per_week = null;
-        if($is_flex_time === true){
-            $core_start_time = isset($workScheduleData['core_start_time']) ? validateInput($workScheduleData['core_start_time'], 'Core Start Time') : '';
-            $core_end_time = isset($workScheduleData['core_end_time']) ? validateInput($workScheduleData['core_end_time'], 'Core End Time') : '';
-            $total_hrs_per_week = isset($workScheduleData['total_hours_per_week']) ? (int) validateInput($workScheduleData['total_hours_per_week'], 'Total Hours Per Week') : null;
+        if($is_flex_time){
+            $core_start_time = isset($workScheduleData['core_start_time']) ? 
+                date('Y-m-d H:i:s', strtotime(validateInput($workScheduleData['core_start_time'], 'Core Start Time'))) : '1970-01-01 00:00:00';
+
+            $core_end_time = isset($workScheduleData['core_end_time']) ? 
+                date('Y-m-d H:i:s', strtotime(validateInput($workScheduleData['core_end_time'], 'Core End Time'))) : '1970-01-01 00:00:00';
+
+            $total_hrs_per_week = isset($workScheduleData['total_hrs_per_week']) ? (int) validateInput($workScheduleData['total_hrs_per_week'], 'Total Hours Per Week') : null;
         }
         $total_work_hrs = isset($workScheduleData['total_work_hrs']) ? (int) validateInput($workScheduleData['total_work_hrs'], 'Total Work Hours') : null;
         $start_date = isset($workScheduleData['start_date']) ? validateInput($workScheduleData['start_date'], 'Start Date') : null;
         $startDate = date('Y-m-d', strtotime($start_date));
+
+
+        // echo "Employee: " . $employee . PHP_EOL;
+        // echo "Start Time: " . $start_time . PHP_EOL;
+        // echo "End Time: " . $end_time . PHP_EOL;
+        // echo "Is Flex Time: " . ($is_flex_time === null ? 'null' : ($is_flex_time ? 'true' : 'false')) . PHP_EOL;
+
+        // if ($is_flex_time) {
+        //     echo "Core Start Time: " . $core_start_time . PHP_EOL;
+        //     echo "Core End Time: " . $core_end_time . PHP_EOL;
+        //     echo "Total Hours Per Week: " . ($total_hrs_per_week === null ? 'null' : $total_hrs_per_week) . PHP_EOL;
+        // }
+
+        // echo "Total Work Hours: " . ($total_work_hrs === null ? 'null' : $total_work_hrs) . PHP_EOL;
+        // echo "Start Date: " . ($start_date === null ? 'null' : $start_date) . PHP_EOL;
+        // echo "Formatted Start Date: " . $startDate . PHP_EOL;
+
         $newWorkSchedule = new WorkSchedule(
             id: null,
             employeeId: $employee,
@@ -128,7 +150,11 @@ try {
             </script>
             ");
         }else {
-            echo "errror";
+            die("
+            <script>
+                showError();
+            </script>
+            ");
         }
 
         return;

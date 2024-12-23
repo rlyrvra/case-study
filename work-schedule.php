@@ -33,9 +33,9 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
 />
 
 <!-- Ajax -->
-<script src="work-schedules/modules/work-schedules-ajax.js?v1.3"></script>
+<script src="work-schedules/modules/work-schedules-ajax.js?v1.4"></script>
 <!-- Scripts -->
-<script src="work-schedules/modules/work-schedules-scripts.js?v1.4"></script>
+<script src="work-schedules/modules/work-schedules-scripts.js?v1.5"></script>
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 

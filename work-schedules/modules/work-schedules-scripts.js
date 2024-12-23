@@ -100,6 +100,7 @@ function showFormIncomplete(){
 }
 
 function missingFieldValues(fieldName){
+    $('#add_work_schedules').modal('hide');
     Swal.fire({
         title: 'Warning!',
         text: `The ${fieldName} is missing. Please fill it up and try again.`,
@@ -109,11 +110,25 @@ function missingFieldValues(fieldName){
 }
 
 function showSuccessCreate() {
+    $('#add_work_schedules').modal('hide');
     Swal.fire({
         title: 'Success!',
         text: 'The work schedule has been created successfully.',
         icon: 'success',
         timer: 2000,
         confirmButtonText: 'OK'
+    });
+}
+
+function showError(){
+    Swal.fire({
+        title: 'Error!',
+        text: 'An error has occured. Please try again.',
+        icon: 'error',
+        confirmButtonText: 'OK'
+    }).then((result) => {
+        if(result.isConfirmed){
+            window.location.href = SMARTWAGE_LOCATION + "/work-schedule";
+        }
     });
 }
