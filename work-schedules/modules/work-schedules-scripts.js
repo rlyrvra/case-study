@@ -45,3 +45,75 @@ document.addEventListener('DOMContentLoaded', function () {
         
     });
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+    const startTimeSelect = document.getElementById("startTime");
+    const endTimeSelect = document.getElementById("endTime");
+
+    function calculateWorkHours() {
+        const startTime = startTimeSelect.value;
+        const endTime = endTimeSelect.value;
+
+        if (startTime && endTime) {
+            const startDate = new Date(`1970-01-01T${convertTo24Hour(startTime)}`);
+            const endDate = new Date(`1970-01-01T${convertTo24Hour(endTime)}`);
+
+            let diff = (endDate - startDate) / (1000 * 60 * 60); // Difference in hours
+
+            // Adjust for cases where end time is on the next day
+            if (diff < 0) {
+                diff += 24;
+            }
+
+            document.getElementById("totalWorkHours").value = diff;
+        }
+    }
+
+    function convertTo24Hour(time) {
+        const [hours, minutes, period] = time.match(/(\d+):(\d+)(AM|PM)/).slice(1);
+        let hour = parseInt(hours, 10);
+        if (period === "PM" && hour !== 12) {
+            hour += 12;
+        } else if (period === "AM" && hour === 12) {
+            hour = 0;
+        }
+        return `${hour.toString().padStart(2, "0")}:${minutes}`;
+    }
+
+    endTimeSelect.addEventListener("change", calculateWorkHours);
+});
+
+function showFormIncomplete(){
+    $('#add_work_schedules').modal('hide');
+    Swal.fire({
+        title: 'Warning!',
+        text: 'Please fill up the create form.',
+        icon: 'warning',
+        timer: 2000,
+        confirmButtonText: 'OK'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $('#add_work_schedules').modal('show');
+        }
+    });
+    
+}
+
+function missingFieldValues(fieldName){
+    Swal.fire({
+        title: 'Warning!',
+        text: `The ${fieldName} is missing. Please fill it up and try again.`,
+        icon: 'warning',
+        confirmButtonText: 'OK'
+    });
+}
+
+function showSuccessCreate() {
+    Swal.fire({
+        title: 'Success!',
+        text: 'The work schedule has been created successfully.',
+        icon: 'success',
+        timer: 2000,
+        confirmButtonText: 'OK'
+    });
+}

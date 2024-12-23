@@ -75,7 +75,7 @@ class WorkScheduleDao
 
             error_log("Database Error: An error occurred while creating the work schedule. " .
                       "Exception: {$exception->getMessage()}");
-
+            echo $exception->getMessage();
             return ActionResult::FAILURE;
         }
     }

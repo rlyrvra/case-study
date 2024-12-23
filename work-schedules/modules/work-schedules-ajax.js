@@ -56,3 +56,49 @@ function fetchAllWorkSchedules(page = 1){
         }
     });
 }
+
+function createWorkSchedule(){
+    const form = document.getElementById("work_schedules_add_form");
+    if(!form.checkValidity()){
+        showFormIncomplete();
+        return;
+    }
+    const employee = document.getElementById('select_employee').value;
+    const start_time = document.getElementById('startTime').value;
+    const end_time = document.getElementById('endTime').value;
+    const is_flex_time = document.getElementById('isFlextime').checked;
+    const core_start_time = document.getElementById('coreStartTime').value;
+    const core_end_time = document.getElementById('coreEndTime').value;
+    const total_hrs_per_week = document.getElementById('totalHoursPerWeek').value;
+    const total_work_hrs = document.getElementById('totalWorkHours').value;
+    const start_date = document.getElementById('startDate').value;
+    const work_schedule = {
+        employee: employee,
+        start_time: start_time,
+        end_time: end_time,
+        is_flex_time: is_flex_time,
+        core_start_time: core_start_time,
+        core_end_time: core_end_time,
+        total_hrs_per_week: total_hrs_per_week,
+        total_work_hrs: total_work_hrs,
+        start_date: start_date
+    };
+
+    console.log(work_schedule);
+
+    $.ajax({
+        url: 'work-schedules/modules/work-schedules-api',
+        type: 'POST',
+        data: {
+            action: 'create',
+            work_schedule: work_schedule
+        },
+        success: function(response) {
+            loadingSpinner.classList.add("visually-hidden");
+            $('#response-test').html(response);
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log("AJAX Error: " + textStatus + ": " + errorThrown);
+        }
+    });
+}

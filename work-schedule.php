@@ -33,9 +33,9 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
 />
 
 <!-- Ajax -->
-<script src="work-schedules/modules/work-schedules-ajax.js?v1.1"></script>
+<script src="work-schedules/modules/work-schedules-ajax.js?v1.3"></script>
 <!-- Scripts -->
-<script src="work-schedules/modules/work-schedules-scripts.js?v1.2"></script>
+<script src="work-schedules/modules/work-schedules-scripts.js?v1.4"></script>
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -97,7 +97,7 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
       <!-- / Navbar -->
       <div class="content-wrapper">
         <div class="container-fluid pt-5 pb-5">
-
+            <div id="response-test"></div>
             <div class="container-fluid mb-3 d-flex justify-content-between flex-column flex-lg-row">
               <h1 class="display-1">Work Schedules</h1>
               <button type="button" class="btn btn-success btn-xl" data-bs-toggle="modal" data-bs-target="#add_work_schedules">
@@ -108,7 +108,7 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
             <hr>
             <div class="container-fluid mb-3 d-flex justify-content-between flex-column flex-lg-row">
               <h1 class="display-2">Breaks</h1>
-              <button type="button" class="btn btn-success btn-xl" data-bs-toggle="modal" data-bs-target="#add_leave_types_modal">
+              <button type="button" class="btn btn-success btn-xl" data-bs-toggle="modal" data-bs-target="#add_breaks">
                 <i class="bx bx-plus bx-lg"></i>Add Breaks
               </button>
 
