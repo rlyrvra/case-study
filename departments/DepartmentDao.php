@@ -220,9 +220,8 @@ class DepartmentDao
     {
         $query = "
             SELECT
-                department.name                       AS department_name,
-                COUNT(employee.id)                    AS employee_count ,
-                COUNT(DISTINCT department.id) OVER () AS total_row_count
+                department.name    AS department_name,
+                COUNT(employee.id) AS employee_count
             FROM
                 departments AS department
             LEFT JOIN
@@ -234,6 +233,8 @@ class DepartmentDao
             GROUP BY
                 department.id  ,
                 department.name
+            HAVING
+                COUNT(employee.id) > 0
         ";
 
         try {
@@ -241,13 +242,13 @@ class DepartmentDao
 
             $statement->execute();
 
-            $resultSet     = [];
-            $totalRowCount = 0 ;
+            $resultSet = [];
 
             while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
-                $resultSet[]   = $row                   ;
-                $totalRowCount = $row['total_row_count'];
+                $resultSet[] = $row;
             }
+
+            $totalRowCount = count($resultSet);
 
             return [
                 "result_set"      => $resultSet    ,
