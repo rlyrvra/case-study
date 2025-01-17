@@ -100,7 +100,7 @@ if(isset($_GET['aR']) && $_GET['aR'] == true){
                 include_once __DIR__ . "/dashboard-staff.php";
                 break;
               case 'Manager':
-                include_once __DIR__ . "/dashboard-manager.php";
+                include_once __DIR__ . "/dashboard-admin.php";
                 break;
               case 'default':
                 break;

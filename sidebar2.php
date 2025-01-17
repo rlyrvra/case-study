@@ -92,11 +92,16 @@
         <div data-i18n="Misc">Attendance</div>
         </a>
         <ul class="menu-sub">
+        <?php
+        if($_SESSION['access_role'] != 'Admin'){
+        echo '
         <li class="menu-item">
             <a href="maintenance-login" class="menu-link">
             <div data-i18n="Error">My Attendance</div>
             </a>
-        </li>
+        </li>';
+        }
+        ?>
         <li class="menu-item">
             <a href="maintenance-login" class="menu-link">
             <div data-i18n="Under Maintenance">Attendance</div>
@@ -135,7 +140,7 @@
         </a>
         <ul class="menu-sub">
         <?php
-        if($_SESSION['access_role'] == 'Admin' || $_SESSION['access_role'] == 'Manager'){
+        if($_SESSION['access_role'] == 'Admin'){
         echo '
         <li class="menu-item" id="leave-types-menu">
             <a href="leave-types" class="menu-link">
@@ -145,6 +150,9 @@
         ';
         }
         ?>
+        <?php
+        if($_SESSION['access_role'] != 'Admin'){
+        echo '
         <li class="menu-item" id="apply-leave-menu">
             <a href="apply-leave" class="menu-link">
             <div data-i18n="Alerts">Apply Leave</div>
@@ -155,7 +163,9 @@
             <div data-i18n="Buttons">Leave Requests</div>
             </a>
         
-        </li>
+        </li>';
+        }
+        ?>
         </ul>
     </li>
 
@@ -167,6 +177,9 @@
         <div>Payroll</div>
         </a>
         <ul class="menu-sub">
+        <?php
+        if($_SESSION['access_role'] != 'Admin'){
+        echo '
         <li class="menu-item">
             <a href="maintenance-login" class="menu-link">
             <div data-i18n="Basic Inputs">My Payslips</div>
@@ -176,30 +189,32 @@
             <a href="maintenance-login" class="menu-link">
             <div data-i18n="Input groups">Generate Payslips</div>
             </a>
-        </li>
-
+        </li>';
+        }
+        ?>
+        <?php
+        if($_SESSION['access_role'] == 'Admin' || $_SESSION['access_role'] == 'Manager'){
+        echo '
         <li class="menu-item">
             <a href="forms-input-groups.html" class="menu-link">
             <div data-i18n="Input groups">Payroll Groups</div>
             </a>
         </li>
-        <?php
-        if($_SESSION['access_role'] == 'Admin' || $_SESSION['access_role'] == 'Manager'){
-        echo '
+        
         <li class="menu-item" id="allowances-menu">
             <a href="allowance" class="menu-link">
             <div>Allowances</div>
             </a>
         </li>
-        ';
-        }
-        ?>
+
         <li class="menu-item">
             <a href="maintenance-login" class="menu-link">
             <div data-i18n="Input groups">Deductions</div>
             </a>
         </li>
-        
+        ';
+        }
+        ?>
         </ul>
     </li>
 
@@ -267,5 +282,3 @@
     </ul>
 </aside>
 <!-- / Menu -->
-
-

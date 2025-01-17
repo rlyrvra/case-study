@@ -1,76 +1,100 @@
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<?php
+require_once __DIR__ . '/includes/Helper.php';
+require_once __DIR__ . '/includes/enums/ErrorCode.php';
+require_once __DIR__ . '/database/database.php';
+
+require_once __DIR__ . '/employees/EmployeeDao.php';
+require_once __DIR__ . '/employees/EmployeeService.php';
+require_once __DIR__ . '/employees/EmployeeRepository.php';
+require_once __DIR__ . '/employees/Employee.php';
+
+require_once __DIR__ . '/leaves/LeaveRequest.php';
+require_once __DIR__ . '/leaves/LeaveRequestDao.php';
+require_once __DIR__ . '/leaves/LeaveRequestRepository.php';
+require_once __DIR__ . '/leaves/LeaveRequestService.php';
+
+require_once __DIR__ . '/leaves/LeaveEntitlement.php';
+require_once __DIR__ . '/leaves/LeaveEntitlementDao.php';
+require_once __DIR__ . '/leaves/LeaveEntitlementRepository.php';
+require_once __DIR__ . '/leaves/LeaveEntitlementService.php';
+
+require_once __DIR__ . '/leaves/LeaveRequestAttachment.php';
+require_once __DIR__ . '/leaves/LeaveRequestAttachmentDao.php';
+require_once __DIR__ . '/leaves/LeaveRequestAttachmentRepository.php';
+?>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #ffffff, #e9f5e9);
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-            color: #2f3e2f;
-        }
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #ffffff, #e9f5e9);
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    color: #2f3e2f;
+}
 
-        .dashboard-container {
-            padding: 40px 20px;
-            max-width: 1200px;
-            margin: auto;
-        }
+.dashboard-container {
+    padding: 40px 20px;
+    max-width: 1200px;
+    margin: auto;
+}
 
-        .dashboard-header {
-            text-align: center;
-            margin-bottom: 20px;
-            font-size: 38px;
-            font-weight: 700;
-            color: #2f5932;
-        }
+.dashboard-header {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 38px;
+    font-weight: 700;
+    color: #2f5932;
+}
 
-        .welcome-label {
-            text-align: center;
-            font-size: 18px;
-            margin-bottom: 40px;
-            color: #43634a;
-        }
+.welcome-label {
+    text-align: center;
+    font-size: 18px;
+    margin-bottom: 40px;
+    color: #43634a;
+}
 
-        .card-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
-            padding: 20px;
-        }
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    padding: 20px;
+}
 
-        .dashboard-card {
-            background: #ffffff;
-            color: #155724;
-            border: 2px solid #28a745;
-            border-radius: 15px;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            padding: 40px 20px;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
+.dashboard-card {
+    background: #ffffff;
+    color: #155724;
+    border: 2px solid #28a745;
+    border-radius: 15px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    padding: 40px 20px;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
 
-        .dashboard-card h3 {
-            font-size: 18px;
-            font-weight: 500;
-            margin-bottom: 10px;
-        }
+.dashboard-card h3 {
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
 
-        .dashboard-card h2 {
-            font-size: 48px;
-            font-weight: 700;
-            margin: 0;
-            color: #2f5932;
-        }
+.dashboard-card h2 {
+    font-size: 48px;
+    font-weight: 700;
+    margin: 0;
+    color: #2f5932;
+}
 
-        .dashboard-card:hover {
-            background: #e9f5e9;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-            transform: translateY(-5px);
-        }
+.dashboard-card:hover {
+    background: #e9f5e9;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    transform: translateY(-5px);
+}
 
-        table {
+table {
     width: 100%; /* Ensure the table takes full width */
     border-collapse: collapse;
     margin-top: 40px;
@@ -102,52 +126,95 @@ tbody tr:hover {
     background-color: #f3faf3; /* Highlight background color on hover */
 }
 
-        .chart-container {
-            margin-top: 40px;
-            background: #ffffff;
-            border: 2px solid #28a745;
-            border-radius: 15px;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-            padding: 30px;
-        }
+.chart-container {
+    margin-top: 40px;
+    background: #ffffff;
+    border: 2px solid #28a745;
+    border-radius: 15px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+}
 
-        .chart-container canvas {
-            max-height: 300px;
-            display: block;
-        }
+.chart-container canvas {
+    max-height: 300px;
+    display: block;
+}
 
-        footer {
-            text-align: center;
-            margin-top: 50px;
-            padding: 20px;
-            background-color: #2f5932;
-            color: #ffffff;
-            border-radius: 10px;
-        }
+footer {
+    text-align: center;
+    margin-top: 50px;
+    padding: 20px;
+    background-color: #2f5932;
+    color: #ffffff;
+    border-radius: 10px;
+}
 
-        h2.my-4 {
-            font-family: 'Poppins', sans-serif;
-            font-size: 24px;
-            font-weight: 600;
-            color: #2f5932;
-            text-align: center;
-            margin-bottom: 20px;
-        }
+h2.my-4 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 24px;
+    font-weight: 600;
+    color: #2f5932;
+    text-align: center;
+    margin-bottom: 20px;
+}
 
-    </style>
+</style>
 <body>
     <div class="dashboard-container">
         <h1 class="dashboard-header">Team Performance Dashboard</h1>
-        <p class="welcome-label">Welcome, [User]! Here’s an overview of your team's performance and distribution.</p>
+        <p class="welcome-label">Welcome, <?php echo $_SESSION['full_name'];?>! Here’s an overview of your team's performance and distribution.</p>
         
         <div class="card-grid">
             <div class="dashboard-card">
                 <h3>Employee Code</h3>
-                <h2>132</h2>
+                <h2>
+                    <?php
+                    $employeeDao = new EmployeeDao($pdo);
+                    $employeeRepository = new EmployeeRepository($employeeDao);
+                    $employeeService = new EmployeeService($employeeRepository);
+            
+                    $empCode = $employeeService->fetchAllEmployees(
+                        ['employee_code'], 
+                        [
+                            [
+                            "column" => "employee.id",
+                            "operator" => "=",
+                            "value" => $_SESSION['id']
+                            ]
+                        ], [], 1
+                    );
+
+
+                    echo $empCode['result_set'][0]['employee_code'];
+
+                    ?>
+                </h2>
             </div>
             <div class="dashboard-card">
                 <h3>Pending Leaves</h3>
-                <h2>143</h2>
+                <h2>
+                    <?php
+                    $filterCriteria = [];
+                    $filterCriteria[] = [
+                        "column" => "leave_request.status",
+                        "operator" => "=",
+                        "value" => "Pending"
+                    ];
+                    $filterCriteria[] = [
+                        "column" => "leave_request.employee_id",
+                        "operator" => "=",
+                        "value" => $_SESSION['id']
+                    ];
+                    $leaveRequestDao = new LeaveRequestDao($pdo);
+                    $leaveRequestAttachmentDao = new LeaveRequestAttachmentDao($pdo);
+                    $leaveRequestRepo = new LeaveRequestRepository($leaveRequestDao);
+                    $leaveRequestAttachmentRepo = new LeaveRequestAttachmentRepository($leaveRequestAttachmentDao);
+                    $leaveRequestService = new LeaveRequestService($leaveRequestRepo, $leaveRequestAttachmentRepo);
+                    $result = $leaveRequestService->fetchAllLeaveRequests(["id"], $filterCriteria);
+
+                    echo $result['total_row_count'];
+                    ?>
+                </h2>
             </div>
         </div>
 

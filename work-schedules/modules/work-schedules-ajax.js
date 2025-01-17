@@ -96,6 +96,7 @@ function createWorkSchedule(){
         success: function(response) {
             loadingSpinner.classList.add("visually-hidden");
             $('#response-test').html(response);
+            fetchAllWorkSchedules();
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log("AJAX Error: " + textStatus + ": " + errorThrown);
