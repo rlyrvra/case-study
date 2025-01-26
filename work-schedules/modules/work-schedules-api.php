@@ -98,15 +98,16 @@ try {
         $is_flex_time = isset($workScheduleData['is_flex_time']) ? validateInput($workScheduleData['is_flex_time'], 'Is Flex Time') : null;
         $core_start_time = null; $core_end_time = null; $total_hrs_per_week = null;
         if($is_flex_time){
-            $core_start_time = isset($workScheduleData['core_start_time']) ? 
-                date('Y-m-d H:i:s', strtotime(validateInput($workScheduleData['core_start_time'], 'Core Start Time'))) : '1970-01-01 00:00:00';
+            // $core_start_time = isset($workScheduleData['core_start_time']) ? 
+            //     date('Y-m-d H:i:s', strtotime(validateInput($workScheduleData['core_start_time'], 'Core Start Time'))) : '1970-01-01 00:00:00';
 
-            $core_end_time = isset($workScheduleData['core_end_time']) ? 
-                date('Y-m-d H:i:s', strtotime(validateInput($workScheduleData['core_end_time'], 'Core End Time'))) : '1970-01-01 00:00:00';
-
+            // $core_end_time = isset($workScheduleData['core_end_time']) ? 
+            //     date('Y-m-d H:i:s', strtotime(validateInput($workScheduleData['core_end_time'], 'Core End Time'))) : '1970-01-01 00:00:00';
+            $core_start_time = date('Y-m-d H:i:s', strtotime(validateInput('12:00AM', 'Core End Time')));
+            $core_end_time = date('Y-m-d H:i:s', strtotime(validateInput('11:59PM', 'Core End Time')));
             $total_hrs_per_week = isset($workScheduleData['total_hrs_per_week']) ? (int) validateInput($workScheduleData['total_hrs_per_week'], 'Total Hours Per Week') : null;
         }
-        $total_work_hrs = isset($workScheduleData['total_work_hrs']) ? (int) validateInput($workScheduleData['total_work_hrs'], 'Total Work Hours') : null;
+        $total_work_hrs = isset($workScheduleData['total_work_hrs']) ? (int) (validateNumericIdentifier($workScheduleData['total_work_hrs'], 1, 3, 'Total Work Hours') * 6): null;
         $start_date = isset($workScheduleData['start_date']) ? validateInput($workScheduleData['start_date'], 'Start Date') : null;
         $startDate = date('Y-m-d', strtotime($start_date));
 

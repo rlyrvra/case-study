@@ -32,15 +32,15 @@ document.addEventListener('DOMContentLoaded', function () {
     const startTime = document.getElementById('startTime');
     const endTime = document.getElementById('endTime');
     const isFlextimeCheckbox = document.getElementById('isFlextime');
-    const coreStartTime = document.getElementById('coreStartTime');
-    const coreEndTime = document.getElementById('coreEndTime');
+    // const coreStartTime = document.getElementById('coreStartTime');
+    // const coreEndTime = document.getElementById('coreEndTime');
     const totalHours = document.getElementById('totalHoursPerWeek');
 
     isFlextimeCheckbox.addEventListener('change', function () {
         const isRequired = isFlextimeCheckbox.checked;
 
-        coreStartTime.required = isRequired;
-        coreEndTime.required = isRequired;
+        // coreStartTime.required = isRequired;
+        // coreEndTime.required = isRequired;
         totalHours.required = isRequired;
         
     });

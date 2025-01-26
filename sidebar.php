@@ -3,7 +3,7 @@
 <!-- <aside id="layout-menu" class="position-sticky layout-menu menu-vertical menu bg-menu-theme top-0 vh-100"> -->
 <aside id="layout-menu" class="position-sticky layout-menu menu-vertical menu bg-menu-theme top-0 vh-100">
     <div class="app-brand demo">
-    <a href="index.php" class="app-brand-link">
+    <a href="smartWage-index.php" class="app-brand-link">
         <span class="app-brand-logo demo">
         
         </span>

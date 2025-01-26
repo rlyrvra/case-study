@@ -6,7 +6,7 @@
         <script>
             document.write(new Date().getFullYear());
         </script>
-        <a href="#" target="_blank" class="footer-link fw-bolder">smartWage</a>
+        <a href="index.php" target="_blank" class="footer-link fw-bolder">smartWage</a>
         </div>
         <div>
         <a href="#" class="footer-link me-4" target="_blank">Contact</a>

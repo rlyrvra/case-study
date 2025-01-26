@@ -1,250 +1,536 @@
-<?php 
-require_once __DIR__ . '/company-profile/CompanyProfile.php';
-require_once __DIR__. '/database/database.php';
-require_once __DIR__ . '/includes/header.php'; 
-
-?>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Lobster&display=swap" rel="stylesheet">
+    
     <title>smartWage Landing Page</title>
     <link rel="icon" type="image/x-icon" href="img/logo-files/logo1.ico" />
 
     <script src="https://kit.fontawesome.com/e82c3ed260.js" crossorigin="anonymous"></script>
     <!-- SimpleMDE for text editors -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
-    <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Medula+One&family=Onest:wght@100..900&display=swap');
-        body{
-            padding: 0;
-            box-sizing: border-box;
-            background-color: #D6EFD8;
-        }
-        /* ----------- NAV BAR ------------ */
-        .sidebar-nav { min-width: 200px; }
-        .navbar-toggler { margin-left: auto; }
-        .full-width-btn-group{
-            width: 100%;
-            background-color: #FFFFFF;
-        }
-        nav .btn{
-            font-family: "Medula One";
-            font-size: 1.5rem !important;
-            transition: border-color 0.3s ease; /* Smooth transition for border color */
-            border: 2px solid transparent; /* Black border on hover */
-        }
-        @media (max-width: 576px) {
-            .navbar .btn {
-                font-size: 0.5rem;
-            }
-        }
-        .navbar{
-            margin: 0;
-            padding: 0;
-        }
-        .navbar .btn:hover {
-            border-color: black;
-        }
-        #navbarNav .active{
-            border-color: black;
-        }
-        /* ----------- /NAV BAR ------------ */
-        .indexContainer{
-            scroll-snap-type: y mandatory;
-            overflow-y: scroll;
-            height: 100vh;
-            scroll-behavior: smooth;
-        }
-        .indexSections{
-            scroll-snap-align: start;
-        }
-        .one{
-            background-color: #CADDCB;
-        }
-        .two{
-            background-color: red;
-        }
-        .three{
-            background-color: blue;
-        }
-        #top{
-            position: relative;
-            overflow: hidden; 
-        }
-        #top img {
-            width: 100%;
-            height: 100%;
-            display: block;
-            object-fit: cover;
-        }
-        #top::before{
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.4); /* Black overlay with 40% opacity */
-            z-index: 1;
-        }
-        #aboutUs .section h1{
-            font-family: "Medula One";
-            font-size: 10vh;
-        }
-        #aboutUs .inside{
-            height: 100%;
 
+    <style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-color: #ffffff;
+        color: #2f4f4f;
+    }
+
+    /* Sticky Navigation Bar */
+    .navbar {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background-color: #052a06;
+        padding: 10px 20px;
+    }
+
+    .navbar a {
+        color: white;
+        text-decoration: none;
+        margin-right: 100px;
+    }
+
+    
+
+    .hero {
+        background: url('img/ezgif.com-animated-gif-maker.gif') no-repeat center center/cover;
+        color: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 50px 20px;
+        height: 100vh;
+        position: relative;
+    }
+
+    .hero::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+    }
+
+    .hero-text {
+        max-width: 50%;
+        z-index: 2;
+    }
+
+    .hero h1 {
+        font-size: 3rem;
+        font-weight: 700;
+        line-height: 1.2;
+    }
+
+    .hero p {
+        font-size: 1.2rem;
+        margin-bottom: 20px;
+    }
+
+    .hero img {
+        max-width: 40%;
+        border-radius: 20px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-primary {
+        background-color: #052a06;
+        border: none;
+    }
+
+    .btn-primary:hover {
+        background-color: #052a06;
+    }
+
+    .about-us, .principles, .compliance {
+        padding: 60px 20px;
+    }
+
+    .about-us {
+        padding: 60px 0;
+        background-color: #dbe1dc;
+    }
+
+    .about-us h2 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    font-weight: bold;
+    }
+
+    .about-us p {
+    font-size: 1.2rem;
+    color: #666;
+    margin-bottom: 40px;
+    }
+
+    .about-us .card {
+    border: none;
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .about-us .card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .about-us .card img {
+    border-radius: 10px;
+    max-height: 150px;
+    object-fit: cover;
+    }
+
+    .about-us .card h5 {
+    font-size: 1.4rem;
+    font-weight: bold;
+    margin: 15px 0;
+    }
+
+    .about-us .card p {
+    font-size: 1rem;
+    color: #555;
+    }
+
+    @media (max-width: 768px) {
+    .about-us .card {
+        margin-bottom: 20px;
+    }
+    }
+
+
+
+        
+
+    .slide-in {
+        transform: translateX(100%);
+        opacity: 0;
+        transition: transform 1s ease, opacity 1s ease;
+    }
+
+
+
+
+    .principles {
+        background-color: #f1f8f5;
+    }
+
+    .compliance {
+        background-color: #e8f5e9;
+    }
+
+    h2, h3, h4 {
+        color: #052a06;
+    }
+
+    .card {
+        border: none;
+        transition: transform 0.2s ease, opacity 0.3s ease, background-color 0.3s;
+        opacity: 0;
+        transform: translateY(50px);
+    }
+
+    .btn-light {
+        --bs-btn-color: #631212;
+        --bs-btn-bg: #052a06;
+        --bs-btn-border-color: #f8f9fa;
+        --bs-btn-hover-color: #212529;
+        --bs-btn-hover-bg: #d3d4d5;
+        --bs-btn-hover-border-color: #c6c7c8;
+        --bs-btn-focus-shadow-rgb: 211, 212, 213;
+        --bs-btn-active-color: #000;
+        --bs-btn-active-bg: #c6c7c8;
+        --bs-btn-active-border-color: #babbbc;
+        --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+        --bs-btn-disabled-color: #000;
+        --bs-btn-disabled-bg: #f8f9fa;
+        --bs-btn-disabled-border-color: #f8f9fa;
+    }
+    .card.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .card:hover {
+        background-color: #d7ffd9;
+        transform: scale(1.05);
+    }
+
+    footer {
+        background-color: #052a06;
+        color: white;
+        padding: 40px 20px;
+        text-align: center;
+    }
+
+    footer a {
+        color: #a5d6a7;
+        text-decoration: none;
+    }
+
+    footer a:hover {
+        text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+        .hero {
+            flex-direction: column;
+            text-align: center;
         }
-        .history .col-sm h1{
-            font-family: "Medula One" !important;
-            border-left: 10px solid black !important;
+
+        .hero-text {
+            max-width: 100%;
         }
-        .history .col-sm p{
-            text-align: justify;
+
+        .hero img {
+            max-width: 100%;
+            margin-top: 20px;
         }
-        .inside .row{
-            background-color: #CADDCB;
-            padding: 3vh;
+
+        .hero h1 {
+            font-size: 2.5rem;
         }
+
+        .hero p {
+            font-size: 1rem;
+        }
+    }
+
+    #contact-links {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-top: 20px;
+    }
+
+    #contact-links a {
+        color: #052a06;
+        font-size: 1.5rem;
+    }
+
+    #contact-links a:hover {
+        color: #2d6a4f;
+    }
+
+    .header {
+        display: flex;
+        justify-content: flex-end;
+        padding: 10px;
+        background-color: #f3f3f3; /* Example background */
+    }
+
+    .login-button {
+        padding: 10px 20px;
+        background-color: #052a06;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .login-button:hover {
+    background-color: #052a06;
+    }
+
+    .animated-card {
+        transform: translateX(-50px);
+        opacity: 0;
+        transition: all 0.8s ease-in-out;
+    }
+
+    .animated-card.visible {
+        transform: translateX(0);
+        opacity: 1;
+    }
+
     </style>
 </head>
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
-  <div class="container-fluid">
-    <button class="navbar-toggler" type="button" 
-    data-bs-toggle="collapse" 
-    data-bs-target="#navbarNav" 
-    aria-controls="navbarNav" 
-    aria-expanded="false"
-    aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <!-- Use d-flex for mobile and d-lg-flex-row for horizontal layout on large screens -->
-      <div class="d-flex flex-column flex-lg-row w-100 justify-content-between">
-        <button type="button" id="smartWageBtn" class="btn flex-fill mb-2 mb-lg-0" onclick="window.location.href='login.php'">smartWAGE</button>
-        <button type="button" id="attendanceBtn" class="btn flex-fill mb-2 mb-lg-0" onclick="window.location.href='attendances.php'">Attendance</button>
-        <button type="button" id="aboutUsBtn" class="btn flex-fill mb-2 mb-lg-0" onclick="scrollToSection('aboutUs')">About Us</button>
-        <button type="button" id="principlesBtn" class="btn flex-fill mb-2 mb-lg-0" onclick="scrollToSection('principles')">Principles</button>
-        <button type="button" id="complianceBtn" class="btn flex-fill mb-2 mb-lg-0" onclick="scrollToSection('compliance')">Compliance & Policies</button>
-        <button type="button" id="contactBtn" class="btn flex-fill" onclick="">Contact</button>
-      </div>
-    </div>
-  </div>
-</nav>
-<div class="indexContainer">
-    <section class="indexSections h-100" id="top">
-        <img src="img/wallpaperSample2.jpg" alt="wallpaper">
-        
-    </section>
-    <section class="indexSections d-flex justify-content-center h-100" id="aboutUs">
-        <div class="container inside p-5">
-            <div class="row mt-2">
-                <div class="section container mt-4">
-                    <h1> About Us </h1>
+<body>
+    <!-- Sticky Navigation Bar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link" href="#" onclick="window.location.href='login.php'">Smart Wage</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">About Us</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Principles</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Compliance</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+            <button class="login-button" onclick="window.location.href='login.php'">Log In</button>
+    </nav>
+
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="hero-text">
+            <h1>Empowering Work, Simplifying Wages, Ensuring Trust.</h1>
+            <p> Experience the power of seamless payroll, where exclusive benefits meet effortless convenience. </p>
+            <a href="#about" class="btn btn-outline-light btn-lg ms-2">Check Eligibility</a> <!--pwede to gawin yung sa attendance part-->
+        </div>
+    </header>
+
+
+    <!-- About Us Section -->
+    <section id="about" class="about-us">
+        <div class="container">
+            <h2 class="text-center mb-4">About Us</h2>
+            <p class="text-center mb-5">Smart Wage Management System provides a simple and efficient solution for managing payroll. We focus on accuracy, transparency, and ease of use for businesses and employees.</p>
+    
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="card p-4 shadow text-center">
+                        <img src="img/1.webp" alt="Payroll Processing" class="img-fluid mb-3">
+                        <h5>Payroll Processing</h5>
+                        <p>Save time with automated calculations and payments.</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card p-4 shadow text-center">
+                        <img src="img/2.1.webp" alt="Wage Calculations" class="img-fluid mb-3">
+                        <h5>Wage Calculations</h5>
+                        <p>Eliminate errors with precision-based calculations.</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card p-4 shadow text-center">
+                        <img src="img/3.jpg" alt="Employee Self-Service" class="img-fluid mb-3">
+                        <h5>Employee Self-Service</h5>
+                        <p>Empower your team with full transparency.</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card p-4 shadow text-center">
+                        <img src="img/4.webp" alt="Compliance Made Easy" class="img-fluid mb-3">
+                        <h5>Simplified Compliance</h5>
+                        <p>Accurate reporting and legal adherence made simple.</p>
+                        
+                    </div>
                 </div>
             </div>
-            <div class="row history">
-                <div class="col-sm">
-                    <h1 class="display-1 ps-2"> History </h1>
-                    <?php 
-                    $companyProfile = new CompanyProfile($pdo);
-                    $results = $companyProfile->fetchCompanyInformation();
-                    // Loop through the results and extract the history column
-                    foreach ($results as $row) {
-                        if (isset($row['history'])) {
-                            $companyLocation[] = $row['location'];
-                            $companyIndustry[] = $row['industry'];
-                            $companyBusinessType[] = $row['business_type'];
-                            $companySize[] = $row['size'];
-                            $companyInfo[] = $row['history']; // Collect the history column values
-                            
-                        }
-                    }
-                    ?>
-                    
-                    <div id="preview"></div>
-                    <textarea id="markdownInput" style="visibility:hidden; height: 0; width: 0; display: none;"><?php echo htmlspecialchars($companyInfo[0]); ?></textarea>
-                    <h1 class="display-1 ps-2"> Details </h1>
-                    <p><i class="fa-solid fa-location-dot"></i> <?php echo htmlspecialchars($companyLocation[0]); ?></p>
-                    <p><i class="fa-solid fa-industry"></i> <?php echo htmlspecialchars($companyIndustry[0]); ?></p>
-                    <p><i class="fa-solid fa-building"></i> <?php echo htmlspecialchars($companyBusinessType[0]); ?></p>
-                    <p><i class="fa-solid fa-users"></i> Over <?php echo htmlspecialchars($companySize[0]); ?> employees</p>
+    
+            <!-- History Section -->
+            <div class="history-section mt-5 d-flex justify-content-center">
+                <div class="card p-4 shadow-lg animated-card">
+                    <h3 class="text-center mb-3">Our History</h3>
+                    <p class="text-center">Smart Wage Management System was established with the vision of simplifying payroll processing for businesses of all sizes. From our humble beginnings as a small startup, we’ve grown into a trusted platform that serves organizations across multiple industries. Our journey is fueled by our commitment to innovation, precision, and customer satisfaction.</p>
+                    <h3 class="text-center mb-3">Details</h3>
+        <div class="row text-center">
+            <div class="col-md-3 mb-3">
+                <i class="fas fa-map-marker-alt fa-2x mb-2" style="color: #2d6a4f;"></i>
+                <h5>Location</h5>
+                <p>Manila, Philippines</p>
+            </div>
+            <div class="col-md-3 mb-3">
+                <i class="fas fa-building fa-2x mb-2" style="color: #2d6a4f;"></i>
+                <h5>Address</h5>
+                <p>123 Main Street, Suite 400</p>
+            </div>
+            <div class="col-md-3 mb-3">
+                <i class="fas fa-laptop-code fa-2x mb-2" style="color: #2d6a4f;"></i>
+                <h5>Technology</h5>
+                <p>Information Technology</p>
+            </div>
+            <div class="col-md-3 mb-3">
+                <i class="fas fa-users fa-2x mb-2" style="color: #2d6a4f;"></i>
+                <h5>Employee Count</h5>
+                <p>100+ Employees</p>
+            </div>  
                 </div>
-                <div class="col-sm p-2" >
-                    <img src="img/wallpaperSample2.jpg" alt="wallpaper" style="max-width: 60vh; max-height: 70vh;">
-                </div>
-                <script>
-                    var simplemde = new SimpleMDE();
-                    simplemde.toTextArea();
-                    simplemde.value(document.getElementById("markdownInput").value);
-                    document.getElementById("preview").innerHTML = simplemde.markdown(simplemde.value());
-                </script>
             </div>
         </div>
     </section>
-    <section class="two indexSections h-100" id="principles">
-
-    </section>
     
-    <section class="three indexSections h-100" id="compliance">
+    
 
+
+  
+
+
+    
+
+    <!-- Principles Section -->
+    <section id="principles" class="principles">
+        <div class="container">
+            <h2 class="text-center mb-5">Company Principles</h2>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card p-3 shadow">
+                        <h4><i class="fas fa-bullseye mb-3"></i> Mission</h4>
+                        <p>To simplify payroll management through accurate, transparent, and efficient solutions.                        </p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card p-3 shadow">
+                        <h4><i class="fas fa-lightbulb mb-3"></i> Vision</h4>
+                        <p>To be the go-to platform for reliable and seamless wage management.                        </p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card p-3 shadow">
+                        <h4><i class="fas fa-handshake mb-3"></i> Values</h4>
+                        <p> We are committed to ensuring precise payroll processing, building trust through transparency, saving time with efficient solutions, and prioritizing user-friendly experiences.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
-</div>
 
-<script>
-// Select the section to observe
-const sections = document.querySelectorAll('.indexSections');
-const buttons = ["smartWageBtn", "aboutUsBtn", "principlesBtn", "complianceBtn", "contactBtn"];
-// Create an Intersection Observer
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (!entry.isIntersecting) {
-            return;
-        }
-        buttons.forEach(button => {
-            document.getElementById(button).classList.remove("active");
+    <!-- Compliance Section -->
+    <section id="compliance" class="compliance">
+        <div class="container">
+            <h2 class="text-center mb-5">Compliance and Policies</h2>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card p-3 shadow">
+                        <h4><i class="fas fa-user-check mb-3"></i> HR Policies</h4>
+                        <p>We uphold fairness, transparency, confidentiality, and compliance in all HR practices.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card p-3 shadow">
+                        <h4><i class="fas fa-balance-scale mb-3"></i> Compliance Requirements</h4>
+                        <p>We ensure strict adherence to labor laws, tax regulations, and data protection standards.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card p-3 shadow">
+                        <h4><i class="fas fa-file-contract mb-3"></i> Policies</h4>
+                        <p>We maintain fair practices, data security, and compliance with all applicable laws and regulations.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section id="contact-us" style="background-color: #f4f4f4; padding: 50px 0;">
+        <div style="text-align: center; margin-bottom: 30px;">
+          <h2 style="color: #2d6a4f;">Contact Us</h2>
+          <p style="color: #6b8e23;">We'd love to hear from you! Reach out with any questions, comments, or feedback.</p>
+        </div>
+        
+        <div style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
+          <form action="#" method="POST" style="max-width: 600px; width: 100%; background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+            <div style="margin-bottom: 20px;">
+              <label for="name" style="color: #2d6a4f; font-weight: bold;">Your Name</label>
+              <input type="text" id="name" name="name" placeholder="Enter your name" required style="width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 5px;"/>
+            </div>
+      
+            <div style="margin-bottom: 20px;">
+              <label for="email" style="color: #2d6a4f; font-weight: bold;">Your Email</label>
+              <input type="email" id="email" name="email" placeholder="Enter your email" required style="width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 5px;"/>
+            </div>
+      
+            <div style="margin-bottom: 20px;">
+              <label for="message" style="color: #2d6a4f; font-weight: bold;">Your Message</label>
+              <textarea id="message" name="message" placeholder="Write your message here" required style="width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 5px; height: 150px;"></textarea>
+            </div>
+      
+            <div style="text-align: center;">
+              <button type="submit" style="background-color: #2d6a4f; color: white; padding: 15px 30px; font-size: 16px; border: none; border-radius: 5px; cursor: pointer;">
+                Send Message
+              </button>
+            </div>
+          </form>
+          <div id="contact-links">
+            <a href="#"><i class="fab fa-twitter" title="Twitter"></i></a>
+            <a href="#"><i class="fab fa-facebook" title="Facebook"></i></a>
+            <a href="#"><i class="fab fa-instagram" title="Instagram"></i></a>
+            <a href="mailto:example@example.com"><i class="fas fa-envelope" title="Email"></i></a>
+        </div>
+        </div>
+      </section>
+      
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 Smart Wage | Designed with Sneats Bootstrap Template</p>
+        <div>
+            <a href="#">Privacy Policy</a> | <a href="#">Terms of Use</a>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
         });
-        switch(entry.target.id){
-            case 'aboutUs': document.getElementById("aboutUsBtn").classList.add("active"); break;
-            case 'principles': document.getElementById("principlesBtn").classList.add("active"); break;
-            case 'compliance': document.getElementById("complianceBtn").classList.add("active"); break;
-        }
-        console.log('User is in section with ID: ' + entry.target.id);
+    
+        document.querySelectorAll('.card').forEach((card) => {
+            observer.observe(card);
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+        const animatedCard = document.querySelector('.animated-card');
+
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    animatedCard.classList.add('visible');
+                }
+            },
+            { threshold: 0.1 }
+        );
+
+        observer.observe(animatedCard);
     });
-}, {
-    root: null, // Use the viewport as the container
-    threshold: 0.2 // Trigger when 10% of the section is in view
-});
-
-// Observe each section
-sections.forEach(section => observer.observe(section));
-</script>
-
-<script>
-    function scrollToSection(id) {
-        document.getElementById(id).scrollIntoView({ behavior: "smooth" });
-        // Collapse the navbar after click
-        const navbarCollapse = document.getElementById('navbarNav');
-        const bsCollapse = new bootstrap.Collapse(navbarCollapse, {
-            toggle: false // Ensures collapse does not auto-toggle
-        });
-        bsCollapse.hide(); // Manually collapse the navbar
-    }
-</script>
-
-
-<script>
-// // JavaScript to snap fully to each section on scroll
-// const container = document.querySelector('.indexContainer');
-
-// container.addEventListener('wheel', (event) => {
-//     event.preventDefault();
-//     if (event.deltaY > 0) {
-//         container.scrollBy({ top: window.innerHeight, behavior: 'smooth' });
-//     } else {
-//         container.scrollBy({ top: -window.innerHeight, behavior: 'smooth' });
-//     }
-// });
-</script>
+    </script>
+    
+</body>
 </html>
