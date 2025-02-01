@@ -131,11 +131,234 @@ if(isset($_GET['aR']) && $_GET['aR'] == true){
       <div class="content-wrapper">
         <div class="container-fluid">
             
-          
+          <!-- HEADER -->
+          <div class="controls"> <!--Entries Per Page Text-->
+                        <div class="align"> 
+                            <label for="entries-per-page">Show:</label>
+                            <select id="entries-per-page">
+                              <option value="10">10</option>
+                              <option value="25">25</option>
+                              <option value="50">50</option>
+                              <option value="100">100</option>
+                            </select>
+                            <label for="entries-per-page">Entries</label>  
+                        </div>
+                     
+                      <div class="dropdown sort">
+                        <button
+                          class="btn btn-default dropdown-toggle"
+                          type="button"
+                          data-toggle="dropdown"
+                        >
+                          Sort By <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                          <li><a class="dropdown-item" href="#" data-group="group1" data-value="Name">Name</a></li>
+                          <li><a class="dropdown-item" href="#" data-group="group1" data-value="Date Created">Date Created</a></li>
+                          <li><a class="dropdown-item" href="#" data-group="group1" data-value="Date Modified">Date Modified</a></li>
+                          <li><h5 class="dropdown-header line"></h5></li>
+                          <li><a class="dropdown-item" href="#" data-group="group2" data-value="Ascending">Ascending</a></li>
+                          <li><a class="dropdown-item" href="#" data-group="group2" data-value="Descending">Descending</a></li>
+                        </ul>
+                      </div>  
+                      <div class="dropdown filter">
+                        <button
+                          class="btn btn-default dropdown-toggle"
+                          type="button"
+                          data-toggle="dropdown"
+                        >
+                          Filter by Status <span class="caret"></span>
+                        </button>
+                       <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                          <li><a class="dropdown-item" href="#" data-group="group1" data-value="Active">Active</a></li>
+                          <li><a class="dropdown-item" href="#" data-group="group1" data-value="Inactive">Inactive</a></li>
+                          <li><a class="dropdown-item" href="#" data-group="group1" data-value="Archived">Archived</a></li>
+                        </ul>
+                      </div>  
+                      <div class="dropdown filter">
+                        <button
+                          class="btn btn-default dropdown-toggle"
+                          type="button"
+                          data-toggle="dropdown"
+                        >
+                          Filter by Date <span class="caret"></span>
+                        </button>
+                       <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <li><a class="dropdown-item" href="#" data-group="group1" data-value="None">None</a></li>
+                        <li><a class="dropdown-item" href="#" data-group="group1" data-value="Date Created">Date Created</a></li>
+                        <li><a class="dropdown-item" href="#" data-group="group1" data-value="Date Updated">Date Updated</a></li>
+                        <li><h5 class="dropdown-header line"></h5></li>
+                        <div class="space">
+                          <input type="date" id="col3"  class="form-control" required />
+                        </div>
+                        <div class="space">
+                          <input type="date" id="col3"  class="form-control" required />
+                        </div>
+                        </ul>
+                      </div>  
+                      <div class="search ">
+                        <label for="search">Search</label>
+                        <input type="text" id="Search" />
+                        <button
+                        id="openModalBtn"
+                        class="btn btn-success "
+                        data-toggle="modal"
+                        data-target="#inputModal"
+                      >
+                        Add Row
+                      </button>
+                      </div>
+                    </div>
 
+                    <!-- TABLE -->
+                    <div class="content">
+                        <div class="container mt-5">
+                          <table id="dynamicTable" class="table table-bordered table-striped">
+                            <thead>
+                              <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Date</th>
+                                <th>Paid</th>
+                                <th>Description</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <!-- Rows will be added dynamically -->
+                              <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>
+                                  <button class="btn btn-primary btn-sm">Edit</button>
+                                  <button class="btn btn-danger btn-sm">Delete</button>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                    </div>
 
-
-
+                    <!-- Footer Starts HERE -->
+                    <style>
+                        .modal-header{
+                            justify-content: start !important;
+                        }
+                        .close{
+                            margin-left:80%;
+                        }
+                        .form-check-input{
+                            border: black solid 1px;
+                        }
+                    </style>
+                      <div class="showing-entries">
+                        <span id="entry-info">Showing 0 of 0 entries</span>
+                      </div>
+                      <div
+                      id="inputModal"
+                      class="modal fade"
+                      tabindex="-1"
+                      role="dialog"
+                      aria-labelledby="modalTitle"
+                      aria-hidden="true"
+                    >
+                    <!-- MODAL -->
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="modalTitle">Add New Row</h5>
+                            <button
+                              type="button"
+                              class="close"
+                              data-dismiss="modal"
+                              aria-label="Close"
+                            >
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                            <form id="rowInputForm">
+                              <div class="form-group">
+                                <label for="col2">Name</label>
+                                <input type="text" id="col2" class="form-control" required />
+                              </div>
+                              <div class="form-group">
+                                <label for="col3">Date</label>
+                                <input type="date" id="col3"  class="form-control" required />
+                              </div>
+                              <div class="form-group">
+                                <label for="col4">Is Paid</label><br />
+                                <input
+                                  class="form-check-input"
+                                  type="radio"
+                                  name="yesNoOption"
+                                  id="col4"
+                                  value="Yes"
+                                />
+                                <label for="col4">YES</label>
+                                <input
+                                  class="form-check-input"
+                                  type="radio"
+                                  name="yesNoOption"
+                                  id="col4"
+                                  value="No"
+                                />
+                                <label for="col4">NO</label>
+                              </div>
+                              <div class="form-group">
+                                <label for="col6">Description</label>
+                                <input type="text" id="col5" class="form-control" required />
+                              </div>
+                              <div class="form-group">
+                                <label for="col7">Status</label><br />
+                                <input
+                                  class="form-check-input"
+                                  type="radio"
+                                  name="ActiveInactive"
+                                  id="col7"
+                                  value="Active"
+                                />
+                                <label class="form-check-label" for="ActiveInactive"
+                                  >Active</label
+                                >
+                                <input
+                                  class="form-check-input"
+                                  type="radio"
+                                  name="ActiveInactive"
+                                  id="col7"
+                                  value="Inactive"
+                                />
+                                <label class="form-check-label" for="ActiveInactive"
+                                  >Inactive</label
+                                >
+                              </div>
+                              <button type="submit" class="btn btn-primary">Add Row</button>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination justify-content-end">
+                          <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1">Previous</a>
+                          </li>
+                          <li class="page-item"><a class="page-link" href="#">1</a></li>
+                          <li class="page-item"><a class="page-link" href="#">2</a></li>
+                          <li class="page-item"><a class="page-link" href="#">3</a></li>
+                          <li class="page-item">
+                            <a class="page-link" href="#">Next</a>
+                          </li>
+                        </ul>
+                      </nav>
+                  </div>
+            </div>
+          </div>
         </div>
       </div>
       <?php require_once __DIR__ . '/footer.php' ?>

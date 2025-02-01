@@ -57,8 +57,7 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
                     <li>
-                        <a class="dropdown-item" href="#">
-                        <div class="d-flex">
+                        <div class="p-1 d-flex">
                             <div class="flex-shrink-0 me-3">
                             <div class="avatar avatar-online">
                             <?php 
@@ -78,7 +77,6 @@
                             <small class="text-muted"><?php echo htmlspecialchars($_SESSION['access_role'])?></small>
                             </div>
                         </div>
-                        </a>
                     </li>
                     <li>
                         <div class="dropdown-divider"></div>
