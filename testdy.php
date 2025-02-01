@@ -8,5 +8,8 @@ function HelloVaness(){
     echo "Hello World shsshsh";
 }
 
+function Reily(){
+    echo "Reily";
+}
 
 ?>

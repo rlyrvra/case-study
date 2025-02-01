@@ -1,13 +1,13 @@
 <?
 function Hello(){
 
-echo Hello World
+echo Hello World;
 
 }
 
 function Reily(){
-    SSSSSSS
-    SSSSSSS
+    SSSSSSS;
+    SSSSSSS;
 }
 
 function JabbatheHutt(
