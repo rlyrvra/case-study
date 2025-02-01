@@ -112,9 +112,7 @@ body{
                             <label class="form-check-label" for="remember">Remember me?</label>
                         </div>
                         <button type="submit" class="btn btn-login mb-3" onclick="login()">LOGIN</button>
-                        <div class="text-center">
-                            <a href="#" class="forgot-password text-decoration-none">Forgot Password?</a>
-                        </div>
+                       
                     </form>
                 </div>
             </div>
