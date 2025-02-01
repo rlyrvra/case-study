@@ -121,7 +121,7 @@ if($_SESSION['access_role'] !== 'Admin'){
               </div>
               <div class="card-body">
                 <div id="job-titles-table" class="table-responsive text-no-wrap">
-                  <div class="spinner-border spinner-border-lg text-primary text-center w-px-700 h-px-700" role="status"></div>
+                <div class="container-fluid spinner-border spinner-border-lg d-flex align-items-center justify-content-center w-px-700 h-px-700" role="status"></div>
                 </div>
               </div>
             </div>

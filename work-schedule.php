@@ -90,6 +90,7 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
       document.getElementById("work-schedules-menu").classList.add("active");
     </script>
     <?php require_once __DIR__ . '/work-schedules/modules/work-schedules-modal-add-form.php' ?>
+    <?php require_once __DIR__ . '/work-schedules/modules/work-schedules-modal-breaks.php' ?>
     <!-- Layout container -->
     <div class="layout-page">
     <?php require_once __DIR__ . '/user.php' ?>
@@ -131,7 +132,7 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
               </div>
               <div class="card-body">
                 <div id="work-schedules-table" class="table-responsive text-no-wrap">
-                  <!-- <div class="spinner-border spinner-border-lg text-primary text-center w-px-700 h-px-700" role="status"></div> -->
+                  <div class="container-fluid spinner-border spinner-border-lg d-flex align-items-center justify-content-center w-px-700 h-px-700" role="status"></div>
                   <?php require_once __DIR__ . '/work-schedules/modules/work-schedules-table.php' ?>
                 </div>
               </div>
