@@ -7,5 +7,8 @@ function HelloReily(){
     echo "Hello Reily";
 }
 
+function Hellodusu(){
+    echo "Hello jdabh";
+}
 
 ?>
