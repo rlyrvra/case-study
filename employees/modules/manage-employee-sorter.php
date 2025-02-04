@@ -1,6 +1,6 @@
 <div class="controls d-flex justify-content-between flex-column flex-lg-row"> 
     <!--Entries Per Page Text-->
-    <div class="display-6 align col-auto flex-fill mx-2"> 
+    <div class="align col-auto mx-1 d-flex align-items-center"> 
         <label for="entries-per-page">Show:</label>
         <select id="entries-per-page">
             <option value="10">10</option>
@@ -12,7 +12,7 @@
     </div>
     
     <!-- Sort By -->
-    <div class="dropdown sort col-auto flex-fill mx-2">
+    <div class="dropdown sort col-auto flex-fill mx-1 d-flex align align-items-center">
     <button
         class="btn btn-outline-primary dropdown-toggle"
         type="button"
@@ -30,7 +30,7 @@
         <li><a class="dropdown-item selected" href="#" data-group="order_by" data-value="DESC">Descending</a></li>
     </ul>
     </div>  
-    <div class="dropdown filter col-auto flex-fill mx-2">
+    <div class="dropdown filter flex-fill w-25 col-auto mx-1">
         <div class="input-group">
             <span class="input-group-text"><i class="bx bx-filter fs-4 lh-0"></i></span>
             <select class="form-select selectize-department-sorter" id="selectize_department_sorter" name="selectize-department-sorter" placeholder="Filter Department" onchange="fetchAllEmployees();">
@@ -38,7 +38,7 @@
             </select>
         </div>
     </div>  
-    <div class="search col-auto d-flex flex-column flex-lg-row mx-2">
+    <div class="search col-auto flex-fill mx-1 d-flex align align-items-center">
         <div class="input-group">
             <span class="input-group-text"><i class="bx bx-category fs-4 lh-0"></i></span>
             <select class="form-select" id="search_at" name="search_at" placeholder="Search At">
