@@ -1,38 +1,38 @@
 <?php
 
-require_once __DIR__ . '/AllowanceDao.php';
+require_once __DIR__ . '/AllowanceRepository.php';
 
 class AllowanceService
 {
-    private readonly AllowanceDao $allowanceDao;
+    private readonly AllowanceRepository $allowanceRepository;
 
-    public function __construct(AllowanceDao $allowanceDao)
+    public function __construct(AllowanceRepository $allowanceRepository)
     {
-        $this->allowanceDao = $allowanceDao;
+        $this->allowanceRepository = $allowanceRepository;
     }
 
     public function createAllowance(Allowance $allowance): ActionResult
     {
-        return $this->allowanceDao->create($allowance);
+        return $this->allowanceRepository->createAllowance($allowance);
     }
 
     public function fetchAllAllowances(
-        ? array $columns        = null,
-        ? array $filterCriteria = null,
-        ? array $sortCriteria   = null,
-        ? int   $limit          = null,
-        ? int   $offset         = null
+        ?array $columns        = null,
+        ?array $filterCriteria = null,
+        ?array $sortCriteria   = null,
+        ?int   $limit          = null,
+        ?int   $offset         = null
     ): ActionResult|array {
-        return $this->allowanceDao->fetchAll($columns, $filterCriteria, $sortCriteria, $limit, $offset);
+        return $this->allowanceRepository->fetchAllAllowances($columns, $filterCriteria, $sortCriteria, $limit, $offset);
     }
 
     public function updateAllowance(Allowance $allowance, bool $isHashedId = false): ActionResult
     {
-        return $this->allowanceDao->update($allowance, $isHashedId);
+        return $this->allowanceRepository->updateAllowance($allowance, $isHashedId);
     }
 
     public function deleteAllowance(int|string $allowanceId, bool $isHashedId = false): ActionResult
     {
-        return $this->allowanceDao->delete($allowanceId, $isHashedId);
+        return $this->allowanceRepository->deleteAllowance($allowanceId, $isHashedId);
     }
 }

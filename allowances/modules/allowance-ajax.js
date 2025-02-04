@@ -1,4 +1,4 @@
-function fetchAllDepartments(page = 1) {
+function fetchAllAllowances(page = 1) {
     var numberEntries = $("#entries-per-page").val();
     var sortByColumn = getSortByColumn();
     var pageNumber = getPage(page);
@@ -38,7 +38,7 @@ function fetchAllDepartments(page = 1) {
     var loadingSpinner = document.getElementById("loadingSpinner");
     loadingSpinner.classList.remove("visually-hidden");
     $.ajax({
-        url: 'departments/modules/departments-api',
+        url: 'allowances/modules/allowance-api',
         type: 'POST',
         data: {
             action: 'fetchAll',
@@ -55,7 +55,7 @@ function fetchAllDepartments(page = 1) {
         },
         success: function(response) {
             loadingSpinner.classList.add("visually-hidden");
-            $('#departments-table').html(response);
+            $('#allowance-table').html(response);
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log("AJAX Error: " + textStatus + ": " + errorThrown);
@@ -63,32 +63,40 @@ function fetchAllDepartments(page = 1) {
     });
 }
 
+function createAllowance() {
+    const createForm = document.getElementById("add_allowance_form");
+    if(!createForm.checkValidity()){
+        //showWarningIncompleteForm()
+        return;
+    }
+    const allowanceName = document.getElementById('create_name').value;
+    const allowanceAmount = document.getElementById('create_amount').value;
+    const allowanceFrequency = document.getElementById('create_frequency').value;
+    const allowanceDesc = document.getElementById('create_description').value;
+    const allowanceStatus = document.getElementById('create_status').value;
+    
 
-function createDepartment() {
-    const departmentName = document.getElementById('create_department_name').value;
-    const departmentHeadId = document.getElementById('create_department_head').value;
-    const departmentDescription = document.getElementById('create_department_description').value;
-    const departmentStatus = document.getElementById('create_department_status').value;
-
-    const departmentData = {
-        name: departmentName,
-        departmentHeadId: departmentHeadId,
-        description: departmentDescription,
-        status: departmentStatus
+    const allowanceData = {
+        name: allowanceName,
+        amount: allowanceAmount,
+        frequency: allowanceFrequency,
+        description: allowanceDesc,
+        status: allowanceStatus
     };
 
+
     $.ajax({
-        url: 'departments/modules/departments-api',
+        url: 'allowances/modules/allowance-api',
         method: 'POST',
         data: {
             action: 'create',
-            department: departmentData
+            allowance: allowanceData
         },
         success: function(response) {
-            $('#departments-table').html(response);
-            fetchAllDepartments();
-            document.getElementById('add-departments-form').reset();
-            showCreatedSuccessAlert();
+            $('#allowance-table').html(response);
+            fetchAllAllowances();
+            document.getElementById('add_allowance_form').reset();
+            showSuccessCreate();
         },
         error(xhr, status, error) {
             console.error("Error creating department:", error);
@@ -96,60 +104,31 @@ function createDepartment() {
     });
 }
 
-function deleteDepartment(button){
-    const row = button.closest('tr');  // Get the closest row
-    const departmentData = {
-        token: row.getAttribute('data-id'),
-    };
-    
-    $.ajax({
-        url: 'departments/modules/departments-api',
-        type: 'POST',
-        data: {
-            action: 'delete',
-            md5_id: departmentData.token
-        },
-        success: function(response) {
-            $('#departments').html(response);
-            fetchAllDepartments();
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            console.log("AJAX Error: " + textStatus + ": " + errorThrown);
-        }
-    });
-    
-}
-
-function updateDepartment(button){
+function updateAllowance(button){
     var md5_id = button.getAttribute('data-token');
-    var departmentName = document.getElementById('update_department_name').value;
-    var departmentHeadId = document.getElementById('update_department_head').value;
-    var departmentDescription = document.getElementById('update_department_description').value;
-    var departmentStatus = document.getElementById('update_department_status').value;
-
-    // console.log(`MD5 ID: ${md5_id}, 
-    //     Department Name: ${departmentName}, 
-    //     Department Head ID: ${departmentHeadId}, 
-    //     Department Description: ${departmentDescription}, 
-    //     Department Status: ${departmentStatus}`);
+    const allowanceName = document.getElementById('update_name').value;
+    const allowanceAmount = document.getElementById('update_amount').value;
+    const allowanceFrequency = document.getElementById('update_frequency').value;
+    const allowanceDesc = document.getElementById('update_description').value;
+    const allowanceStatus = document.getElementById('update_status').value;
 
     $.ajax({
-        url: 'departments/modules/departments-api',
+        url: 'allowances/modules/allowance-api',
         type: 'POST',
         data: {
             action: 'update',
-            department: {
+            allowanceData: {
                 md5_id: md5_id,
-                name: departmentName,
-                departmentHeadId: departmentHeadId,
-                departmentDescription: departmentDescription,
-                departmentStatus: departmentStatus
+                name: allowanceName,
+                amount: allowanceAmount,
+                frequency: allowanceFrequency,
+                description: allowanceDesc,
+                status: allowanceStatus
             }
         },
         success: function(response) {
-            $('#responseTest').html(response);
-            showSuccessUpdate();
-            fetchAllDepartments();
+            $('#response-test').html(response);
+            fetchAllAllowances();
             
         },
         error: function(jqXHR, textStatus, errorThrown) {
@@ -158,3 +137,29 @@ function updateDepartment(button){
     });
     
 }
+
+function deleteAllowance(button){
+    const row = button.closest('tr');  // Get the closest row
+    const allowanceData = {
+        token: row.getAttribute('data-id'),
+    };
+    
+    $.ajax({
+        url: 'allowances/modules/allowance-api',
+        type: 'POST',
+        data: {
+            action: 'delete',
+            md5_id: allowanceData.token
+        },
+        success: function(response) {
+            $('#response-test').html(response);
+            fetchAllAllowances();
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log("AJAX Error: " + textStatus + ": " + errorThrown);
+        }
+    });
+    
+}
+
+

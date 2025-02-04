@@ -26,66 +26,66 @@
         <h4 class="mb-4">Add Allowances</h4>
         <div class="container">
             <form onsubmit='event.preventDefault()' id="allowance-form">
-            <!-- Name -->
-            <div class="form-group">
-                <label for="name">Name</label>
-                <input type="text" class="form-control" id="name" name="name" maxlength="50" required>
-            </div>
+                <!-- Name -->
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" class="form-control" id="name" name="name" maxlength="50" required>
+                </div>
 
-            <!-- Amount -->
-            <div class="form-group">
-                <label for="amount">Amount</label>
-                <input type="number" class="form-control" id="amount" name="amount" step="0.01" required>
-            </div>
+                <!-- Amount -->
+                <div class="form-group">
+                    <label for="amount">Amount</label>
+                    <input type="number" class="form-control" id="amount" name="amount" step="0.01" required>
+                </div>
 
-            <!-- Is Taxable -->
-            <div class="form-group form-check">
-                <input type="checkbox" class="form-check-input" id="is_taxable" name="is_taxable">
-                <label class="form-check-label" for="is_taxable">Is Taxable</label>
-            </div>
+                <!-- Is Taxable -->
+                <div class="form-group form-check">
+                    <input type="checkbox" class="form-check-input" id="is_taxable" name="is_taxable">
+                    <label class="form-check-label" for="is_taxable">Is Taxable</label>
+                </div>
 
-            <!-- Frequency -->
-            <div class="form-group">
-                <label for="frequency">Frequency</label>
-                <select class="form-control" id="frequency" name="frequency" required>
-                    <option value="">Select Frequency</option>
-                    <option value="Weekly">Weekly</option>
-                    <option value="Bi-weekly">Bi-weekly</option>
-                    <option value="Semi-monthly">Semi-monthly</option>
-                    <option value="Monthly">Monthly</option>
-                </select>
-            </div>
+                <!-- Frequency -->
+                <div class="form-group">
+                    <label for="frequency">Frequency</label>
+                    <select class="form-control" id="frequency" name="frequency" required>
+                        <option value="">Select Frequency</option>
+                        <option value="Weekly">Weekly</option>
+                        <option value="Bi-weekly">Bi-weekly</option>
+                        <option value="Semi-monthly">Semi-monthly</option>
+                        <option value="Monthly">Monthly</option>
+                    </select>
+                </div>
 
-            <!-- Description -->
-            <div class="form-group">
-                <label for="description">Description</label>
-                <textarea class="form-control" id="description" name="description" rows="3" maxlength="255"></textarea>
-            </div>
+                <!-- Description -->
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea class="form-control" id="description" name="description" rows="3" maxlength="255"></textarea>
+                </div>
 
-            <!-- Status -->
-            <div class="form-group">
-                <label for="status">Status</label>
-                <select class="form-control" id="status" name="status" required>
-                    <option value="Active">Active</option>
-                    <option value="Inactive">Inactive</option>
-                    <option value="Archived">Archived</option>
-                </select>
-            </div>
+                <!-- Status -->
+                <div class="form-group">
+                    <label for="status">Status</label>
+                    <select class="form-control" id="status" name="status" required>
+                        <option value="Active">Active</option>
+                        <option value="Inactive">Inactive</option>
+                        <option value="Archived">Archived</option>
+                    </select>
+                </div>
 
-            <!-- Effective Date -->
-            <div class="form-group">
-                <label for="effective_date">Effective Date</label>
-                <input type="date" class="form-control" id="effective_date" name="effective_date" required>
-            </div>
+                <!-- Effective Date -->
+                <div class="form-group">
+                    <label for="effective_date">Effective Date</label>
+                    <input type="date" class="form-control" id="effective_date" name="effective_date" required>
+                </div>
 
-            <!-- End Date -->
-            <div class="form-group">
-                <label for="end_date">End Date</label>
-                <input type="date" class="form-control" id="end_date" name="end_date">
-            </div>
+                <!-- End Date -->
+                <div class="form-group">
+                    <label for="end_date">End Date</label>
+                    <input type="date" class="form-control" id="end_date" name="end_date">
+                </div>
 
-            <!-- Submit Button -->
-            <button type="submit" class="btn btn-primary" onclick="create()">Submit</button>
+                <!-- Submit Button -->
+                <button type="submit" class="btn btn-primary" onclick="create()">Submit</button>
             </form>
         </div>
         <button type="submit" class="btn btn-primary" onclick="fetchAll()">Load Table</button>
