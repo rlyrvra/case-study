@@ -26,8 +26,11 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <!-- Sweet Alert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Selectize CSS -->
+<link
+  rel="stylesheet"
+  href="assets/vendor/css/selectize.bootstrap5.css"
+/>
 
 
 
@@ -37,7 +40,6 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
 <script src="allowances/modules/allowance-scripts.js?v1.8"></script>
 
 
-
 <!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -45,6 +47,8 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
   href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
   rel="stylesheet"
 />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <!-- Icons. Uncomment required icon fonts -->
 <link rel="stylesheet" href="assets/vendor/fonts/boxicons.css" />
@@ -81,15 +85,26 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
     </script>
     <?php require_once __DIR__ . '/allowances/modules/allowance-modals-add-form.php' ?>
     <?php require_once __DIR__ . '/allowances/modules/allowance-modals-update-form.php' ?>
-
+    <?php require_once __DIR__ . '/allowances/employee-allowance/modules/assign-allowances-modals-assign-form.php' ?>
     <!-- Layout container -->
     <div class="layout-page">
     <?php require_once __DIR__ . '/user.php' ?>
 
       <!-- / Navbar -->
       <div class="content-wrapper">
-        <div id="response-test"></div>
         <div class="container-fluid pt-5 pb-5">
+          <div id="response-test"></div>
+
+          <div class="container-fluid mb-3 d-flex justify-content-between flex-column flex-lg-row">
+              <h1 class="display-1">Assign Leaves</h1>
+              <button type="button" class="btn btn-success btn-xl" data-bs-toggle="modal" data-bs-target="#assign_allowances_modal">
+                <i class="bx bx-label bx-lg"></i>Assign Allowances
+              </button>
+
+          </div>
+
+          <hr/>
+
           <div class="container-fluid mb-3 d-flex justify-content-between flex-column flex-lg-row">
             <h1 class="display-1">Allowances</h1>
             <button type="button" class="btn btn-success btn-xl" data-bs-toggle="modal" data-bs-target="#add-allowances-modal">
@@ -158,5 +173,14 @@ $(document).ready(function () {
 
 <!-- Place this tag in your head or just before your close body tag. -->
 <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+<!-- Selectize -->
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/js/selectize.min.js"
+  integrity="sha512-IOebNkvA/HZjMM7MxL0NYeLYEalloZ8ckak+NDtOViP7oiYzG5vn6WVXyrJDiJPhl4yRdmNAG49iuLmhkUdVsQ=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+></script>
+
 </body>
 </html>
