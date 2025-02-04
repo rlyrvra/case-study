@@ -45,10 +45,12 @@
                 <li><a class="dropdown-item" href="#" data-group="by_date" data-value="created_at">Date Created</a></li>
                 <li><a class="dropdown-item" href="#" data-group="by_date" data-value="updated_at">Date Modified</a></li>
                 <li><hr/></li>
-                <div class="space">
+                <div class="space p-2">
+                    <p class="m-0 mx-3"><b>Start</b></p>
                     <input type="date" id="dateStart"  class="form-control" required />
                 </div>
-                <div class="space">
+                <div class="space p-2">
+                    <p class="m-0 mx-3"><b>End</b></p>
                     <input type="date" id="dateEnd"  class="form-control" required />
                 </div>
             </ul>
