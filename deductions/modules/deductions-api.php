@@ -4,17 +4,18 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
     exit('This resource is only accessible via AJAX requests.');
 }
 
-require_once __DIR__ . '/../Allowance.php';
-require_once __DIR__ . '/../AllowanceDao.php';
-require_once __DIR__ . '/../AllowanceRepository.php';
-require_once __DIR__ . '/../AllowanceService.php';
+require_once __DIR__ . '/../Deduction.php';
+require_once __DIR__ . '/../DeductionDao.php';
+require_once __DIR__ . '/../DeductionRepository.php';
+require_once __DIR__ . '/../DeductionService.php';
 
 require_once __DIR__ . '/../../includes/Helper.php';
 require_once __DIR__ . '/../../includes/enums/ErrorCode.php';
 require_once __DIR__ . '/../../database/database.php';
 
+
 try {
-    $allowanceDao = new AllowanceDao($pdo);
+    $deductionDao = new DeductionDao($pdo);
     $action = $_POST['action'] ?? '';
 
     if($action === 'fetchAll'){
@@ -32,7 +33,7 @@ try {
         
         if(!empty($status)){
             $filterCriteria[] = [
-                "column" => "allowance.status",
+                "column" => "deduction.status",
                 "operator" => "=",
                 "value" => $status
             ];
@@ -40,14 +41,14 @@ try {
 
         if(empty($searchAt) && !empty($searchFilter)){
             $filterCriteria[] = [
-                "column" => "allowance.name", 
+                "column" => "deduction.name", 
                 "operator" => "LIKE",
                 "value" => "%$searchFilter%", 
                 'boolean' => 'OR'
 
             ];
             $filterCriteria[] = [
-                "column" => "allowance.description", 
+                "column" => "deduction.description", 
                 "operator" => "LIKE",
                 "value" => "%$searchFilter%", 
                 'boolean' => 'OR'
@@ -56,7 +57,7 @@ try {
 
         if(!empty($searchFilter) && !empty($searchAt)){
             $filterCriteria[] = [
-                "column" => "allowance." . $searchAt, 
+                "column" => "deduction." . $searchAt, 
                 "operator" => "LIKE",
                 "value" => "%$searchFilter%"
             ];
@@ -64,7 +65,7 @@ try {
 
         if((!empty($dateFilterColumn) && $dateFilterColumn !== "none") && !empty($dateStart) && !empty($dateEnd)){
             $filterCriteria[] = [
-                "column" => "allowance." . $dateFilterColumn,
+                "column" => "deduction." . $dateFilterColumn,
                 "operator" => "BETWEEN",
                 "lower_bound" => $dateStart,
                 "upper_bound" => $dateEnd
@@ -74,39 +75,38 @@ try {
 
         $sortCriteria = [
             [
-                "column" => "allowance." . $_POST['sort_by'],
+                "column" => "deduction." . $_POST['sort_by'],
                 "direction" => $_POST['sort_order']
             ]
         ];
-        $allowanceRepository = new AllowanceRepository($allowanceDao);
-        $allowanceService = new AllowanceService($allowanceRepository);
-        $result = $allowanceService->fetchAllAllowances([], $filterCriteria, $sortCriteria, $limit, $offset);
-        $allowances;
+        $deductionRepository = new DeductionRepository($deductionDao);
+        $deductionService = new DeductionService($deductionRepository);
+        $result = $deductionService->fetchAllDeductions([], $filterCriteria, $sortCriteria, $limit, $offset);
+        $deductions;
         if ($result !== ActionResult::FAILURE) {
-            $allowances = $result['result_set'];
+            $deductions = $result['result_set'];
         }
 
-        $totalAllowances = $result["total_row_count"];
-        $totalPages = ceil($totalAllowances / $limit);
-        include __DIR__ . '/allowance-table.php';
+        $totalDeductions = $result["total_row_count"];
+        $totalPages = ceil($totalDeductions / $limit);
+        include __DIR__ . '/deductions-table.php';
         return;
     }
 
-    
     if($action === 'create'){
-        $allowanceData = $_POST['allowance'] ?? null;
-        if ($allowanceData == null) {
-            echo "Invalid allowance data.";
+        $deductionsData = $_POST['deduction'] ?? null;
+        if (!$deductionsData) {
+            echo "Invalid deduction data.";
             return;
         }
 
-        $name = isset($allowanceData['name']) && $allowanceData['name'] !== '' ? validateInput($allowanceData['name'], "Name") : null;
-        $amount = isset($allowanceData['amount']) && $allowanceData['amount'] !== 0 ? validateNumericIdentifier((int) $allowanceData['amount'], 1, 30, "Amount") : null;
-        $frequency = isset($allowanceData['frequency']) && $allowanceData['frequency'] !== '' ? validateInput($allowanceData['frequency'], "Frequency") : null;
-        $description = isset($allowanceData['description']) ? $allowanceData['description'] : null;
-        $status = isset($allowanceData['status']) ? validateInput($allowanceData['status'], "Status") : null;
+        $name = isset($deductionsData['name']) && $deductionsData['name'] !== '' ? validateInput($deductionsData['name'], "Name") : null;
+        $amount = isset($deductionsData['amount']) && $deductionsData['amount'] !== 0 ? validateNumericIdentifier((int) $deductionsData['amount'], 1, 30, "Amount") : null;
+        $frequency = isset($deductionsData['frequency']) && $deductionsData['frequency'] !== '' ? validateInput($deductionsData['frequency'], "Frequency") : null;
+        $description = isset($deductionsData['description']) ? $deductionsData['description'] : null;
+        $status = isset($deductionsData['status']) ? validateInput($deductionsData['status'], "Status") : null;
         
-        $newAllowance = new Allowance(
+        $newDeduction = new Deduction(
             id: null,
             name: $name,
             amount: $amount,
@@ -114,9 +114,9 @@ try {
             description: $description,
             status: $status
         );
-        $allowanceRepository = new AllowanceRepository($allowanceDao);
-        $allowanceService = new AllowanceService($allowanceRepository);
-        $result = $allowanceService->createAllowance($newAllowance);
+        $deductionRepository = new DeductionRepository($deductionDao);
+        $deductionService = new DeductionService($deductionRepository);
+        $result = $deductionService->createDeduction($newDeduction);
         
         if ($result !== ActionResult::FAILURE) {
             die("
@@ -125,29 +125,29 @@ try {
             </script>
             ");
         } else {
-            echo "Failed to create department. Please try again.";
+            echo "Failed to create deduction. Please try again.";
         }
         return;
     }
 
     if($action == 'update'){
-        $allowanceData = $_POST['allowanceData'] ?? null;
-        if (!$allowanceData) {
+
+        $deductionsData = $_POST['deduction'] ?? null;
+        if (!$deductionsData) {
             return;
         }
-        $hashed_id = $allowanceData['md5_id'] ?? null;
+        $hashed_id = $deductionsData['md5_id'] ?? null;
         if (!$hashed_id) {
             return;
         }
 
-        $name = isset($allowanceData['name']) && $allowanceData['name'] !== '' ? validateInput($allowanceData['name'], "Name") : null;
-        $amount = isset($allowanceData['amount']) && $allowanceData['amount'] !== 0 ? validateNumericIdentifier((int) $allowanceData['amount'], 1, 30, "Amount") : null;
-        $frequency = isset($allowanceData['frequency']) && $allowanceData['frequency'] !== '' ? validateInput($allowanceData['frequency'], "Frequency") : null;
-        $description = isset($allowanceData['description']) ? $allowanceData['description'] : null;
-        $status = isset($allowanceData['status']) ? validateInput($allowanceData['status'], "Status") : null;
+        $name = isset($deductionsData['name']) && $deductionsData['name'] !== '' ? validateInput($deductionsData['name'], "Name") : null;
+        $amount = isset($deductionsData['amount']) && $deductionsData['amount'] !== 0 ? validateNumericIdentifier((int) $deductionsData['amount'], 1, 30, "Amount") : null;
+        $frequency = isset($deductionsData['frequency']) && $deductionsData['frequency'] !== '' ? validateInput($deductionsData['frequency'], "Frequency") : null;
+        $description = isset($deductionsData['description']) ? $deductionsData['description'] : null;
+        $status = isset($deductionsData['status']) ? validateInput($deductionsData['status'], "Status") : null;
         
-
-        $updatedAllowance = new Allowance(
+        $updateDeduction = new Deduction(
             id: $hashed_id,
             name: $name,
             amount: $amount,
@@ -155,9 +155,9 @@ try {
             description: $description,
             status: $status
         );
-        $allowanceRepository = new AllowanceRepository($allowanceDao);
-        $allowanceService = new AllowanceService($allowanceRepository);
-        $result = $allowanceService->updateAllowance($updatedAllowance);
+        $deductionRepository = new DeductionRepository($deductionDao);
+        $deductionService = new DeductionService($deductionRepository);
+        $result = $deductionService->updateDeduction($updateDeduction);
         
         if ($result !== ActionResult::FAILURE) {
             die("
@@ -166,16 +166,18 @@ try {
             </script>
             ");
         } else {
-            echo "Failed to create department. Please try again.";
+            echo "Failed to update deduction. Please try again.";
         }
+
         return;
+
     }
-        
+
     if($action == 'delete'){
         $hashed_id = $_POST['md5_id'] ?? null;
-        $allowanceRepository = new AllowanceRepository($allowanceDao);
-        $allowanceService = new AllowanceService($allowanceRepository);
-        $result = $allowanceService->deleteAllowance($hashed_id);
+        $deductionRepository = new DeductionRepository($deductionDao);
+        $deductionService = new DeductionService($deductionRepository);
+        $result = $deductionService->deleteDeduction($hashed_id);
 
         if ($result) {
             die("
@@ -190,8 +192,8 @@ try {
     }
 
 
-    echo "Invalid action specified.";
 
+    echo "Invalid action specified.";
 } catch (Exception $e) {
     echo "Error: " . $e->getMessage();
 }
