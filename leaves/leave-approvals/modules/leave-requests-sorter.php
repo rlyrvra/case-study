@@ -1,5 +1,5 @@
 <div class="controls d-flex justify-content-between flex-column flex-lg-row"> <!--Entries Per Page Text-->
-    <div class="align col-auto mx-1 d-flex align-items-center"> 
+    <div class="align mx-1 d-flex align-items-center"> 
         <label for="entries-per-page" class="mx-1">Show:</label>
         <select id="entries-per-page">
             <option value="10">10</option>
@@ -10,7 +10,7 @@
         <label for="entries-per-page" class="mx-1"> Entries</label>  
     </div>
     
-    <div class="dropdown col-auto mx-1 d-flex align-items-center sort mx-1">
+    <div class="dropdown mx-1 d-flex align-items-center sort mx-1">
         <button
             class="btn btn-primary dropdown-toggle"
             type="button"
