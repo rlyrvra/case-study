@@ -1,5 +1,5 @@
 <div class="controls d-flex justify-content-between flex-column flex-lg-row"> <!--Entries Per Page Text-->
-    <div class="display-6 align col-auto flex-fill mx-2"> 
+    <div class="align col-auto mx-1 d-flex justify-content-center align-items-center"> 
         <label for="entries-per-page">Show:</label>
         <select id="entries-per-page">
             <option value="10">10</option>
@@ -10,7 +10,7 @@
         <label for="entries-per-page">Entries</label>  
     </div>
     
-    <div class="dropdown sort col-auto flex-fill mx-2">
+    <div class="dropdown sort mx-1">
         <button
             class="btn btn-primary dropdown-toggle"
             type="button"
@@ -28,7 +28,7 @@
             <li><a class="dropdown-item selected" href="#" data-group="order_by" data-value="DESC">Descending</a></li>
         </ul>
     </div>  
-    <div class="dropdown filter col-auto flex-fill mx-2">
+    <div class="dropdown filter col-auto  mx-1">
         <div class="input-group">
             <span class="input-group-text"><i class="bx bx-category-alt fs-4 lh-0"></i></span>
             <select class="form-select" id="status" name="status" placeholder="Filter Department" onchange="">
@@ -39,7 +39,7 @@
             </select>
         </div>
     </div>  
-    <div class="search col-auto d-flex flex-column flex-lg-row mx-2">
+    <div class="dropdown flex-fill col-auto mx-1">
         <div class="input-group">
             <span class="input-group-text"><i class="bx bx-category fs-4 lh-0"></i></span>
             <select class="form-select" id="search_at" name="search_at" placeholder="Search At">
@@ -50,7 +50,9 @@
                 <option value="email">Email</option>
             </select>
         </div>
-        <div class="input-group ms-lg-3">
+    </div>
+    <div class="search flex-fill">
+        <div class="input-group ms-lg-1">
             <span class="input-group-text"><i class="bx bx-search-alt-2 fs-4 lh-0"></i></span>
             <input type="text" class="form-control" id="searchText" />
             <button id="openModalBtn" class="btn btn-success" onclick=""> Search
