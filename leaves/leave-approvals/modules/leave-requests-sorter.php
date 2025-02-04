@@ -28,7 +28,7 @@
             <li><a class="dropdown-item selected" href="#" data-group="order_by" data-value="DESC">Descending</a></li>
         </ul>
     </div>  
-    <div class="dropdown filter flex-fill col-auto  mx-1">
+    <div class="dropdown filter flex-fill col-auto mx-1">
         <div class="input-group">
             <span class="input-group-text"><i class="bx bx-category-alt fs-4 lh-0"></i></span>
             <select class="form-select" id="status" name="status" placeholder="Filter Department" onchange="">
