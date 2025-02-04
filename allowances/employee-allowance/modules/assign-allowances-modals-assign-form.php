@@ -1,3 +1,4 @@
+
 <!-- Modal -->
 <div class="modal fade" id="assign_allowances_modal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
@@ -17,26 +18,27 @@
                 <form id="leave_type_form" onsubmit="event.preventDefault()">
                     <div class="row mb-4">
                         <label for="select_employee" class="form-label text-center"><strong class="display-5">Employee:</strong></label>
-                        <select class="form-select selectize_select_employee" id="select_employee" name="select_Employee" placeholder="Select Employee" required onchange="fetchEmployeeLeaves();">
+                        <select class="form-select selectize_select_employee" id="select_employee" name="select_Employee" placeholder="Select Employee" required onchange="fetchEmployeeAllowances();">
                         </select>
                     </div>
                     <hr/>
                     <div class="row mb-4 justify-content-center">
                         <button type="button" class="btn-lg btn-info col-auto mx-auto" 
-                        data-bs-target="#leaveEntitlementModal"
+                        data-bs-target="#allowance_entitlement_modal"
                         data-bs-toggle="modal" 
                         data-bs-dismiss="modal"
+                        onclick="assignAllowanceName()"
                         >
                         <i class="bx bx-label bx-sm"></i>Assign Allowances</button>
                         <button type="button" class="btn-lg btn-primary col-auto mx-auto" 
-                        onclick="fetchEmployeeLeaves()"
+                        onclick="fetchEmployeeAllowances()"
                         >
                         Fetch Employee Allowances</button>
                     </div>
                     <hr/>
                     <div class="container-fluid card pt-5 pb-3 mt-5">
                         <h5>Allowances of Employee </h5>
-                        <div id="employee-leave-credits-table" class="table-responsive text-no-wrap">
+                        <div id="employee-allowances-table" class="table-responsive text-no-wrap">
                             <?php include __DIR__ . '/assign-allowances-table.php'; ?>
                         </div>
                     </div>
@@ -159,3 +161,4 @@
         
     </div>
 </div>
+<?php include __DIR__ . '/assign-allowances-allowance-entitlement.php'; ?>

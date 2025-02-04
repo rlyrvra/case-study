@@ -28,6 +28,11 @@ function renderLeaveTypes(tbody) {
     });
 }
 
+document.addEventListener('DOMContentLoaded', function() {
+    // Call the render function
+    renderLeaveTypes(document.getElementById('leaveTableBody'));
+});
+
 function clearSelectedLeaveTypes(){
     const checkboxes = document.querySelectorAll('#leaveEntitlementModal #leaveTableBody input[type="checkbox"]');
     checkboxes.forEach((checkbox) => {
@@ -49,7 +54,7 @@ function leaveTypeInputTest(){
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!',
+        confirmButtonText: 'Yes, continue!',
     }).then((result) => {
         if (result.isConfirmed) {
             const selectedLeaveTypes = getSelectedLeaveTypes();
@@ -95,12 +100,6 @@ function showSelectedEmployee(){
 }
 
 
- 
-
-document.addEventListener('DOMContentLoaded', function() {
-    // Call the render function
-    renderLeaveTypes(document.getElementById('leaveTableBody'));
-});
 
 function confirmDeleteEmployeeLeave(button){
     $('#assign_leave_types_modal').modal('hide');

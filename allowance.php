@@ -38,6 +38,10 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
 <script src="allowances/modules/allowance-ajax.js?v1.8"></script>
 <!-- Scripts -->
 <script src="allowances/modules/allowance-scripts.js?v1.8"></script>
+<!-- Ajax -->
+<script src="allowances/employee-allowance/modules/assign-allowances-ajax.js"></script>
+<!-- Scripts -->
+<script src="allowances/employee-allowance/modules/assign-allowances-scripts.js"></script>
 
 
 <!-- Fonts -->
