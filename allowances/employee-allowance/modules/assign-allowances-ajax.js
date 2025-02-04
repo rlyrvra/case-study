@@ -40,3 +40,23 @@ function assignAllowances(){
         }
     });
 }
+
+function deleteAllowance(button){
+    const employeeAllowanceId = button.getAttribute("data-id");
+    
+    $.ajax({
+        url: 'allowances/employee-allowance/modules/assign-allowances-api',
+        type: 'POST',
+        data: {
+            action: 'deleteAllowance',
+            employee_allowance_id: employeeAllowanceId,
+        },
+        success: function(response) {
+            $('#response-test').html(response);
+            fetchEmployeeLeaves();
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log("AJAX Error: " + textStatus + ": " + errorThrown);
+        }
+    });
+}   

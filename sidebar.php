@@ -1,3 +1,4 @@
+<?php if(!($_SERVER['HTTP_HOST'] !== 'localhost' && $_SERVER['HTTP_HOST'] !== '127.0.0.1')): ?>
 <!-- Menu -->
 <?php ob_start(); ?>
 <!-- <aside id="layout-menu" class="position-sticky layout-menu menu-vertical menu bg-menu-theme top-0 vh-100"> -->
@@ -194,8 +195,8 @@
         ';
         }
         ?>
-        <li class="menu-item">
-            <a href="maintenance-login" class="menu-link">
+        <li class="menu-item" id="deductions-menu">
+            <a href="deduction" class="menu-link">
             <div data-i18n="Input groups">Deductions</div>
             </a>
         </li>
@@ -267,5 +268,8 @@
     </ul>
 </aside>
 <!-- / Menu -->
+<?php else: ?>
+<?php require_once __DIR__ . '/sidebar2.php'; ?>
+<?php endif ?>
 
 

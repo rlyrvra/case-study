@@ -40,7 +40,11 @@ try{
             [
                 "column" => "allowance.status",
                 "operator" => "=", 
-                "value" => "Active"
+                "value" => 'Active'
+            ],
+            [
+                "column" => "employee_allowance.deleted_at",
+                "operator" => "IS NULL"
             ]
         ];
         $employeeAllowanceRepository = new EmployeeAllowanceRepository($employeeAllowanceDao);
@@ -93,6 +97,27 @@ try{
             ";
         }
         
+        return;
+    }
+
+    if($action === 'deleteAllowance'){
+        $employeeAllowanceId = isset($_POST['employee_allowance_id']) ? (int) $_POST['employee_allowance_id'] : null;
+
+        if($employeeAllowanceId == null){
+            die("");
+        }
+
+        $employeeAllowanceRepository = new EmployeeAllowanceRepository($employeeAllowanceDao);
+        $employeeAllowanceService = new EmployeeAllowanceService($employeeAllowanceRepository);
+        $deleteresult = $employeeAllowanceService->deleteEmployeeAllowance($employeeAllowanceId);
+        if ($deleteresult === ActionResult::SUCCESS){
+            echo "
+            <script>
+            showSuccessDeleteAllowance();
+            </script>
+            ";
+        }
+
         return;
     }
     

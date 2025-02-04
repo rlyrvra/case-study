@@ -102,3 +102,37 @@ function showSuccessEntitlement(){
         }
     });
 }
+
+function showSuccessDeleteAllowance(){
+    $('#allowance_entitlement_modal').modal('hide');
+    $('#assign_allowances_modal').modal('hide');
+    Swal.fire({
+        title: 'Success!',
+        text: 'The allowance has been sucessfully deleted.',
+        icon: 'success',
+        confirmButtonText: 'OK'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $('#assign_allowances_modal').modal('show');
+        }
+    });
+}
+
+function confirmDeleteAllowance(button){
+    $('#assign_allowances_modal').modal('hide');
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "Do you want to remove this assigned allowance from the employee?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            deleteAllowance(button);
+        } else {
+            $('#assign_allowances_modal').modal('show');
+        }
+    });
+}

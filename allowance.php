@@ -39,9 +39,9 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
 <!-- Scripts -->
 <script src="allowances/modules/allowance-scripts.js?v1.8"></script>
 <!-- Ajax -->
-<script src="allowances/employee-allowance/modules/assign-allowances-ajax.js"></script>
+<script src="allowances/employee-allowance/modules/assign-allowances-ajax.js?v1.1"></script>
 <!-- Scripts -->
-<script src="allowances/employee-allowance/modules/assign-allowances-scripts.js"></script>
+<script src="allowances/employee-allowance/modules/assign-allowances-scripts.js?v1.1"></script>
 
 
 <!-- Fonts -->
@@ -100,7 +100,7 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
           <div id="response-test"></div>
 
           <div class="container-fluid mb-3 d-flex justify-content-between flex-column flex-lg-row">
-              <h1 class="display-1">Assign Leaves</h1>
+              <h1 class="display-1">Assign Allowances</h1>
               <button type="button" class="btn btn-success btn-xl" data-bs-toggle="modal" data-bs-target="#assign_allowances_modal">
                 <i class="bx bx-label bx-lg"></i>Assign Allowances
               </button>
