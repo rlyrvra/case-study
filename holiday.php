@@ -99,8 +99,35 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
       <div class="content-wrapper">
         <div class="container-fluid pt-5 pb-5">
           <div id="response-test"></div>
+          <div class="accordion py-3" id="accordion_date">
+            <div class="card accordion-item active">
+              <h2 class="accordion-header" id="headingOne">
+                <button
+                  type="button"
+                  class="accordion-button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#date_body"
+                  aria-expanded="true"
+                  aria-controls="date_body"
+                >
+                  <h5 class="display-5 pt-2">Show/Hide Calendar</h5>
+                </button>
+              </h2>
+
+              <hr/>
+
+              <div
+                id="date_body"
+                class="accordion-collapse collapse show"
+                data-bs-parent="#accordion_date"
+              >
+                <div class="accordion-body mb-5">
+                  <div id="calendar"></div>
+                </div>
+              </div>
+            </div>
+          </div>
           
-          <div id="calendar"></div>
 
 
 
