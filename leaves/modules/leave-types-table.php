@@ -11,7 +11,7 @@
     <tr>
       <th>Name</th>
       <th>Maximum Number of Days</th>
-      <th>is_paid</th>
+      <th>Paid</th>
       <th>description</th>
       <th>status</th>
       <th>Created At</th>
@@ -41,7 +41,7 @@
           ?>"><?php 
           if($row['is_paid'] == 0) echo "No";
           if($row['is_paid'] == 1) echo "Yes";
-          ?></td>
+          ?></span></td>
           <td><?php echo htmlspecialchars($row['description']); ?></td>
           <td><span class="badge 
           <?php 

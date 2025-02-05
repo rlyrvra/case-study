@@ -116,9 +116,9 @@
             </a>
         </li>
 
-        <li class="menu-item">
-            <a href="maintenance-login" class="menu-link">
-            <div data-i18n="Under Maintenance">Holidays</div>
+        <li class="menu-item" id="holiday-menu">
+            <a href="holiday" class="menu-link">
+            <div>Holidays</div>
             </a>
         </li>
 

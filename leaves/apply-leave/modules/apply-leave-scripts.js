@@ -35,7 +35,7 @@ function setEndDateMin(date){
         return;
     }
     limitDate = new Date(date.value);
-    limitDate.setDate(limitDate.getDate() + 1);
+    limitDate.setDate(limitDate.getDate());
     const formattedDate = limitDate.toISOString().split('T')[0];
     endDate.setAttribute('min', formattedDate);
     endDate.value = "";
@@ -65,6 +65,9 @@ function calculateTotalNumberOfDays(){
     startDate = new Date(startDateId);
     endDate = new Date(endDateId);
     totalNumberOfDays = (endDate - startDate) / (1000 * 60 * 60 * 24);
+    if(startDate.getTime() === endDate.getTime()){
+        totalNumberOfDays = 1;
+    }
     $("#totalDays").val(totalNumberOfDays);
     const remainingBalance = $("#remainingBalance").val();
     if(remainingBalance <= 0){

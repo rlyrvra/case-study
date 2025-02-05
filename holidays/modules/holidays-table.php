@@ -7,15 +7,18 @@
 
 </style>
 <!-- Table Rendering -->
-<table class="table table-bordered table-hover table-striped">
+<table class="table table-bordered table-hover">
   <thead>
     <tr>
       <!-- <th>id</th> -->
       <!-- <th style="width: 2%">NO.</th> -->
-      <th>NAME</th>
-      <th>DEPARTMENT HEAD</th>
-      <th>DESCRIPTION</th>
-      <th>STATUS</th>
+      <th>Name</th>
+      <th>Start Date</th>
+      <th>End Date</th>
+      <th>Paid</th>
+      <th>Recurring Annually</th>
+      <th>Description</th>
+      <th>Status</th>
       <th>Created At</th>
       <!-- <th>Created By</th> -->
       <th>Updated At</th>
@@ -26,18 +29,44 @@
     </tr>
   </thead>
   <tbody>
-    <?php if (!empty($departments)): ?>
-      <?php $i = 1; foreach ($departments as $row): ?>
+    <?php if (!empty($holidays)): ?>
+      <?php $i = 1; foreach ($holidays as $row): ?>
         <tr data-id="<?php echo htmlspecialchars($row['id']); ?>" 
             data-name="<?php echo htmlspecialchars($row['name']); ?>" 
-            data-dept-head-id="<?php echo htmlspecialchars($row['department_head_id']); ?>" 
-            data-department-head-id="<?php echo htmlspecialchars($row['department_head_full_name']); ?>" 
-            data-description="<?php echo htmlspecialchars($row['description']); ?>" 
+            data-start="<?php echo htmlspecialchars($row['start_date']); ?>" 
+            data-end="<?php echo htmlspecialchars($row['end_date']); ?>" 
+            data-paid="<?php echo htmlspecialchars($row['is_paid']); ?>"
+            data-recurring="<?php echo htmlspecialchars($row['is_recurring_annually']); ?>"
+            data-description="<?php echo htmlspecialchars($row['description']); ?>"  
             data-status="<?php echo htmlspecialchars($row['status']); ?>">
           <!-- <td><?php //echo htmlspecialchars($row['id']); ?></td> -->
           <!-- <td><?php //echo htmlspecialchars($i); ?></td> -->
           <td><?php echo htmlspecialchars($row['name']); ?></td>
-          <td><?php echo htmlspecialchars($row['department_head_full_name']); ?></td>
+          <td><?php echo htmlspecialchars($row['start_date']); ?></td>
+          <td><?php echo htmlspecialchars($row['end_date']); ?></td>
+          <td>
+            <span class="badge badge center
+            <?php 
+                if($row['is_paid'] == 0) echo "bg-danger";
+                if($row['is_paid'] == 1) echo "bg-success";
+                ?>"><?php 
+                if($row['is_paid'] == 0) echo "No";
+                if($row['is_paid'] == 1) echo "Yes";
+            ?></span>
+          </td>
+          <td>
+            <span class="badge badge center
+            <?php 
+                if($row['is_recurring_annually'] == 0) echo "bg-danger";
+                if($row['is_recurring_annually'] == 1) echo "bg-success";
+                ?>"><?php 
+                if($row['is_recurring_annually'] == 0) echo "No";
+                if($row['is_recurring_annually'] == 1) echo "Yes";
+            ?></span>
+          </td>
+          
+
+
           <td><?php echo htmlspecialchars($row['description']); ?></td>
           <td><span class="badge 
           <?php 
@@ -52,17 +81,14 @@
           ?> me-1"><?php echo htmlspecialchars($row['status']); ?></span>
           </td>
           <td><?php echo htmlspecialchars($row['created_at']); ?></td>
-          <!-- <td><?php //echo htmlspecialchars($row['created_by']); ?></td> -->
           <td><?php echo htmlspecialchars($row['updated_at']); ?></td>
-          <!-- <td><?php //echo htmlspecialchars($row['updated_by']); ?></td> -->
           <?php if (isset($status) && $status === 'Archived') echo "<td>" . htmlspecialchars($row['deleted_at']) . "</td>"; ?>
-          <?php //if (isset($status) && $status === 'Archived') echo "<td>" . htmlspecialchars($row['deleted_by']) . "</td>"; ?>
           <?php if (!isset($status) || $status !== 'Archived') echo
             '<td>
-              <button class="btn btn-info" title="Click to Edit" onclick="updateDepartmentClick(this)" data-bs-toggle="modal" data-bs-target="#update_departments_modal"> 
+              <button class="btn btn-info" title="Click to Edit" onclick="updateAllowanceClick(this)" data-bs-toggle="modal" data-bs-target="#update-allowances-modal"> 
                 <i class="bx bx-edit-alt"></i>
               </button> 
-              <button class="btn btn-danger" title="Click to Delete" onclick="confirmDeleteDepartment(this)">
+              <button class="btn btn-danger" title="Click to Delete" onclick="confirmDeleteAllowance(this)">
                 <i class="bx bx-trash"></i>
               </button> 
             </td>';
@@ -71,7 +97,7 @@
       <?php endforeach; ?>
     <?php else: ?>
       <tr>
-        <td colspan="7">No data available</td>
+        <td colspan="9" class="text-center">No data available</td>
       </tr>
     <?php endif; ?>
   </tbody>
@@ -83,19 +109,19 @@
     <ul class="pagination pagination-lg">
       <!-- Previous Button -->
       <li class="page-item <?= $page <= 1 ? 'disabled' : '' ?>">
-        <a class="page-link" onclick="fetchAllDepartments('prev')" aria-label="Previous">
+        <a class="page-link" onclick="fetchAllHolidays('prev')" aria-label="Previous">
           <span aria-hidden="true">&laquo;</span>
         </a>
       </li>
       <?php for ($i = 1; $i <= $totalPages; $i++): ?>
         <!-- Page Numbers -->
         <li class="page-item <?= $i === $page ? 'active' : '' ?>">
-          <a class="page-link" onclick="fetchAllDepartments(<?php echo $i ?>)" ><?= $i ?></a>
+          <a class="page-link" onclick="fetchAllHolidays(<?php echo $i ?>)" ><?= $i ?></a>
         </li>
       <?php endfor; ?>
       <!-- Next Button -->
       <li class="page-item <?= $page >= $totalPages ? 'disabled' : '' ?>">
-        <a class="page-link" onclick="fetchAllDepartments('next')" aria-label="Next">
+        <a class="page-link" onclick="fetchAllHolidays('next')" aria-label="Next">
           <span aria-hidden="true">&raquo;</span>
         </a>
       </li>

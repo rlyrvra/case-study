@@ -119,12 +119,16 @@
             <div data-i18n="Under Maintenance">Overtime Rates</div>
             </a>
         </li>
-
+        <?php
+        if($_SESSION['access_role'] == 'Admin' || $_SESSION['access_role'] == 'Manager'){
+        echo '
         <li class="menu-item">
-            <a href="maintenance-login" class="menu-link">
+            <a href="holiday" class="menu-link">
             <div data-i18n="Under Maintenance">Holidays</div>
             </a>
-        </li>
+        </li>';
+        }
+        ?>
 
         </ul>
     </li>
