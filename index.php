@@ -300,11 +300,12 @@
         <div class="container">
             <div class="collapse navbar-collapse">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item"><a class="nav-link" href="#" onclick="window.location.href='login.php'">Smart Wage</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">About Us</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Principles</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Compliance</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#smart">Smart Wage</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#about">About Us</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#principles">Principles</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#compliance">Compliance</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contact-us">Contact</a></li>
+
                 </ul>
             </div>
         </div>
@@ -313,13 +314,14 @@
 
 
     <!-- Hero Section -->
-    <header class="hero">
+    <header class="hero" id="smart">
         <div class="hero-text">
             <h1>Empowering Work, Simplifying Wages, Ensuring Trust.</h1>
             <p> Experience the power of seamless payroll, where exclusive benefits meet effortless convenience. </p>
             <a href="#about" class="btn btn-outline-light btn-lg ms-2">Check Eligibility</a> <!--pwede to gawin yung sa attendance part-->
         </div>
     </header>
+
 
 
     <!-- About Us Section -->
@@ -529,6 +531,24 @@
         );
 
         observer.observe(animatedCard);
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".nav-link").forEach(anchor => {
+            anchor.addEventListener("click", function (event) {
+                if (this.getAttribute("href").startsWith("#")) {
+                    event.preventDefault();
+                    const targetId = this.getAttribute("href").substring(1);
+                    const targetElement = document.getElementById(targetId);
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 50, 
+                            behavior: "smooth"
+                        });
+                    }
+                }
+            });
+        });
     });
     </script>
     
