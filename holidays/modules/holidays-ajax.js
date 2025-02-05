@@ -100,7 +100,7 @@ function createHolidays(){
             $('#holiday-table').html(response);
             fetchAllAllowances();
             document.getElementById('add_holidays_form').reset();
-            showSuccessCreate();
+            //showSuccessCreate();
         },
         error(xhr, status, error) {
             console.error("Error creating department:", error);
@@ -108,6 +108,74 @@ function createHolidays(){
     });
 }
 
-function updateHolidays(){
+function updateHolidays(button){
+    const md5_id = button.getAttribute('data-token');
+    const updateForm = document.getElementById("update_holidays_form");
+    if(!updateForm.checkValidity()){
+        //showWarningIncompleteForm()
+        return;
+    }
+    const holidayName = document.getElementById('update_name').value;
+    const holidayStart = document.getElementById('update_start_date').value;
+    const holidayEnd = document.getElementById('update_end_date').value;
+    const holidayIsPaid = document.getElementById('update_isPaid').checked;
+    const holidayIsRecurring = document.getElementById('update_isRecurring').checked;
+    const holidayDescription = document.getElementById('update_description').value;
+    const holidayStatus = document.getElementById("update_status").value;
+    
+
+    const holidayData = {
+        md5_id: md5_id,
+        name: holidayName,
+        start_date: holidayStart,
+        end_date: holidayEnd,
+        isPaid: holidayIsPaid,
+        isRecurring: holidayIsRecurring,
+        description: holidayDescription,
+        status: holidayStatus
+    };
+
+    //console.log(holidayData);
+
+
+    $.ajax({
+        url: 'holidays/modules/holidays-api',
+        method: 'POST',
+        data: {
+            action: 'update',
+            holidayData: holidayData
+        },
+        success: function(response) {
+            $('#holiday-table').html(response);
+            //fetchAllHolidays();
+        },
+        error(xhr, status, error) {
+            console.error("Error creating department:", error);
+        }
+    });
+}
+
+
+function deleteHoliday(button){
+    const row = button.closest('tr');  // Get the closest row
+    const allowanceData = {
+        token: row.getAttribute('data-id'),
+    };
+    
+    $.ajax({
+        url: 'holidays/modules/holidays-api',
+        type: 'POST',
+        data: {
+            action: 'delete',
+            md5_id: allowanceData.token
+        },
+        success: function(response) {
+            $('#response-test').html(response);
+            fetchAllHolidays();
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log("AJAX Error: " + textStatus + ": " + errorThrown);
+        }
+    });
     
 }

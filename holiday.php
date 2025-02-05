@@ -26,11 +26,15 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <!-- Sweet Alert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- Include FullCalendar JS -->
+<script src='https://cdn.jsdelivr.net/npm/rrule@2.6.4/dist/es5/rrule.min.js'></script>
+<script src='assets/vendor/libs/fullcalendar-6.1.15/dist/index.global.min.js'></script>
+<script src='assets/vendor/libs/fullcalendar-6.1.15/packages/rrule/index.global.min.js'></script>
 
 <!-- Ajax -->
-<script src="holidays/modules/holidays-ajax.js?v1.8"></script>
+<script src="holidays/modules/holidays-ajax.js?v1.4"></script>
 <!-- Scripts -->
-<script src="holidays/modules/holidays-scripts.js?v1.8"></script>
+<script src="holidays/modules/holidays-scripts.js?v1.4"></script>
 
 
 
@@ -85,7 +89,8 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
       document.getElementById("attendance-menu").classList.add("open");
       document.getElementById("holiday-menu").classList.add("active");
     </script>
-    <?php require_once __DIR__ . '/holidays/modules/holidays-add-form.php' ?>
+    <?php require_once __DIR__ . '/holidays/modules/holidays-modals-add-form.php' ?>
+    <?php require_once __DIR__ . '/holidays/modules/holidays-modals-update-form.php' ?>
     <!-- Layout container -->
     <div class="layout-page">
     <?php require_once __DIR__ . '/user.php' ?>
@@ -94,9 +99,13 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
       <div class="content-wrapper">
         <div class="container-fluid pt-5 pb-5">
           <div id="response-test"></div>
+          
+          <div id="calendar"></div>
 
 
-          <div class="container-fluid mb-3 d-flex justify-content-between flex-column flex-lg-row">
+
+          
+          <div class="container-fluid mt-5 mb-3 d-flex justify-content-between flex-column flex-lg-row">
             <h1 class="display-1">Holidays</h1>
             <button type="button" class="btn btn-success btn-xl" data-bs-toggle="modal" data-bs-target="#add-holidays-modal">
               <i class="bx bx-plus bx-lg"></i>Add Holiday
@@ -146,6 +155,8 @@ $(document).ready(function () {
   fetchAllHolidays();
 });
 </script>
+<?php require_once __DIR__ . '/holidays/modules/holidays-fetch-holidays.php' ?>
+
 
 <!-- Core JS -->
 <!-- build:js assets/vendor/js/core.js -->

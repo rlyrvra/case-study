@@ -141,7 +141,6 @@ try {
     if($action === 'update'){
         $holidayData = $_POST['holidayData'] ?? null;
         if (!$holidayData) {
-            echo "Invalid holiday data.";
             return;
         }
         $hashed_id = $holidayData['md5_id'] ?? null;
@@ -156,11 +155,14 @@ try {
                 date('Y-m-d', strtotime(validateInput($holidayData['start_date'], 'Start Date'))) : '1970-01-01';
         $endDate = isset($holidayData['end_date']) ? 
                 date('Y-m-d', strtotime(validateInput($holidayData['end_date'], 'End Date'))) : '1970-01-01';
-        $isPaid = isset($holidayData['isPaid']) && $holidayData['isPaid'] !== '' ? $holidayData['isPaid'] : null;
-        $isRecurring = isset($holidayData['isRecurring']) && $holidayData['isRecurring'] !== '' ? $holidayData['isRecurring'] : null;
+        $isPaid = isset($holidayData['isPaid']) && $holidayData['isPaid'] !== '' ? $holidayData['isPaid'] : false;
+        $isRecurring = isset($holidayData['isRecurring']) && $holidayData['isRecurring'] !== '' ? $holidayData['isRecurring'] : false;
         $description = isset($holidayData['description']) ? $holidayData['description'] : null;
         $status = isset($holidayData['status']) ? validateInput($holidayData['status'], "Status") : null;
-        
+
+        echo $isPaid;
+        echo $isRecurring;
+
         $updatedHoliday = new Holiday(
             id: $hashed_id,
             name: $name,
@@ -171,9 +173,13 @@ try {
             description: $description,
             status: $status
         );
+
+        echo $updatedHoliday->getIsPaid();
+        echo $updatedHoliday->getIsRecurringAnnually();
+
         $holidayRepository = new HolidayRepository($holidayDao);
         $holidayService = new HolidayService($holidayRepository);
-        $result = $holidayService->updateHoliday($newHoliday);
+        $result = $holidayService->updateHoliday($updatedHoliday);
         
         if ($result !== ActionResult::FAILURE) {
             die("
@@ -186,6 +192,31 @@ try {
         }
         return;
     }
+
+
+    if($action === 'delete'){
+        $hashed_id = $_POST['md5_id'] ?? null;
+        if (!$hashed_id) {
+            return;
+        }
+
+        $holidayRepository = new HolidayRepository($holidayDao);
+        $holidayService = new HolidayService($holidayRepository);
+        $result = $holidayService->deleteHoliday($hashed_id);
+        
+        if ($result !== ActionResult::FAILURE) {
+            die("
+            <script>
+                showSuccessDelete();
+            </script>
+            ");
+        } else {
+            echo "Failed to delete holidays. Please try again.";
+        }
+        return;
+    }
+
+
 
 
 

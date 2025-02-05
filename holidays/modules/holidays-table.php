@@ -85,10 +85,10 @@
           <?php if (isset($status) && $status === 'Archived') echo "<td>" . htmlspecialchars($row['deleted_at']) . "</td>"; ?>
           <?php if (!isset($status) || $status !== 'Archived') echo
             '<td>
-              <button class="btn btn-info" title="Click to Edit" onclick="updateAllowanceClick(this)" data-bs-toggle="modal" data-bs-target="#update-allowances-modal"> 
+              <button class="btn btn-info" title="Click to Edit" onclick="updateHolidayClick(this)" data-bs-toggle="modal" data-bs-target="#update-holidays-modal"> 
                 <i class="bx bx-edit-alt"></i>
               </button> 
-              <button class="btn btn-danger" title="Click to Delete" onclick="confirmDeleteAllowance(this)">
+              <button class="btn btn-danger" title="Click to Delete" onclick="confirmDeleteHoliday(this)">
                 <i class="bx bx-trash"></i>
               </button> 
             </td>';

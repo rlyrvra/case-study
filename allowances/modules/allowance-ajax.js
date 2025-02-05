@@ -96,7 +96,7 @@ function createAllowance() {
             $('#allowance-table').html(response);
             fetchAllAllowances();
             document.getElementById('add_allowance_form').reset();
-            showSuccessCreate();
+            //showSuccessCreate();
         },
         error(xhr, status, error) {
             console.error("Error creating department:", error);
