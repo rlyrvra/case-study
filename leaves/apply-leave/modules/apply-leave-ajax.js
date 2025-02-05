@@ -46,7 +46,7 @@
 // }
 
 function createLeaveRequest() {
-    calculateTotalNumberOfDays();
+    if(calculateTotalNumberOfDays()) return;
     const form = document.getElementById('apply_leave_form');
     if (!form.checkValidity()) {
         return;

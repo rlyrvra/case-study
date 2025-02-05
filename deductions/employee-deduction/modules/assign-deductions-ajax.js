@@ -1,15 +1,15 @@
-function fetchEmployeeAllowances(){
+function fetchEmployeeDeductions(){
     const employeeId = document.getElementById('select_employee').value;
     
     $.ajax({
-        url: 'allowances/employee-allowance/modules/assign-allowances-api',
+        url: 'deductions/employee-deduction/modules/assign-deductions-api',
         type: 'POST',
         data: {
-            action: 'fetchEmployeeAllowances',
+            action: 'fetchEmployeeDeductions',
             employee_id: employeeId,
         },
         success: function(response) {
-            $('#employee-allowances-table').html(response);
+            $('#employee-deductions-table').html(response);
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log("AJAX Error: " + textStatus + ": " + errorThrown);
@@ -17,23 +17,24 @@ function fetchEmployeeAllowances(){
     });
 }
 
-function assignAllowances(){
-    const selectedAllowances = getSelectedAllowances();
+function assignDeductions(){
+    const selectedDeductions = getSelectedDeductions();
     const employeeId = document.getElementById('select_employee').value;
+
     $.ajax({
-        url: 'allowances/employee-allowance/modules/assign-allowances-api',
+        url: 'deductions/employee-deduction/modules/assign-deductions-api',
         type: 'POST',
         data: {
-            action: 'assignAllowances',
+            action: 'assignDeductions',
             employee_id: employeeId,
-            selectedAllowances: selectedAllowances
+            selectedDeductions: selectedDeductions
         },
         success: function(response) {
             $('#response-test').html(response);
-            clearSelectedAllowances();
-            $('#allowance_entitlement_modal').modal('hide');
-            $('#assign_allowances_modal').modal('hide');
-            fetchEmployeeAllowances();
+            clearSelectedDeductions();
+            $('#deductions_entitlement_modal').modal('hide');
+            $('#assign_deductions_modal').modal('hide');
+            fetchEmployeeDeductions();
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log("AJAX Error: " + textStatus + ": " + errorThrown);
@@ -41,19 +42,19 @@ function assignAllowances(){
     });
 }
 
-function deleteAllowance(button){
-    const employeeAllowanceId = button.getAttribute("data-id");
+function deleteDeduction(button){
+    const employeeDeductionId = button.getAttribute("data-id");
     
     $.ajax({
-        url: 'allowances/employee-allowance/modules/assign-allowances-api',
+        url: 'deductions/employee-deduction/modules/assign-deductions-api',
         type: 'POST',
         data: {
-            action: 'deleteAllowance',
-            employee_allowance_id: employeeAllowanceId,
+            action: 'deleteDeduction',
+            employee_deduction_id: employeeDeductionId,
         },
         success: function(response) {
             $('#response-test').html(response);
-            fetchEmployeeAllowances();
+            fetchEmployeeDeductions();
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log("AJAX Error: " + textStatus + ": " + errorThrown);

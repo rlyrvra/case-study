@@ -173,11 +173,11 @@
             <div data-i18n="Basic Inputs">My Payslips</div>
             </a>
         </li>
-        <li class="menu-item">
+        <!-- <li class="menu-item">
             <a href="maintenance-login" class="menu-link">
             <div data-i18n="Input groups">Generate Payslips</div>
             </a>
-        </li>
+        </li> -->
 
         <li class="menu-item">
             <a href="forms-input-groups.html" class="menu-link">

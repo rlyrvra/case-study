@@ -26,12 +26,21 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <!-- Sweet Alert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- Selectize CSS -->
+<link
+  rel="stylesheet"
+  href="assets/vendor/css/selectize.bootstrap5.css"
+/>
 
 
 <!-- Ajax -->
 <script src="deductions/modules/deductions-ajax.js?v1.3"></script>
 <!-- Scripts -->
 <script src="deductions/modules/deductions-scripts.js?v1.3"></script>
+<!-- Ajax -->
+<script src="deductions/employee-deduction/modules/assign-deductions-ajax.js?v1.1"></script>
+<!-- Scripts -->
+<script src="deductions/employee-deduction/modules/assign-deductions-scripts.js?v1.1"></script>
 
 
 
@@ -89,6 +98,7 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
     </script>
     <?php require_once __DIR__ . '/deductions/modules/deductions-modals-add-form.php' ?>
     <?php require_once __DIR__ . '/deductions/modules/deductions-modals-update-form.php' ?>
+    <?php require_once __DIR__ . '/deductions/employee-deduction/modules/assign-deductions-modals-assign-form.php' ?>
     <!-- Layout container -->
     <div class="layout-page">
     <?php require_once __DIR__ . '/user.php' ?>
@@ -98,6 +108,7 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
         <div class="container-fluid pt-5 pb-5">
 
           <div id="response-test"></div>
+
           <div class="container-fluid mb-3 d-flex justify-content-between flex-column flex-lg-row">
 
             <h1 class="display-1">Assign Deductions</h1>
@@ -178,5 +189,15 @@ $(document).ready(function () {
 
 <!-- Place this tag in your head or just before your close body tag. -->
 <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+<!-- Selectize -->
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/js/selectize.min.js"
+  integrity="sha512-IOebNkvA/HZjMM7MxL0NYeLYEalloZ8ckak+NDtOViP7oiYzG5vn6WVXyrJDiJPhl4yRdmNAG49iuLmhkUdVsQ=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+></script>
+
+
 </body>
 </html>

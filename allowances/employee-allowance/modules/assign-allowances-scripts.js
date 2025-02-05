@@ -72,9 +72,9 @@ function clearSelectedAllowances(){
 function assignAllowancesClick(){
     $('#allowance_entitlement_modal').modal('hide');
     Swal.fire({
-        title: "Assign Allowances?",
+        title: "Assign Allowances",
         text: "Assign allowances to this employee?",
-        icon: "warning",
+        icon: "info",
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",

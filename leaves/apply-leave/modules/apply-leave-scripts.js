@@ -68,11 +68,13 @@ function calculateTotalNumberOfDays(){
     $("#totalDays").val(totalNumberOfDays);
     const remainingBalance = $("#remainingBalance").val();
     if(remainingBalance <= 0){
-        return;
+        return false;
     }
     if(totalNumberOfDays > remainingBalance){
         showInvalidBalance();
+        return false;
     }
+    return true;
 
 }
 
@@ -98,7 +100,7 @@ function updateLeaveRequestClick(button){
     endDate.val(leaveRequestData.end_date);
     reason.val(leaveRequestData.reason);
     document.getElementById("form_indicator").innerHTML = "Update My Leave";
-    calculateTotalNumberOfDays();
+    if(!calculateTotalNumberOfDays()) return;
 }
 
 function showInvalidBalance(){
