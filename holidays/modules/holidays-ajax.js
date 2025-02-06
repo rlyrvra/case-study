@@ -135,8 +135,6 @@ function updateHolidays(button){
         status: holidayStatus
     };
 
-    //console.log(holidayData);
-
 
     $.ajax({
         url: 'holidays/modules/holidays-api',
@@ -147,7 +145,7 @@ function updateHolidays(button){
         },
         success: function(response) {
             $('#holiday-table').html(response);
-            //fetchAllHolidays();
+            fetchAllHolidays();
         },
         error(xhr, status, error) {
             console.error("Error creating department:", error);
