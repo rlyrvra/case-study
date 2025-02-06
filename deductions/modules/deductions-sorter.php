@@ -10,7 +10,7 @@
         </select>
         <label for="entries-per-page" class="mx-1">Entries</label>  
     </div>
-    <div class="col-auto d-flex align-items-center mx-1">
+    <div class="col-auto d-flex align-items-center flex-fill mx-1">
         <!--Sort By dropdown-->
         <div class="dropdown sort mx-1">
             <button
@@ -70,7 +70,7 @@
     </div>
 
     <!--Search At-->
-    <div class="search col-auto flex-fill col-auto  mx-1">
+    <div class="search col-auto flex-fill col-auto">
         <div class="input-group">
             <span class="input-group-text"><i class="bx bx-category fs-4 lh-0"></i></span>
             <select class="form-select" id="search_at" name="search_at" placeholder="Search At">
@@ -80,8 +80,8 @@
             </select>
         </div> 
     </div>
-    <div class="search col-auto  flex-fill col-auto  mx-1">
-        <div class="input-group ms-lg-3">
+    <div class="search col-auto  flex-fill col-auto">
+        <div class="input-group ms-lg-1">
             <span class="input-group-text"><i class="bx bx-search-alt-2 fs-4 lh-0"></i></span>
             <input type="text" class="form-control" id="searchText" />
             <button id="openModalBtn" class="btn btn-success" onclick="fetchAllDeductions()"> Search
