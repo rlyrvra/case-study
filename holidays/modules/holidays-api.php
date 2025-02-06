@@ -155,13 +155,17 @@ try {
                 date('Y-m-d', strtotime(validateInput($holidayData['start_date'], 'Start Date'))) : '1970-01-01';
         $endDate = isset($holidayData['end_date']) ? 
                 date('Y-m-d', strtotime(validateInput($holidayData['end_date'], 'End Date'))) : '1970-01-01';
-        $isPaid = isset($holidayData['isPaid']) && $holidayData['isPaid'] !== '' ? $holidayData['isPaid'] : false;
-        $isRecurring = isset($holidayData['isRecurring']) && $holidayData['isRecurring'] !== '' ? $holidayData['isRecurring'] : false;
+        $isPaid = 
+        (isset($holidayData['isPaid']) && $holidayData['isPaid'] === 'true') 
+        ? true : false;
+        $isRecurring = 
+        (isset($holidayData['isRecurring']) && $holidayData['isRecurring'] === 'true') 
+        ? true : false;
         $description = isset($holidayData['description']) ? $holidayData['description'] : null;
         $status = isset($holidayData['status']) ? validateInput($holidayData['status'], "Status") : null;
 
-        echo $isPaid;
-        echo $isRecurring;
+        echo $isPaid . " ";
+        echo $isRecurring . "<br>";
 
         $updatedHoliday = new Holiday(
             id: $hashed_id,
@@ -174,8 +178,10 @@ try {
             status: $status
         );
 
-        echo $updatedHoliday->getIsPaid();
-        echo $updatedHoliday->getIsRecurringAnnually();
+        var_dump($updatedHoliday);
+
+        echo "<br>" . $updatedHoliday->getIsPaid() . " ";
+        echo $updatedHoliday->getIsRecurringAnnually() . "<br>";
 
         $holidayRepository = new HolidayRepository($holidayDao);
         $holidayService = new HolidayService($holidayRepository);

@@ -100,11 +100,12 @@ function updateHolidayClick(button){
     holidayName.val(holidayData.name);
     holidayStart.val(holidayData.start_date);
     holidayEnd.val(holidayData.end_date);
-    holidayIsPaid.prop('checked', holidayData.isPaid);
-    holidayIsRecurring.prop('checked', holidayData.isRecurring);
+    holidayIsPaid.prop('checked', holidayData.isPaid == 1);
+    holidayIsRecurring.prop('checked', holidayData.isRecurring == 1);
     holidayDescription.val(holidayData.description);
     holidayStatus.val(holidayData.status);
     btnUpdateHoliday.setAttribute('data-token', holidayData.token);
+
     
 
 
