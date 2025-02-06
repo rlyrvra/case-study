@@ -98,8 +98,7 @@ require_once __DIR__ . '/login-checker.php';
               <option value="monthly">Monthly</option>
           </select>
           <div class="card-body">
-          <div class="table-responsive no-wrap">
-            <table id="withholding-tax-table" class="table table-hover">
+            <table id="withholding-tax-table" class="table table-bordered table-hover table-striped">
               <thead>
                   <tr>
                     <th>Daily</th>
@@ -132,7 +131,7 @@ require_once __DIR__ . '/login-checker.php';
                   </tr>
                   </tbody>
             </table>
-        </div>
+          </div>
       </div>
       <!-- /Content -->
       <?php require_once __DIR__ . '/footer.php' ?>
