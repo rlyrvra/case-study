@@ -17,11 +17,11 @@ class AllowanceService
     }
 
     public function fetchAllAllowances(
-        ? array $columns        = null,
-        ? array $filterCriteria = null,
-        ? array $sortCriteria   = null,
-        ? int   $limit          = null,
-        ? int   $offset         = null
+        ?array $columns        = null,
+        ?array $filterCriteria = null,
+        ?array $sortCriteria   = null,
+        ?int   $limit          = null,
+        ?int   $offset         = null
     ): ActionResult|array {
         return $this->allowanceRepository->fetchAllAllowances($columns, $filterCriteria, $sortCriteria, $limit, $offset);
     }

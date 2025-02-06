@@ -47,6 +47,7 @@ class EmployeeAllowanceDao
 
             error_log("Database Error: An error occurred while assigning the allowance to employee. " .
                       "Exception: {$exception->getMessage()}");
+            echo $exception->getMessage();
 
             return ActionResult::FAILURE;
         }
@@ -176,7 +177,7 @@ class EmployeeAllowanceDao
             {$limitClause}
             {$offsetClause}
         ";
-
+        //echo $query;
         try {
             $statement = $this->pdo->prepare($query);
 
@@ -202,7 +203,8 @@ class EmployeeAllowanceDao
         } catch (PDOException $exception) {
             error_log("Database Error: An error occurred while fetching employee allowances. " .
                       "Exception: {$exception->getMessage()}");
-
+            //echo $exception->getMessage();
+            
             return ActionResult::FAILURE;
         }
     }

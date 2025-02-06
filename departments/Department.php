@@ -9,6 +9,7 @@ class Department
         private readonly ? string          $description     ,
         private readonly   string          $status
     ) {
+
     }
 
     public function getId(): int|string|null

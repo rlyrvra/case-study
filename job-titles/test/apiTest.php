@@ -1,0 +1,173 @@
+<?php
+
+if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest') {
+    exit('This resource is only accessible via AJAX requests.');
+}
+
+require_once __DIR__ . '/../JobTitleDao.php';
+require_once __DIR__ . '/../JobTitle.php';
+require_once __DIR__ . '/../../includes/Helper.php';
+require_once __DIR__ . '/../../includes/enums/ErrorCode.php';
+require_once __DIR__ . '/../../database/database.php';
+
+try {
+    $userId = 1;
+    $jobTitleDao = new JobTitleDao($pdo);
+    $action = $_POST['action'] ?? '';
+    
+    
+
+    if ($action === 'fetchAll') {
+        $page = isset($_POST['page']) ? (int)$_POST['page'] : 1;
+        $limit = 5;
+        $offset = ($page - 1) * $limit;
+        $data = $jobTitleDao->fetchAll([], [], [["column" => "job_title_name", "direction" => "DESC"], ["column" => "id", "direction" => "ASC"]]);
+        $jobTitles = $data["result_set"];
+        $totalJobTitles = $data["total_row_count"];
+        $totalPages = ceil($totalJobTitles / $limit);
+        include __DIR__ . '/jobTitlesTable.php';
+        return;
+    }
+
+    if($action === 'fetchAllSort'){
+        $status = $_POST['filter_status'];
+        $searchAt = isset($_POST['filter_searchAt']) & $_POST['filter_searchAt'] !== "none" ? $_POST['filter_searchAt'] : null;
+        $searchFilter = $_POST['filter_search'];
+        $dateFilterColumn = $_POST['filter_date_column'];
+        $dateStart = isset($_POST['filter_startDate']) && $dateFilterColumn !== "none" ? $_POST['filter_startDate'] : 0;
+        $dateEnd = isset($_POST['filter_endDate']) && $dateFilterColumn !== "none" ? $_POST['filter_endDate'] : 0;
+        $page = isset($_POST['page']) ? (int)$_POST['page'] : 1;
+        $limit = isset($_POST['numberEntries']) ? $_POST['numberEntries'] : 5;
+        $offset = ($page - 1) * $limit;
+        
+        
+        $filterCriteria = [];
+        
+        if(!empty($status)){
+            $filterCriteria[] = [
+                "column" => "job_title.status",
+                "operator" => "=",
+                "value" => $status
+            ];
+        }
+        if(!empty($searchFilter)){
+            $filterCriteria[] = [
+                "column" => "job_title." . $searchAt,
+                "operator" => "LIKE",
+                "value" => "%$searchFilter%"
+            ];
+        }
+        if((!empty($dateFilterColumn) && $dateFilterColumn !== "none") && !empty($dateStart) && !empty($dateEnd)){
+            $filterCriteria[] = [
+                "column" => "job_title." . $dateFilterColumn,
+                "operator" => "BETWEEN",
+                "lower_bound" => $dateStart,
+                "upper_bound" => $dateEnd
+            ];
+        }
+        print_r($filterCriteria);
+        
+        $sortCriteria = [
+            [
+                "column" => "job_title." . $_POST['sort_by'],
+                "direction" => $_POST['sort_order']
+            ]
+        ];
+        print_r($sortCriteria);
+        $data = $jobTitleDao->fetchAll([], $filterCriteria, $sortCriteria, $limit, $offset);
+        $jobTitles = $data["result_set"];
+        $total_job_titles = $data["total_row_count"];
+        $totalPages = ceil($total_job_titles / $_POST['numberEntries']);
+        include __DIR__ . '/jobTitlesTable.php';
+        return;
+
+    }
+
+    if ($action === 'create') {
+        $jobTitleData = $_POST['job_title'] ?? null;
+
+        if (!$jobTitleData) {
+            echo "Invalid JT data.";
+            return;
+            
+        } 
+
+        $jobTitleTitle = $jobTitleData['title'] ?? '';
+        $jobTitleDepartmentId = $jobTitleData['department_id'] ?? null;
+        $jobTitledescription = $jobTitleData['description'] ?? null;
+        $jobTitleStatus = $jobTitleData['status'] ?? null;
+
+        $newJobTitle = new JobTitle(
+            id: null,
+            title: $jobTitleTitle,
+            departmentId: $jobTitleDepartmentId,
+            description: $jobTitledescription,
+            status: $jobTitleStatus
+        );
+
+        $result = $jobTitleDao->create($newJobTitle, $userId);
+
+        if ($result) {
+            echo "Job Title created successfully!";
+        } else {
+            echo "Failed to JT. Please try again.";
+        }
+
+        return;
+    }
+
+    if($action == 'update'){
+        
+        $jobTitleData = $_POST['job_title'] ?? null;
+        if (!$jobTitleData) {
+            echo "Invalid job title data.";
+            return;
+        }
+
+        print_r($jobTitleData);
+
+        $hashed_id = $jobTitleData['md5_id'] ?? null;
+        $jobTitleTitle = $jobTitleData['title'] ?? '';
+        $jobTitleDepartmentId = $jobTitleData['department_id'] ?? null;
+        $jobTitledescription = $jobTitleData['description'] ?? null;
+        $jobTitleStatus = $jobTitleData['status'] ?? null;
+
+
+        $updateJobTitle = new JobTitle(
+            id: null,
+            title: $jobTitleTitle,
+            departmentId: $jobTitleDepartmentId,
+            description: $jobTitledescription,
+            status: $jobTitleStatus
+        );
+
+        $updateResult = $jobTitleDao->update($updateJobTitle, $hashed_id);
+
+        if ($updateResult) {
+            echo "JT updated successfully!";
+        } else {
+            echo "Failed to JT. Please try again.";
+        }
+        
+        return;
+    }
+
+    if($action == 'delete'){
+        $hashed_id = $_POST['md5_id'] ?? null;
+        $deleteResult = $jobTitleDao->delete($hashed_id);
+
+        if ($deleteResult) {
+            echo "Department deleted successfully!";
+        } else {
+            echo "Failed to delete department. Please try again.";
+        }
+        return;
+    }
+
+    
+
+    
+    echo "Invalid action specified.";
+} catch (Exception $e) {
+    echo "Error: " . $e->getMessage();
+}

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FullCalendar Example</title>
+    <!-- Include FullCalendar JS -->
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar-scheduler@6.1.15/index.global.min.js'></script>
+</head>
+<body>
+  <script>
+      // Initialize the calendar once the document is loaded
+      document.addEventListener('DOMContentLoaded', function() {
+          var calendarEl = document.getElementById('calendar');
+
+          var calendar = new FullCalendar.Calendar(calendarEl, {
+              initialView: 'dayGridMonth',  // Set initial view to month view
+              events: [
+                  {
+                      title: 'Event 2',
+                      start: '2025-02-15',
+                      end: '2025-02-15',
+                      description: 'Another event 2'
+                  }
+              ],
+              headerToolbar: {
+                  left: 'prev,next today',    // Buttons to navigate to previous, next, and today
+                  center: 'title',            // Display the title of the calendar
+                  right: 'dayGridMonth'  // Views for month, week, and day
+              }
+          });
+          calendar.render();
+
+          // Function to update the view based on the screen size
+          function checkScreenSize() {
+              // Use window.matchMedia to check the screen size
+              if (window.matchMedia('(max-width: 991px)').matches) {
+                  // If the screen is smaller than 992px (Bootstrap col-lg), switch to list view
+                  calendar.changeView('listMonth');
+              } else {
+                  // If the screen is larger, switch back to month view
+                  calendar.changeView('dayGridMonth');
+              }
+          }
+
+          // Initial check
+          checkScreenSize();
+
+          // Listen for window resize events and adjust the calendar view accordingly
+          window.addEventListener('resize', checkScreenSize);
+      });
+  </script>
+
+  <h2>My Calendar</h2>
+  <!-- Container for the calendar -->
+  <div id="calendar"></div>
+
+</body>
+</html>

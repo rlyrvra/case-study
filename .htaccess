@@ -1,0 +1,62 @@
+RewriteEngine On
+RewriteCond %{HTTPS} !=on
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# # Set the base URL to the subdirectory
+# RewriteBase /case-study/
+
+# # Exclude /smartWage from global rules
+# RewriteRule ^case-study/ - [L]
+
+# # Rule to remove .php extension
+# RewriteCond %{REQUEST_FILENAME} !-d
+# RewriteCond %{REQUEST_FILENAME}\.php -f
+# RewriteRule ^(.*)$ $1.php [L,QSA]
+
+# # Redirect .php to extension-less URLs
+# RewriteCond %{THE_REQUEST} \s/case-study/(.*)\.php [NC]
+# RewriteRule ^(.*)\.php$ /case-study/$1 [L,R=301]
+
+
+RewriteBase /smartWage/
+
+RewriteRule ^smartWage/ - [L]
+
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}\.php -f
+RewriteRule ^(.*)$ $1.php [L,QSA]
+
+RewriteCond %{THE_REQUEST} \s/smartWage/(.*)\.php [NC]
+RewriteRule ^(.*)\.php$ /smartWage/$1 [L,R=301]
+
+
+# Forbidden 403
+
+RewriteRule ^assets/?$ - [F,L]
+RewriteRule ^allowances/?$ - [F,L]
+# RewriteRule ^attendance/?$ - [F,L]
+RewriteRule ^breaks/?$ - [F,L]
+RewriteRule ^company-profile/?$ - [F,L]
+RewriteRule ^database/?$ - [F,L]
+RewriteRule ^deductions/?$ - [F,L]
+RewriteRule ^departments/?$ - [F,L]
+RewriteRule ^employees/?$ - [F,L]
+RewriteRule ^holidays/?$ - [F,L]
+RewriteRule ^img/?$ - [F,L]
+RewriteRule ^includes/?$ - [F,L]
+RewriteRule ^job-titles/?$ - [F,L]
+RewriteRule ^leaves/?$ - [F,L]
+RewriteRule ^overtime-rates/?$ - [F,L]
+RewriteRule ^payroll/?$ - [F,L]
+RewriteRule ^requests/?$ - [F,L]
+RewriteRule ^rfid-test/?$ - [F,L]
+RewriteRule ^settings/?$ - [F,L]
+RewriteRule ^sweet-alert-toasts/?$ - [F,L]
+RewriteRule ^vendor/?$ - [F,L]
+RewriteRule ^work-schedules/?$ - [F,L]
+
+RewriteRule ^login-validator.php/?$ - [F,L]
+RewriteRule ^login-checker.php/?$ - [F,L]
+RewriteRule ^footer.php/?$ - [F,L]
+RewriteRule ^user.php/?$ - [F,L]
+RewriteRule ^sidebar.php/?$ - [F,L]

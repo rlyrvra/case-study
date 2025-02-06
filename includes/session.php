@@ -9,3 +9,5 @@ ini_set('session.sid_length'     , '32'    );
 ini_set('session.hash_function'  , 'sha256');
 
 session_start();
+
+?>

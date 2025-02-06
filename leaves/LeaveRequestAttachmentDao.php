@@ -44,7 +44,7 @@ class LeaveRequestAttachmentDao
 
             error_log("Database Error: An error occurred while creating the attachment. " .
                       "Exception: {$exception->getMessage()}");
-
+            echo $exception->getMessage();
             return ActionResult::FAILURE;
         }
     }
@@ -173,7 +173,7 @@ class LeaveRequestAttachmentDao
         } catch (PDOException $exception) {
             error_log("Database Error: An error occurred while fetching the attachments. " .
                       "Exception: {$exception->getMessage()}");
-
+            echo $exception->getMessage();
             return ActionResult::FAILURE;
         }
     }
