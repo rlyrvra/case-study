@@ -10,7 +10,6 @@ require_once __DIR__ . '/../../PayrollGroupRepository.php';
 require_once __DIR__ . '/../../PayrollGroupService.php';
 
 require_once __DIR__ . '/../../../includes/Helper.php';
-require_once __DIR__ . '/../../../includes/enums/ErrorCode.php';
 require_once __DIR__ . '/../../../database/database.php';
 
 
@@ -33,7 +32,7 @@ try {
         
         if(!empty($status)){
             $filterCriteria[] = [
-                "column" => "holiday.status",
+                "column" => "payroll_group.status",
                 "operator" => "=",
                 "value" => $status
             ];
@@ -41,14 +40,14 @@ try {
 
         if(empty($searchAt) && !empty($searchFilter)){
             $filterCriteria[] = [
-                "column" => "holiday.name", 
+                "column" => "payroll_group.name", 
                 "operator" => "LIKE",
                 "value" => "%$searchFilter%", 
                 'boolean' => 'OR'
 
             ];
             $filterCriteria[] = [
-                "column" => "holiday.description", 
+                "column" => "payroll_group.description", 
                 "operator" => "LIKE",
                 "value" => "%$searchFilter%", 
                 'boolean' => 'OR'
@@ -57,7 +56,7 @@ try {
 
         if(!empty($searchFilter) && !empty($searchAt)){
             $filterCriteria[] = [
-                "column" => "holiday." . $searchAt, 
+                "column" => "payroll_group." . $searchAt, 
                 "operator" => "LIKE",
                 "value" => "%$searchFilter%"
             ];
@@ -65,7 +64,7 @@ try {
 
         if((!empty($dateFilterColumn) && $dateFilterColumn !== "none") && !empty($dateStart) && !empty($dateEnd)){
             $filterCriteria[] = [
-                "column" => "holiday." . $dateFilterColumn,
+                "column" => "payroll_group." . $dateFilterColumn,
                 "operator" => "BETWEEN",
                 "lower_bound" => $dateStart,
                 "upper_bound" => $dateEnd
@@ -75,7 +74,7 @@ try {
 
         $sortCriteria = [
             [
-                "column" => "holiday." . $_POST['sort_by'],
+                "column" => "payroll_group." . $_POST['sort_by'],
                 "direction" => $_POST['sort_order']
             ]
         ];

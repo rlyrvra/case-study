@@ -14,8 +14,9 @@
       <!-- <th style="width: 2%">NO.</th> -->
       <th>Name</th>
       <th>Pay Frequency</th>
-      <th>Pay Day</th>
-      <th>Start Date</th>
+      <th>Cut Off</th>
+      <th>Payday Offset</th>
+      <th>Payday Adjustment</th>
       <th>Status</th>
       <th>Created At</th>
       <!-- <th>Created By</th> -->
@@ -26,21 +27,61 @@
       <?php if (!isset($status) || $status !== 'Archived') echo "<th style='width: 14%'>Action</th>"; ?> 
     </tr>
   </thead>
+  <?php
+    function findNamedDay($dayNumber){
+      switch($dayNumber){
+        case 1:
+          return "Monday";
+        case 2:
+          return "Tuesday";
+        case 3:
+          return "Wednesday";
+        case 4:
+          return "Thursday";
+        case 5:
+          return "Friday";
+        case 6:
+          return "Saturday";
+        case 7:
+          return "Sunday";
+        default:
+          //do nothing
+      }
+    }
+  ?>
   <tbody>
     <?php if (!empty($payrollGroups)): ?>
       <?php $i = 1; foreach ($payrollGroups as $row): ?>
         <tr data-id="<?php echo htmlspecialchars($row['id']); ?>" 
             data-name="<?php echo htmlspecialchars($row['name']); ?>" 
-            data-payfreq="<?php echo htmlspecialchars($row['pay_frequency']); ?>" 
-            data-payday="<?php echo htmlspecialchars($row['pay_day_after_cutoff']); ?>" 
-            data-start="<?php echo htmlspecialchars($row['start_date']); ?>" 
+            data-payfreq="<?php echo htmlspecialchars($row['payroll_frequency']); ?>" 
+            data-weekly-cutoff="<?php echo htmlspecialchars($row['day_of_weekly_cutoff']); ?>" 
+            data-biweekly-cutoff="<?php echo htmlspecialchars($row['day_of_biweekly_cutoff']); ?>"
+            data-semimonthly-first-cutoff="<?php echo htmlspecialchars($row['semi_monthly_first_cutoff']); ?>"
+            data-semimonthly-second-cutoff="<?php echo htmlspecialchars($row['semi_monthly_second_cutoff']); ?>"
+            data-payday-offset="<?php echo htmlspecialchars($row['payday_offset']); ?>"
+            data-payday-adjustment="<?php echo htmlspecialchars($row['payday_adjustment']); ?>" 
             data-status="<?php echo htmlspecialchars($row['status']); ?>">
           <!-- <td><?php //echo htmlspecialchars($row['id']); ?></td> -->
           <!-- <td><?php //echo htmlspecialchars($i); ?></td> -->
           <td><?php echo htmlspecialchars($row['name']); ?></td>
-          <td><?php echo htmlspecialchars($row['pay_frequency']); ?></td>
-          <td><?php echo htmlspecialchars($row['pay_day_after_cutoff']); ?></td>
-          <td><?php echo htmlspecialchars($row['start_date']); ?></td>
+          <td><?php echo htmlspecialchars($row['payroll_frequency']); ?></td>
+          <td>
+            <?php
+            
+            if($row['payroll_frequency'] === 'Weekly' || $row['payroll_frequency'] === 'Bi-weekly'){
+              echo htmlspecialchars(findNamedDay($row['day_of_weekly_cutoff']));
+            }else if($row['payroll_frequency'] === 'Semi-monthly'){
+              echo htmlspecialchars("Every " . $row['semi_monthly_first_cutoff'] . " and " . $row['semi_monthly_second_cutoff'] . " of the month");
+            }else{
+              //do nothing
+            }
+
+            
+            ?>
+          </td>
+          <td><?php echo htmlspecialchars($row['payday_offset']); ?></td>
+          <td><?php echo htmlspecialchars($row['payday_adjustment']); ?></td>
           <td><span class="badge 
           <?php 
           if($row['status'] === "Active"){
