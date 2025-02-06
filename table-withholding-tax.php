@@ -97,6 +97,7 @@ require_once __DIR__ . '/login-checker.php';
               <option value="semiMonthly">Semi-Monthly</option>
               <option value="monthly">Monthly</option>
           </select>
+          <div class="card-body">
           <div class="table-responsive no-wrap">
             <table id="withholding-tax-table" class="table table-hover">
               <thead>
@@ -129,13 +130,8 @@ require_once __DIR__ . '/login-checker.php';
                   <td>₱1,102.60 + 30% over ₱5,479</td>
                   <td>₱6,034.30 + 35% over ₱21,918</td>
                   </tr>
-                </tbody>
+                  </tbody>
             </table>
-          </div>
-          <style>
-            
-          </style>
-          
         </div>
       </div>
       <!-- /Content -->
@@ -331,14 +327,7 @@ require_once __DIR__ . '/login-checker.php';
         replaceContent(monthly.data);
       }
     });
-  });
-  
-  $(document).ready(function() {
-    $('#withholding-tax-table').DataTable();
-  });
-          
-
-          
+  });          
 </script>
 </body>
 </html>

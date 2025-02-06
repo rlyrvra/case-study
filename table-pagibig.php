@@ -91,8 +91,22 @@ require_once __DIR__ . '/login-checker.php';
             </div>
 
             <hr/>
-            <table id="pagibig-table" class="table table-responsive table-hover">
-              <thead>
+            <div class="card-body">
+        <div class="container mt-4 mb-4">
+          <label for="entries" class="form-label">Show</label>
+          <select id="entries" class="form-select w-auto d-inline-block">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="15">15</option>
+          </select>
+          <span>entries</span>
+        </div>
+        <div id="pagibig-table" class="table-responsive text-no-wrap">
+          <table
+            class="table table-hover table-striped table-bordered flex-fill"
+            id="dataTable"
+          >
+            <thead>
                 <tr>
                   <th>Fund Salary</th>
                   <th>Employee</th>
@@ -120,6 +134,10 @@ require_once __DIR__ . '/login-checker.php';
             </table>
         </div>
       </div>
+      <nav aria-label="Page navigation" class="d-flex justify-content-center">
+      <ul class="pagination pagination-lg" id="pagination"></ul>
+    </nav>
+
       <!-- /Content -->
       <?php require_once __DIR__ . '/footer.php' ?>
       <div class="content-backdrop fade"></div>
@@ -160,25 +178,72 @@ require_once __DIR__ . '/login-checker.php';
 <script src="https://cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
 
 <script>
-  $(document).ready(function() {
-      $('#pagibig-table').DataTable({
-          autoWidth: false,   // Prevents automatic column resizing by DataTable
-          responsive: true,   // Makes the table responsive (optional)
-          columnDefs: [
-              { width: '20%', targets: 0 }, // Set specific widths if necessary
-              { width: '30%', targets: 1 },
-              { width: '50%', targets: 2 },
-              { orderable: false, targets: [0, 2], },
-              { orderable: false, targets: [0, 1] },
-              { orderable: false, targets: [0, 3] },
-              { orderable: false, targets: [0, 4] }
-              
-          ]
-      });
-  });
-  
+   $(document).ready(function () {
+        let currentPage = 1;
+        let rowsPerPage = parseInt($("#entries").val());
+        const $tableRows = $("#dataTable tbody tr");
 
-  
+        function updateTable() {
+          rowsPerPage = parseInt($("#entries").val());
+          const totalRows = $tableRows.length;
+          const totalPages = Math.ceil(totalRows / rowsPerPage);
+
+          $("#pagination")
+            .empty()
+            .append(
+              '<li class="page-item"><a class="page-link" href="#" id="prev"><span aria-hidden="true">&laquo;</span></a></li>'
+            );
+          let startPage = Math.max(1, currentPage - 1);
+          let endPage = Math.min(startPage + 2, totalPages);
+
+          for (let i = startPage; i <= endPage; i++) {
+            $("#pagination").append(
+              `<li class="page-item">
+                <a href="#" class="page-link" data-page="${i}">${i}</a></li>`
+            );
+          }
+          $("#pagination").append(
+            '<li class="page-item "><a class="page-link" href="#" id="next"><span aria-hidden="true">&raquo;</span></a></li>'
+          );
+
+          showPage(currentPage);
+        }
+
+        function showPage(page) {
+          currentPage = page;
+          const start = (currentPage - 1) * rowsPerPage;
+          const end = start + rowsPerPage;
+          $tableRows.hide().slice(start, end).show();
+
+          $("#pagination li").removeClass("active");
+          $("#pagination li a[data-page='" + currentPage + "']")
+            .parent()
+            .addClass("active");
+        }
+
+        $("#entries").change(function () {
+          currentPage = 1;
+          updateTable();
+        });
+
+        $(document).on("click", "#pagination a", function (e) {
+          e.preventDefault();
+          const page = $(this).attr("data-page");
+          if (page) {
+            showPage(parseInt(page));
+          } else if ($(this).attr("id") === "prev" && currentPage > 1) {
+            showPage(currentPage - 1);
+          } else if (
+            $(this).attr("id") === "next" &&
+            currentPage < Math.ceil($tableRows.length / rowsPerPage)
+          ) {
+            showPage(currentPage + 1);
+          }
+          updateTable();
+        });
+
+        updateTable();
+      });
 </script>
 </body>
 </html>
