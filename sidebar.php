@@ -178,29 +178,28 @@
             <div data-i18n="Input groups">Generate Payslips</div>
             </a>
         </li> -->
-
-        <li class="menu-item">
-            <a href="forms-input-groups.html" class="menu-link">
-            <div data-i18n="Input groups">Payroll Groups</div>
-            </a>
-        </li>
         <?php
         if($_SESSION['access_role'] == 'Admin' || $_SESSION['access_role'] == 'Manager'){
         echo '
+        <li class="menu-item" id="payrollGroup-menu">
+            <a href="payroll-group" class="menu-link">
+            <div>Payroll Groups</div>
+            </a>
+        </li>
         <li class="menu-item" id="allowances-menu">
             <a href="allowance" class="menu-link">
             <div>Allowances</div>
             </a>
         </li>
-        ';
-        }
-        ?>
+
         <li class="menu-item" id="deductions-menu">
             <a href="deduction" class="menu-link">
             <div data-i18n="Input groups">Deductions</div>
             </a>
         </li>
-        
+        ';
+        }
+        ?>
         </ul>
     </li>
 

@@ -124,11 +124,6 @@ function confirmDeleteHoliday(button) {
     }).then((result) => {
         if (result.isConfirmed) {
         deleteHoliday(button);
-        Swal.fire(
-            'Deleted!',
-            'The holiday has been deleted.',
-            'success'
-        );
         }
     });
 }

@@ -188,15 +188,16 @@
             <a href="maintenance-login" class="menu-link">
             <div data-i18n="Basic Inputs">My Payslips</div>
             </a>
-        </li>';
+        </li>
+        ';
         }
         ?>
         <?php
         if($_SESSION['access_role'] == 'Admin' || $_SESSION['access_role'] == 'Manager'){
         echo '
-        <li class="menu-item">
-            <a href="forms-input-groups.html" class="menu-link">
-            <div data-i18n="Input groups">Payroll Groups</div>
+        <li class="menu-item" id="payrollGroup-menu">
+            <a href="payroll-group" class="menu-link">
+            <div>Payroll Groups</div>
             </a>
         </li>
         

@@ -148,7 +148,7 @@ try {
             return;
         }
 
-        print_r($holidayData);
+        //print_r($holidayData);
 
         $name = isset($holidayData['name']) && $holidayData['name'] !== '' ? validateInput($holidayData['name'], "Name") : null;
         $startDate = isset($holidayData['start_date']) ? 
