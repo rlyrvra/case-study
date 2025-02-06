@@ -12,7 +12,7 @@
     </div>
     <div class="col-auto d-flex align-items-center mx-1">
         <!--Sort By dropdown-->
-        <div class="dropdown sort col-auto flex-fill mx-2 mb-1">
+        <div class="dropdown sort mx-1">
             <button
                 class="btn btn-primary dropdown-toggle"
                 type="button"
@@ -70,7 +70,7 @@
     </div>
 
     <!--Search At-->
-    <div class="search col-auto  flex-fill col-auto  mx-1">
+    <div class="search col-auto flex-fill col-auto  mx-1">
         <div class="input-group">
             <span class="input-group-text"><i class="bx bx-category fs-4 lh-0"></i></span>
             <select class="form-select" id="search_at" name="search_at" placeholder="Search At">

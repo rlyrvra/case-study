@@ -12,7 +12,7 @@
     </div>
     <div class="col-auto d-flex align-items-center mx-1">
         <!--Sort By dropdown-->
-        <div class="dropdown sort col-auto flex-fill mx-2 mb-1">
+        <div class="dropdown sort mx-1">
             <button
                 class="btn btn-primary dropdown-toggle"
                 type="button"
