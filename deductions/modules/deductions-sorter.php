@@ -10,7 +10,7 @@
         </select>
         <label for="entries-per-page" class="mx-1">Entries</label>  
     </div>
-    <div class="col-auto d-flex align-items-center flex-fill mx-1">
+    <div class="col-auto d-flex align-items-center mx-1">
         <!--Sort By dropdown-->
         <div class="dropdown sort mx-1">
             <button
