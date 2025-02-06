@@ -1,14 +1,14 @@
 <div class="controls d-flex justify-content-between flex-column flex-lg-row"> 
     <!--Entries Per Page -->
     <div class="align mx-1 d-flex align-items-center"> 
-        <label for="entries-per-page">Show:</label>
+        <label for="entries-per-page" class="mx-1">Show:</label>
         <select id="entries-per-page" onchange="fetchAllAllowances()">
             <option value="10">10</option>
             <option value="25">25</option>
             <option value="50">50</option>
             <option value="100">100</option>
         </select>
-        <label for="entries-per-page">Entries</label>  
+        <label for="entries-per-page" class="mx-1">Entries</label>  
     </div>
     <div class="col-auto d-flex align-items-center mx-1">
         <!--Sort By dropdown-->
