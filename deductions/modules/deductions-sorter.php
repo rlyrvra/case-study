@@ -1,16 +1,16 @@
 <div class="controls d-flex justify-content-between flex-column flex-lg-row"> 
     <!--Entries Per Page -->
-    <div class="display-6 align col-auto flex-fill mx-2"> 
-        <label for="entries-per-page">Show:</label>
+    <div class="align mx-1 d-flex align-items-center"> 
+        <label for="entries-per-page" class="mx-1">Show:</label>
         <select id="entries-per-page" onchange="fetchAllDeductions()">
             <option value="10">10</option>
             <option value="25">25</option>
             <option value="50">50</option>
             <option value="100">100</option>
         </select>
-        <label for="entries-per-page">Entries</label>  
+        <label for="entries-per-page" class="mx-1">Entries</label>  
     </div>
-    <div class="col-auto flex-fill mx-2">
+    <div class="col-auto d-flex align-items-center mx-1">
         <!--Sort By dropdown-->
         <div class="dropdown sort col-auto flex-fill mx-2 mb-1">
             <button
@@ -31,7 +31,7 @@
             </ul>
         </div>
         <!--Filter By Date dropdown-->
-        <div class="dropdown sort col-auto flex-fill mx-2">
+        <div class="dropdown sort mx-1">
             <button
                 class="btn btn-primary dropdown-toggle"
                 type="button"
@@ -57,7 +57,7 @@
         </div>  
     </div>
     <!--Filter By Status-->
-    <div class="dropdown filter col-auto d-flex flex-column flex-lg-row mx-2">
+    <div class="dropdown filter flex-fill col-auto  mx-1">
         <div class="input-group">
             <span class="input-group-text"><i class="bx bx-category-alt fs-4 lh-0"></i></span>
             <select class="form-select" id="status" name="status" placeholder="Filter By Status" onchange="fetchAllDeductions()">
@@ -70,7 +70,7 @@
     </div>
 
     <!--Search At-->
-    <div class="search col-auto d-flex flex-column flex-lg-row mx-2">
+    <div class="search col-auto  flex-fill col-auto  mx-1">
         <div class="input-group">
             <span class="input-group-text"><i class="bx bx-category fs-4 lh-0"></i></span>
             <select class="form-select" id="search_at" name="search_at" placeholder="Search At">
@@ -78,7 +78,9 @@
                 <option value="name">Name</option>
                 <option value="description">Description</option>
             </select>
-        </div>
+        </div> 
+    </div>
+    <div class="search col-auto  flex-fill col-auto  mx-1">
         <div class="input-group ms-lg-3">
             <span class="input-group-text"><i class="bx bx-search-alt-2 fs-4 lh-0"></i></span>
             <input type="text" class="form-control" id="searchText" />
