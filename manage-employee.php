@@ -38,9 +38,15 @@ if(isset($_GET['e']) && $_GET['e'] === '404'){
 />
 
 <!-- Ajax -->
-<script src="employees/modules/manage-employee-ajax.js?v1.2"></script>
+<script src="employees/modules/manage-employee-ajax.js?v1.3"></script>
 <!-- Scripts -->
 <script src="employees/modules/manage-employee-scripts.js?v1.3"></script>
+<script src="employees/modules/manage-employee-skeleton.js?v1.1"></script>
+
+<link
+  rel="stylesheet"
+  href="employees/modules/manage-employee-skeleton.css"
+/>
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -117,7 +123,7 @@ if(isset($_GET['e']) && $_GET['e'] === '404'){
           <hr/>
 
           <div id="manage-employee-table" class="row flex-column flex-lg-row justify-content-center">
-              <div class="spinner-border spinner-border-lg text-primary text-center w-px-700 h-px-700" role="status">
+              <div class="visually-hidden spinner-border spinner-border-lg text-primary text-center w-px-700 h-px-700" role="status">
                   <span class="visually-hidden">Loading...</span>
               </div>
             

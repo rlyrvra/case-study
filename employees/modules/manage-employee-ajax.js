@@ -23,8 +23,8 @@ function fetchAllEmployees(page = 1) {
     var search = $("#searchText").val();
     var filterByDepartment = $("#selectize_department_sorter").val();
 
-    var loadingSpinner = document.getElementById("loadingSpinner");
-    loadingSpinner.classList.remove("visually-hidden");
+    // var loadingSpinner = document.getElementById("loadingSpinner");
+    // loadingSpinner.classList.remove("visually-hidden");
     
     // console.log(`
     //     Number of Entries: ${numberEntries}, 
@@ -34,7 +34,7 @@ function fetchAllEmployees(page = 1) {
     //     Search At Column: ${searchColumn}, 
     //     Search Text: ${search},
     //     Department ID: ${filterByDepartment}`);
-        
+    loadSkeletonView(numberEntries, document.getElementById('manage-employee-table'))
     $.ajax({
         url: 'employees/modules/manage-employee-api',
         type: 'POST',
@@ -53,7 +53,7 @@ function fetchAllEmployees(page = 1) {
             filter_endDate: ''
         },
         success: function(response) {
-            loadingSpinner.classList.add("visually-hidden");
+            //loadingSpinner.classList.add("visually-hidden");
             $('#manage-employee-table').html(response);
         },
         error: function(jqXHR, textStatus, errorThrown) {
