@@ -16,7 +16,6 @@
       <th>Pay Frequency</th>
       <th>Cut Off</th>
       <th>Payday Offset</th>
-      <th>Payday Adjustment</th>
       <th>Status</th>
       <th>Created At</th>
       <!-- <th>Created By</th> -->
@@ -59,8 +58,7 @@
             data-biweekly-cutoff="<?php echo htmlspecialchars($row['day_of_biweekly_cutoff']); ?>"
             data-semimonthly-first-cutoff="<?php echo htmlspecialchars($row['semi_monthly_first_cutoff']); ?>"
             data-semimonthly-second-cutoff="<?php echo htmlspecialchars($row['semi_monthly_second_cutoff']); ?>"
-            data-payday-offset="<?php echo htmlspecialchars($row['payday_offset']); ?>"
-            data-payday-adjustment="<?php echo htmlspecialchars($row['payday_adjustment']); ?>" 
+            data-payday-offset="<?php echo htmlspecialchars($row['payday_offset']); ?>" 
             data-status="<?php echo htmlspecialchars($row['status']); ?>">
           <!-- <td><?php //echo htmlspecialchars($row['id']); ?></td> -->
           <!-- <td><?php //echo htmlspecialchars($i); ?></td> -->
@@ -81,7 +79,6 @@
             ?>
           </td>
           <td><?php echo htmlspecialchars($row['payday_offset']); ?></td>
-          <td><?php echo htmlspecialchars($row['payday_adjustment']); ?></td>
           <td><span class="badge 
           <?php 
           if($row['status'] === "Active"){

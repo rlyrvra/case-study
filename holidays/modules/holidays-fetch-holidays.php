@@ -5,7 +5,6 @@ require_once __DIR__ . '/../HolidayRepository.php';
 require_once __DIR__ . '/../HolidayService.php';
 
 require_once __DIR__ . '/../../includes/Helper.php';
-require_once __DIR__ . '/../../includes/enums/ErrorCode.php';
 require_once __DIR__ . '/../../database/database.php';
 
 function getHolidays(){
