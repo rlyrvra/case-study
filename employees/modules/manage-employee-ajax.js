@@ -34,7 +34,16 @@ function fetchAllEmployees(page = 1) {
     //     Search At Column: ${searchColumn}, 
     //     Search Text: ${search},
     //     Department ID: ${filterByDepartment}`);
-    loadSkeletonView(numberEntries, document.getElementById('manage-employee-table'))
+    if(!skeletonLoaded){
+        loadSkeletonView(10, document.getElementById('skeleton-employee-table'));
+        document.getElementById('skeleton-employee-table').classList.remove("visually-hidden");
+        document.getElementById('manage-employee-table').classList.add("visually-hidden");
+        skeletonLoaded = true;
+    }else{
+        document.getElementById('skeleton-employee-table').classList.remove("visually-hidden");
+        document.getElementById('manage-employee-table').classList.add("visually-hidden");
+    }
+    
     $.ajax({
         url: 'employees/modules/manage-employee-api',
         type: 'POST',
@@ -54,6 +63,8 @@ function fetchAllEmployees(page = 1) {
         },
         success: function(response) {
             //loadingSpinner.classList.add("visually-hidden");
+            document.getElementById('skeleton-employee-table').classList.add("visually-hidden");
+            document.getElementById('manage-employee-table').classList.remove("visually-hidden");
             $('#manage-employee-table').html(response);
         },
         error: function(jqXHR, textStatus, errorThrown) {
