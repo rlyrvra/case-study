@@ -211,8 +211,8 @@
         </a>
         <ul class="menu-sub">
         <li class="menu-item">
-            <a href="maintenance-login" class="menu-link">
-            <div data-i18n="Vertical Form">Company Profile</div>
+            <a href="companyprofile" class="menu-link">
+            <div>Company Profile</div>
             </a>
             
         
