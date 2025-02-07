@@ -27,6 +27,21 @@ function getMaxPageValue() {
     return maxPage;
 }
 
+function getSortByColumn(){
+    var sortBy = selectedOptions.sort_by;
+    return sortBy;
+}
+
+function getOrderBy(){
+    var orderBy = selectedOptions.order_by;
+    return orderBy;
+}
+
+function getByDate(){
+    var byDate = selectedOptions.by_date;
+    return byDate;
+}
+
 // Function to add or remove the "Deleted At" option
 function toggleDeletedAtOption() {
     const statusSelect = document.getElementById('status');

@@ -34,9 +34,9 @@ if($_SESSION['access_role'] !== 'Admin'){
 
 
 <!-- Ajax -->
-<script src="job-titles/modules/job-titles-ajax.js?v1.2"></script>
+<script src="job-titles/modules/job-titles-ajax.js?v1.3"></script>
 <!-- Scripts -->
-<script src="job-titles/modules/job-titles-scripts.js?v1.2"></script>
+<script src="job-titles/modules/job-titles-scripts.js?v1.3"></script>
 
 
 <!-- Fonts -->
