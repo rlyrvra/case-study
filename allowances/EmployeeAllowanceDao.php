@@ -54,12 +54,14 @@ class EmployeeAllowanceDao
     }
 
     public function fetchAll(
-        ? array $columns        = null,
-        ? array $filterCriteria = null,
-        ? array $sortCriteria   = null,
-        ? int   $limit          = null,
-        ? int   $offset         = null
+        ? array $columns              = null,
+        ? array $filterCriteria       = null,
+        ? array $sortCriteria         = null,
+        ? int   $limit                = null,
+        ? int   $offset               = null,
+          bool  $includeTotalRowCount = true
     ): ActionResult|array {
+
         $tableColumns = [
             "id"                  => "employee_allowance.id           AS id"                 ,
             "employee_id"         => "employee_allowance.employee_id  AS employee_id"        ,
@@ -95,8 +97,9 @@ class EmployeeAllowanceDao
             ";
         }
 
-        $whereClauses    = [];
-        $queryParameters = [];
+        $whereClauses     = [];
+        $queryParameters  = [];
+        $filterParameters = [];
 
         if (empty($filterCriteria)) {
             $whereClauses[] = "employee_allowance.deleted_at IS NULL";
@@ -108,8 +111,10 @@ class EmployeeAllowanceDao
                 switch ($operator) {
                     case "="   :
                     case "LIKE":
-                        $whereClauses   [] = "{$column} {$operator} ?";
-                        $queryParameters[] = $filterCriterion["value"];
+                        $whereClauses    [] = "{$column} {$operator} ?";
+                        $queryParameters [] = $filterCriterion["value"];
+
+                        $filterParameters[] = $filterCriterion["value"];
 
                         break;
 
@@ -119,9 +124,12 @@ class EmployeeAllowanceDao
                         break;
 
                     case "BETWEEN":
-                        $whereClauses   [] = "{$column} {$operator} ? AND ?";
-                        $queryParameters[] = $filterCriterion["lower_bound"];
-                        $queryParameters[] = $filterCriterion["upper_bound"];
+                        $whereClauses    [] = "{$column} {$operator} ? AND ?";
+                        $queryParameters [] = $filterCriterion["lower_bound"];
+                        $queryParameters [] = $filterCriterion["upper_bound"];
+
+                        $filterParameters[] = $filterCriterion["lower_bound"];
+                        $filterParameters[] = $filterCriterion["upper_bound"];
 
                         break;
                 }
@@ -166,7 +174,7 @@ class EmployeeAllowanceDao
         }
 
         $query = "
-            SELECT SQL_CALC_FOUND_ROWS
+            SELECT
                 " . implode(", ", $selectedColumns) . "
             FROM
                 employee_allowances AS employee_allowance
@@ -192,8 +200,29 @@ class EmployeeAllowanceDao
                 $resultSet[] = $row;
             }
 
-            $countStatement = $this->pdo->query("SELECT FOUND_ROWS()");
-            $totalRowCount = $countStatement->fetchColumn();
+            $totalRowCount = null;
+
+            if ($includeTotalRowCount) {
+                $totalRowCountQuery = "
+                    SELECT
+                        COUNT(employee_allowance.id)
+                    FROM
+                        employee_allowances AS employee_allowance
+                    {$joinClauses}
+                    WHERE
+                        " . implode(" AND ", $whereClauses) . "
+                ";
+
+                $countStatement = $this->pdo->prepare($totalRowCountQuery);
+
+                foreach ($filterParameters as $index => $parameter) {
+                    $countStatement->bindValue($index + 1, $parameter, Helper::getPdoParameterType($parameter));
+                }
+
+                $countStatement->execute();
+
+                $totalRowCount = $countStatement->fetchColumn();
+            }
 
             return [
                 "result_set"      => $resultSet    ,

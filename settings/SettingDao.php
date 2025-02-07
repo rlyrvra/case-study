@@ -13,12 +13,14 @@ class SettingDao
     }
 
     public function fetchAll(
-        ? array $columns        = null,
-        ? array $filterCriteria = null,
-        ? array $sortCriteria   = null,
-        ? int   $limit          = null,
-        ? int   $offset         = null
+        ? array $columns              = null,
+        ? array $filterCriteria       = null,
+        ? array $sortCriteria         = null,
+        ? int   $limit                = null,
+        ? int   $offset               = null,
+          bool  $includeTotalRowCount = true
     ): ActionResult|array {
+
         $tableColumns = [
             "id"            => "setting.id            AS id"           ,
             "setting_key"   => "setting.setting_key   AS setting_key"  ,
@@ -36,8 +38,9 @@ class SettingDao
                     array_flip($columns)
                 );
 
-        $whereClauses    = [];
-        $queryParameters = [];
+        $whereClauses     = [];
+        $queryParameters  = [];
+        $filterParameters = [];
 
         if ( ! empty($filterCriteria)) {
             foreach ($filterCriteria as $filterCriterion) {
@@ -51,8 +54,10 @@ class SettingDao
                     case "="   :
                     case "!="  :
                     case "LIKE":
-                        $whereClauses   [] = "{$column} {$operator} ?";
-                        $queryParameters[] = $filterCriterion["value"];
+                        $whereClauses    [] = "{$column} {$operator} ?";
+                        $queryParameters [] = $filterCriterion["value"];
+
+                        $filterParameters[] = $filterCriterion["value"];
 
                         break;
 
@@ -63,9 +68,12 @@ class SettingDao
                         break;
 
                     case "BETWEEN":
-                        $whereClauses   [] = "{$column} {$operator} ? AND ?";
-                        $queryParameters[] = $filterCriterion["lower_bound"];
-                        $queryParameters[] = $filterCriterion["upper_bound"];
+                        $whereClauses    [] = "{$column} {$operator} ? AND ?";
+                        $queryParameters [] = $filterCriterion["lower_bound"];
+                        $queryParameters [] = $filterCriterion["upper_bound"];
+
+                        $filterParameters[] = $filterCriterion["lower_bound"];
+                        $filterParameters[] = $filterCriterion["upper_bound"];
 
                         break;
                 }
@@ -115,7 +123,7 @@ class SettingDao
         }
 
         $query = "
-            SELECT SQL_CALC_FOUND_ROWS
+            SELECT
                 " . implode(", ", $selectedColumns) . "
             FROM
                 settings AS setting
@@ -139,8 +147,27 @@ class SettingDao
                 $resultSet[] = $row;
             }
 
-            $countStatement = $this->pdo->query("SELECT FOUND_ROWS()");
-            $totalRowCount = $countStatement->fetchColumn();
+            $totalRowCount = null;
+
+            if ($includeTotalRowCount) {
+                $totalRowCountQuery = "
+                    SELECT
+                        COUNT(setting.id)
+                    FROM
+                        settings AS setting
+                    " . ( ! empty($whereClauses) ? "WHERE " . implode(" ", $whereClauses) : "" ) . "
+                ";
+
+                $countStatement = $this->pdo->prepare($totalRowCountQuery);
+
+                foreach ($filterParameters as $index => $parameter) {
+                    $countStatement->bindValue($index + 1, $parameter, Helper::getPdoParameterType($parameter));
+                }
+
+                $countStatement->execute();
+
+                $totalRowCount = $countStatement->fetchColumn();
+            }
 
             return [
                 "result_set"      => $resultSet    ,
@@ -150,7 +177,7 @@ class SettingDao
         } catch (PDOException $exception) {
             error_log("Database Error: An error occurred while fetching the settings. " .
                       "Exception: {$exception->getMessage()}");
-            echo $exception->getMessage();
+
             return ActionResult::FAILURE;
         }
     }

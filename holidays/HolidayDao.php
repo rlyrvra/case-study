@@ -65,12 +65,14 @@ class HolidayDao
     }
 
     public function fetchAll(
-        ? array $columns        = null,
-        ? array $filterCriteria = null,
-        ? array $sortCriteria   = null,
-        ? int   $limit          = null,
-        ? int   $offset         = null
+        ? array $columns              = null,
+        ? array $filterCriteria       = null,
+        ? array $sortCriteria         = null,
+        ? int   $limit                = null,
+        ? int   $offset               = null,
+          bool  $includeTotalRowCount = true
     ): ActionResult|array {
+
         $tableColumns = [
             "id"                    => "holiday.id                    AS id"                   ,
             "name"                  => "holiday.name                  AS name"                 ,
@@ -93,8 +95,9 @@ class HolidayDao
                     array_flip($columns)
                 );
 
-        $whereClauses    = [];
-        $queryParameters = [];
+        $whereClauses     = [];
+        $queryParameters  = [];
+        $filterParameters = [];
 
         if (empty($filterCriteria)) {
             $whereClauses[] = "holiday.deleted_at IS NULL";
@@ -108,15 +111,20 @@ class HolidayDao
                     case ">="  :
                     case "<="  :
                     case "LIKE":
-                        $whereClauses   [] = "{$column} {$operator} ?";
-                        $queryParameters[] = $filterCriterion["value"];
+                        $whereClauses    [] = "{$column} {$operator} ?";
+                        $queryParameters [] = $filterCriterion["value"];
+
+                        $filterParameters[] = $filterCriterion["value"];
 
                         break;
 
                     case "BETWEEN":
-                        $whereClauses   [] = "{$column} {$operator} ? AND ?";
-                        $queryParameters[] = $filterCriterion["lower_bound"];
-                        $queryParameters[] = $filterCriterion["upper_bound"];
+                        $whereClauses    [] = "{$column} {$operator} ? AND ?";
+                        $queryParameters [] = $filterCriterion["lower_bound"];
+                        $queryParameters [] = $filterCriterion["upper_bound"];
+
+                        $filterParameters[] = $filterCriterion["lower_bound"];
+                        $filterParameters[] = $filterCriterion["upper_bound"];
 
                         break;
                 }
@@ -160,7 +168,7 @@ class HolidayDao
         }
 
         $query = "
-            SELECT SQL_CALC_FOUND_ROWS
+            SELECT
                 " . implode(", ", $selectedColumns) . "
             FROM
                 holidays AS holiday
@@ -185,8 +193,28 @@ class HolidayDao
                 $resultSet[] = $row;
             }
 
-            $countStatement = $this->pdo->query("SELECT FOUND_ROWS()");
-            $totalRowCount = $countStatement->fetchColumn();
+            $totalRowCount = null;
+
+            if ($includeTotalRowCount) {
+                $totalRowCountQuery = "
+                    SELECT
+                        COUNT(holiday.id)
+                    FROM
+                        holidays AS holiday
+                    WHERE
+                        " . implode(" AND ", $whereClauses) . "
+                ";
+
+                $countStatement = $this->pdo->prepare($totalRowCountQuery);
+
+                foreach ($filterParameters as $index => $parameter) {
+                    $countStatement->bindValue($index + 1, $parameter, Helper::getPdoParameterType($parameter));
+                }
+
+                $countStatement->execute();
+
+                $totalRowCount = $countStatement->fetchColumn();
+            }
 
             return [
                 "result_set"      => $resultSet    ,

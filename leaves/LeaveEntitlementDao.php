@@ -133,12 +133,14 @@ class LeaveEntitlementDao
     }
 
     public function fetchAll(
-        ? array $columns        = null,
-        ? array $filterCriteria = null,
-        ? array $sortCriteria   = null,
-        ? int   $limit          = null,
-        ? int   $offset         = null
+        ? array $columns              = null,
+        ? array $filterCriteria       = null,
+        ? array $sortCriteria         = null,
+        ? int   $limit                = null,
+        ? int   $offset               = null,
+          bool  $includeTotalRowCount = true
     ): ActionResult|array {
+
         $tableColumns = [
             "id"                      => "leave_entitlement.id                      AS id"                     ,
             "employee_id"             => "leave_entitlement.employee_id             AS employee_id"            ,
@@ -187,8 +189,9 @@ class LeaveEntitlementDao
             ";
         }
 
-        $whereClauses    = [];
-        $queryParameters = [];
+        $whereClauses     = [];
+        $queryParameters  = [];
+        $filterParameters = [];
 
         if (empty($filterCriteria)) {
             $whereClauses[] = "leave_entitlement.deleted_at IS NULL";
@@ -200,8 +203,10 @@ class LeaveEntitlementDao
                 switch ($operator) {
                     case "="   :
                     case "LIKE":
-                        $whereClauses   [] = "{$column} {$operator} ?";
-                        $queryParameters[] = $filterCriterion["value"];
+                        $whereClauses    [] = "{$column} {$operator} ?";
+                        $queryParameters [] = $filterCriterion["value"];
+
+                        $filterParameters[] = $filterCriterion["value"];
 
                         break;
 
@@ -211,9 +216,12 @@ class LeaveEntitlementDao
                         break;
 
                     case "BETWEEN":
-                        $whereClauses   [] = "{$column} {$operator} ? AND ?";
-                        $queryParameters[] = $filterCriterion["lower_bound"];
-                        $queryParameters[] = $filterCriterion["upper_bound"];
+                        $whereClauses    [] = "{$column} {$operator} ? AND ?";
+                        $queryParameters [] = $filterCriterion["lower_bound"];
+                        $queryParameters [] = $filterCriterion["upper_bound"];
+
+                        $filterParameters[] = $filterCriterion["lower_bound"];
+                        $filterParameters[] = $filterCriterion["upper_bound"];
 
                         break;
                 }
@@ -258,7 +266,7 @@ class LeaveEntitlementDao
         }
 
         $query = "
-            SELECT SQL_CALC_FOUND_ROWS
+            SELECT
                 " . implode(", ", $selectedColumns) . "
             FROM
                 leave_entitlements AS leave_entitlement
@@ -284,8 +292,29 @@ class LeaveEntitlementDao
                 $resultSet[] = $row;
             }
 
-            $countStatement = $this->pdo->query("SELECT FOUND_ROWS()");
-            $totalRowCount = $countStatement->fetchColumn();
+            $totalRowCount = null;
+
+            if ($includeTotalRowCount) {
+                $totalRowCountQuery = "
+                    SELECT
+                        COUNT(leave_entitlement.id)
+                    FROM
+                        leave_entitlements AS leave_entitlement
+                    {$joinClauses}
+                    WHERE
+                        " . implode(" AND ", $whereClauses) . "
+                ";
+
+                $countStatement = $this->pdo->prepare($totalRowCountQuery);
+
+                foreach ($filterParameters as $index => $parameter) {
+                    $countStatement->bindValue($index + 1, $parameter, Helper::getPdoParameterType($parameter));
+                }
+
+                $countStatement->execute();
+
+                $totalRowCount = $countStatement->fetchColumn();
+            }
 
             return [
                 "result_set"      => $resultSet    ,

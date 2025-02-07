@@ -12,6 +12,49 @@ class EmployeeBreakDao
         $this->pdo = $pdo;
     }
 
+    public function create(EmployeeBreak $employeeBreak): ActionResult
+    {
+        $query = "
+            INSERT INTO employee_breaks (
+                attendance_id            ,
+                break_schedule_history_id,
+                start_time               ,
+                end_time                 ,
+                break_duration_in_minutes,
+                created_at
+            )
+            VALUES (
+                :attendance_id            ,
+                :break_schedule_history_id,
+                :start_time               ,
+                :end_time                 ,
+                :break_duration_in_minutes,
+                :created_at
+            )
+        ";
+
+        try {
+            $statement = $this->pdo->prepare($query);
+
+            $statement->bindValue(":attendance_id"            , $employeeBreak->getAttendanceId()          , Helper::getPdoParameterType($employeeBreak->getAttendanceId()          ));
+            $statement->bindValue(":break_schedule_history_id", $employeeBreak->getBreakScheduleHistoryId(), Helper::getPdoParameterType($employeeBreak->getBreakScheduleHistoryId()));
+            $statement->bindValue(":start_time"               , $employeeBreak->getStartTime()             , Helper::getPdoParameterType($employeeBreak->getStartTime()             ));
+            $statement->bindValue(":end_time"                 , $employeeBreak->getEndTime()               , Helper::getPdoParameterType($employeeBreak->getEndTime()               ));
+            $statement->bindValue(":break_duration_in_minutes", $employeeBreak->getBreakDurationInMinutes(), Helper::getPdoParameterType($employeeBreak->getBreakDurationInMinutes()));
+            $statement->bindValue(":created_at"               , $employeeBreak->getCreatedAt()             , Helper::getPdoParameterType($employeeBreak->getCreatedAt()             ));
+
+            $statement->execute();
+
+            return ActionResult::SUCCESS;
+
+        } catch (PDOException $exception) {
+            error_log("Database Error: An error occurred while creating the employee break. " .
+                      "Exception: {$exception->getMessage()}");
+
+            return ActionResult::FAILURE;
+        }
+    }
+
     public function breakIn(EmployeeBreak $employeeBreak): ActionResult
     {
         $query = "
@@ -93,12 +136,14 @@ class EmployeeBreakDao
     }
 
     public function fetchAll(
-        ? array $columns        = null,
-        ? array $filterCriteria = null,
-        ? array $sortCriteria   = null,
-        ? int   $limit          = null,
-        ? int   $offset         = null
+        ? array $columns              = null,
+        ? array $filterCriteria       = null,
+        ? array $sortCriteria         = null,
+        ? int   $limit                = null,
+        ? int   $offset               = null,
+          bool  $includeTotalRowCount = true
     ): ActionResult|array {
+
         $tableColumns = [
             "id"                                                      => "employee_break.id                                       AS id"                                                     ,
             "attendance_id"                                           => "employee_break.attendance_id                            AS attendance_id"                                          ,
@@ -397,8 +442,9 @@ class EmployeeBreakDao
             ";
         }
 
-        $whereClauses    = [];
-        $queryParameters = [];
+        $whereClauses     = [];
+        $queryParameters  = [];
+        $filterParameters = [];
 
         if (empty($filterCriteria)) {
             $whereClauses[] = "employee_break.deleted_at IS NULL";
@@ -410,8 +456,10 @@ class EmployeeBreakDao
                 switch ($operator) {
                     case "="   :
                     case "LIKE":
-                        $whereClauses   [] = "{$column} {$operator} ?";
-                        $queryParameters[] = $filterCriterion["value"];
+                        $whereClauses    [] = "{$column} {$operator} ?";
+                        $queryParameters [] = $filterCriterion["value"];
+
+                        $filterParameters[] = $filterCriterion["value"];
 
                         break;
 
@@ -421,9 +469,12 @@ class EmployeeBreakDao
                         break;
 
                     case "BETWEEN":
-                        $whereClauses   [] = "{$column} {$operator} ? AND ?";
-                        $queryParameters[] = $filterCriterion["lower_bound"];
-                        $queryParameters[] = $filterCriterion["upper_bound"];
+                        $whereClauses    [] = "{$column} {$operator} ? AND ?";
+                        $queryParameters [] = $filterCriterion["lower_bound"];
+                        $queryParameters [] = $filterCriterion["upper_bound"];
+
+                        $filterParameters[] = $filterCriterion["lower_bound"];
+                        $filterParameters[] = $filterCriterion["upper_bound"];
 
                         break;
                 }
@@ -467,7 +518,7 @@ class EmployeeBreakDao
         }
 
         $query = "
-            SELECT SQL_CALC_FOUND_ROWS
+            SELECT
                 " . implode(", ", $selectedColumns) . "
             FROM
                 employee_breaks AS employee_break
@@ -493,8 +544,29 @@ class EmployeeBreakDao
                 $resultSet[] = $row;
             }
 
-            $countStatement = $this->pdo->query("SELECT FOUND_ROWS()");
-            $totalRowCount = $countStatement->fetchColumn();
+            $totalRowCount = null;
+
+            if ($includeTotalRowCount) {
+                $totalRowCountQuery = "
+                    SELECT
+                        COUNT(employee_break.id)
+                    FROM
+                        employee_breaks AS employee_break
+                    {$joinClauses}
+                    WHERE
+                        " . implode(" AND ", $whereClauses) . "
+                ";
+
+                $countStatement = $this->pdo->prepare($totalRowCountQuery);
+
+                foreach ($filterParameters as $index => $parameter) {
+                    $countStatement->bindValue($index + 1, $parameter, Helper::getPdoParameterType($parameter));
+                }
+
+                $countStatement->execute();
+
+                $totalRowCount = $countStatement->fetchColumn();
+            }
 
             return [
                 "result_set"      => $resultSet    ,

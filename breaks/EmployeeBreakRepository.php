@@ -11,6 +11,11 @@ class EmployeeBreakRepository
         $this->employeeBreakDao = $employeeBreakDao;
     }
 
+    public function createEmployeeBreak(EmployeeBreak $employeeBreak): ActionResult
+    {
+        return $this->employeeBreakDao->create($employeeBreak);
+    }
+
     public function breakIn(EmployeeBreak $employeeBreak): ActionResult
     {
         return $this->employeeBreakDao->breakIn($employeeBreak);
@@ -22,13 +27,22 @@ class EmployeeBreakRepository
     }
 
     public function fetchAllEmployeeBreaks(
-        ? array $columns        = null,
-        ? array $filterCriteria = null,
-        ? array $sortCriteria   = null,
-        ? int   $limit          = null,
-        ? int   $offset         = null
+        ? array $columns              = null,
+        ? array $filterCriteria       = null,
+        ? array $sortCriteria         = null,
+        ? int   $limit                = null,
+        ? int   $offset               = null,
+          bool  $includeTotalRowCount = true
     ): ActionResult|array {
-        return $this->employeeBreakDao->fetchAll($columns, $filterCriteria, $sortCriteria, $limit, $offset);
+
+        return $this->employeeBreakDao->fetchAll(
+            columns             : $columns             ,
+            filterCriteria      : $filterCriteria      ,
+            sortCriteria        : $sortCriteria        ,
+            limit               : $limit               ,
+            offset              : $offset              ,
+            includeTotalRowCount: $includeTotalRowCount
+        );
     }
 
     public function updateEmployeeBreak(EmployeeBreak $employeeBreak, bool $isHashedId = false): ActionResult

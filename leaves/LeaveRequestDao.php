@@ -68,12 +68,14 @@ class LeaveRequestDao
     }
 
     public function fetchAll(
-        ? array $columns        = null,
-        ? array $filterCriteria = null,
-        ? array $sortCriteria   = null,
-        ? int   $limit          = null,
-        ? int   $offset         = null
+        ? array $columns              = null,
+        ? array $filterCriteria       = null,
+        ? array $sortCriteria         = null,
+        ? int   $limit                = null,
+        ? int   $offset               = null,
+          bool  $includeTotalRowCount = true
     ): ActionResult|array {
+
         $tableColumns = [
             "id"                       => "leave_request.id            AS id"                      ,
             "employee_id"              => "leave_request.employee_id   AS employee_id"             ,
@@ -171,8 +173,9 @@ class LeaveRequestDao
             ";
         }
 
-        $whereClauses    = [];
-        $queryParameters = [];
+        $whereClauses     = [];
+        $queryParameters  = [];
+        $filterParameters = [];
 
         if (empty($filterCriteria)) {
             $whereClauses[] = "leave_request.deleted_at IS NULL";
@@ -183,9 +186,13 @@ class LeaveRequestDao
 
                 switch ($operator) {
                     case "="   :
+                    case ">="  :
+                    case "<="  :
                     case "LIKE":
-                        $whereClauses   [] = "{$column} {$operator} ?";
-                        $queryParameters[] = $filterCriterion["value"];
+                        $whereClauses    [] = "{$column} {$operator} ?";
+                        $queryParameters [] = $filterCriterion["value"];
+
+                        $filterParameters[] = $filterCriterion["value"];
 
                         break;
 
@@ -195,9 +202,12 @@ class LeaveRequestDao
                         break;
 
                     case "BETWEEN":
-                        $whereClauses   [] = "{$column} {$operator} ? AND ?";
-                        $queryParameters[] = $filterCriterion["lower_bound"];
-                        $queryParameters[] = $filterCriterion["upper_bound"];
+                        $whereClauses    [] = "{$column} {$operator} ? AND ?";
+                        $queryParameters [] = $filterCriterion["lower_bound"];
+                        $queryParameters [] = $filterCriterion["upper_bound"];
+
+                        $filterParameters[] = $filterCriterion["lower_bound"];
+                        $filterParameters[] = $filterCriterion["upper_bound"];
 
                         break;
 
@@ -207,8 +217,10 @@ class LeaveRequestDao
                         if ( ! empty($valueList)) {
                             $placeholders = implode(", ", array_fill(0, count($valueList), "?"));
 
-                            $whereClauses[]  = "{$column} IN ({$placeholders})"         ;
-                            $queryParameters = array_merge($queryParameters, $valueList);
+                            $whereClauses[]   = "{$column} IN ({$placeholders})"          ;
+                            $queryParameters  = array_merge($queryParameters , $valueList);
+
+                            $filterParameters = array_merge($filterParameters, $valueList);
                         }
 
                         break;
@@ -253,7 +265,7 @@ class LeaveRequestDao
         }
 
         $query = "
-            SELECT SQL_CALC_FOUND_ROWS
+            SELECT
                 " . implode(", ", $selectedColumns) . "
             FROM
                 leave_requests AS leave_request
@@ -279,8 +291,29 @@ class LeaveRequestDao
                 $resultSet[] = $row;
             }
 
-            $countStatement = $this->pdo->query("SELECT FOUND_ROWS()");
-            $totalRowCount = $countStatement->fetchColumn();
+            $totalRowCount = null;
+
+            if ($includeTotalRowCount) {
+                $totalRowCountQuery = "
+                    SELECT
+                        COUNT(leave_request.id)
+                    FROM
+                        leave_requests AS leave_request
+                    {$joinClauses}
+                    WHERE
+                        " . implode(" AND ", $whereClauses) . "
+                ";
+
+                $countStatement = $this->pdo->prepare($totalRowCountQuery);
+
+                foreach ($filterParameters as $index => $parameter) {
+                    $countStatement->bindValue($index + 1, $parameter, Helper::getPdoParameterType($parameter));
+                }
+
+                $countStatement->execute();
+
+                $totalRowCount = $countStatement->fetchColumn();
+            }
 
             return [
                 "result_set"      => $resultSet    ,
