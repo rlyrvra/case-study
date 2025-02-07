@@ -1,22 +1,27 @@
 function fetchAllLeaveTypes(page = 1){
-    var numberEntries = $("#entries").val();
-    var sortByColumn = $("#sortBy").val();
+    var numberEntries = $("#entries-per-page").val();
+    var sortByColumn = getSortByColumn();
     var pageNumber = getPage(page);
-    if(sortByColumn == null) return;
-    var sortOrderBy = $("#orderBy").val();
-    if(sortOrderBy == null) return;
+    if(sortByColumn == null){
+        sortByColumn = "created_at";
+    };
+    var sortOrderBy = getOrderBy();
+    if(sortOrderBy == null) {
+        sortOrderBy = "DESC";
+    };
     var filterStatus = $("#status").val();
-    var searchColumn = $("#searchColumn").val();
-    var dateColumn = $("#dateColumn").val();
+    var searchColumn = $("#search_at").val();
+    if(searchColumn == 'none'){
+        searchColumn = "";
+    };
+    var dateColumn = getByDate();
     var startDate, endDate;
-    if(dateColumn !== "none"){
+    if(dateColumn){
         startDate = $("#dateStart").val();
         endDate = $("#dateEnd").val();
     }
     var search = $("#searchText").val();
 
-    var loadingSpinner = document.getElementById("loadingSpinner");
-    loadingSpinner.classList.remove("visually-hidden");
     
     // console.log(`
     //     Number of Entries: ${numberEntries}, 
@@ -24,7 +29,7 @@ function fetchAllLeaveTypes(page = 1){
     //     Page Number: ${pageNumber}, 
     //     Sort Order By: ${sortOrderBy}, 
     //     Filter Status: ${filterStatus}, 
-    //     Search At Column: ${searchColumn},
+    //     Search At Column: ${searchColumn}, 
     //     Date Column: ${dateColumn}, 
     //     Start Date: ${startDate}, 
     //     End Date: ${endDate}, 

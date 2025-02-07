@@ -8,6 +8,7 @@ require_once __DIR__ . '/../JobTitleDao.php';
 require_once __DIR__ . '/../JobTitleService.php';
 require_once __DIR__ . '/../JobTitleRepository.php';
 require_once __DIR__ . '/../JobTitle.php';
+
 require_once __DIR__ . '/../../includes/Helper.php';
 require_once __DIR__ . '/../../includes/enums/ErrorCode.php';
 require_once __DIR__ . '/../../database/database.php';
@@ -30,6 +31,7 @@ try {
         
         $filterCriteria = [];
         
+
         if(!empty($status)){
             $filterCriteria[] = [
                 "column" => "job_title.status",
@@ -37,13 +39,30 @@ try {
                 "value" => $status
             ];
         }
-        if(!empty($searchFilter)){
+
+        $searchColumns = ['title', 'description'];
+        if(empty($searchAt) && !empty($searchFilter)){
+            foreach($searchColumns as $searchColumn){
+                $filterCriteria[] = [
+                    "column" => "job_title." . $searchColumn, 
+                    "operator" => "LIKE",
+                    "value" => "%$searchFilter%", 
+                    'boolean' => 'OR'
+    
+                ];
+            }
+            
+        }
+
+        if(!empty($searchFilter) && !empty($searchAt)){
             $filterCriteria[] = [
                 "column" => "job_title." . $searchAt,
                 "operator" => "LIKE",
                 "value" => "%$searchFilter%"
             ];
         }
+
+
         if((!empty($dateFilterColumn) && $dateFilterColumn !== "none") && !empty($dateStart) && !empty($dateEnd)){
             $filterCriteria[] = [
                 "column" => "job_title." . $dateFilterColumn,

@@ -8,6 +8,7 @@ require_once __DIR__ . '/../leave-types/LeaveType.php';
 require_once __DIR__ . '/../leave-types/LeaveTypeRepository.php';
 require_once __DIR__ . '/../leave-types/LeaveTypeService.php';
 require_once __DIR__ . '/../leave-types/LeaveTypeDao.php';
+
 require_once __DIR__ . '/../../includes/Helper.php';
 require_once __DIR__ . '/../../includes/enums/ErrorCode.php';
 require_once __DIR__ . '/../../database/database.php';
@@ -39,13 +40,31 @@ try {
                 "value" => $status
             ];
         }
-        if(!empty($searchFilter)){
+
+        $searchColumns = ['name', 'description'];
+        if(empty($searchAt) && !empty($searchFilter)){
+            foreach($searchColumns as $searchColumn){
+                $filterCriteria[] = [
+                    "column" => "leave_type." . $searchColumn, 
+                    "operator" => "LIKE",
+                    "value" => "%$searchFilter%", 
+                    'boolean' => 'OR'
+    
+                ];
+            }
+            
+        }
+
+
+        if(!empty($searchFilter) && !empty($searchAt)){
             $filterCriteria[] = [
                 "column" => "leave_type." . $searchAt,
                 "operator" => "LIKE",
                 "value" => "%$searchFilter%"
             ];
         }
+
+
         if((!empty($dateFilterColumn) && $dateFilterColumn !== "none") && !empty($dateStart) && !empty($dateEnd)){
             $filterCriteria[] = [
                 "column" => "leave_type." . $dateFilterColumn,
@@ -61,6 +80,8 @@ try {
                 "direction" => $_POST['sort_order']
             ]
         ];
+
+        //print_r($filterCriteria);
         
         $leaveTypeRepository = new LeaveTypeRepository($leaveTypeDao);
         $leaveTypeService = new LeaveTypeService($leaveTypeRepository);
