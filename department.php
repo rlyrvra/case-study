@@ -31,9 +31,14 @@ if($_SESSION['access_role'] !== 'Admin'){
 
 
 <!-- Ajax -->
-<script src="departments/modules/departments-ajax.js?v1.4"></script>
+<script src="departments/modules/departments-ajax.js?v1.5"></script>
 <!-- Scripts -->
-<script src="departments/modules/departments-scripts.js?v1.6"></script>
+<script src="departments/modules/departments-scripts.js?v1.5"></script>
+
+<!---Skeletons--->
+<script src="requests/table-skeleton.js?v1.1"></script>
+<!---Skeletons CSS-->
+<link rel="stylesheet" href="requests/table-skeleton.css?v1.1" />
 
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -117,7 +122,7 @@ if($_SESSION['access_role'] !== 'Admin'){
               </div>
               <div class="card-body">
                 <div id="departments-table" class="table-responsive text-no-wrap">
-                <div class="container-fluid spinner-border spinner-border-lg d-flex align-items-center justify-content-center w-px-700 h-px-700" role="status"></div>
+                <div class="container-fluid spinner-border spinner-border-lg d-flex align-items-center justify-content-center w-px-700 h-px-700 visually-hidden" role="status"></div>
                 </div>
               </div>
             </div>
