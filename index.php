@@ -333,28 +333,28 @@
             <div class="row">
                 <div class="col-md-3">
                     <div class="card p-4 shadow text-center">
-                        <img src="img/1.webp" alt="Payroll Processing" class="img-fluid mb-3">
+                        <img src="img/1.webp" alt="Payroll Processing" class="img-fluid mb-3" loading="lazy">
                         <h5>Payroll Processing</h5>
                         <p>Save time with automated calculations and payments.</p>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="card p-4 shadow text-center">
-                        <img src="img/2.1.webp" alt="Wage Calculations" class="img-fluid mb-3">
+                        <img src="img/2.1.webp" alt="Wage Calculations" class="img-fluid mb-3" loading="lazy">
                         <h5>Wage Calculations</h5>
                         <p>Eliminate errors with precision-based calculations.</p>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="card p-4 shadow text-center">
-                        <img src="img/3.jpg" alt="Employee Self-Service" class="img-fluid mb-3">
+                        <img src="img/3.jpg" alt="Employee Self-Service" class="img-fluid mb-3" loading="lazy">
                         <h5>Employee Self-Service</h5>
                         <p>Empower your team with full transparency.</p>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="card p-4 shadow text-center">
-                        <img src="img/4.webp" alt="Compliance Made Easy" class="img-fluid mb-3">
+                        <img src="img/4.webp" alt="Compliance Made Easy" class="img-fluid mb-3" loading="lazy">
                         <h5>Simplified Compliance</h5>
                         <p>Accurate reporting and legal adherence made simple.</p>
                         
