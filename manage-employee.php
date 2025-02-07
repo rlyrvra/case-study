@@ -121,7 +121,7 @@ if(isset($_GET['e']) && $_GET['e'] === '404'){
           </div>
 
           <hr/>
-
+          <div id="skeleton-employee-table" class="visually-hidden row flex-column flex-lg-row justify-content-center"></div>
           <div id="manage-employee-table" class="row flex-column flex-lg-row justify-content-center">
               <div class="visually-hidden spinner-border spinner-border-lg text-primary text-center w-px-700 h-px-700" role="status">
                   <span class="visually-hidden">Loading...</span>
