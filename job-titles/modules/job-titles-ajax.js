@@ -36,6 +36,19 @@ function fetchAllJobTitles(page = 1) {
     //     End Date: ${endDate}, 
     //     Search Text: ${search}`);
 
+    var loadingSpinner = document.getElementById("loadingSpinner");
+    loadingSpinner.classList.remove("visually-hidden");
+
+    if(!skeletonLoaded){
+        loadSkeletonView(7, ['Job Title', 'Department', 'Description', 'Status', 'Created At', 'Updated At'] , numberEntries, document.getElementById("skeleton-jobs-table"));
+        document.getElementById('skeleton-jobs-table').classList.remove("visually-hidden");
+        document.getElementById('job-titles-table').classList.add("visually-hidden");
+        skeletonLoaded = true;
+    }else{
+        document.getElementById('skeleton-jobs-table').classList.remove("visually-hidden");
+        document.getElementById('job-titles-table').classList.add("visually-hidden");
+    }
+
         
     $.ajax({
         url: 'job-titles/modules/job-titles-api',
@@ -54,6 +67,9 @@ function fetchAllJobTitles(page = 1) {
             filter_endDate: endDate
         },
         success: function(response) {
+            loadingSpinner.classList.add("visually-hidden");
+            document.getElementById('skeleton-jobs-table').classList.add("visually-hidden");
+            document.getElementById('job-titles-table').classList.remove("visually-hidden");
             $('#job-titles-table').html(response);
         },
         error: function(jqXHR, textStatus, errorThrown) {

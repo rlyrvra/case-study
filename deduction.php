@@ -34,7 +34,7 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
 
 
 <!-- Ajax -->
-<script src="deductions/modules/deductions-ajax.js?v1.3"></script>
+<script src="deductions/modules/deductions-ajax.js?v1.4"></script>
 <!-- Scripts -->
 <script src="deductions/modules/deductions-scripts.js?v1.3"></script>
 <!-- Ajax -->
@@ -42,7 +42,10 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
 <!-- Scripts -->
 <script src="deductions/employee-deduction/modules/assign-deductions-scripts.js?v1.1"></script>
 
-
+<!---Skeletons--->
+<script src="requests/table-skeleton.js?v1.2"></script>
+<!---Skeletons CSS-->
+<link rel="stylesheet" href="requests/table-skeleton.css?v1.1" />
 
 
 <!-- Fonts -->
@@ -142,9 +145,9 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
               <h5>List of Deductions
             </div>
             <div class="card-body">
+              <div id="skeleton-deductions-table" class="visually-hidden table-responsive text-no-wrap"></div>
               <div id="deductions-table" class="table-responsive text-no-wrap">
-              <?php require_once __DIR__ . '/deductions/modules/deductions-table.php' ?>
-              <div class="container-fluid spinner-border spinner-border-lg d-flex align-items-center justify-content-center w-px-700 h-px-700" role="status"></div>
+                <div class="visually-hidden container-fluid spinner-border spinner-border-lg d-flex align-items-center justify-content-center w-px-700 h-px-700" role="status"></div>
               </div>
             </div>
           </div>

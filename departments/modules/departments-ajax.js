@@ -35,10 +35,23 @@ function fetchAllDepartments(page = 1) {
     //     End Date: ${endDate}, 
     //     Search Text: ${search}`);
 
+
     var loadingSpinner = document.getElementById("loadingSpinner");
     loadingSpinner.classList.remove("visually-hidden");
-    loadSkeletonView(7, ['Name', 'DEPARTMENT HEAD', 'DESCRIPTION', 'STATUS', 'Created At', 'Updated At'] , numberEntries, document.getElementById("departments-table"));
-    //document.getElementById("skeleton-table").classList.remove("visually-hidden");
+
+
+    if(!skeletonLoaded){
+        loadSkeletonView(7, ['Name', 'DEPARTMENT HEAD', 'DESCRIPTION', 'STATUS', 'Created At', 'Updated At'] , numberEntries, document.getElementById("skeleton-departments-table"));
+        document.getElementById('skeleton-departments-table').classList.remove("visually-hidden");
+        document.getElementById('departments-table').classList.add("visually-hidden");
+        skeletonLoaded = true;
+    }else{
+        document.getElementById('skeleton-departments-table').classList.remove("visually-hidden");
+        document.getElementById('departments-table').classList.add("visually-hidden");
+    }
+
+    
+    
     $.ajax({
         url: 'departments/modules/departments-api',
         type: 'POST',
@@ -57,7 +70,8 @@ function fetchAllDepartments(page = 1) {
         },
         success: function(response) {
             loadingSpinner.classList.add("visually-hidden");
-            //document.getElementById("skeleton-table").classList.add("visually-hidden");
+            document.getElementById('skeleton-departments-table').classList.add("visually-hidden");
+            document.getElementById('departments-table').classList.remove("visually-hidden");
             $('#departments-table').html(response);
         },
         error: function(jqXHR, textStatus, errorThrown) {

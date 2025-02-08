@@ -1,3 +1,4 @@
+var skeletonLoaded = false;
 function loadSkeletonView(cols = 1, colNames = ['default'], rows = 1, targetTableId) {
     let table = document.getElementById(targetTableId);
     

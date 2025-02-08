@@ -37,6 +37,10 @@ if($_SESSION['access_role'] !== 'Admin'){
 <script src="job-titles/modules/job-titles-ajax.js?v1.3"></script>
 <!-- Scripts -->
 <script src="job-titles/modules/job-titles-scripts.js?v1.3"></script>
+<!---Skeletons--->
+<script src="requests/table-skeleton.js?v1.2"></script>
+<!---Skeletons CSS-->
+<link rel="stylesheet" href="requests/table-skeleton.css?v1.1" />
 
 
 <!-- Fonts -->
@@ -105,7 +109,7 @@ if($_SESSION['access_role'] !== 'Admin'){
 
             <div class="container-fluid card pt-3 pb-3 mt-5 mb-5">
               <?php require_once __DIR__ . '/job-titles/modules/job-titles-sorter.php' ?>
-              <div class="visually-hidden spinner-border spinner-border-lg text-primary text-center w-px-25 h-px-25" role="status" id="loadingSpinner"></div>
+              <div class="spinner-border spinner-border-lg text-primary text-center w-px-25 h-px-25" role="status" id="loadingSpinner"></div>
             </div>
 
             <!-- <div class="divider text-start">
@@ -120,8 +124,9 @@ if($_SESSION['access_role'] !== 'Admin'){
                 <h5>List of Job Titles
               </div>
               <div class="card-body">
+                <div id="skeleton-jobs-table" class="visually-hidden table-responsive text-no-wrap"></div>
                 <div id="job-titles-table" class="table-responsive text-no-wrap">
-                <div class="container-fluid spinner-border spinner-border-lg d-flex align-items-center justify-content-center w-px-700 h-px-700" role="status"></div>
+                  <div class="visually-hidden container-fluid spinner-border spinner-border-lg d-flex align-items-center justify-content-center w-px-700 h-px-700" role="status"></div>
                 </div>
               </div>
             </div>

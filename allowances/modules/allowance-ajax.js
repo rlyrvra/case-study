@@ -37,6 +37,19 @@ function fetchAllAllowances(page = 1) {
 
     var loadingSpinner = document.getElementById("loadingSpinner");
     loadingSpinner.classList.remove("visually-hidden");
+
+
+    if(!skeletonLoaded){
+        loadSkeletonView(7, ['Name', 'Amount', 'Frequency', 'Description', 'Status', 'Created At', 'Updated At'] , numberEntries, document.getElementById("skeleton-allowance-table"));
+        document.getElementById('skeleton-allowance-table').classList.remove("visually-hidden");
+        document.getElementById('allowance-table').classList.add("visually-hidden");
+        skeletonLoaded = true;
+    }else{
+        document.getElementById('skeleton-allowance-table').classList.remove("visually-hidden");
+        document.getElementById('allowance-table').classList.add("visually-hidden");
+    }
+
+
     $.ajax({
         url: 'allowances/modules/allowance-api',
         type: 'POST',
@@ -54,6 +67,8 @@ function fetchAllAllowances(page = 1) {
             filter_endDate: endDate
         },
         success: function(response) {
+            document.getElementById('skeleton-allowance-table').classList.add("visually-hidden");
+            document.getElementById('allowance-table').classList.remove("visually-hidden");
             loadingSpinner.classList.add("visually-hidden");
             $('#allowance-table').html(response);
         },

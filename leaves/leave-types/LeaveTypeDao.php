@@ -33,8 +33,12 @@ class LeaveTypeDao
             )
         ";
 
+        $isLocalTransaction = ! $this->pdo->inTransaction();
+
         try {
-            $this->pdo->beginTransaction();
+            if ($isLocalTransaction) {
+                $this->pdo->beginTransaction();
+            }
 
             $statement = $this->pdo->prepare($query);
 
@@ -47,13 +51,17 @@ class LeaveTypeDao
 
             $statement->execute();
 
-            $this->pdo->commit();
+            if ($isLocalTransaction) {
+                $this->pdo->commit();
+            }
 
             return ActionResult::SUCCESS;
 
         } catch (PDOException $exception) {
-            $this->pdo->rollBack();
-            
+            if ($isLocalTransaction) {
+                $this->pdo->rollBack();
+            }
+
             error_log("Database Error: An error occurred while creating the leave type. " .
                       "Exception: {$exception->getMessage()}");
 
@@ -101,6 +109,9 @@ class LeaveTypeDao
             foreach ($filterCriteria as $filterCriterion) {
                 $column   = $filterCriterion["column"  ];
                 $operator = $filterCriterion["operator"];
+                $boolean  = isset($filterCriterion["boolean"])
+                    ? strtoupper($filterCriterion["boolean"])
+                    : 'AND';
 
                 switch ($operator) {
                     case "="   :
@@ -122,7 +133,13 @@ class LeaveTypeDao
 
                         break;
                 }
+
+                $whereClauses[] = " {$boolean}";
             }
+        }
+
+        if (in_array(trim(end($whereClauses)), ['AND', 'OR'], true)) {
+            array_pop($whereClauses);
         }
 
         $orderByClauses = [];
@@ -168,7 +185,7 @@ class LeaveTypeDao
             FROM
                 leave_types AS leave_type
             WHERE
-                " . implode(" AND ", $whereClauses) . "
+                " . implode(" ", $whereClauses) . "
             " . ( ! empty($orderByClauses) ? "ORDER BY " . implode(", ", $orderByClauses) : "") . "
             {$limitClause}
             {$offsetClause}
@@ -197,7 +214,7 @@ class LeaveTypeDao
                     FROM
                         leave_types AS leave_type
                     WHERE
-                        " . implode(" AND ", $whereClauses) . "
+                        " . implode(" ", $whereClauses) . "
                 ";
 
                 $countStatement = $this->pdo->prepare($totalRowCountQuery);
@@ -219,7 +236,7 @@ class LeaveTypeDao
         } catch (PDOException $exception) {
             error_log("Database Error: An error occurred while fetching the leave types. " .
                       "Exception: {$exception->getMessage()}");
-            echo $exception->getMessage();
+
             return ActionResult::FAILURE;
         }
     }
@@ -244,8 +261,12 @@ class LeaveTypeDao
             $query .= " id = :leave_type_id";
         }
 
+        $isLocalTransaction = ! $this->pdo->inTransaction();
+
         try {
-            $this->pdo->beginTransaction();
+            if ($isLocalTransaction) {
+                $this->pdo->beginTransaction();
+            }
 
             $statement = $this->pdo->prepare($query);
 
@@ -260,12 +281,16 @@ class LeaveTypeDao
 
             $statement->execute();
 
-            $this->pdo->commit();
+            if ($isLocalTransaction) {
+                $this->pdo->commit();
+            }
 
             return ActionResult::SUCCESS;
 
         } catch (PDOException $exception) {
-            $this->pdo->rollBack();
+            if ($isLocalTransaction) {
+                $this->pdo->rollBack();
+            }
 
             error_log("Database Error: An error occurred while updating the leave type. " .
                       "Exception: {$exception->getMessage()}");
@@ -295,8 +320,12 @@ class LeaveTypeDao
             $query .= " id = :leave_type_id";
         }
 
+        $isLocalTransaction = ! $this->pdo->inTransaction();
+
         try {
-            $this->pdo->beginTransaction();
+            if ($isLocalTransaction) {
+                $this->pdo->beginTransaction();
+            }
 
             $statement = $this->pdo->prepare($query);
 
@@ -304,12 +333,16 @@ class LeaveTypeDao
 
             $statement->execute();
 
-            $this->pdo->commit();
+            if ($isLocalTransaction) {
+                $this->pdo->commit();
+            }
 
             return ActionResult::SUCCESS;
 
         } catch (PDOException $exception) {
-            $this->pdo->rollBack();
+            if ($isLocalTransaction) {
+                $this->pdo->rollBack();
+            }
 
             error_log("Database Error: An error occurred while deleting the leave type. " .
                       "Exception: {$exception->getMessage()}");

@@ -35,13 +35,18 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
 
 
 <!-- Ajax -->
-<script src="allowances/modules/allowance-ajax.js?v1.8"></script>
+<script src="allowances/modules/allowance-ajax.js?v1.10"></script>
 <!-- Scripts -->
 <script src="allowances/modules/allowance-scripts.js?v1.8"></script>
 <!-- Ajax -->
 <script src="allowances/employee-allowance/modules/assign-allowances-ajax.js?v1.1"></script>
 <!-- Scripts -->
 <script src="allowances/employee-allowance/modules/assign-allowances-scripts.js?v1.1"></script>
+
+<!---Skeletons--->
+<script src="requests/table-skeleton.js?v1.2"></script>
+<!---Skeletons CSS-->
+<link rel="stylesheet" href="requests/table-skeleton.css?v1.1" />
 
 
 <!-- Fonts -->
@@ -131,9 +136,9 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
               <h5>List of Allowances
             </div>
             <div class="card-body">
+              <div id="skeleton-allowance-table" class="visually-hidden table-responsive text-no-wrap"></div>
               <div id="allowance-table" class="table-responsive text-no-wrap">
-              <?php require_once __DIR__ . '/allowances/modules/allowance-table.php' ?>
-              <div class="container-fluid spinner-border spinner-border-lg d-flex align-items-center justify-content-center w-px-700 h-px-700" role="status"></div>
+                <div class="visually-hidden container-fluid spinner-border spinner-border-lg d-flex align-items-center justify-content-center w-px-700 h-px-700" role="status"></div>
               </div>
             </div>
           </div>
