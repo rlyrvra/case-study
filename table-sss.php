@@ -108,7 +108,7 @@ require_once __DIR__ . '/login-checker.php';
           >
             <thead class="col-auto">
               <tr>
-                <th>Compensation Monthly Salary Credit</th>
+                <th>Compensation EY Monthly Salary Credit</th>
                 <th>MSC Regular SS</th>
                 <th>MSC WISP</th>
                 <th>MSC Total</th>
