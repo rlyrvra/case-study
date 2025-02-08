@@ -323,7 +323,7 @@ class LeaveRequestDao
         } catch (PDOException $exception) {
             error_log("Database Error: An error occurred while fetching the leave requests. " .
                       "Exception: {$exception->getMessage()}");
-
+            echo $exception->getMessage();
             return ActionResult::FAILURE;
         }
     }

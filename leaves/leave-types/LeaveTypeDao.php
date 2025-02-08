@@ -219,7 +219,7 @@ class LeaveTypeDao
         } catch (PDOException $exception) {
             error_log("Database Error: An error occurred while fetching the leave types. " .
                       "Exception: {$exception->getMessage()}");
-
+            echo $exception->getMessage();
             return ActionResult::FAILURE;
         }
     }

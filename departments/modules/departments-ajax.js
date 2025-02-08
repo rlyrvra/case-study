@@ -35,8 +35,8 @@ function fetchAllDepartments(page = 1) {
     //     End Date: ${endDate}, 
     //     Search Text: ${search}`);
 
-    // var loadingSpinner = document.getElementById("loadingSpinner");
-    // loadingSpinner.classList.remove("visually-hidden");
+    var loadingSpinner = document.getElementById("loadingSpinner");
+    loadingSpinner.classList.remove("visually-hidden");
     loadSkeletonView(7, ['Name', 'DEPARTMENT HEAD', 'DESCRIPTION', 'STATUS', 'Created At', 'Updated At'] , numberEntries, document.getElementById("departments-table"));
     //document.getElementById("skeleton-table").classList.remove("visually-hidden");
     $.ajax({
@@ -56,7 +56,7 @@ function fetchAllDepartments(page = 1) {
             filter_endDate: endDate
         },
         success: function(response) {
-            //loadingSpinner.classList.add("visually-hidden");
+            loadingSpinner.classList.add("visually-hidden");
             //document.getElementById("skeleton-table").classList.add("visually-hidden");
             $('#departments-table').html(response);
         },

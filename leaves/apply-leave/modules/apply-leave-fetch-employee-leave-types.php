@@ -3,8 +3,8 @@ require_once __DIR__ . '/../../LeaveEntitlement.php';
 require_once __DIR__ . '/../../LeaveEntitlementDao.php';
 require_once __DIR__ . '/../../LeaveEntitlementRepository.php';
 require_once __DIR__ . '/../../LeaveEntitlementService.php';
+
 require_once __DIR__ . '/../../../includes/Helper.php';
-require_once __DIR__ . '/../../../includes/enums/ErrorCode.php';
 require_once __DIR__ . '/../../../includes/session.php';
 require_once __DIR__ . '/../../../database/database.php';
 
