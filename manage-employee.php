@@ -38,7 +38,7 @@ if(isset($_GET['e']) && $_GET['e'] === '404'){
 />
 
 <!-- Ajax -->
-<script src="employees/modules/manage-employee-ajax.js?v1.3"></script>
+<script src="employees/modules/manage-employee-ajax.js?v1.4"></script>
 <!-- Scripts -->
 <script src="employees/modules/manage-employee-scripts.js?v1.3"></script>
 <script src="employees/modules/manage-employee-skeleton.js?v1.1"></script>

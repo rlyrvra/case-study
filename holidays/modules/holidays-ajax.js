@@ -37,6 +37,18 @@ function fetchAllHolidays(page = 1){
 
     var loadingSpinner = document.getElementById("loadingSpinner");
     loadingSpinner.classList.remove("visually-hidden");
+
+    if(!skeletonLoaded){
+        loadSkeletonView(7, ['Name', 'DEPARTMENT HEAD', 'DESCRIPTION', 'STATUS', 'Created At', 'Updated At'] , numberEntries, document.getElementById("skeleton-holiday-table"));
+        document.getElementById('skeleton-holiday-table').classList.remove("visually-hidden");
+        document.getElementById('holiday-table').classList.add("visually-hidden");
+        skeletonLoaded = true;
+    }else{
+        document.getElementById('skeleton-holiday-table').classList.remove("visually-hidden");
+        document.getElementById('holiday-table').classList.add("visually-hidden");
+    }
+
+
     $.ajax({
         url: 'holidays/modules/holidays-api',
         type: 'POST',
@@ -54,6 +66,8 @@ function fetchAllHolidays(page = 1){
             filter_endDate: endDate
         },
         success: function(response) {
+            document.getElementById('skeleton-holiday-table').classList.add("visually-hidden");
+        document.getElementById('holiday-table').classList.remove("visually-hidden");
             loadingSpinner.classList.add("visually-hidden");
             $('#holiday-table').html(response);
         },

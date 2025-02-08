@@ -32,11 +32,17 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
 />
 
 <!-- Ajax -->
-<script src="leaves/modules/leave-types-ajax.js?v1.4"></script>
+<script src="leaves/modules/leave-types-ajax.js?v1.5"></script>
 <script src="leaves/modules/assign-leaves-ajax.js?v1.4"></script>
 <!-- Scripts -->
 <script src="leaves/modules/leave-types-scripts.js?v1.4"></script>
 <script src="leaves/modules/assign-leaves-scripts.js?v1.5"></script>
+<!---Skeletons--->
+<script src="requests/table-skeleton.js?v1.2"></script>
+<!---Skeletons CSS-->
+<link rel="stylesheet" href="requests/table-skeleton.css?v1.1" />
+
+
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -135,8 +141,9 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
               <h5>List of Leave Types</h5>
             </div>
             <div class="card-body">
+              <div id="skeleton-leaves-table" class="visually-hidden table-responsive text-no-wrap"></div>
               <div id="leave-types-table" class="table-responsive text-no-wrap">
-                <div class="spinner-border spinner-border-lg text-primary text-center w-px-700 h-px-700" role="status"></div>
+                <div class="visually-hidden spinner-border spinner-border-lg text-primary text-center w-px-700 h-px-700" role="status"></div>
               </div>
             </div>
           </div>

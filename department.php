@@ -36,7 +36,7 @@ if($_SESSION['access_role'] !== 'Admin'){
 <script src="departments/modules/departments-scripts.js?v1.5"></script>
 
 <!---Skeletons--->
-<script src="requests/table-skeleton.js?v1.1"></script>
+<script src="requests/table-skeleton.js?v1.2"></script>
 <!---Skeletons CSS-->
 <link rel="stylesheet" href="requests/table-skeleton.css?v1.1" />
 
@@ -111,7 +111,7 @@ if($_SESSION['access_role'] !== 'Admin'){
 
             <div class="container-fluid card pt-3 pb-3 mt-5 mb-5">
               <?php require_once __DIR__ . '/departments/modules/departments-sorter.php' ?>
-              <div class="visually-hidden spinner-border spinner-border-lg text-primary text-center w-px-25 h-px-25" role="status" id="loadingSpinner"></div>
+              <div class="spinner-border spinner-border-lg text-primary text-center w-px-25 h-px-25" role="status" id="loadingSpinner"></div>
             </div>
 
             <hr/>
@@ -121,8 +121,9 @@ if($_SESSION['access_role'] !== 'Admin'){
                 <h5>List of Departments
               </div>
               <div class="card-body">
+                <div id="skeleton-departments-table" class="visually-hidden table-responsive text-no-wrap"></div>
                 <div id="departments-table" class="table-responsive text-no-wrap">
-                <div class="container-fluid spinner-border spinner-border-lg d-flex align-items-center justify-content-center w-px-700 h-px-700 visually-hidden" role="status"></div>
+                  <div class="visually-hidden container-fluid spinner-border spinner-border-lg d-flex align-items-center justify-content-center w-px-700 h-px-700" role="status"></div>
                 </div>
               </div>
             </div>

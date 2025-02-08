@@ -35,6 +35,20 @@ function fetchAllLeaveTypes(page = 1){
     //     End Date: ${endDate}, 
     //     Search Text: ${search}`);
 
+    var loadingSpinner = document.getElementById("loadingSpinner");
+    loadingSpinner.classList.remove("visually-hidden");
+
+
+    if(!skeletonLoaded){
+        loadSkeletonView(7, ['Name', 'Maximum Number of Days', 'Paid', 'description', 'status', 'Created At', 'Updated At'] , numberEntries, document.getElementById("skeleton-leaves-table"));
+        document.getElementById('skeleton-leaves-table').classList.remove("visually-hidden");
+        document.getElementById('leave-types-table').classList.add("visually-hidden");
+        skeletonLoaded = true;
+    }else{
+        document.getElementById('skeleton-leaves-table').classList.remove("visually-hidden");
+        document.getElementById('leave-types-table').classList.add("visually-hidden");
+    }
+
 
     $.ajax({
         url: 'leaves/modules/leave-types-api',
@@ -53,6 +67,8 @@ function fetchAllLeaveTypes(page = 1){
             filter_endDate: endDate
         },
         success: function(response) {
+            document.getElementById('skeleton-leaves-table').classList.add("visually-hidden");
+        document.getElementById('leave-types-table').classList.remove("visually-hidden");
             loadingSpinner.classList.add("visually-hidden");
             $('#leave-types-table').html(response);
         },

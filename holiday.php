@@ -32,9 +32,14 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
 <script src='assets/vendor/libs/fullcalendar-6.1.15/packages/rrule/index.global.min.js'></script>
 
 <!-- Ajax -->
-<script src="holidays/modules/holidays-ajax.js?v1.4"></script>
+<script src="holidays/modules/holidays-ajax.js?v1.5"></script>
 <!-- Scripts -->
 <script src="holidays/modules/holidays-scripts.js?v1.4"></script>
+
+<!---Skeletons--->
+<script src="requests/table-skeleton.js?v1.2"></script>
+<!---Skeletons CSS-->
+<link rel="stylesheet" href="requests/table-skeleton.css?v1.1" />
 
 
 
@@ -154,9 +159,10 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
               <h5>List of Holidays
             </div>
             <div class="card-body">
+              <div id="skeleton-holiday-table" class="visually-hidden table-responsive text-no-wrap"></div>
               <div id="holiday-table" class="table-responsive text-no-wrap">
               <?php require_once __DIR__ . '/holidays/modules/holidays-table.php' ?>
-              <div class="container-fluid spinner-border spinner-border-lg d-flex align-items-center justify-content-center w-px-700 h-px-700" role="status"></div>
+              <div class="visually-hidden container-fluid spinner-border spinner-border-lg d-flex align-items-center justify-content-center w-px-700 h-px-700" role="status"></div>
               </div>
             </div>
           </div>
