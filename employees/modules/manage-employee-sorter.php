@@ -14,7 +14,7 @@
     <!-- Sort By -->
     <div class="dropdown sort mx-1 d-flex align align-items-center">
     <button
-        class="btn btn-outline-primary dropdown-toggle"
+        class="btn btn-primary dropdown-toggle"
         type="button"
         data-bs-toggle="dropdown"
         aria-expanded="false"
