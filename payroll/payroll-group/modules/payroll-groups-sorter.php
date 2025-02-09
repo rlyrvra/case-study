@@ -2,7 +2,7 @@
     <!--Entries Per Page -->
     <div class="align mx-1 d-flex align-items-center"> 
         <label for="entries-per-page" class="mx-1">Show:</label>
-        <select id="entries-per-page" onchange="fetchAllPayrollGroups()">
+        <select class="form-select" id="entries-per-page" onchange="fetchAllPayrollGroups()">
             <option value="10">10</option>
             <option value="25">25</option>
             <option value="50">50</option>

@@ -1,8 +1,8 @@
 <div class="controls d-flex justify-content-between flex-column flex-lg-row"> 
     <!--Entries Per Page Text-->
-    <div class="align mx-1 d-flex align-items-center"> 
+    <div class="col-auto align mx-1 d-flex align-items-center"> 
         <label for="entries-per-page" class="mx-1">Show:</label>
-        <select id="entries-per-page" onchange="fetchAllEmployees();">
+        <select class="form-select" id="entries-per-page" onchange="fetchAllEmployees();">
             <option value="10">10</option>
             <option value="25">25</option>
             <option value="50">50</option>
