@@ -105,7 +105,7 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
           <div id="response-test"></div>
 
           <div class="container-fluid mb-3 d-flex justify-content-between flex-column flex-lg-row">
-              <h1 class="display-1">Assign Allowances</h1>
+              <h1 class="display-3">Assign Allowances</h1>
               <button type="button" class="btn btn-success btn-xl" data-bs-toggle="modal" data-bs-target="#assign_allowances_modal">
                 <i class="bx bx-label bx-lg"></i>Assign Allowances
               </button>
@@ -115,7 +115,7 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
           <hr/>
 
           <div class="container-fluid mb-3 d-flex justify-content-between flex-column flex-lg-row">
-            <h1 class="display-1">Allowances</h1>
+            <h1 class="display-3">Allowances</h1>
             <button type="button" class="btn btn-success btn-xl" data-bs-toggle="modal" data-bs-target="#add-allowances-modal">
               <i class="bx bx-plus bx-lg"></i>Add Allowance
             </button>
