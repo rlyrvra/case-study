@@ -114,7 +114,7 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
 
           <div class="container-fluid mb-3 d-flex justify-content-between flex-column flex-lg-row">
 
-            <h1 class="display-1">Assign Deductions</h1>
+            <h1 class="display-3">Assign Deductions</h1>
             <button type="button" class="btn btn-success btn-xl" data-bs-toggle="modal" data-bs-target="#assign_deductions_modal">
               <i class="bx bx-label bx-lg"></i>Assign Deductions
             </button>
@@ -124,7 +124,7 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
           <hr/>
 
           <div class="container-fluid mb-3 d-flex justify-content-between flex-column flex-lg-row">
-            <h1 class="display-1">Deductions</h1>
+            <h1 class="display-3">Deductions</h1>
             <button type="button" class="btn btn-success btn-xl" data-bs-toggle="modal" data-bs-target="#add-deductions-modal">
               <i class="bx bx-plus bx-lg"></i>Add Deductions
             </button>
