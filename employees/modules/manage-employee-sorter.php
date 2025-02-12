@@ -1,8 +1,8 @@
 <div class="controls d-flex justify-content-between flex-column flex-lg-row"> 
     <!--Entries Per Page Text-->
-    <div class="align mx-1 d-flex align-items-center"> 
+    <div class="col-auto align mx-1 d-flex align-items-center"> 
         <label for="entries-per-page" class="mx-1">Show:</label>
-        <select id="entries-per-page" onchange="fetchAllEmployees();">
+        <select class="form-select" id="entries-per-page" onchange="fetchAllEmployees();">
             <option value="10">10</option>
             <option value="25">25</option>
             <option value="50">50</option>
@@ -14,7 +14,7 @@
     <!-- Sort By -->
     <div class="dropdown sort mx-1 d-flex align align-items-center">
     <button
-        class="btn btn-outline-primary dropdown-toggle"
+        class="btn btn-primary dropdown-toggle"
         type="button"
         data-bs-toggle="dropdown"
         aria-expanded="false"
