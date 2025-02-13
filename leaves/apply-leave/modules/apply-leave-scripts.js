@@ -1,3 +1,42 @@
+function getPage(page){
+    let output;
+    if(page === 'next'){
+        page = $("#pagination .active .page-link").text();
+        let currentPage = parseInt($("#pagination .active .page-link").text(), 10);
+        let maxPage = getMaxPageValue();
+        if(currentPage < maxPage) page = currentPage + 1;
+    } else if(page === 'prev'){
+        page = $("#pagination .active .page-link").text();
+        let currentPage = parseInt($("#pagination .active .page-link").text(), 10);
+        if(currentPage != 1) page = currentPage - 1;
+    }
+    return page;
+}
+
+function getMaxPageValue() {
+    // Find all <a> tags inside the <ul> with id "pagination"
+    let pageNumbers = $("#pagination .page-link").map(function() {
+        // Get the text content of each <a> tag and convert it to a number
+        let pageText = $(this).text().trim(); // Use trim to remove any extra spaces
+        return parseInt(pageText, 10);
+    }).get(); // `.get()` turns the jQuery object into a plain array
+
+    // Get the maximum value from the array (excluding NaN values)
+    let maxPage = Math.max(...pageNumbers.filter(num => !isNaN(num)));
+
+    return maxPage;
+}
+
+function getSortByColumn(){
+    var sortBy = selectedOptions.sort_by;
+    return sortBy;
+}
+
+function getOrderBy(){
+    var orderBy = selectedOptions.order_by;
+    return orderBy;
+}
+
 $(document).ready(function() {
     const startDate = document.getElementById('startDate');
     const today = new Date();
@@ -21,6 +60,15 @@ $(document).ready(function() {
             console.log("Hello");
             alert(`Please select a date between ${formattedDate} and ${futureformattedDate}.`);
             this.value = ""; // Clear invalid input
+        }
+    });
+
+    document.getElementById("isHalfday").addEventListener("change", function () {
+        let half_day_options = document.getElementById("half_day_options");
+        if (this.checked) {
+            half_day_options.required = true;
+        } else {
+            half_day_options.required = false;
         }
     });
 
@@ -66,7 +114,12 @@ function calculateTotalNumberOfDays(){
     endDate = new Date(endDateId);
     totalNumberOfDays = (endDate - startDate) / (1000 * 60 * 60 * 24);
     if(startDate.getTime() === endDate.getTime()){
-        totalNumberOfDays = 1;
+        const isHalfDay = document.getElementById('endDate').checked;
+        if(isHalfDay) totalNumberOfDays = 0.5;
+        if(!isHalfDay) totalNumberOfDays = 1;
+    }
+    if(!checkHalfDayValidity(totalNumberOfDays)){
+        return false;
     }
     $("#totalDays").val(totalNumberOfDays);
     const remainingBalance = $("#remainingBalance").val();
@@ -79,6 +132,24 @@ function calculateTotalNumberOfDays(){
     }
     return true;
 
+}
+
+function checkHalfDayValidity(numberOfDays){
+    if(numberOfDays != 1){
+        Swal.fire({
+            title: 'Warning!',
+            text: 'Half day requests are only available for one day leaves.',
+            icon: 'warning',
+            confirmButtonText: 'OK'
+        }).then((result) => {
+            if(result.isConfirmed){
+                document.getElementById('apply_leave_form').reset();
+                document.getElementById('leaveType').value = "";
+            }
+        });
+        return false;
+    }
+    return true;
 }
 
 function updateLeaveRequestClick(button){

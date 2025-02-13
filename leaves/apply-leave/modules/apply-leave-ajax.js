@@ -55,10 +55,16 @@ function createLeaveRequest() {
     const leaveType = document.getElementById('leaveType').value;
     const startDate = document.getElementById('startDate').value;
     const endDate = document.getElementById('endDate').value;
+    const isHalfDay = document.getElementById('isHalfday').checked;
+    var halfDayPart;
+    if(isHalfDay.checked){
+        halfDayPart = document.getElementById('half_day_options').value;
+    }else{
+        halfDayPart = '';
+    }
     const reason = document.getElementById('reason').value;
     const attachments = document.getElementById('files').files;
 
-    
     // Initialize FormData
     const leaveRequestData = new FormData();
 
@@ -67,6 +73,10 @@ function createLeaveRequest() {
     leaveRequestData.append('leave_type_id', leaveType);
     leaveRequestData.append('start_date', startDate);
     leaveRequestData.append('end_date', endDate);
+    if(isHalfDay.checked){
+        leaveRequestData.append('is_half_day', isHalfDay);
+        leaveRequestData.append('half_day_part', halfDayPart);
+    }
     leaveRequestData.append('reason', reason);
 
     // Add file attachments to FormData
@@ -93,14 +103,48 @@ function createLeaveRequest() {
     });
 }
 
-function fetchLeaveRequests(){
+function fetchLeaveRequests(page = 1){
+    var numberEntries = $("#entries-per-page").val();
+    var pageNumber = getPage(page);
+    var sortByColumn = getSortByColumn();
+    if(sortByColumn == null){
+        sortByColumn = "created_at";
+    };
+    var sortOrderBy = getOrderBy();
+    if(sortOrderBy == null) {
+        sortOrderBy = "DESC";
+    };
+    var filterStatus = $("#status").val();
+
+    var loadingSpinner = document.getElementById("loadingSpinner");
+    loadingSpinner.classList.remove("visually-hidden");
+
+
+    if(!skeletonLoaded){
+        loadSkeletonView(7, ['#', 'Type', 'Start Date', 'End Date', 'Reason', 'Status', 'Action'] , 10, document.getElementById("skeleton-apply-table"));
+        document.getElementById('skeleton-apply-table').classList.remove("visually-hidden");
+        document.getElementById('apply_leaves_table').classList.add("visually-hidden");
+        skeletonLoaded = true;
+    }else{
+        document.getElementById('skeleton-apply-table').classList.remove("visually-hidden");
+        document.getElementById('apply_leaves_table').classList.add("visually-hidden");
+    }
+
     $.ajax({
         url: 'leaves/apply-leave/modules/apply-leave-api',
         type: 'POST',
         data: {
-            action: 'fetchAll'
+            action: 'fetchAll',
+            page: pageNumber,
+            numberEntries: numberEntries,
+            sort_by: sortByColumn,
+            sort_order: sortOrderBy,
+            filter_status: filterStatus
         },
         success: function(response) {
+            document.getElementById('skeleton-apply-table').classList.add("visually-hidden");
+            document.getElementById('apply_leaves_table').classList.remove("visually-hidden");
+            loadingSpinner.classList.add("visually-hidden");
             $('#apply_leaves_table').html(response);
         },
         error: function(jqXHR, textStatus, errorThrown) {

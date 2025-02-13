@@ -16,7 +16,6 @@ require_once __DIR__ . '/../../LeaveRequestAttachmentRepository.php';
 
 
 require_once __DIR__ . '/../../../includes/Helper.php';
-require_once __DIR__ . '/../../../includes/enums/ErrorCode.php';
 require_once __DIR__ . '/../../../includes/enums/ActionResult.php';
 require_once __DIR__ . '/../../../database/database.php';
 require_once __DIR__ . '/../../../includes/session.php';
@@ -34,17 +33,70 @@ try {
     $action = $_POST['action'] ?? '';
 
     if($action === 'fetchAll'){
-        // $status = $_POST['filter_status'];
-        $page = isset($_POST['page']) ? (int) $_POST['page'] : 1;
-        $limit = isset($_POST['numberEntries']) ? (int) $_POST['numberEntries'] : 10;
+        $status = isset($_POST['filter_status']) && $_POST['filter_status'] ? $_POST['filter_status'] : null;
+        $searchAt = isset($_POST['filter_searchAt']) && $_POST['filter_searchAt'] !== "none" ? $_POST['filter_searchAt'] : null;
+        $searchFilter = isset($_POST['filter_search']) ? $_POST['filter_search'] : null;
+        $dateFilterColumn = isset($_POST['filter_date_column']) ? $_POST['filter_date_column'] : null;
+        $dateStart = isset($_POST['filter_startDate']) && $dateFilterColumn !== "none" ? $_POST['filter_startDate'] : 0;
+        $dateEnd = isset($_POST['filter_endDate']) && $dateFilterColumn !== "none" ? $_POST['filter_endDate'] : 0;
+        $page = isset($_POST['page']) ? (int)$_POST['page'] : 1;
+        $limit = isset($_POST['numberEntries']) ? $_POST['numberEntries'] : 10;
         $offset = ($page - 1) * $limit;
 
         $filterCriteria = [];
 
+        if(!empty($status)){
+            $filterCriteria[] = [
+                "column" => "leave_request.status",
+                "operator" => "=",
+                "value" => $status
+            ];
+        }
+
+        if(empty($searchAt) && !empty($searchFilter)){
+            $filterCriteria[] = [
+                "column" => "employee.full_name", 
+                "operator" => "LIKE",
+                "value" => "%$searchFilter%", 
+                'boolean' => 'OR'
+
+            ];
+            $filterCriteria[] = [
+                "column" => "employee.email_address", 
+                "operator" => "LIKE",
+                "value" => "%$searchFilter%", 
+                'boolean' => 'OR'
+            ];
+        }
+
+        if(!empty($searchFilter) && !empty($searchAt)){
+            $filterCriteria[] = [
+                "column" => "employee." . $searchAt, 
+                "operator" => "LIKE",
+                "value" => "%$searchFilter%"
+            ];
+        }
+
+        if((!empty($dateFilterColumn) && $dateFilterColumn !== "none") && !empty($dateStart) && !empty($dateEnd)){
+            $filterCriteria[] = [
+                "column" => "leave_request." . $dateFilterColumn,
+                "operator" => "BETWEEN",
+                "lower_bound" => $dateStart,
+                "upper_bound" => $dateEnd
+            ];
+        }
+
+        $sortCriteria = [
+            [
+                "column" => "leave_request." . $_POST['sort_by'],
+                "direction" => $_POST['sort_order']
+            ]
+        ];
+
         $leaveRequestRepo = new LeaveRequestRepository($leaveRequestDao);
         $leaveRequestAttachmentRepo = new LeaveRequestAttachmentRepository($leaveRequestAttachmentDao);
         $leaveRequestService = new LeaveRequestService($leaveRequestRepo, $leaveRequestAttachmentRepo);
-        $result = $leaveRequestService->fetchAllLeaveRequests([], $filterCriteria);
+        $result = $leaveRequestService->fetchAllLeaveRequests([], $filterCriteria, $sortCriteria, $limit, $offset);
         $leaveRequests;
         $leaveRequests = $result['result_set'];
 

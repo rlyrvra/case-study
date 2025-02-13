@@ -172,11 +172,7 @@ try {
             return;
         }
 
-        //print_r($leaveTypeData);
-
-
         $hashed_id = isset($_POST['md5_id']) ? (int) validateNumericIdentifier($_POST['md5_id'], 1, 30) : null;
-        //echo $hashed_id;
         $name = $leaveTypeData['name'] ?? '';
         $maxNumberOfDays = $leaveTypeData['maxNumberOfDays'] ?? null;
         $isPaid = $leaveTypeData['isPaid'] ?? null;

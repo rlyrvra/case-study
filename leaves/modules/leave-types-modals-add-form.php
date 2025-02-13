@@ -26,8 +26,16 @@
                     </div>
                     
                     <div class="mb-3 form-check">
-                        <input type="checkbox" class="add_form-check-input" id="add_is_paid">
-                        <label class="form-check-label" for="add_is_paid">Is Paid</label>
+                        <div class="row">
+                            <div class="col-6">
+                                <input type="checkbox" class="add_form-check-input" id="add_is_paid">
+                                <label class="form-check-label" for="add_is_paid">Is Paid</label>
+                            </div>
+                            <div class="col-6">
+                                <input type="checkbox" class="add_form-check-input" id="add_is_encashable">
+                                <label class="form-check-label" for="add_is_encashable">Is Encashable</label>
+                            </div>
+                        </div>
                     </div>
                     
                     <div class="mb-3">

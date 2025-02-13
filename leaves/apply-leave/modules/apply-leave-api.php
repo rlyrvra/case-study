@@ -27,7 +27,7 @@ try {
 
     if($action == 'fetchAll'){
         $employeeId = $_SESSION['id'];
-        // $status = $_POST['filter_status'];
+        $status = isset($_POST['filter_status']) && $_POST['filter_status'] ? $_POST['filter_status'] : null;
         $page = isset($_POST['page']) ? (int) $_POST['page'] : 1;
         $limit = isset($_POST['numberEntries']) ? (int) $_POST['numberEntries'] : 10;
         $offset = ($page - 1) * $limit;
@@ -45,10 +45,25 @@ try {
             "operator" => "IS NULL"
         ];
 
+        if(!empty($status)){
+            $filterCriteria[] = [
+                "column" => "leave_request.status",
+                "operator" => "=",
+                "value" => $status
+            ];
+        }
+
+        $sortCriteria = [
+            [
+                "column" => "leave_request." . $_POST['sort_by'],
+                "direction" => $_POST['sort_order']
+            ]
+        ];
+
         $leaveRequestRepo = new LeaveRequestRepository($leaveRequestDao);
         $leaveRequestAttachmentRepo = new LeaveRequestAttachmentRepository($leaveRequestAttachmentDao);
         $leaveRequestService = new LeaveRequestService($leaveRequestRepo, $leaveRequestAttachmentRepo);
-        $result = $leaveRequestService->fetchAllLeaveRequests([], $filterCriteria);
+        $result = $leaveRequestService->fetchAllLeaveRequests([], $filterCriteria, $sortCriteria, $limit, $offset);
         $employeeLeaveRequests;
         $employeeLeaveRequests = $result['result_set'];
 
@@ -63,6 +78,11 @@ try {
         $leave_type_id = isset($_POST['leave_type_id']) ? (int) validateInput($_POST['leave_type_id'], 'Leave Type') : '';
         $start_date = isset($_POST['start_date']) ?  validateInput($_POST['start_date'], 'Start Date') : '';
         $end_date = isset($_POST['end_date']) ? validateInput($_POST['end_date'], 'End Date') : '';
+        $isHalfDay = isset($_POST['is_half_day']) ? validateInput($_POST['is_half_day'], 'Is Half Day') : null;
+        $halfDayPart = '';
+        if($isHalfDay == 'true'){
+            $halfDayPart = isset($_POST['half_day_part']) ? validateInput($_POST['half_day_part'], 'Half Day Part') : null;
+        }
         $reason = isset($_POST['reason']) ? validateInput($_POST['reason'], 'Reason') : '';
         $status = "Pending";
         $newLeaveRequest = new LeaveRequest(
@@ -72,7 +92,7 @@ try {
             startDate: $start_date,
             endDate: $end_date,
             reason: $reason,
-            isHalfDay: false,
+            isHalfDay: $isHalfDay,
             halfDayPart: $halfDayPart,
             status: $status
         );
@@ -211,30 +231,7 @@ try {
         }
         return;
     }
-
-
-    if($action === 'delete'){
-        $hashed_id = $_POST['md5_id'] ?? null;
-        $leaveRequestRepo = new LeaveRequestRepository($leaveRequestDao);
-        $leaveRequestAttachmentRepo = new LeaveRequestAttachmentRepository($leaveRequestAttachmentDao);
-        $leaveRequestService = new LeaveRequestService($leaveRequestRepo, $leaveRequestAttachmentRepo);
-        $deleteResult = $leaveRequestService->deleteLeaveRequest($hashed_id);
-        $deleteAttachmentsResult = $leaveRequestService->deleteLeaveRequestAttachment($hashed_id);
-        if($deleteResult === ActionResult::SUCCESS){
-            echo "
-            <script>
-                showSuccessDeleteRequest();
-            </script>
-            ";
-        }else{
-            echo "
-            <script>
-                showError();
-            </script>
-            ";
-        }
-        return;
-    }
+    
 
     if($action === 'cancel'){
         $hashed_id = $_POST['md5_id'] ?? null;

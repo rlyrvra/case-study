@@ -12,6 +12,7 @@
       <th>Name</th>
       <th>Maximum Number of Days</th>
       <th>Paid</th>
+      <th>Encashable</th>
       <th>description</th>
       <th>status</th>
       <th>Created At</th>
@@ -30,6 +31,7 @@
             data-name="<?php echo htmlspecialchars($row['name']); ?>" 
             data-maximum-number-of-days="<?php echo htmlspecialchars($row['maximum_number_of_days']); ?>"
             data-is-paid="<?php echo htmlspecialchars($row['is_paid']); ?>" 
+            data-is-encashable="<?php echo htmlspecialchars($row['is_encashable']); ?>" 
             data-description="<?php echo htmlspecialchars($row['description']); ?>" 
             data-status="<?php echo htmlspecialchars($row['status']); ?>">
           <td><?php echo htmlspecialchars($row['name']); ?></td>
@@ -41,6 +43,14 @@
           ?>"><?php 
           if($row['is_paid'] == 0) echo "No";
           if($row['is_paid'] == 1) echo "Yes";
+          ?></span></td>
+          <td><span class="badge badge center 
+          <?php 
+          if($row['is_encashable'] == 0) echo "bg-danger";
+          if($row['is_encashable'] == 1) echo "bg-success";
+          ?>"><?php 
+          if($row['is_encashable'] == 0) echo "No";
+          if($row['is_encashable'] == 1) echo "Yes";
           ?></span></td>
           <td><?php echo htmlspecialchars($row['description']); ?></td>
           <td><span class="badge 
