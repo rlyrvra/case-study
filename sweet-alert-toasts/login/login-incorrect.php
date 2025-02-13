@@ -5,16 +5,11 @@
 
 <script>
 function login_failed(){
-    const Toast = Swal.mixin({
-    toast: true,
-    position: "top-end",
-    showConfirmButton: false,
-    timer: 3000,
-    timerProgressBar: true,
-    });
-        Toast.fire({
-        icon: "error",
-        title: "Login credentials is wrong."
+    Swal.fire({
+        title: 'Error!',
+        text: 'Username and/or password are invalid.',
+        icon: 'error',
+        confirmButtonText: 'OK'
     });
 }
 

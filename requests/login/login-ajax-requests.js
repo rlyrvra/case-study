@@ -4,6 +4,7 @@ function login(){
     const remember = document.getElementById('remember').checked;
 
     if(username.length <= 0 || password.length <= 0){
+        showEmptyFields();
         return;
     }
 
@@ -31,5 +32,14 @@ function login(){
         error(xhr, status, error) {
             console.error("Error fetching credentials", error);
         }
+    });
+}
+
+function showEmptyFields(){
+    Swal.fire({
+        title: 'Warning!',
+        text: 'Password and/or username fields cannot be empty.',
+        icon: 'warning',
+        confirmButtonText: 'OK'
     });
 }
