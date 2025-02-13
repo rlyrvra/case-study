@@ -11,79 +11,38 @@ class AttendanceRepository
         $this->attendanceDao = $attendanceDao;
     }
 
+    public function createAttendance(Attendance $attendance): ActionResult
+    {
+        return $this->attendanceDao->create($attendance);
+    }
+
     public function checkIn(Attendance $attendance): ActionResult
     {
         return $this->attendanceDao->checkIn($attendance);
     }
 
-    public function checkOut(Attendance $attendance, bool $isHashedId = false): ActionResult
+    public function checkOut(Attendance $attendance): ActionResult
     {
-        return $this->attendanceDao->checkOut($attendance, $isHashedId);
+        return $this->attendanceDao->checkOut($attendance);
     }
 
     public function fetchAllAttendance(
-        ? array $columns        = null,
-        ? array $filterCriteria = null,
-        ? array $sortCriteria   = null,
-        ? int   $limit          = null,
-        ? int   $offset         = null
+        ? array $columns              = null,
+        ? array $filterCriteria       = null,
+        ? array $sortCriteria         = null,
+        ? int   $limit                = null,
+        ? int   $offset               = null,
+          bool  $includeTotalRowCount = true
     ): ActionResult|array {
-        return $this->attendanceDao->fetchAll($columns, $filterCriteria, $sortCriteria, $limit, $offset);
-    }
 
-    public function getLastAttendanceRecord(int $employeeId): ActionResult|array
-    {
-        $columns = [
-            'id'                             ,
-
-            'work_schedule_id'               ,
-            'work_schedule_start_time'       ,
-            'work_schedule_end_time'         ,
-            'work_schedule_is_flextime'      ,
-            'work_schedule_total_work_hours' ,
-
-            'employee_id'                    ,
-
-            'date'                           ,
-            'check_in_time'                  ,
-            'check_out_time'                 ,
-            'total_break_duration_in_minutes',
-            'total_hours_worked'             ,
-            'late_check_in'                  ,
-            'is_overtime_approved'           ,
-            'attendance_status'              ,
-            'remarks'
-        ];
-
-        $filterCriteria = [
-            [
-                'column'   => 'work_schedule.employee_id',
-                'operator' => '=',
-                'value'    => $employeeId
-            ]
-        ];
-
-        $sortCriteria = [
-            [
-                'column'    => 'attendance.id',
-                'direction' => 'DESC'
-            ]
-        ];
-
-        $result = $this->attendanceDao->fetchAll(
-            columns       : $columns       ,
-            filterCriteria: $filterCriteria,
-            sortCriteria  : $sortCriteria  ,
-            limit         : 1
+        return $this->attendanceDao->fetchAll(
+            columns             : $columns             ,
+            filterCriteria      : $filterCriteria      ,
+            sortCriteria        : $sortCriteria        ,
+            limit               : $limit               ,
+            offset              : $offset              ,
+            includeTotalRowCount: $includeTotalRowCount
         );
-
-        if ($result === ActionResult::FAILURE) {
-            return ActionResult::FAILURE;
-        }
-
-        return ! empty($result['result_set'])
-            ? $result['result_set'][0]
-            : [];
     }
 
     public function updateAttendance(Attendance $attendance, bool $isHashedId = false): ActionResult
@@ -96,8 +55,13 @@ class AttendanceRepository
         return $this->attendanceDao->approveOvertime($attendanceId, $isHashedId);
     }
 
-    public function checkAttendancePerMonth(int $employeeId): ActionResult|array
+    public function markAsProcessedForNextPayroll(int $attendanceId): ActionResult
     {
-        return $this->attendanceDao->checkAttendancePerMonth($employeeId);
+        return $this->attendanceDao->markAsProcessedForNextPayroll($attendanceId);
+    }
+
+    public function deleteAttendance(int|string $attendanceId, bool $isHashedId = false): ActionResult
+    {
+        return $this->attendanceDao->delete($attendanceId, $isHashedId);
     }
 }

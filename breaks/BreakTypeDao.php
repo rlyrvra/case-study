@@ -2,7 +2,6 @@
 
 require_once __DIR__ . "/../includes/Helper.php"            ;
 require_once __DIR__ . "/../includes/enums/ActionResult.php";
-require_once __DIR__ . "/../includes/enums/ErrorCode.php"   ;
 
 class BreakTypeDao
 {
@@ -42,6 +41,14 @@ class BreakTypeDao
 
             $statement->execute();
 
+            $breakType->setId($this->pdo->lastInsertId());
+
+            if ($this->createHistory($breakType) === ActionResult::FAILURE) {
+                $this->pdo->rollBack();
+
+                return ActionResult::FAILURE;
+            }
+
             $this->pdo->commit();
 
             return ActionResult::SUCCESS;
@@ -56,13 +63,55 @@ class BreakTypeDao
         }
     }
 
+    public function createHistory(BreakType $breakType): ActionResult
+    {
+        $query = "
+            INSERT INTO break_types_history (
+                break_type_id                    ,
+                name                             ,
+                duration_in_minutes              ,
+                is_paid                          ,
+                is_require_break_in_and_break_out
+            )
+            VALUES (
+                :break_type_id                    ,
+                :name                             ,
+                :duration_in_minutes              ,
+                :is_paid                          ,
+                :is_require_break_in_and_break_out
+            )
+        ";
+
+        try {
+            $statement = $this->pdo->prepare($query);
+
+            $statement->bindValue(":break_type_id"                    , $breakType->getId()                      , Helper::getPdoParameterType($breakType->getId()                      ));
+            $statement->bindValue(":name"                             , $breakType->getName()                    , Helper::getPdoParameterType($breakType->getName()                    ));
+            $statement->bindValue(":duration_in_minutes"              , $breakType->getDurationInMinutes()       , Helper::getPdoParameterType($breakType->getDurationInMinutes()       ));
+            $statement->bindValue(":is_paid"                          , $breakType->isPaid()                     , Helper::getPdoParameterType($breakType->isPaid()                     ));
+            $statement->bindValue(":is_require_break_in_and_break_out", $breakType->isRequireBreakInAndBreakOut(), Helper::getPdoParameterType($breakType->isRequireBreakInAndBreakOut()));
+
+            $statement->execute();
+
+            return ActionResult::SUCCESS;
+
+        } catch (PDOException $exception) {
+            error_log("Database Error: An error occurred while creating the break type history. " .
+                      "Exception: {$exception->getMessage()}");
+
+            return ActionResult::FAILURE;
+        }
+    }
+
     public function fetchAll(
-        ? array $columns        = null,
-        ? array $filterCriteria = null,
-        ? array $sortCriteria   = null,
-        ? int   $limit          = null,
-        ? int   $offset         = null
+        ? array $columns              = null,
+        ? array $filterCriteria       = null,
+        ? array $sortCriteria         = null,
+        ? int   $limit                = null,
+        ? int   $offset               = null,
+          bool  $includeTotalRowCount = true
     ): ActionResult|array {
+
         $tableColumns = [
             "id"                                => "break_type.id                                AS id"                               ,
             "name"                              => "break_type.name                              AS name"                             ,
@@ -82,9 +131,9 @@ class BreakTypeDao
                     array_flip($columns
                 ));
 
-        $queryParameters = [];
-
-        $whereClauses = [];
+        $whereClauses     = [];
+        $queryParameters  = [];
+        $filterParameters = [];
 
         if (empty($filterCriteria)) {
             $whereClauses[] = "break_type.deleted_at IS NULL";
@@ -96,14 +145,21 @@ class BreakTypeDao
                 switch ($operator) {
                     case "="   :
                     case "LIKE":
-                        $whereClauses   [] = "{$column} {$operator} ?";
-                        $queryParameters[] = $filterCriterion["value"];
+                        $whereClauses    [] = "{$column} {$operator} ?";
+                        $queryParameters [] = $filterCriterion["value"];
+
+                        $filterParameters[] = $filterCriterion["value"];
+
                         break;
 
                     case "BETWEEN":
-                        $whereClauses   [] = "{$column} {$operator} ? AND ?";
-                        $queryParameters[] = $filterCriterion["lower_bound"];
-                        $queryParameters[] = $filterCriterion["upper_bound"];
+                        $whereClauses    [] = "{$column} {$operator} ? AND ?";
+                        $queryParameters [] = $filterCriterion["lower_bound"];
+                        $queryParameters [] = $filterCriterion["upper_bound"];
+
+                        $filterParameters[] = $filterCriterion["lower_bound"];
+                        $filterParameters[] = $filterCriterion["upper_bound"];
+
                         break;
                 }
             }
@@ -146,13 +202,13 @@ class BreakTypeDao
         }
 
         $query = "
-            SELECT SQL_CALC_FOUND_ROWS
+            SELECT
                 " . implode(", ", $selectedColumns) . "
             FROM
                 break_types AS break_type
             WHERE
             " . implode(" AND ", $whereClauses) . "
-            " . (!empty($orderByClauses) ? "ORDER BY " . implode(", ", $orderByClauses) : "") . "
+            " . ( ! empty($orderByClauses) ? "ORDER BY " . implode(", ", $orderByClauses) : "") . "
             {$limitClause}
             {$offsetClause}
         ";
@@ -171,8 +227,28 @@ class BreakTypeDao
                 $resultSet[] = $row;
             }
 
-            $countStatement = $this->pdo->query("SELECT FOUND_ROWS()");
-            $totalRowCount = $countStatement->fetchColumn();
+            $totalRowCount = null;
+
+            if ($includeTotalRowCount) {
+                $totalRowCountQuery = "
+                    SELECT
+                        COUNT(break_type.id)
+                    FROM
+                        break_types AS break_type
+                    WHERE
+                        " . implode(" AND ", $whereClauses) . "
+                ";
+
+                $countStatement = $this->pdo->prepare($totalRowCountQuery);
+
+                foreach ($filterParameters as $index => $parameter) {
+                    $countStatement->bindValue($index + 1, $parameter, Helper::getPdoParameterType($parameter));
+                }
+
+                $countStatement->execute();
+
+                $totalRowCount = $countStatement->fetchColumn();
+            }
 
             return [
                 "result_set"      => $resultSet    ,
@@ -181,6 +257,37 @@ class BreakTypeDao
 
         } catch (PDOException $exception) {
             error_log("Database Error: An error occurred while fetching the break types. " .
+                      "Exception: {$exception->getMessage()}");
+
+            return ActionResult::FAILURE;
+        }
+    }
+
+    public function fetchLatestHistoryId(int $breakTypeId): int|ActionResult
+    {
+        $query = "
+            SELECT
+                id
+            FROM
+                break_types_history
+            WHERE
+                break_type_id = :break_type_id
+            ORDER BY
+                active_at DESC
+            LIMIT 1
+        ";
+
+        try {
+            $statement = $this->pdo->prepare($query);
+
+            $statement->bindValue(":break_type_id", $breakTypeId, Helper::getPdoParameterType($breakTypeId));
+
+            $statement->execute();
+
+            return $statement->fetchColumn() ?: ActionResult::FAILURE;
+
+        } catch (PDOException $exception) {
+            error_log("Database Error: An error occurred while fetching the break type history ID. " .
                       "Exception: {$exception->getMessage()}");
 
             return ActionResult::FAILURE;
@@ -213,10 +320,17 @@ class BreakTypeDao
             $statement->bindValue(":name"                             , $breakType->getName()                    , Helper::getPdoParameterType($breakType->getName()                    ));
             $statement->bindValue(":duration_in_minutes"              , $breakType->getDurationInMinutes()       , Helper::getPdoParameterType($breakType->getDurationInMinutes()       ));
             $statement->bindValue(":is_paid"                          , $breakType->isPaid()                     , Helper::getPdoParameterType($breakType->isPaid()                     ));
-            $statement->bindValue(":break_type_id"                    , $breakType->getId()                      , Helper::getPdoParameterType($breakType->getId()                      ));
             $statement->bindValue(":is_require_break_in_and_break_out", $breakType->isRequireBreakInAndBreakOut(), Helper::getPdoParameterType($breakType->isRequireBreakInAndBreakOut()));
 
+            $statement->bindValue(":break_type_id"                    , $breakType->getId()                      , Helper::getPdoParameterType($breakType->getId()                      ));
+
             $statement->execute();
+
+            if ($this->createHistory($breakType) === ActionResult::FAILURE) {
+                $this->pdo->rollBack();
+
+                return ActionResult::FAILURE;
+            }
 
             $this->pdo->commit();
 

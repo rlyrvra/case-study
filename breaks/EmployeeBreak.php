@@ -3,11 +3,12 @@
 class EmployeeBreak
 {
     public function __construct(
-        private readonly   int|string|null $id                     = null,
-        private readonly   int|string      $breakScheduleId              ,
-        private readonly ? string          $startTime              = null,
-        private readonly ? string          $endTime                = null,
-        private readonly   int             $breakDurationInMinutes = 0   ,
+        private readonly   int|string|null $id                    ,
+        private readonly   int|string|null $attendanceId          ,
+        private readonly   int|string      $breakScheduleHistoryId,
+        private readonly ? string          $startTime             ,
+        private readonly ? string          $endTime               ,
+        private readonly   int             $breakDurationInMinutes,
         private readonly   string          $createdAt
     ) {
     }
@@ -17,9 +18,14 @@ class EmployeeBreak
         return $this->id;
     }
 
-    public function getBreakScheduleId(): int|string
+    public function getAttendanceId(): int|string|null
     {
-        return $this->breakScheduleId;
+        return $this->attendanceId;
+    }
+
+    public function getBreakScheduleHistoryId(): int|string
+    {
+        return $this->breakScheduleHistoryId;
     }
 
     public function getStartTime(): ?string

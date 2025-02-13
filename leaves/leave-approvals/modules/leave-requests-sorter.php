@@ -1,7 +1,7 @@
 <div class="controls d-flex justify-content-between flex-column flex-lg-row"> <!--Entries Per Page Text-->
     <div class="align mx-1 d-flex align-items-center"> 
         <label for="entries-per-page" class="mx-1">Show:</label>
-        <select id="entries-per-page">
+        <select id="entries-per-page" onchange="fetchAllLeaveRequests();">
             <option value="10">10</option>
             <option value="25">25</option>
             <option value="50">50</option>
@@ -20,7 +20,7 @@
             Sort By <span class="tf-icons bx bx-sort"></span>
         </button>
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="dropdownMenuButton">
-            <li><a class="dropdown-item" href="#" data-group="sort_by" data-value="full_name">Name</a></li>
+            <li><a class="dropdown-item" href="#" data-group="sort_by" data-value="leave_type_id">Type</a></li>
             <li><a class="dropdown-item selected" href="#" data-group="sort_by" data-value="created_at">Date Created</a></li>
             <li><a class="dropdown-item" href="#" data-group="sort_by" data-value="updated_at">Date Modified</a></li>
             <li><hr/></li>
@@ -31,7 +31,7 @@
     <div class="dropdown filter flex-fill col-auto mx-1">
         <div class="input-group">
             <span class="input-group-text"><i class="bx bx-category-alt fs-4 lh-0"></i></span>
-            <select class="form-select" id="status" name="status" placeholder="Filter Department" onchange="">
+            <select class="form-select" id="status" name="status" placeholder="Filter Department" onchange="fetchAllLeaveRequests();">
                 <option value="" selected>All</option>
                 <option value="Approved">Approved</option>
                 <option value="Rejected">Rejected</option>
@@ -44,10 +44,8 @@
             <span class="input-group-text"><i class="bx bx-category fs-4 lh-0"></i></span>
             <select class="form-select" id="search_at" name="search_at" placeholder="Search At">
                 <option value="none" selected>All</option>
-                <option value="name">Leave Type</option>
                 <option value="full_name">Employee Name</option>
-                <option value="title">Job Title</option>
-                <option value="email">Email</option>
+                <option value="email_address">Email</option>
             </select>
         </div>
     </div>
@@ -55,7 +53,7 @@
         <div class="input-group ms-lg-1">
             <span class="input-group-text"><i class="bx bx-search-alt-2 fs-4 lh-0"></i></span>
             <input type="text" class="form-control" id="searchText" />
-            <button id="openModalBtn" class="btn btn-success" onclick=""> Search
+            <button id="openModalBtn" class="btn btn-success" onclick="fetchAllLeaveRequests();"> Search
             </button>
         </div>
     </div>
@@ -94,7 +92,7 @@ dropdownItems.forEach(item => {
     .filter(val => val)
     .map(val => val.replace('option', 'Option '))
     .join(', ');
-    //fetchAllEmployees();
+    fetchAllLeaveRequests();
 
     });
 });

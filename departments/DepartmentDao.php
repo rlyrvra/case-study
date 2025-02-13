@@ -2,7 +2,6 @@
 
 require_once __DIR__ . "/../includes/Helper.php"            ;
 require_once __DIR__ . "/../includes/enums/ActionResult.php";
-require_once __DIR__ . "/../includes/enums/ErrorCode.php"   ;
 
 class DepartmentDao
 {
@@ -57,24 +56,25 @@ class DepartmentDao
     }
 
     public function fetchAll(
-        ? array $columns        = null,
-        ? array $filterCriteria = null,
-        ? array $sortCriteria   = null,
-        ? int   $limit          = null,
-        ? int   $offset         = null
+        ? array $columns              = null,
+        ? array $filterCriteria       = null,
+        ? array $sortCriteria         = null,
+        ? int   $limit                = null,
+        ? int   $offset               = null,
+          bool  $includeTotalRowCount = true
     ): ActionResult|array {
+
         $tableColumns = [
             "id"                        => "department.id                 AS id"                       ,
             "name"                      => "department.name               AS name"                     ,
-
             "department_head_id"        => "department.department_head_id AS department_head_id"       ,
-            "department_head_full_name" => "department_head.full_name     AS department_head_full_name",
-
             "description"               => "department.description        AS description"              ,
             "status"                    => "department.status             AS status"                   ,
             "created_at"                => "department.created_at         AS created_at"               ,
             "updated_at"                => "department.updated_at         AS updated_at"               ,
-            "deleted_at"                => "department.deleted_at         AS deleted_at"
+            "deleted_at"                => "department.deleted_at         AS deleted_at"               ,
+
+            "department_head_full_name" => "department_head.full_name     AS department_head_full_name"
         ];
 
         $selectedColumns =
@@ -96,9 +96,9 @@ class DepartmentDao
             ";
         }
 
-        $queryParameters = [];
-
-        $whereClauses = [];
+        $whereClauses     = [];
+        $queryParameters  = [];
+        $filterParameters = [];
 
         if (empty($filterCriteria)) {
             $whereClauses[] = "department.deleted_at IS NULL";
@@ -106,34 +106,28 @@ class DepartmentDao
             foreach ($filterCriteria as $filterCriterion) {
                 $column   = $filterCriterion["column"  ];
                 $operator = $filterCriterion["operator"];
-                $boolean  = isset($filterCriterion["boolean"])
-                    ? strtoupper($filterCriterion["boolean"])
-                    : 'AND';
 
                 switch ($operator) {
                     case "="   :
                     case "LIKE":
-                        $whereClauses   [] = "{$column} {$operator} ?";
-                        $queryParameters[] = $filterCriterion["value"];
+                        $whereClauses    [] = "{$column} {$operator} ?";
+                        $queryParameters [] = $filterCriterion["value"];
+
+                        $filterParameters[] = $filterCriterion["value"];
+
                         break;
 
                     case "BETWEEN":
-                        $whereClauses   [] = "{$column} {$operator} ? AND ?";
-                        $queryParameters[] = $filterCriterion["lower_bound"];
-                        $queryParameters[] = $filterCriterion["upper_bound"];
+                        $whereClauses    [] = "{$column} {$operator} ? AND ?";
+                        $queryParameters [] = $filterCriterion["lower_bound"];
+                        $queryParameters [] = $filterCriterion["upper_bound"];
+
+                        $filterParameters[] = $filterCriterion["lower_bound"];
+                        $filterParameters[] = $filterCriterion["upper_bound"];
+
                         break;
-
-                    default:
-                        // Do nothing
                 }
-
-                $whereClauses[] = " {$boolean}";
             }
-
-        }
-
-        if (in_array(trim(end($whereClauses)), ['AND', 'OR'], true)) {
-            array_pop($whereClauses);
         }
 
         $orderByClauses = [];
@@ -174,14 +168,14 @@ class DepartmentDao
         }
 
         $query = "
-            SELECT SQL_CALC_FOUND_ROWS
+            SELECT
                 " . implode(", ", $selectedColumns) . "
             FROM
                 departments AS department
             {$joinClauses}
             WHERE
-            " . implode(" ", $whereClauses) . "
-            " . (!empty($orderByClauses) ? "ORDER BY " . implode(", ", $orderByClauses) : "") . "
+            " . implode(" AND ", $whereClauses) . "
+            " . ( ! empty($orderByClauses) ? "ORDER BY " . implode(", ", $orderByClauses) : "") . "
             {$limitClause}
             {$offsetClause}
         ";
@@ -200,8 +194,29 @@ class DepartmentDao
                 $resultSet[] = $row;
             }
 
-            $countStatement = $this->pdo->query("SELECT FOUND_ROWS()");
-            $totalRowCount = $countStatement->fetchColumn();
+            $totalRowCount = null;
+
+            if ($includeTotalRowCount) {
+                $totalRowCountQuery = "
+                    SELECT
+                        COUNT(department.id)
+                    FROM
+                        departments AS department
+                    {$joinClauses}
+                    WHERE
+                        " . implode(" AND ", $whereClauses) . "
+                ";
+
+                $countStatement = $this->pdo->prepare($totalRowCountQuery);
+
+                foreach ($filterParameters as $index => $parameter) {
+                    $countStatement->bindValue($index + 1, $parameter, Helper::getPdoParameterType($parameter));
+                }
+
+                $countStatement->execute();
+
+                $totalRowCount = $countStatement->fetchColumn();
+            }
 
             return [
                 "result_set"      => $resultSet    ,
@@ -211,7 +226,7 @@ class DepartmentDao
         } catch (PDOException $exception) {
             error_log("Database Error: An error occurred while fetching the departments. " .
                       "Exception: {$exception->getMessage()}");
-            echo $exception->getMessage();
+
             return ActionResult::FAILURE;
         }
     }
@@ -290,6 +305,7 @@ class DepartmentDao
             $statement->bindValue(":department_head_id", $department->getDepartmentHeadId(), Helper::getPdoParameterType($department->getDepartmentHeadId()));
             $statement->bindValue(":description"       , $department->getDescription()     , Helper::getPdoParameterType($department->getDescription()     ));
             $statement->bindValue(":status"            , $department->getStatus()          , Helper::getPdoParameterType($department->getStatus()          ));
+
             $statement->bindValue(":department_id"     , $department->getId()              , Helper::getPdoParameterType($department->getId()              ));
 
             $statement->execute();

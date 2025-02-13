@@ -7,6 +7,8 @@
             <th>Type</th>
             <th>Start Date</th>
             <th>End Date</th>
+            <th>Half Day</th>
+            <th>Half Day Part</th>
             <th>Status</th>
             <th>Review</th>
         </tr>
@@ -41,6 +43,19 @@
             </td>
             <td>
               <?php echo htmlspecialchars($row['end_date']); ?>
+            </td>
+            <td>
+              <span class="badge badge center 
+              <?php 
+              if($row['is_half_day'] == 0) echo "bg-danger";
+              if($row['is_half_day'] == 1) echo "bg-success";
+              ?>"><?php 
+              if($row['is_half_day'] == 0) echo "No";
+              if($row['is_half_day'] == 1) echo "Yes";
+              ?></span>
+            </td>
+            <td>
+              <?php echo htmlspecialchars($row['half_day_part']); ?>
             </td>
             <td><span class="badge
             <?php 

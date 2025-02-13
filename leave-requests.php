@@ -39,9 +39,9 @@ if(isset($_GET['aR']) && $_GET['aR'] == true){
 />
 
 <!-- Ajax -->
-<script src="leaves/leave-approvals/modules/leave-requests-ajax.js?v1.2"></script>
+<script src="leaves/leave-approvals/modules/leave-requests-ajax.js?v1.4"></script>
 <!-- Scripts -->
-<script src="leaves/leave-approvals/modules/leave-requests-scripts.js?v1.3"></script>
+<script src="leaves/leave-approvals/modules/leave-requests-scripts.js?v1.4"></script>
 
 
 <meta name="viewport" content="width=device-width, initial-scale=1">

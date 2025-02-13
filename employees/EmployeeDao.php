@@ -2,7 +2,6 @@
 
 require_once __DIR__ . "/../includes/Helper.php"            ;
 require_once __DIR__ . "/../includes/enums/ActionResult.php";
-require_once __DIR__ . "/../includes/enums/ErrorCode.php"   ;
 
 class EmployeeDao
 {
@@ -183,12 +182,14 @@ class EmployeeDao
     }
 
     public function fetchAll(
-        ? array $columns        = null,
-        ? array $filterCriteria = null,
-        ? array $sortCriteria   = null,
-        ? int   $limit          = null,
-        ? int   $offset         = null
+        ? array $columns              = null,
+        ? array $filterCriteria       = null,
+        ? array $sortCriteria         = null,
+        ? int   $limit                = null,
+        ? int   $offset               = null,
+          bool  $includeTotalRowCount = true
     ): ActionResult|array {
+
         $tableColumns = [
             "id"                              => "employee.id                              AS id"                             ,
             "rfid_uid"                        => "employee.rfid_uid                        AS rfid_uid"                       ,
@@ -215,20 +216,13 @@ class EmployeeDao
 
             "employee_code"                   => "employee.employee_code                   AS employee_code"                  ,
             "job_title_id"                    => "employee.job_title_id                    AS job_title_id"                   ,
-            "job_title_title"                 => "job_title.title                          AS job_title_title"                ,
             "department_id"                   => "employee.department_id                   AS department_id"                  ,
-            "department_name"                 => "department.name                          AS department_name"                ,
-            "department_head_id"              => "department.department_head_id            AS department_head_id"             ,
             "employment_type"                 => "employee.employment_type                 AS employment_type"                ,
             "date_of_hire"                    => "employee.date_of_hire                    AS date_of_hire"                   ,
             "supervisor_id"                   => "employee.supervisor_id                   AS supervisor_id"                  ,
-            "supervisor_first_name"           => "supervisor.first_name                    AS supervisor_first_name"          ,
-            "supervisor_middle_name"          => "supervisor.middle_name                   AS supervisor_middle_name"         ,
-            "supervisor_last_name"            => "supervisor.last_name                     AS supervisor_last_name"           ,
             "access_role"                     => "employee.access_role                     AS access_role"                    ,
 
             "payroll_group_id"                => "employee.payroll_group_id                AS payroll_group_id"               ,
-            "payroll_group_deleted_at"        => "payroll_group.deleted_at                 AS payroll_group_deleted_at"       ,
             "basic_salary"                    => "employee.basic_salary                    AS basic_salary"                   ,
 
             "tin_number"                      => "employee.tin_number                      AS tin_number"                     ,
@@ -248,15 +242,26 @@ class EmployeeDao
 
             "created_at"                      => "employee.created_at                      AS created_at"                     ,
             "updated_at"                      => "employee.updated_at                      AS updated_at"                     ,
-            "deleted_at"                      => "employee.deleted_at                      AS deleted_at"
+            "deleted_at"                      => "employee.deleted_at                      AS deleted_at"                     ,
+
+            "job_title_title"                 => "job_title.title                          AS job_title_title"                ,
+
+            "department_name"                 => "department.name                          AS department_name"                ,
+            "department_head_id"              => "department.department_head_id            AS department_head_id"             ,
+
+            "supervisor_first_name"           => "supervisor.first_name                    AS supervisor_first_name"          ,
+            "supervisor_middle_name"          => "supervisor.middle_name                   AS supervisor_middle_name"         ,
+            "supervisor_last_name"            => "supervisor.last_name                     AS supervisor_last_name"           ,
+
+            "payroll_group_deleted_at"        => "payroll_group.deleted_at                 AS payroll_group_deleted_at"       ,
         ];
 
         $selectedColumns =
             empty($columns)
                 ? $tableColumns
                 : array_intersect_key(
-                $tableColumns,
-                array_flip($columns)
+                    $tableColumns,
+                    array_flip($columns)
                 );
 
         $joinClauses = "";
@@ -272,6 +277,7 @@ class EmployeeDao
 
         if (array_key_exists("department_name"   , $selectedColumns) ||
             array_key_exists("department_head_id", $selectedColumns)) {
+
             $joinClauses .= "
                 LEFT JOIN
                     departments AS department
@@ -283,6 +289,7 @@ class EmployeeDao
         if (array_key_exists("supervisor_first_name" , $selectedColumns) ||
             array_key_exists("supervisor_middle_name", $selectedColumns) ||
             array_key_exists("supervisor_last_name"  , $selectedColumns)) {
+
             $joinClauses .= "
                 LEFT JOIN
                     employees AS supervisor
@@ -300,9 +307,9 @@ class EmployeeDao
             ";
         }
 
-        $queryParameters = [];
-
-        $whereClauses = [];
+        $whereClauses     = [];
+        $queryParameters  = [];
+        $filterParameters = [];
 
         if (empty($filterCriteria)) {
             $whereClauses[] = "employee.deleted_at is NULL";
@@ -318,22 +325,27 @@ class EmployeeDao
                     case "="   :
                     case "!="  :
                     case "LIKE":
-                        $whereClauses   [] = "{$column} {$operator} ?";
-                        $queryParameters[] = $filterCriterion["value"];
+                        $whereClauses    [] = "{$column} {$operator} ?";
+                        $queryParameters [] = $filterCriterion["value"];
+
+                        $filterParameters[] = $filterCriterion["value"];
+
                         break;
 
                     case "IS NULL":
                         $whereClauses[] = "{$column} {$operator}";
+
                         break;
 
                     case "BETWEEN":
-                        $whereClauses   [] = "{$column} {$operator} ? AND ?";
-                        $queryParameters[] = $filterCriterion["lower_bound"];
-                        $queryParameters[] = $filterCriterion["upper_bound"];
-                        break;
+                        $whereClauses    [] = "{$column} {$operator} ? AND ?";
+                        $queryParameters [] = $filterCriterion["lower_bound"];
+                        $queryParameters [] = $filterCriterion["upper_bound"];
 
-                    default:
-                        // Do nothing
+                        $filterParameters[] = $filterCriterion["lower_bound"];
+                        $filterParameters[] = $filterCriterion["upper_bound"];
+
+                        break;
                 }
 
                 $whereClauses[] = " {$boolean}";
@@ -382,14 +394,14 @@ class EmployeeDao
         }
 
         $query = "
-            SELECT SQL_CALC_FOUND_ROWS
+            SELECT
                 " . implode(", ", $selectedColumns) . "
             FROM
                 employees AS employee
             {$joinClauses}
             WHERE
                 " . implode(" ", $whereClauses) . "
-            " . (!empty($orderByClauses) ? "ORDER BY " . implode(", ", $orderByClauses) : "") . "
+            " . ( ! empty($orderByClauses) ? "ORDER BY " . implode(", ", $orderByClauses) : "") . "
             {$limitClause}
             {$offsetClause}
         ";
@@ -408,8 +420,29 @@ class EmployeeDao
                 $resultSet[] = $row;
             }
 
-            $countStatement = $this->pdo->query("SELECT FOUND_ROWS()");
-            $totalRowCount = $countStatement->fetchColumn();
+            $totalRowCount = null;
+
+            if ($includeTotalRowCount) {
+                $totalRowCountQuery = "
+                    SELECT
+                        COUNT(employee.id)
+                    FROM
+                        employees AS employee
+                    {$joinClauses}
+                    WHERE
+                        " . implode(" ", $whereClauses) . "
+                ";
+
+                $countStatement = $this->pdo->prepare($totalRowCountQuery);
+
+                foreach ($filterParameters as $index => $parameter) {
+                    $countStatement->bindValue($index + 1, $parameter, Helper::getPdoParameterType($parameter));
+                }
+
+                $countStatement->execute();
+
+                $totalRowCount = $countStatement->fetchColumn();
+            }
 
             return [
                 "result_set"      => $resultSet    ,
@@ -580,6 +613,7 @@ class EmployeeDao
             $statement = $this->pdo->prepare($query);
 
             $statement->bindValue(":new_hashed_password", $newHashedPassword, Helper::getPdoParameterType($newHashedPassword));
+
             $statement->bindValue(":employee_id"        , $employeeId       , Helper::getPdoParameterType($employeeId       ));
 
             $statement->execute();

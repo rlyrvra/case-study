@@ -2,7 +2,6 @@
 
 require_once __DIR__ . "/../includes/Helper.php"            ;
 require_once __DIR__ . "/../includes/enums/ActionResult.php";
-require_once __DIR__ . "/../includes/enums/ErrorCode.php"   ;
 
 class EmploymentTypeBenefitDao
 {
@@ -67,40 +66,41 @@ class EmploymentTypeBenefitDao
     }
 
     public function fetchAll(
-        ? array $columns        = null,
-        ? array $filterCriteria = null,
-        ? array $sortCriteria   = null,
-        ? int   $limit          = null,
-        ? int   $offset         = null
+        ? array $columns              = null,
+        ? array $filterCriteria       = null,
+        ? array $sortCriteria         = null,
+        ? int   $limit                = null,
+        ? int   $offset               = null,
+          bool  $includeTotalRowCount = true
     ): ActionResult|array {
+
         $tableColumns = [
             "id"                                => "employment_type_benefit.id              AS id"                               ,
             "employment_type"                   => "employment_type_benefit.employment_type AS employment_type"                  ,
-
             "leave_type_id"                     => "employment_type_benefit.leave_type_id   AS leave_type_id"                    ,
+            "allowance_id"                      => "employment_type_benefit.allowance_id    AS allowance_id"                     ,
+            "deduction_id"                      => "employment_type_benefit.deduction_id    AS deduction_id"                     ,
+            "created_at"                        => "employment_type_benefit.created_at      AS created_at"                       ,
+            "deleted_at"                        => "employment_type_benefit.deleted_at      AS deleted_at"                       ,
+
             "leave_type_name"                   => "leave_type.name                         AS leave_type_name"                  ,
             "leave_type_maximum_number_of_days" => "leave_type.maximum_number_of_days       AS leave_type_maximum_number_of_days",
             "leave_type_is_paid"                => "leave_type.is_paid                      AS leave_type_is_paid"               ,
             "leave_type_status"                 => "leave_type.status                       AS leave_type_status"                ,
             "leave_type_deleted_at"             => "leave_type.deleted_at                   AS leave_type_deleted_at"            ,
 
-            "allowance_id"                      => "employment_type_benefit.allowance_id    AS allowance_id"                     ,
             "allowance_name"                    => "allowance.name                          AS allowance_name"                   ,
             "allowance_amount"                  => "allowance.amount                        AS allowance_amount"                 ,
             "allowance_frequency"               => "allowance.frequency                     AS allowance_frequency"              ,
             "allowance_status"                  => "allowance.status                        AS allowance_status"                 ,
             "allowance_deleted_at"              => "allowance.deleted_at                    AS allowance_deleted_at"             ,
 
-            "deduction_id"                      => "employment_type_benefit.deduction_id    AS deduction_id"                     ,
             "deduction_name"                    => "deduction.name                          AS deduction_name"                   ,
             "deduction_amount"                  => "deduction.amount                        AS deduction_amount"                 ,
             "deduction_frequency"               => "deduction.frequency                     AS deduction_frequency"              ,
             "deduction_description"             => "deduction.description                   AS deduction_description"            ,
             "deduction_status"                  => "deduction.status                        AS deduction_status"                 ,
-            "deduction_deleted_at"              => "deduction.deleted_at                    AS deduction_deleted_at"             ,
-
-            "created_at"                        => "employment_type_benefit.created_at      AS created_at"                       ,
-            "deleted_at"                        => "employment_type_benefit.deleted_at      AS deleted_at"
+            "deduction_deleted_at"              => "deduction.deleted_at                    AS deduction_deleted_at"
         ];
 
         $selectedColumns =
@@ -118,6 +118,7 @@ class EmploymentTypeBenefitDao
             array_key_exists("leave_type_is_paid"               , $selectedColumns) ||
             array_key_exists("leave_type_status"                , $selectedColumns) ||
             array_key_exists("leave_type_deleted_at"            , $selectedColumns)) {
+
             $joinClauses .= "
                 LEFT JOIN
                     leave_types AS leave_type
@@ -131,6 +132,7 @@ class EmploymentTypeBenefitDao
             array_key_exists("allowance_frequency" , $selectedColumns) ||
             array_key_exists("allowance_status"    , $selectedColumns) ||
             array_key_exists("allowance_deleted_at", $selectedColumns)) {
+
             $joinClauses .= "
                 LEFT JOIN
                     allowances AS allowance
@@ -145,6 +147,7 @@ class EmploymentTypeBenefitDao
             array_key_exists("deduction_description", $selectedColumns) ||
             array_key_exists("deduction_status"     , $selectedColumns) ||
             array_key_exists("deduction_deleted_at" , $selectedColumns)) {
+
             $joinClauses .= "
                 LEFT JOIN
                     deductions AS deduction
@@ -153,9 +156,9 @@ class EmploymentTypeBenefitDao
             ";
         }
 
-        $queryParameters = [];
-
-        $whereClauses = [];
+        $whereClauses     = [];
+        $queryParameters  = [];
+        $filterParameters = [];
 
         if (empty($filterCriteria)) {
             $whereClauses[] = "employment_type_benefit.deleted_at IS NULL";
@@ -167,18 +170,22 @@ class EmploymentTypeBenefitDao
                 switch ($operator) {
                     case "="   :
                     case "LIKE":
-                        $whereClauses   [] = "{$column} {$operator} ?";
-                        $queryParameters[] = $filterCriterion["value"];
+                        $whereClauses    [] = "{$column} {$operator} ?";
+                        $queryParameters [] = $filterCriterion["value"];
+
+                        $filterParameters[] = $filterCriterion["value"];
+
                         break;
 
                     case "BETWEEN":
-                        $whereClauses   [] = "{$column} {$operator} ? AND ?";
-                        $queryParameters[] = $filterCriterion["lower_bound"];
-                        $queryParameters[] = $filterCriterion["upper_bound"];
-                        break;
+                        $whereClauses    [] = "{$column} {$operator} ? AND ?";
+                        $queryParameters [] = $filterCriterion["lower_bound"];
+                        $queryParameters [] = $filterCriterion["upper_bound"];
 
-                    default:
-                        // Do nothing
+                        $filterParameters[] = $filterCriterion["lower_bound"];
+                        $filterParameters[] = $filterCriterion["upper_bound"];
+
+                        break;
                 }
             }
         }
@@ -221,14 +228,14 @@ class EmploymentTypeBenefitDao
         }
 
         $query = "
-            SELECT SQL_CALC_FOUND_ROWS
+            SELECT
                 " . implode(", ", $selectedColumns) . "
             FROM
                 employment_type_benefits AS employment_type_benefit
             {$joinClauses}
             WHERE
             " . implode(" AND ", $whereClauses) . "
-            " . (!empty($orderByClauses) ? "ORDER BY " . implode(", ", $orderByClauses) : "") . "
+            " . ( ! empty($orderByClauses) ? "ORDER BY " . implode(", ", $orderByClauses) : "") . "
             {$limitClause}
             {$offsetClause}
         ";
@@ -249,8 +256,29 @@ class EmploymentTypeBenefitDao
                 $resultSet[] = $row;
             }
 
-            $countStatement = $this->pdo->query("SELECT FOUND_ROWS()");
-            $totalRowCount = $countStatement->fetchColumn();
+            $totalRowCount = null;
+
+            if ($includeTotalRowCount) {
+                $totalRowCountQuery = "
+                    SELECT
+                        COUNT(employment_type_benefit.id)
+                    FROM
+                        employment_type_benefits AS employment_type_benefit
+                    {$joinClauses}
+                    WHERE
+                        " . implode(" AND ", $whereClauses) . "
+                ";
+
+                $countStatement = $this->pdo->prepare($totalRowCountQuery);
+
+                foreach ($filterParameters as $index => $parameter) {
+                    $countStatement->bindValue($index + 1, $parameter, Helper::getPdoParameterType($parameter));
+                }
+
+                $countStatement->execute();
+
+                $totalRowCount = $countStatement->fetchColumn();
+            }
 
             return [
                 "result_set"      => $resultSet    ,

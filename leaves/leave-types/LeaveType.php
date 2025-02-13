@@ -3,11 +3,12 @@
 class LeaveType
 {
     public function __construct(
-        private readonly   int|string|null $id                  = null,
-        private readonly   string          $name                      ,
-        private readonly   int             $maximumNumberOfDays       ,
-        private readonly   bool            $isPaid                    ,
-        private readonly ? string          $description         = null,
+        private readonly   int|string|null $id                 ,
+        private readonly   string          $name               ,
+        private readonly   int             $maximumNumberOfDays,
+        private readonly   bool            $isPaid             ,
+        private readonly   bool            $isEncashable       ,
+        private readonly ? string          $description        ,
         private readonly   string          $status
     ) {
     }
@@ -30,6 +31,11 @@ class LeaveType
     public function isPaid(): bool
     {
         return $this->isPaid;
+    }
+
+    public function isEncashable(): bool
+    {
+        return $this->isEncashable;
     }
 
     public function getDescription(): ?string

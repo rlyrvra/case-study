@@ -1,48 +1,52 @@
 <?php
 
-require_once __DIR__ . "/BreakScheduleDao.php";
+require_once __DIR__ . "/BreakScheduleRepository.php";
 
 class BreakScheduleService
 {
-    private readonly BreakScheduleDao $breakScheduleDao;
+    private readonly BreakScheduleRepository $breakScheduleRepository;
 
-    public function __construct(BreakScheduleDao $breakScheduleDao)
+    public function __construct(BreakScheduleRepository $breakScheduleRepository)
     {
-        $this->breakScheduleDao = $breakScheduleDao;
+        $this->breakScheduleRepository = $breakScheduleRepository;
     }
 
     public function createBreakSchedule(BreakSchedule $breakSchedule): ActionResult
     {
-        return $this->breakScheduleDao->create($breakSchedule);
+        return $this->breakScheduleRepository->createBreakSchedule($breakSchedule);
     }
 
     public function fetchAllBreakSchedules(
-        ? array $columns        = null,
-        ? array $filterCriteria = null,
-        ? array $sortCriteria   = null,
-        ? int   $limit          = null,
-        ? int   $offset         = null
+        ? array $columns              = null,
+        ? array $filterCriteria       = null,
+        ? array $sortCriteria         = null,
+        ? int   $limit                = null,
+        ? int   $offset               = null,
+          bool  $includeTotalRowCount = true
     ): ActionResult|array {
-        return $this->breakScheduleDao->fetchAll($columns, $filterCriteria, $sortCriteria, $limit, $offset);
+
+        return $this->breakScheduleRepository->fetchAllBreakSchedules(
+            columns             : $columns             ,
+            filterCriteria      : $filterCriteria      ,
+            sortCriteria        : $sortCriteria        ,
+            limit               : $limit               ,
+            offset              : $offset              ,
+            includeTotalRowCount: $includeTotalRowCount
+        );
+    }
+
+    public function fetchLatestBreakScheduleHistoryId(int $breakScheduleId): int|null|ActionResult
+    {
+        return $this->breakScheduleRepository->fetchLatestBreakScheduleHistoryId($breakScheduleId);
     }
 
     public function updateBreakSchedule(BreakSchedule $breakSchedule, bool $isHashedId = false): ActionResult
     {
-        return $this->breakScheduleDao->update($breakSchedule, $isHashedId);
-    }
-
-    public function fetchOrderedBreakSchedules(int|string $workScheduleId, bool $isHashedId = false): ActionResult|array
-    {
-        return $this->breakScheduleDao->fetchOrderedBreakSchedules($workScheduleId, $isHashedId);
+        return $this->breakScheduleRepository->updateBreakSchedule($breakSchedule, $isHashedId);
     }
 
     public function deleteBreakSchedule(int|string $breakScheduleId, bool $isHashedId = false): ActionResult
     {
-        return $this->breakScheduleDao->delete($breakScheduleId, $isHashedId);
-    }
-
-    public function deleteBreakScheduleByWorkScheduleId(int|string $workScheduleId, bool $isHashedId = false): ActionResult
-    {
-        return $this->breakScheduleDao->deleteByWorkScheduleId($workScheduleId, $isHashedId);
+        return $this->breakScheduleRepository->deleteBreakSchedule($breakScheduleId, $isHashedId);
     }
 }

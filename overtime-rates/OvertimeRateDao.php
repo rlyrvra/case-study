@@ -2,7 +2,6 @@
 
 require_once __DIR__ . "/../includes/Helper.php"            ;
 require_once __DIR__ . "/../includes/enums/ActionResult.php";
-require_once __DIR__ . "/../includes/enums/ErrorCode.php"   ;
 
 class OvertimeRateDao
 {
@@ -140,6 +139,7 @@ class OvertimeRateDao
             $statement->bindValue(":overtime_rate"                       , $overtimeRate->getOvertimeRate()                    , Helper::getPdoParameterType($overtimeRate->getOvertimeRate()                    ));
             $statement->bindValue(":night_differential_rate"             , $overtimeRate->getNightDifferentialRate()           , Helper::getPdoParameterType($overtimeRate->getNightDifferentialRate()           ));
             $statement->bindValue(":night_differential_and_overtime_rate", $overtimeRate->getNightDifferentialAndOvertimeRate(), Helper::getPdoParameterType($overtimeRate->getNightDifferentialAndOvertimeRate()));
+
             $statement->bindValue(":overtime_rate_assignment_id"         , $overtimeRate->getOvertimeRateAssignmentId()        , Helper::getPdoParameterType($overtimeRate->getOvertimeRateAssignmentId()        ));
             $statement->bindValue(":overtime_rate_id"                    , $overtimeRate->getId()                              , Helper::getPdoParameterType($overtimeRate->getId()                              ));
 

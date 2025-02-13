@@ -34,9 +34,14 @@ if(isset($_GET['s']) && $_GET['s'] == true){
 />
 
 <!-- Ajax -->
-<script src="leaves/apply-leave/modules/apply-leave-ajax.js?v1.6"></script>
+<script src="leaves/apply-leave/modules/apply-leave-ajax.js?v1.7"></script>
 <!-- Scripts -->
-<script src="leaves/apply-leave/modules/apply-leave-scripts.js?v1.6"></script>
+<script src="leaves/apply-leave/modules/apply-leave-scripts.js?v1.7"></script>
+
+<!---Skeletons--->
+<script src="requests/table-skeleton.js?v1.2"></script>
+<!---Skeletons CSS-->
+<link rel="stylesheet" href="requests/table-skeleton.css?v1.1" />
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -119,6 +124,20 @@ if(isset($_GET['s']) && $_GET['s'] == true){
                               <label for="endDate" class="form-label">End Date*</label>
                               <input type="date" class="form-control" id="endDate" name="endDate" required onchange="calculateTotalNumberOfDays()" disabled>
                           </div>
+                          <div class="form-check mb-3">
+                              <input class="form-check-input" type="checkbox" id="isHalfday" data-bs-toggle="collapse" data-bs-target="#halfdayOptions">
+                              <label class="form-check-label" for="isHalfday">Is Halfday</label>
+                          </div>
+                          <div class="collapse" id="halfdayOptions">
+                            <div class="card card-body">
+                              <label for="half_day_options" class="form-label">Work Hours:</label>
+                              <select class="form-select" id="half_day_options" name="half_day_options">
+                                <option value="" disabled selected>Select a cycle...</option>
+                                <option value="First Half">First Half</option>
+                                <option value="Second Half">Second Half</option>
+                              </select>
+                            </div>
+                          </div>
                           <div class="mb-3">
                               <label for="totalDays" class="form-label">Total Number of Days:</label>
                               <input type="number" class="form-control" id="totalDays" name="totalDays" readonly>
@@ -139,8 +158,13 @@ if(isset($_GET['s']) && $_GET['s'] == true){
               <div class="col-md-8 p-4">
                   <div class="table-section">
                       <h5>My Leaves</h5>
+                      <div class="container-fluid card pt-3 pb-3 mt-5 mb-5">
+                          <?php require_once __DIR__ . '/leaves/apply-leave/modules/apply-leave-sorter.php' ?>
+                          <div class="visually-hidden spinner-border spinner-border-lg text-primary text-center w-px-25 h-px-25" role="status" id="loadingSpinner"></div>
+                      </div>
+                      <div id="skeleton-apply-table" class="visually-hidden table-responsive text-no-wrap">
+                      </div>
                       <div class="table-responsive" id="apply_leaves_table">
-                        <div class="spinner-border spinner-border-lg text-primary text-center w-px-700 h-px-700" role="status"></div>
                       </div>
                   </div>
               </div>

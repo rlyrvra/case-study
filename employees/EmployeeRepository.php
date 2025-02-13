@@ -17,13 +17,22 @@ class EmployeeRepository
     }
 
     public function fetchAllEmployees(
-        ? array $columns        = null,
-        ? array $filterCriteria = null,
-        ? array $sortCriteria   = null,
-        ? int   $limit          = null,
-        ? int   $offset         = null
+        ? array $columns              = null,
+        ? array $filterCriteria       = null,
+        ? array $sortCriteria         = null,
+        ? int   $limit                = null,
+        ? int   $offset               = null,
+          bool  $includeTotalRowCount = true
     ): ActionResult|array {
-        return $this->employeeDao->fetchAll($columns, $filterCriteria, $sortCriteria, $limit, $offset);
+
+        return $this->employeeDao->fetchAll(
+            columns             : $columns             ,
+            filterCriteria      : $filterCriteria      ,
+            sortCriteria        : $sortCriteria        ,
+            limit               : $limit               ,
+            offset              : $offset              ,
+            includeTotalRowCount: $includeTotalRowCount
+        );
     }
 
     public function fetchLastEmployeeId(): int|string
@@ -34,35 +43,6 @@ class EmployeeRepository
     public function updateEmployee(Employee $employee, bool $isHashedId = false): ActionResult
     {
         return $this->employeeDao->update($employee, $isHashedId);
-    }
-
-    public function getEmployeeIdBy(string $column, string $value): ActionResult|int
-    {
-        $columns = [
-            'id'
-        ];
-
-        $filterCriteria = [
-            [
-                'column'   => $column,
-                'operator' => '='    ,
-                'value'    => $value
-            ],
-        ];
-
-        $result = $this->fetchAllEmployees(
-            columns       : $columns       ,
-            filterCriteria: $filterCriteria,
-            limit         : 1
-        );
-
-        if ($result === ActionResult::FAILURE) {
-            return ActionResult::FAILURE;
-        }
-
-        return empty($result['result_set'])
-            ? ActionResult::NO_RECORD_FOUND
-            : (int) $result['result_set'][0]['id'];
     }
 
     public function changePassword(int|string $employeeId, string $newHashedPassword, bool $isHashedId = false): ActionResult

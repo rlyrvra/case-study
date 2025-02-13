@@ -1,7 +1,8 @@
 <?php
+
+echo '<pre>';
+
 require_once __DIR__ . '/Attendance.php';
-
-
 
 require_once __DIR__ . '/AttendanceService.php';
 require_once __DIR__ . '/../database/database.php';
@@ -44,9 +45,10 @@ $newLeaveEntitlement = new LeaveEntitlement(
 $attendanceDao    = new AttendanceDao($pdo);
 $employeeDao      = new EmployeeDao($pdo);
 $leaveRequestDao  = new LeaveRequestDao($pdo);
-$workScheduleDao  = new WorkScheduleDao($pdo);
 $settingDao       = new SettingDao($pdo);
-$breakScheduleDao = new BreakScheduleDao($pdo);
+$workScheduleDao  = new WorkScheduleDao($pdo, $settingDao);
+$breakTypeDao = new BreakTypeDao($pdo);
+$breakScheduleDao = new BreakScheduleDao($pdo, $workScheduleDao, $breakTypeDao);
 $employeeBreakDao = new EmployeeBreakDao($pdo);
 $overtimeRateDao = new OvertimeRateDao($pdo);
 $overtimeRateAssignmentDao = new OvertimeRateAssignmentDao($pdo, $overtimeRateDao);
@@ -64,6 +66,7 @@ $overtimeRateAssignmentRepository = new OvertimeRateAssignmentRepository($overti
 $holidayRepository = new HolidayRepository($holidayDao);
 
 $attendanceService = new AttendanceService(
+    $pdo,
     $attendanceRepository,
     $employeeRepository,
     $leaveRequestRepository,
@@ -80,6 +83,24 @@ $employeeBreakService = new EmployeeBreakService(
     $breakScheduleRepository
 );
 
+$rfidUid = '123456789';
+$currentDateTime = '2025-01-01 12:00:00';
+$response = $attendanceService->handleRfidTap($rfidUid, $currentDateTime);
+print_r($response);
+/*
+$currentDateTime = '2025-01-01 12:00:00';
+$response = $attendanceService->handleRfidTap($rfidUid, $currentDateTime);
+
+$currentDateTime = '2025-01-01 17:00:00';
+$response = $attendanceService->handleRfidTap($rfidUid, $currentDateTime);
+
+$response = $employeeBreakService->handleRfidTap('123456789', '2025-01-01 12:00:00');
+print_r($response);
+
+*/
+
+
+/*
 $attendance = new Attendance(
     id: 2,
     workScheduleId: 1,
@@ -98,7 +119,6 @@ $attendance = new Attendance(
 
 print_r($attendanceService->updateAttendance($attendance));
 
-/*
 $currentDateTime = '2024-11-26 08:00:00';
 
 $response = $attendanceService->handleRfidTap($rfidUid, $currentDateTime);

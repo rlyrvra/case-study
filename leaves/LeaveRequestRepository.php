@@ -17,13 +17,22 @@ class LeaveRequestRepository
     }
 
     public function fetchAllLeaveRequests(
-        ? array $columns        = null,
-        ? array $filterCriteria = null,
-        ? array $sortCriteria   = null,
-        ? int   $limit          = null,
-        ? int   $offset         = null
+        ? array $columns              = null,
+        ? array $filterCriteria       = null,
+        ? array $sortCriteria         = null,
+        ? int   $limit                = null,
+        ? int   $offset               = null,
+          bool  $includeTotalRowCount = true
     ): ActionResult|array {
-        return $this->leaveRequestDao->fetchAll($columns, $filterCriteria, $sortCriteria, $limit, $offset);
+
+        return $this->leaveRequestDao->fetchAll(
+            columns             : $columns             ,
+            filterCriteria      : $filterCriteria      ,
+            sortCriteria        : $sortCriteria        ,
+            limit               : $limit               ,
+            offset              : $offset              ,
+            includeTotalRowCount: $includeTotalRowCount
+        );
     }
 
     public function updateLeaveRequest(LeaveRequest $leaveRequest, bool $isHashedId = false): ActionResult
@@ -116,9 +125,10 @@ class LeaveRequestRepository
             foreach ($leaveDatePeriod as $leaveDate) {
                 if (isset($datesMarkedAsLeave[$leaveDate->format('Y-m-d')])) {
                     $datesMarkedAsLeave[$leaveDate->format('Y-m-d')] = [
-                        'is_leave'    => true      ,
-                        'is_paid'     => $isPaid   ,
-                        'is_half_day' => $isHalfDay
+                        'is_leave'    => true                   ,
+                        'is_paid'     => $isPaid                ,
+                        'is_half_day' => $isHalfDay             ,
+                        'status'      => $leaveRequest['status']
                     ];
                 }
             }

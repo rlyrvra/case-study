@@ -1,8 +1,8 @@
 <?php
 require_once __DIR__ . '/../../departments/DepartmentDao.php';
 require_once __DIR__ . '/../../departments/Department.php';
+
 require_once __DIR__ . '/../../includes/Helper.php';
-require_once __DIR__ . '/../../includes/enums/ErrorCode.php';
 require_once __DIR__ . '/../../database/database.php';
 
 function getDepartments(){
