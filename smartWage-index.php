@@ -5,6 +5,10 @@
 <?php
 require_once __DIR__ . '/login-checker.php';
 
+if(isset($_GET['r']) && $_GET['r'] == true){
+  include_once __DIR__ . '/sweet-alert-toasts/login/login-welcome.php';
+}
+
 if(isset($_GET['s']) && $_GET['s'] == true){
   include_once __DIR__ . '/sweet-alert-toasts/login/login-success.php';
 }
