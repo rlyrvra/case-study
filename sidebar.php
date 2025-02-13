@@ -1,5 +1,6 @@
 <?php if(!($_SERVER['HTTP_HOST'] !== 'localhost' && $_SERVER['HTTP_HOST'] !== '127.0.0.1')): ?>
 <!-- Menu -->
+<script src="requests/login/logout.js"></script>
 <?php ob_start(); ?>
 <!-- <aside id="layout-menu" class="position-sticky layout-menu menu-vertical menu bg-menu-theme top-0 vh-100"> -->
 <aside id="layout-menu" class="position-sticky layout-menu menu-vertical menu bg-menu-theme top-0 vh-100">
@@ -259,7 +260,7 @@
 
     <!-- Log Out -->
     <li class="menu-item">
-        <a href="#" class="menu-link" onclick="window.location.href='requests/login/logout'">
+        <a href="#" class="menu-link" onclick="confirmLogout()">
         <i class="menu-icon tf-icons bx bx-log-out"></i>
         <div data-i18n="Tables">Log Out</div>
         </a>
@@ -270,5 +271,7 @@
 <?php else: ?>
 <?php require_once __DIR__ . '/sidebar2.php'; ?>
 <?php endif ?>
+
+
 
 
