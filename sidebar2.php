@@ -1,4 +1,5 @@
 <!-- Menu -->
+<script src="requests/login/logout.js"></script>
 <?php ob_start(); ?>
 <!-- <aside id="layout-menu" class="position-sticky layout-menu menu-vertical menu bg-menu-theme top-0 vh-100"> -->
 <aside id="layout-menu" class="position-sticky layout-menu menu-vertical menu bg-menu-theme top-0 vh-100">
