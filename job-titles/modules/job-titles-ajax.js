@@ -168,7 +168,7 @@ function deleteJobTitle(button){
         },
         success: function(response) {
             //('#job-titles-table').html(response);
-            fetchAllSort();
+            fetchAllJobTitles();
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log("AJAX Error: " + textStatus + ": " + errorThrown);
