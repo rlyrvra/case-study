@@ -33,7 +33,13 @@ class EmployeeBreakDao
             )
         ";
 
+        $isLocalTransaction = ! $this->pdo->inTransaction();
+
         try {
+            if ($isLocalTransaction) {
+                $this->pdo->beginTransaction();
+            }
+
             $statement = $this->pdo->prepare($query);
 
             $statement->bindValue(":attendance_id"            , $employeeBreak->getAttendanceId()          , Helper::getPdoParameterType($employeeBreak->getAttendanceId()          ));
@@ -45,9 +51,17 @@ class EmployeeBreakDao
 
             $statement->execute();
 
+            if ($isLocalTransaction) {
+                $this->pdo->commit();
+            }
+
             return ActionResult::SUCCESS;
 
         } catch (PDOException $exception) {
+            if ($isLocalTransaction) {
+                $this->pdo->rollBack();
+            }
+
             error_log("Database Error: An error occurred while creating the employee break. " .
                       "Exception: {$exception->getMessage()}");
 
@@ -72,8 +86,12 @@ class EmployeeBreakDao
             )
         ";
 
+        $isLocalTransaction = ! $this->pdo->inTransaction();
+
         try {
-            $this->pdo->beginTransaction();
+            if ($isLocalTransaction) {
+                $this->pdo->beginTransaction();
+            }
 
             $statement = $this->pdo->prepare($query);
 
@@ -84,12 +102,16 @@ class EmployeeBreakDao
 
             $statement->execute();
 
-            $this->pdo->commit();
+            if ($isLocalTransaction) {
+                $this->pdo->commit();
+            }
 
             return ActionResult::SUCCESS;
 
         } catch (PDOException $exception) {
-            $this->pdo->rollBack();
+            if ($isLocalTransaction) {
+                $this->pdo->rollBack();
+            }
 
             error_log("Database Error: An error occurred while recording the break in. " .
                       "Exception: {$exception->getMessage()}");
@@ -109,8 +131,12 @@ class EmployeeBreakDao
                 id = :employee_break_id
         ";
 
+        $isLocalTransaction = ! $this->pdo->inTransaction();
+
         try {
-            $this->pdo->beginTransaction();
+            if ($isLocalTransaction) {
+                $this->pdo->beginTransaction();
+            }
 
             $statement = $this->pdo->prepare($query);
 
@@ -121,12 +147,16 @@ class EmployeeBreakDao
 
             $statement->execute();
 
-            $this->pdo->commit();
+            if ($isLocalTransaction) {
+                $this->pdo->commit();
+            }
 
             return ActionResult::SUCCESS;
 
         } catch (PDOException $exception) {
-            $this->pdo->rollBack();
+            if ($isLocalTransaction) {
+                $this->pdo->rollBack();
+            }
 
             error_log("Database Error: An error occurred while recording the break out. " .
                       "Exception: {$exception->getMessage()}");
@@ -586,9 +616,12 @@ class EmployeeBreakDao
         $query = "
             UPDATE employee_breaks
             SET
+                attendance_id             = :attendance_id            ,
+                break_schedule_history_id = :break_schedule_history_id,
                 start_time                = :start_time               ,
                 end_time                  = :end_time                 ,
-                break_duration_in_minutes = :break_duration_in_minutes
+                break_duration_in_minutes = :break_duration_in_minutes,
+                created_at                = :created_at
             WHERE
         ";
 
@@ -598,25 +631,36 @@ class EmployeeBreakDao
             $query .= " id = :employee_break_id";
         }
 
+        $isLocalTransaction = ! $this->pdo->inTransaction();
+
         try {
-            $this->pdo->beginTransaction();
+            if ($isLocalTransaction) {
+                $this->pdo->beginTransaction();
+            }
 
             $statement = $this->pdo->prepare($query);
 
+            $statement->bindValue(":attendance_id"            , $employeeBreak->getAttendanceId()          , Helper::getPdoParameterType($employeeBreak->getAttendanceId()          ));
+            $statement->bindValue(":break_schedule_history_id", $employeeBreak->getBreakScheduleHistoryId(), Helper::getPdoParameterType($employeeBreak->getBreakScheduleHistoryId()));
             $statement->bindValue(":start_time"               , $employeeBreak->getStartTime()             , Helper::getPdoParameterType($employeeBreak->getStartTime()             ));
             $statement->bindValue(":end_time"                 , $employeeBreak->getEndTime()               , Helper::getPdoParameterType($employeeBreak->getEndTime()               ));
             $statement->bindValue(":break_duration_in_minutes", $employeeBreak->getBreakDurationInMinutes(), Helper::getPdoParameterType($employeeBreak->getBreakDurationInMinutes()));
+            $statement->bindValue(":created_at"               , $employeeBreak->getCreatedAt()             , Helper::getPdoParameterType($employeeBreak->getCreatedAt()             ));
 
             $statement->bindValue(":employee_break_id"        , $employeeBreak->getId()                    , Helper::getPdoParameterType($employeeBreak->getId()                    ));
 
             $statement->execute();
 
-            $this->pdo->commit();
+            if ($isLocalTransaction) {
+                $this->pdo->commit();
+            }
 
             return ActionResult::SUCCESS;
 
         } catch (PDOException $exception) {
-            $this->pdo->rollBack();
+            if ($isLocalTransaction) {
+                $this->pdo->rollBack();
+            }
 
             error_log("Database Error: An error occurred while updating the employee break record. " .
                       "Exception: {$exception->getMessage()}");
@@ -645,8 +689,12 @@ class EmployeeBreakDao
             $query .= " id = :employee_break_id";
         }
 
+        $isLocalTransaction = ! $this->pdo->inTransaction();
+
         try {
-            $this->pdo->beginTransaction();
+            if ($isLocalTransaction) {
+                $this->pdo->beginTransaction();
+            }
 
             $statement = $this->pdo->prepare($query);
 
@@ -654,12 +702,16 @@ class EmployeeBreakDao
 
             $statement->execute();
 
-            $this->pdo->commit();
+            if ($isLocalTransaction) {
+                $this->pdo->commit();
+            }
 
             return ActionResult::SUCCESS;
 
         } catch (PDOException $exception) {
-            $this->pdo->rollBack();
+            if ($isLocalTransaction) {
+                $this->pdo->rollBack();
+            }
 
             error_log("Database Error: An error occurred while deleting the employee break. " .
                       "Exception: {$exception->getMessage()}");
