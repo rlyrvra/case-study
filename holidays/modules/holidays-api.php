@@ -98,15 +98,17 @@ try {
             return;
         }
 
-        print_r($holidayData);
-
         $name = isset($holidayData['name']) && $holidayData['name'] !== '' ? validateInput($holidayData['name'], "Name") : null;
         $startDate = isset($holidayData['start_date']) ? 
                 date('Y-m-d', strtotime(validateInput($holidayData['start_date'], 'Start Date'))) : '1970-01-01';
         $endDate = isset($holidayData['end_date']) ? 
                 date('Y-m-d', strtotime(validateInput($holidayData['end_date'], 'End Date'))) : '1970-01-01';
-        $isPaid = isset($holidayData['isPaid']) && $holidayData['isPaid'] !== '' ? $holidayData['isPaid'] : null;
-        $isRecurring = isset($holidayData['isRecurring']) && $holidayData['isRecurring'] !== '' ? $holidayData['isRecurring'] : null;
+        $isPaid = 
+        (isset($holidayData['isPaid']) && validateInput($holidayData['isPaid'], "Is Paid") === 'true') 
+        ? true : false;
+        $isRecurring = 
+        (isset($holidayData['isRecurring']) && validateInput($holidayData['isRecurring'], "Is Recurring") === 'true') 
+        ? true : false;
         $description = isset($holidayData['description']) ? $holidayData['description'] : null;
         $status = isset($holidayData['status']) ? validateInput($holidayData['status'], "Status") : null;
         
