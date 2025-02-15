@@ -23,7 +23,7 @@ class BreakScheduleService
         ? int   $limit                = null,
         ? int   $offset               = null,
           bool  $includeTotalRowCount = true
-    ): ActionResult|array {
+    ): array|ActionResult {
 
         return $this->breakScheduleRepository->fetchAllBreakSchedules(
             columns             : $columns             ,
@@ -33,11 +33,6 @@ class BreakScheduleService
             offset              : $offset              ,
             includeTotalRowCount: $includeTotalRowCount
         );
-    }
-
-    public function fetchLatestBreakScheduleHistoryId(int $breakScheduleId): int|null|ActionResult
-    {
-        return $this->breakScheduleRepository->fetchLatestBreakScheduleHistoryId($breakScheduleId);
     }
 
     public function updateBreakSchedule(BreakSchedule $breakSchedule, bool $isHashedId = false): ActionResult

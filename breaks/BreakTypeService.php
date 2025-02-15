@@ -23,7 +23,7 @@ class BreakTypeService
         ? int   $limit                = null,
         ? int   $offset               = null,
           bool  $includeTotalRowCount = true
-    ): ActionResult|array {
+    ): array|ActionResult {
 
         return $this->breakTypeRepository->fetchAllBreakTypes(
             columns             : $columns             ,
@@ -33,11 +33,6 @@ class BreakTypeService
             offset              : $offset              ,
             includeTotalRowCount: $includeTotalRowCount
         );
-    }
-
-    public function fetchLatestBreakTypeHistoryId(int $breakTypeId): int|null|ActionResult
-    {
-        return $this->breakTypeRepository->fetchLatestBreakTypeHistoryId($breakTypeId);
     }
 
     public function updateBreakType(BreakType $breakType, bool $isHashedId = false): ActionResult

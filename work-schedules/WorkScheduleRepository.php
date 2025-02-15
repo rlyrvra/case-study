@@ -16,9 +16,9 @@ class WorkScheduleRepository
         return $this->workScheduleDao->create($workSchedule);
     }
 
-    public function createWorkScheduleHistory(WorkSchedule $workSchedule): ActionResult
+    public function createWorkScheduleSnapshot(WorkScheduleSnapshot $workScheduleSnapshot): int|ActionResult
     {
-        return $this->workScheduleDao->createHistory($workSchedule);
+        return $this->workScheduleDao->createSnapshot($workScheduleSnapshot);
     }
 
     public function fetchAllWorkSchedules(
@@ -28,7 +28,7 @@ class WorkScheduleRepository
         ? int   $limit                = null,
         ? int   $offset               = null,
           bool  $includeTotalRowCount = true
-    ): ActionResult|array {
+    ): array|ActionResult {
 
         return $this->workScheduleDao->fetchAll(
             columns             : $columns             ,
@@ -40,19 +40,9 @@ class WorkScheduleRepository
         );
     }
 
-    public function fetchLatestWorkScheduleHistoryId(int $workScheduleId): int|null|ActionResult
+    public function fetchLatestWorkScheduleSnapshotById(int $workScheduleId): array|ActionResult
     {
-        return $this->workScheduleDao->fetchLatestHistoryId($workScheduleId);
-    }
-
-    public function fetchWorkScheduleLastInsertedId(): ActionResult|int
-    {
-        return $this->workScheduleDao->fetchLastInsertedId();
-    }
-
-    public function fetchLatestWorkScheduleHistory(int $workScheduleId): array|ActionResult
-    {
-        return $this->workScheduleDao->fetchLatestHistory($workScheduleId);
+        return $this->workScheduleDao->fetchLatestSnapshotById($workScheduleId);
     }
 
     public function updateWorkSchedule(WorkSchedule $workSchedule, bool $isHashedId = false): ActionResult
@@ -60,7 +50,7 @@ class WorkScheduleRepository
         return $this->workScheduleDao->update($workSchedule, $isHashedId);
     }
 
-    public function getRecurrenceDates(string $recurrenceRule, string $startDate, string $endDate): array
+    public function getRecurrenceDates(string $recurrenceRule, string $startDate, string $endDate): array|ActionResult
     {
         return $this->workScheduleDao->getRecurrenceDates($recurrenceRule, $startDate, $endDate);
     }

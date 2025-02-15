@@ -16,6 +16,11 @@ class BreakScheduleRepository
         return $this->breakScheduleDao->create($breakSchedule);
     }
 
+    public function createBreakScheduleSnapshot(BreakScheduleSnapshot $breakScheduleSnapshot): int|ActionResult
+    {
+        return $this->breakScheduleDao->createSnapshot($breakScheduleSnapshot);
+    }
+
     public function fetchAllBreakSchedules(
         ? array $columns              = null,
         ? array $filterCriteria       = null,
@@ -23,7 +28,7 @@ class BreakScheduleRepository
         ? int   $limit                = null,
         ? int   $offset               = null,
           bool  $includeTotalRowCount = true
-    ): ActionResult|array {
+    ): array|ActionResult {
 
         return $this->breakScheduleDao->fetchAll(
             columns             : $columns             ,
@@ -35,9 +40,9 @@ class BreakScheduleRepository
         );
     }
 
-    public function fetchLatestBreakScheduleHistoryId(int $breakScheduleId): int|null|ActionResult
+    public function fetchLatestBreakScheduleSnapshotById(int $breakScheduleId): array|ActionResult
     {
-        return $this->breakScheduleDao->fetchLatestHistoryId($breakScheduleId);
+        return $this->breakScheduleDao->fetchLatestSnapshotById($breakScheduleId);
     }
 
     public function updateBreakSchedule(BreakSchedule $breakSchedule, bool $isHashedId = false): ActionResult
