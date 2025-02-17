@@ -57,8 +57,8 @@ class AttendanceService
     public function handleRfidTap(string $rfidUid, string $currentDateTime)
     {
         $employeeColumns = [
-            'id'
-        ];
+			'id'
+		];
 
         $employeeFilterCriteria = [
             [
@@ -72,14 +72,14 @@ class AttendanceService
             ]
         ];
 
-        $employeeFetchResult = $this->employeeRepository->fetchAllEmployees(
+        $employeeId = $this->employeeRepository->fetchAllEmployees(
             columns             : $employeeColumns       ,
             filterCriteria      : $employeeFilterCriteria,
             limit               : 1                      ,
             includeTotalRowCount: false
         );
 
-        if ($employeeFetchResult === ActionResult::FAILURE) {
+        if ($employeeId === ActionResult::FAILURE) {
             return [
                 'status'  => 'error',
                 'message' => 'An unexpected error occurred. Please try again later.'
@@ -87,14 +87,15 @@ class AttendanceService
         }
 
         $employeeId =
-            ! empty($employeeFetchResult['result_set'])
-                ? $employeeFetchResult['result_set'][0]['id']
+            ! empty($employeeId['result_set'])
+                ? $employeeId['result_set'][0]['id']
                 : [];
 
         if (empty($employeeId)) {
             return [
                 'status'  => 'warning',
-                'message' => 'No employee found. This RFID may be invalid or not associated with any employee.'
+                'message' => 'No employee found. This RFID may be invalid or ' .
+                			 'not associated with any employee.'
             ];
         }
 
@@ -122,14 +123,10 @@ class AttendanceService
                 'value'    => $employeeId
             ],
             [
-                'column'   => 'leave_request.start_date',
-                'operator' => '<='                      ,
-                'value'    => $formattedCurrentDate
-            ],
-            [
-                'column'   => 'leave_request.end_date',
-                'operator' => '>='                    ,
-                'value'    => $formattedCurrentDate
+            	'column'      => $formattedCurrentDate     ,
+            	'operator'    => 'BETWEEN'                 ,
+            	'lower_bound' => 'leave_request.start_date',
+            	'upper_bound' => 'leave_request.end_date'
             ],
             [
                 'column'   => 'leave_request.status',
@@ -138,14 +135,14 @@ class AttendanceService
             ]
         ];
 
-        $leaveRequestFetchResult = $this->leaveRequestRepository->fetchAllLeaveRequests(
+        $isOnLeaveToday = $this->leaveRequestRepository->fetchAllLeaveRequests(
             columns             : $leaveRequestColumns       ,
             filterCriteria      : $leaveRequestFilterCriteria,
             limit               : 1                          ,
             includeTotalRowCount: false
         );
 
-        if ($leaveRequestFetchResult === ActionResult::FAILURE) {
+        if ($isOnLeaveToday === ActionResult::FAILURE) {
             return [
                 'status'  => 'error',
                 'message' => 'An unexpected error occurred. Please try again later.'
@@ -153,8 +150,8 @@ class AttendanceService
         }
 
         $isOnLeaveToday =
-            ! empty($leaveRequestFetchResult['result_set'])
-                ? $leaveRequestFetchResult['result_set'][0]
+            ! empty($isOnLeaveToday['result_set'])
+                ? $isOnLeaveToday['result_set'][0]
                 : [];
 
         if ( ! empty($isOnLeaveToday) && ! $isOnLeaveToday['is_half_day']) {
@@ -164,7 +161,7 @@ class AttendanceService
             ];
         }
 
-        $attendanceColumns = [
+        $attendanceRecordColumns = [
             'id'                                                      ,
             'work_schedule_snapshot_id'                               ,
             'date'                                                    ,
@@ -191,7 +188,7 @@ class AttendanceService
             'work_schedule_snapshot_minutes_can_check_in_before_shift'
         ];
 
-        $attendanceFilterCriteria = [
+        $attendanceRecordFilterCriteria = [
             [
                 'column'   => 'attendance.deleted_at',
                 'operator' => 'IS NULL'
@@ -203,7 +200,7 @@ class AttendanceService
             ]
         ];
 
-        $attendanceSortCriteria = [
+        $attendanceRecordSortCriteria = [
             [
                 'column'    => 'attendance.date',
                 'direction' => 'DESC'
@@ -214,15 +211,15 @@ class AttendanceService
             ]
         ];
 
-        $attendanceFetchResult = $this->attendanceRepository->fetchAllAttendance(
-            columns             : $attendanceColumns       ,
-            filterCriteria      : $attendanceFilterCriteria,
-            sortCriteria        : $attendanceSortCriteria  ,
-            limit               : 1                        ,
+        $lastAttendanceRecord = $this->attendanceRepository->fetchAllAttendance(
+            columns             : $attendanceRecordColumns       ,
+            filterCriteria      : $attendanceRecordFilterCriteria,
+            sortCriteria        : $attendanceRecordSortCriteria  ,
+            limit               : 1                              ,
             includeTotalRowCount: false
         );
 
-        if ($attendanceFetchResult === ActionResult::FAILURE) {
+        if ($lastAttendanceRecord === ActionResult::FAILURE) {
             return [
                 'status'  => 'error',
                 'message' => 'An unexpected error occurred. Please try again later.'
@@ -230,8 +227,8 @@ class AttendanceService
         }
 
         $lastAttendanceRecord =
-            ! empty($attendanceFetchResult['result_set'])
-                ? $attendanceFetchResult['result_set'][0]
+            ! empty($lastAttendanceRecord['result_set'])
+                ? $lastAttendanceRecord['result_set'][0]
                 : [];
 
         if (empty($lastAttendanceRecord) ||
@@ -511,6 +508,12 @@ class AttendanceService
                         'message' => 'You are on leave. You cannot check in or check out.'
                     ];
                 }
+            }
+
+            if ($isUsingLastAttendanceWorkSchedule) {
+
+            } else {
+
             }
 
             $breakScheduleColumns = [
@@ -857,8 +860,6 @@ class AttendanceService
                 }
 
                 if ( ! empty($breakSchedules)) {
-                    $currentAttendanceRecordId = $this->pdo->lastInsertId();
-
                     foreach ($breakSchedules as $breakSchedule) {
                         $latestBreakTypeSnapshot = $this->breakTypeRepository
                             ->fetchLatestBreakTypeSnapshotById($breakSchedule['break_type_id']);
@@ -947,12 +948,11 @@ class AttendanceService
                         }
 
                         $employeeBreakRecord = new EmployeeBreak(
-                            id                     : null                      ,
-                            attendanceId           : $currentAttendanceRecordId,
-                            breakScheduleSnapshotId: $breakScheduleSnapshotId  ,
-                            startTime              : null                      ,
-                            endTime                : null                      ,
-                            breakDurationInMinutes : 0                         ,
+                            id                     : null                     ,
+                            breakScheduleSnapshotId: $breakScheduleSnapshotId ,
+                            startTime              : null                     ,
+                            endTime                : null                     ,
+                            breakDurationInMinutes : 0                        ,
                             createdAt              : $formattedCurrentDateTime
                         );
 
@@ -991,19 +991,40 @@ class AttendanceService
         } elseif ($lastAttendanceRecord['check_in_time' ] !== null &&
                   $lastAttendanceRecord['check_out_time'] === null) {
 
+            $isCheckIn = false;
+
+            $workScheduleDate      = $lastAttendanceRecord['date'                             ];
+            $workScheduleStartTime = $lastAttendanceRecord['work_schedule_snapshot_start_time'];
+            $workScheduleEndTime   = $lastAttendanceRecord['work_schedule_snapshot_end_time'  ];
+
+            $workScheduleStartDateTime = new DateTime($workScheduleDate . ' ' . $workScheduleStartTime);
+            $workScheduleEndDateTime   = new DateTime($workScheduleDate . ' ' . $workScheduleEndTime  );
+
+            if ($workScheduleEndDateTime <= $workScheduleStartDateTime) {
+                $workScheduleEndDateTime->modify('+1 day');
+            }
+
+            $earlyCheckInWindow = $lastAttendanceRecord['work_schedule_snapshot_minutes_can_check_in_before_shift'];
+
+            $adjustedWorkScheduleStartDateTime = (clone $workScheduleStartDateTime)
+                ->modify('-' . $earlyCheckInWindow . ' minutes');
+
+            $checkInDateTime  = new DateTime($lastAttendanceRecord['check_in_time']);
+            $checkOutDateTime = $currentDateTime;
+
             $employeeBreakColumns = [
-                'break_schedule_history_id'                 ,
-                'start_time'                                ,
-                'end_time'                                  ,
+                'break_schedule_snapshot_id'                 ,
+                'start_time'                                 ,
+                'end_time'                                   ,
 
-                'break_schedule_history_start_time'         ,
-                'break_schedule_history_end_time'           ,
-                'break_schedule_history_is_flexible'        ,
-                'break_schedule_history_earliest_start_time',
-                'break_schedule_history_latest_end_time'    ,
+                'break_schedule_snapshot_start_time'         ,
+                'break_schedule_snapshot_end_time'           ,
+                'break_schedule_snapshot_is_flexible'        ,
+                'break_schedule_snapshot_earliest_start_time',
+                'break_schedule_snapshot_latest_end_time'    ,
 
-                'break_type_history_duration_in_minutes'    ,
-                'break_type_history_is_paid'
+                'break_type_snapshot_duration_in_minutes'    ,
+                'break_type_snapshot_is_paid'
             ];
 
             $employeeBreakFilterCriteria = [
@@ -1012,9 +1033,15 @@ class AttendanceService
                     'operator' => 'IS NULL'
                 ],
                 [
-                    'column'   => 'employee_break.attendance_id',
-                    'operator' => '='                           ,
-                    'value'    => $lastAttendanceRecord['id']
+                    'column'   => 'break_schedule_snapshot.work_schedule_snapshot_id',
+                    'operator' => '='                                                ,
+                    'value'    => $lastAttendanceRecord['work_schedule_snapshot_id']
+                ],
+                [
+                    'column'      => 'employee_break.created_at'                              ,
+                    'operator'    => 'BETWEEN'                                                ,
+                    'lower_bound' => $adjustedWorkScheduleStartDateTime->format('Y-m-d H:i:s'),
+                    'upper_bound' => $workScheduleEndDateTime          ->format('Y-m-d H:i:s')
                 ]
             ];
 
@@ -1048,17 +1075,16 @@ class AttendanceService
                     ? $employeeBreakFetchResult['result_set']
                     : [];
 
+            $paidBreakInMinutes   = 0;
+            $unpaidBreakInMinutes = 0;
+
             if ( ! empty($breakRecords)) {
                 $groupedBreakRecords = [];
-
                 foreach ($breakRecords as $breakRecord) {
-                    $breakScheduleId = $breakRecord['break_schedule_history_id'];
-
-                    $groupedBreakRecords[$breakScheduleId][] = $breakRecord;
+                    $groupedBreakRecords[$breakRecord['break_schedule_snapshot_id']][] = $breakRecord;
                 }
 
                 $mergedBreakRecords = [];
-
                 foreach ($groupedBreakRecords as $breakRecords) {
                     $firstBreakRecord = $breakRecords[0];
 
@@ -1099,37 +1125,135 @@ class AttendanceService
                 }
 
                 foreach ($mergedBreakRecords as $breakRecord) {
-                    $breakRecordStartTime = $breakRecord['start_time'];
-                    $breakRecordEndTime   = $breakRecord['end_time'  ];
+                    $breakRecordStartTime =
+                        $breakRecord['start_time']
+                            ? (new DateTime($breakRecord['start_time']))->format('H:i:s')
+                            : null;
 
-                    if ($breakRecordStartTime !== null && $breakRecordEndTime !== null) {
+                    $breakScheduleStartTime = $breakRecord['break_schedule_snapshot_start_time'];
 
-                    } elseif ($breakRecordStartTime !== null && $breakRecordEndTime === null) {
+                    if ($breakRecord['break_schedule_snapshot_is_flexible']) {
+                        $breakScheduleStartTime =
+                            $breakRecordStartTime
+                                ?? $breakRecord['break_schedule_snapshot_earliest_start_time'];
+                    }
 
-                    } elseif ($breakRecordStartTime === null && $breakRecordEndTime === null) {
+                    $breakScheduleEndTime = (new DateTime($breakScheduleStartTime))
+                        ->modify('+' . $breakRecord['break_type_snapshot_duration_in_minutes'] . ' minutes')
+                        ->format('H:i:s');
+
+                    $breakScheduleStartDateTime = new DateTime($lastAttendanceRecord['date'] . ' ' . $breakScheduleStartTime);
+                    $breakScheduleEndDateTime   = new DateTime($lastAttendanceRecord['date'] . ' ' . $breakScheduleEndTime  );
+
+                    if ($breakScheduleStartDateTime < $workScheduleStartDateTime) {
+                        $breakScheduleStartDateTime->modify('+1 day');
+                    }
+
+                    if ($breakScheduleEndDateTime < $workScheduleStartDateTime) {
+                        $breakScheduleEndDateTime->modify('+1 day');
+                    }
+
+                    if ($breakScheduleEndDateTime < $breakScheduleStartDateTime) {
+                        $breakScheduleEndDateTime->modify('+1 day');
+                    }
+
+                    if ($checkInDateTime > $breakScheduleStartDateTime) {
+                        $breakScheduleStartDateTime = clone $checkInDateTime;
+                    }
+
+                    if ($checkOutDateTime >= $breakScheduleStartDateTime) {
+                        $breakRecordEndDateTime =
+                            $breakRecord['end_time']
+                                ? new DateTime($breakRecord['end_time'])
+                                : null;
+
+                        if ($breakRecordEndDateTime !== null &&
+                            $breakRecordEndDateTime > $breakScheduleEndDateTime) {
+
+                            $actualBreakDurationInMinutes =
+                                $breakScheduleStartDateTime->diff($breakRecordEndDateTime)->h * 60 +
+                                $breakScheduleStartDateTime->diff($breakRecordEndDateTime)->i;
+
+                            $breakScheduleDurationInMinutes =
+                                $breakScheduleStartDateTime->diff($breakScheduleEndDateTime)->h * 60 +
+                                $breakScheduleStartDateTime->diff($breakScheduleEndDateTime)->i;
+
+                            $overtimeBreakDurationInMinutes =
+                                $breakRecordEndDateTime->diff($breakScheduleEndDateTime)->h * 60 +
+                                $breakRecordEndDateTime->diff($breakScheduleEndDateTime)->i;
+
+                            if ($breakRecord['break_type_snapshot_is_paid']) {
+                                $paidBreakInMinutes   += $breakScheduleDurationInMinutes;
+                                $unpaidBreakInMinutes += $overtimeBreakDurationInMinutes;
+
+                            } else {
+                                $unpaidBreakInMinutes += $actualBreakDurationInMinutes;
+                            }
+
+                        } else {
+                            $breakScheduleEndDateTime =
+                                $checkOutDateTime >= $breakScheduleEndDateTime
+                                    ? $breakScheduleEndDateTime
+                                    : $checkOutDateTime;
+
+                            $breakDuration = $breakScheduleStartDateTime
+                                ->diff($breakScheduleEndDateTime);
+
+                            $breakDurationInMinutes = ($breakDuration->h * 60) + $breakDuration->i;
+
+                            if ($breakRecord['break_type_snapshot_is_paid']) {
+                                $paidBreakInMinutes += $breakDurationInMinutes;
+
+                            } else {
+                                $unpaidBreakInMinutes += $breakDurationInMinutes;
+                            }
+                        }
                     }
                 }
             }
 
             $attendanceColumns = [
-                ''
+                'id'                             ,
+                'work_schedule_snapshot_id'      ,
+                'date'                           ,
+                'check_in_time'                  ,
+                'check_out_time'                 ,
+                'total_break_duration_in_minutes',
+                'total_hours_worked'             ,
+                'late_check_in'                  ,
+                'early_check_out'                ,
+                'overtime_hours'                 ,
+                'is_overtime_approved'           ,
+                'attendance_status'              ,
+                'remarks'
             ];
 
             $attendanceFilterCriteria = [
+                [
+                    'column'   => 'attendance.deleted_at',
+                    'operator' => 'IS NULL'
+                ],
+                [
+                    'column'   => 'attendance.work_schedule_snapshot_id'            ,
+                    'operator' => '='                                               ,
+                    'value'    => $lastAttendanceRecord['work_schedule_snapshot_id']
+                ],
                 [
                     'column'   => 'attendance.date'            ,
                     'operator' => '='                          ,
                     'value'    => $lastAttendanceRecord['date']
                 ],
                 [
-                    'column'   => '',
-                    'operator' => '',
-                    'value'    => ''
+                    'column'   => 'attendance.id'            ,
+                    'operator' => '!='                       ,
+                    'value'    => $lastAttendanceRecord['id']
                 ]
             ];
 
             $attendanceSortCriteria = [
                 [
+                    'column'   => 'attendance.check_in_time',
+                    'operator' => 'ASC'
                 ]
             ];
 
@@ -1147,10 +1271,142 @@ class AttendanceService
                 ];
             }
 
-            // Check out
+            $currentAttendanceRecords =
+                ! empty($attendanceFetchResult['result_set'])
+                    ? $attendanceFetchResult['result_set']
+                    : [];
+
+            $sumOfAllWorkedHours            = 0;
+            $sumOfAllBreakDurationInMinutes = 0;
+
+            if ( ! empty($currentAttendanceRecords)) {
+                foreach ($currentAttendanceRecords as $attendanceRecord) {
+                    $sumOfAllWorkedHours            += $attendanceRecord['total_hours_worked'             ];
+                    $sumOfAllBreakDurationInMinutes += $attendanceRecord['total_break_duration_in_minutes'];
+                }
+            }
+
+            $currentAttendanceStatus = $lastAttendanceRecord['attendance_status'];
+
+            $totalBreakDurationInMinutes = $unpaidBreakInMinutes + $paidBreakInMinutes + $sumOfAllBreakDurationInMinutes;
+
+            $adjustedCheckInDateTime = clone $checkInDateTime;
+            if ($checkInDateTime < $workScheduleStartDateTime && ! $lastAttendanceRecord['work_schedule_snapshot_is_flextime']) {
+                $adjustedCheckInDateTime = clone $workScheduleStartDateTime;
+            }
+
+            $workDuration = $adjustedCheckInDateTime->diff($checkOutDateTime);
+            $totalMinutesWorked = ($workDuration->days * 24 * 60) + ($workDuration->h * 60) + $workDuration->i;
+            $totalMinutesWorked -= $unpaidBreakInMinutes;
+            $totalHoursWorked = $totalMinutesWorked / 60;
+
+            $totalHoursWorked += $sumOfAllWorkedHours;
+
+            $earlyCheckOutInMinutes = 0;
+            $overtimeHours          = 0;
+
+            if ($totalHoursWorked < $lastAttendanceRecord['work_schedule_snapshot_total_work_hours']) {
+                $earlyCheckOutInMinutes = ($lastAttendanceRecord['work_schedule_snapshot_total_work_hours'] - $totalHoursWorked) * 60;
+                $currentAttendanceStatus = 'Undertime';
+
+            } elseif (floor($totalHoursWorked) > $lastAttendanceRecord['work_schedule_snapshot_total_work_hours']) {
+                $overtimeHours = floor($totalHoursWorked) - $lastAttendanceRecord['work_schedule_snapshot_total_work_hours'];
+                $currentAttendanceStatus = 'Overtime';
+
+            } elseif ($lastAttendanceRecord['attendance_status'] !== 'Late') {
+                $currentAttendanceStatus = 'Present';
+            }
+
+            try {
+                $this->pdo->beginTransaction();
+
+                $currentAttendanceRecord = new Attendance(
+                    id                          : $lastAttendanceRecord['id'                               ],
+                    workScheduleSnapshotId      : $lastAttendanceRecord['work_schedule_snapshot_id'        ],
+                    date                        : $lastAttendanceRecord['date'                             ],
+                    checkInTime                 : $lastAttendanceRecord['check_in_time'                    ],
+                    checkOutTime                : $checkOutDateTime->format('Y-m-d H:i:s')                  ,
+                    totalBreakDurationInMinutes : $totalBreakDurationInMinutes                              ,
+                    totalHoursWorked            : $totalHoursWorked                                         ,
+                    lateCheckIn                 : $lastAttendanceRecord['late_check_in'                    ],
+                    earlyCheckOut               : $earlyCheckOutInMinutes                                   ,
+                    overtimeHours               : $overtimeHours                                            ,
+                    isOvertimeApproved          : $lastAttendanceRecord['is_overtime_approved'             ],
+                    attendanceStatus            : $currentAttendanceStatus                                  ,
+                    remarks                     : $lastAttendanceRecord['remarks'                          ]
+                );
+
+                $attendanceCheckOutResult = $this->attendanceRepository->checkOut($currentAttendanceRecord);
+
+                if ($attendanceCheckOutResult === ActionResult::FAILURE) {
+                    return [
+                        'status'  => 'error',
+                        'message' => 'An unexpected error occurred. Please try again later.'
+                    ];
+                }
+
+                if ( ! empty($currentAttendanceRecords)) {
+                    $lastRecordIndex = count($currentAttendanceRecords) - 1;
+                    $lastRecord = $currentAttendanceRecords[$lastRecordIndex];
+
+                    $currentAttendanceRecord = new Attendance(
+                        id                         : $lastRecord['id'                             ],
+                        workScheduleSnapshotId     : $lastRecord['work_schedule_snapshot_id'      ],
+                        date                       : $lastRecord['date'                           ],
+                        checkInTime                : $lastRecord['check_in_time'                  ],
+                        checkOutTime               : $lastRecord['check_out_time'                 ],
+                        totalBreakDurationInMinutes: $lastRecord['total_break_duration_in_minutes'],
+                        totalHoursWorked           : $lastRecord['total_hours_worked'             ],
+                        lateCheckIn                : $lastRecord['late_check_in'                  ],
+                        earlyCheckOut              : 0                                             ,
+                        overtimeHours              : $lastRecord['overtime_hours'                 ],
+                        isOvertimeApproved         : $lastRecord['is_overtime_approved'           ],
+                        attendanceStatus           : $currentAttendanceStatus                      ,
+                        remarks                    : $lastRecord['remarks'                        ]
+                    );
+
+                    $attendanceUpdateResult = $this->attendanceRepository->updateAttendance($currentAttendanceRecord);
+
+                    if ($attendanceUpdateResult === ActionResult::FAILURE) {
+                        return [
+                            'status' => 'error',
+                            'message' => 'Failed to update the last attendance record.'
+                        ];
+                    }
+                }
+
+                $this->pdo->commit();
+
+            } catch (PDOException $exception) {
+                $this->pdo->rollback();
+
+                return [
+                    'status'  => 'error',
+                    'message' => 'An unexpected error occurred. Please try again later.'
+                ];
+
+            } catch (Exception $exception) {
+                $this->pdo->rollback();
+
+                return [
+                    'status'  => 'error',
+                    'message' => 'An unexpected error occurred. Please try again later.'
+                ];
+            }
         }
 
-        //outside
+        if ($isCheckIn) {
+            return [
+                'status'  => 'success',
+                'message' => 'Checked-in recorded successfully.'
+            ];
+
+        } else {
+            return [
+                'status'  => 'success',
+                'message' => 'Checked-out recorded successfully.'
+            ];
+        }
     }
 
     private function getCurrentWorkSchedule(
