@@ -178,6 +178,7 @@ class WorkScheduleDao
 
             "employee_rfid_uid"        => "employee.rfid_uid                  AS employee_rfid_uid"       ,
             "employee_full_name"       => "employee.full_name                 AS employee_full_name"      ,
+            "employee_email_address"   => "employee.email_address             AS employee_email_address"  ,
             "employee_job_title_id"    => "employee.job_title_id              AS employee_job_title_id"   ,
             "employee_department_id"   => "employee.department_id             AS employee_department_id"  ,
             "employee_profile_picture" => "employee.profile_picture           AS employee_profile_picture",

@@ -33,9 +33,13 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
 />
 
 <!-- Ajax -->
-<script src="work-schedules/modules/work-schedules-ajax.js?v1.4"></script>
+<script src="work-schedules/modules/work-schedules-ajax.js?v1.7"></script>
 <!-- Scripts -->
-<script src="work-schedules/modules/work-schedules-scripts.js?v1.5"></script>
+<script src="work-schedules/modules/work-schedules-scripts.js?v1.7"></script>
+<!-- Ajax -->
+<script src="work-schedules/modules/work-schedules-break-ajax.js?v1.1"></script>
+<!-- Scripts -->
+<script src="work-schedules/modules/work-schedules-break-scripts.js?v1.1"></script>
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -101,7 +105,7 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
             <div id="response-test"></div>
             <div class="container-fluid mb-3 d-flex justify-content-between flex-column flex-lg-row">
               <h1 class="display-1">Work Schedules</h1>
-              <button type="button" class="btn btn-success btn-xl" data-bs-toggle="modal" data-bs-target="#add_work_schedules">
+              <button type="button" class="btn btn-success btn-xl" data-bs-toggle="modal" data-bs-target="#add_work_schedules" onclick="fetchBreakTypes()">
                 <i class="bx bx-plus bx-lg"></i>Add Work Schedule
               </button>
               
@@ -110,7 +114,7 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
             <div class="container-fluid mb-3 d-flex justify-content-between flex-column flex-lg-row">
               <h1 class="display-2">Breaks</h1>
               <button type="button" class="btn btn-success btn-xl" data-bs-toggle="modal" data-bs-target="#add_breaks">
-                <i class="bx bx-plus bx-lg"></i>Add Breaks
+                <i class="bx bx-plus bx-lg"></i>Add Break Types
               </button>
 
             </div>
@@ -159,6 +163,10 @@ $(document).ready(function(){
   populateEmployeeSelect(document.getElementById("select_employee"));
 });
 </script>
+
+<div id="fetch_break_types">
+
+</div>
 
 
 

@@ -8,8 +8,8 @@ require_once __DIR__ . '/../WorkSchedule.php';
 require_once __DIR__ . '/../WorkScheduleRepository.php';
 require_once __DIR__ . '/../WorkScheduleService.php';
 require_once __DIR__ . '/../WorkScheduleDao.php';
+
 require_once __DIR__ . '/../../includes/Helper.php';
-require_once __DIR__ . '/../../includes/enums/ErrorCode.php';
 require_once __DIR__ . '/../../database/database.php';
 
 
@@ -44,13 +44,30 @@ try {
             ];
         }
 
-        if(!empty($searchFilter)){
+        if(empty($searchAt) && !empty($searchFilter)){
             $filterCriteria[] = [
-                "column" => "work_schedule." . $searchAt,
+                "column" => "employee.full_name", 
+                "operator" => "LIKE",
+                "value" => "%$searchFilter%", 
+                'boolean' => 'OR'
+
+            ];
+            $filterCriteria[] = [
+                "column" => "employee.email_address", 
+                "operator" => "LIKE",
+                "value" => "%$searchFilter%", 
+                'boolean' => 'OR'
+            ];
+        }
+
+        if(!empty($searchFilter) && !empty($searchAt)){
+            $filterCriteria[] = [
+                "column" => "employee." . $searchAt, 
                 "operator" => "LIKE",
                 "value" => "%$searchFilter%"
             ];
         }
+
         if((!empty($dateFilterColumn) && $dateFilterColumn !== "none") && !empty($dateStart) && !empty($dateEnd)){
             $filterCriteria[] = [
                 "column" => "work_schedule." . $dateFilterColumn,
@@ -103,13 +120,13 @@ try {
 
             // $core_end_time = isset($workScheduleData['core_end_time']) ? 
             //     date('Y-m-d H:i:s', strtotime(validateInput($workScheduleData['core_end_time'], 'Core End Time'))) : '1970-01-01 00:00:00';
-            $core_start_time = date('Y-m-d H:i:s', strtotime(validateInput('12:00AM', 'Core End Time')));
-            $core_end_time = date('Y-m-d H:i:s', strtotime(validateInput('11:59PM', 'Core End Time')));
+            // $core_start_time = date('Y-m-d H:i:s', strtotime(validateInput('12:00AM', 'Core End Time')));
+            // $core_end_time = date('Y-m-d H:i:s', strtotime(validateInput('11:59PM', 'Core End Time')));
             $total_hrs_per_week = isset($workScheduleData['total_hrs_per_week']) ? (int) validateInput($workScheduleData['total_hrs_per_week'], 'Total Hours Per Week') : null;
         }
         $total_work_hrs = isset($workScheduleData['total_work_hrs']) ? (int) (validateNumericIdentifier($workScheduleData['total_work_hrs'], 1, 3, 'Total Work Hours') * 6): null;
         $start_date = isset($workScheduleData['start_date']) ? validateInput($workScheduleData['start_date'], 'Start Date') : null;
-        $startDate = date('Y-m-d', strtotime($start_date));
+        
 
 
         // echo "Employee: " . $employee . PHP_EOL;
@@ -133,11 +150,9 @@ try {
             startTime: $start_time,
             endTime: $end_time,
             isFlextime: $is_flex_time,
-            coreHoursStartTime: $core_start_time,
-            coreHoursEndTime: $core_start_time,
             totalHoursPerWeek: $total_hrs_per_week,
             totalWorkHours: $total_work_hrs,
-            startDate: $start_date,
+            startDate: '2024-01-01',
             recurrenceRule: "FREQ=WEEKLY;INTERVAL=1;DTSTART={$start_date};BYDAY=MO,TU,WE,TH,FR,SA"
         );
 

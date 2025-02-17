@@ -1,15 +1,22 @@
 function fetchAllWorkSchedules(page = 1){
-    var numberEntries = $("#entries").val();
-    var sortByColumn = $("#sortBy").val();
+    var numberEntries = $("#entries-per-page").val();
+    var sortByColumn = getSortByColumn();
     var pageNumber = getPage(page);
-    if(sortByColumn == null) return;
-    var sortOrderBy = $("#orderBy").val();
-    if(sortOrderBy == null) return;
+    if(sortByColumn == null){
+        sortByColumn = "created_at";
+    };
+    var sortOrderBy = getOrderBy();
+    if(sortOrderBy == null) {
+        sortOrderBy = "DESC";
+    };
     var filterStatus = $("#status").val();
-    var searchColumn = $("#searchColumn").val();
-    var dateColumn = $("#dateColumn").val();
+    var searchColumn = $("#search_at").val();
+    if(searchColumn == 'none'){
+        searchColumn = "";
+    };
+    var dateColumn = getByDate();
     var startDate, endDate;
-    if(dateColumn !== "none"){
+    if(dateColumn){
         startDate = $("#dateStart").val();
         endDate = $("#dateEnd").val();
     }
@@ -67,21 +74,15 @@ function createWorkSchedule(){
     const start_time = document.getElementById('startTime').value;
     const end_time = document.getElementById('endTime').value;
     const is_flex_time = document.getElementById('isFlextime').checked;
-    const core_start_time = document.getElementById('coreStartTime').value;
-    const core_end_time = document.getElementById('coreEndTime').value;
     const total_hrs_per_week = document.getElementById('totalHoursPerWeek').value;
     const total_work_hrs = document.getElementById('totalWorkHours').value;
-    const start_date = document.getElementById('startDate').value;
     const work_schedule = {
         employee: employee,
         start_time: start_time,
         end_time: end_time,
         is_flex_time: is_flex_time,
-        core_start_time: core_start_time,
-        core_end_time: core_end_time,
         total_hrs_per_week: total_hrs_per_week,
         total_work_hrs: total_work_hrs,
-        start_date: start_date
     };
 
     //console.log(work_schedule);
@@ -97,6 +98,23 @@ function createWorkSchedule(){
             loadingSpinner.classList.add("visually-hidden");
             $('#response-test').html(response);
             fetchAllWorkSchedules();
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log("AJAX Error: " + textStatus + ": " + errorThrown);
+        }
+    });
+}
+
+let breakTypes;
+function fetchBreakTypes(){
+    $.ajax({
+        url: 'work-schedules/modules/work-schedules-break-api',
+        type: 'POST',
+        data: {
+            action: 'fetchBreakTypes',
+        },
+        success: function(response) {
+            $('#fetch_break_types').html(response);
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log("AJAX Error: " + textStatus + ": " + errorThrown);

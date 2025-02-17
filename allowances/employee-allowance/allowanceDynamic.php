@@ -2,7 +2,6 @@
 require_once __DIR__ . '/../AllowanceDao.php';
 require_once __DIR__ . '/../Allowance.php';
 require_once __DIR__ . '/../../includes/Helper.php';
-require_once __DIR__ . '/../../includes/enums/ErrorCode.php';
 require_once __DIR__ . '/../../database/database.php';
 
 // Example allowance data; replace this with your database query to fetch allowances
