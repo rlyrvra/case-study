@@ -41,15 +41,19 @@
             ?>
           </td>
           <td><?php echo htmlspecialchars($row['total_work_hours']); ?></td>
-          <?php if (!isset($status) || $status !== 'Archived') echo
+          <?php if (!isset($status) || $status !== 'Archived'){
+            echo
             '<td>
-              <button class="btn btn-info" title="Click to Edit" onclick="updateLeaveTypeClick(this)" data-bs-toggle="modal" data-bs-target="#update_leave_types_modal"> 
+              <button class="btn btn-info" title="Click to Edit" onclick="fetchWorkScheduleAndBreak(this); fetchBreakTypes();" data-bs-toggle="modal" data-bs-target="#update_work_schedules"> 
                 <i class="bx bx-edit-alt"></i>
               </button> 
-              <button class="btn btn-danger" title="Click to Delete" onclick="confirmDeleteLeaveTypes(this)">
+              <button class="btn btn-danger" title="Click to Delete" onclick="confirmDeleteWorkSchedule(this)">
                 <i class="bx bx-trash"></i>
               </button> 
             </td>';
+          } else {
+            echo "<td>" . htmlspecialchars($row['deleted_at']) . "</td>";
+          }
           ?>
         </tr>
       <?php endforeach; ?>

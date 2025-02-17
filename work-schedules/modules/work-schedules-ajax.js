@@ -84,6 +84,7 @@ function createWorkSchedule(){
         total_hrs_per_week: total_hrs_per_week,
         total_work_hrs: total_work_hrs,
     };
+    const breakSchedules = getCreateBreaksValues();
 
     //console.log(work_schedule);
 
@@ -92,7 +93,8 @@ function createWorkSchedule(){
         type: 'POST',
         data: {
             action: 'create',
-            work_schedule: work_schedule
+            work_schedule: work_schedule,
+            break_schedules: breakSchedules
         },
         success: function(response) {
             loadingSpinner.classList.add("visually-hidden");
@@ -105,6 +107,29 @@ function createWorkSchedule(){
     });
 }
 
+function deleteWorkSchedule(button){
+    const row = button.closest('tr');  // Get the closest row
+    const token = row.getAttribute('data-id');
+    
+    $.ajax({
+        url: 'work-schedules/modules/work-schedules-api',
+        type: 'POST',
+        data: {
+            action: 'delete',
+            token: token
+        },
+        success: function(response) {
+            $('#response-test').html(response);
+            fetchAllWorkSchedules();
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log("AJAX Error: " + textStatus + ": " + errorThrown);
+        }
+    });
+    
+}
+
+
 let breakTypes;
 function fetchBreakTypes(){
     $.ajax({
@@ -115,6 +140,28 @@ function fetchBreakTypes(){
         },
         success: function(response) {
             $('#fetch_break_types').html(response);
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log("AJAX Error: " + textStatus + ": " + errorThrown);
+        }
+    });
+}
+
+let currentBreakSchedule;
+function fetchWorkScheduleAndBreak(button){
+    const row = button.closest('tr');  // Get the closest row
+    const token = row.getAttribute('data-id');
+    $.ajax({
+        url: 'work-schedules/modules/work-schedules-break-api',
+        type: 'POST',
+        data: {
+            action: 'fetchBreakSchedule',
+            token: token
+        },
+        success: function(response) {
+            $('#fetch_break_schedule').html(response);
+            updateWorkScheduleData(currentBreakSchedule);
+            populateWorkSchedulesBreak(currentBreakSchedule);
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log("AJAX Error: " + textStatus + ": " + errorThrown);

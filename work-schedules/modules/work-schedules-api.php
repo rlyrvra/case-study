@@ -9,6 +9,11 @@ require_once __DIR__ . '/../WorkScheduleRepository.php';
 require_once __DIR__ . '/../WorkScheduleService.php';
 require_once __DIR__ . '/../WorkScheduleDao.php';
 
+require_once __DIR__ . '/../../breaks/BreakSchedule.php';
+require_once __DIR__ . '/../../breaks/BreakScheduleDao.php';
+require_once __DIR__ . '/../../breaks/BreakScheduleRepository.php';
+require_once __DIR__ . '/../../breaks/BreakScheduleService.php';
+
 require_once __DIR__ . '/../../includes/Helper.php';
 require_once __DIR__ . '/../../database/database.php';
 
@@ -37,9 +42,17 @@ try {
                 "column" => "employee.deleted_at",
                 "operator" => "IS NULL"
             ];
+            $filterCriteria[] = [
+                "column" => "work_schedule.deleted_at",
+                "operator" => "IS NOT NULL"
+            ];
         }else{
             $filterCriteria[] = [
                 "column" => "employee.deleted_at",
+                "operator" => "IS NULL"
+            ];
+            $filterCriteria[] = [
+                "column" => "work_schedule.deleted_at",
                 "operator" => "IS NULL"
             ];
         }
@@ -101,10 +114,12 @@ try {
 
     if($action === 'create'){
         $workScheduleData = $_POST['work_schedule'] ?? null;
-
+        $breakScheduleData = $_POST['break_schedules'] ?? null; 
         if (!$workScheduleData) {
             return;
         } 
+
+        
 
 
         $employee = isset($workScheduleData['employee']) ? validateInput($workScheduleData['employee'], 'Employee') : '';
@@ -112,37 +127,14 @@ try {
             date('Y-m-d H:i:s', strtotime(validateInput($workScheduleData['start_time'], 'Start Time'))) : '1970-01-01 00:00:00';
         $end_time = isset($workScheduleData['end_time']) ? 
             date('Y-m-d H:i:s', strtotime(validateInput($workScheduleData['end_time'], 'End Time'))) : '1970-01-01 00:00:00';
-        $is_flex_time = isset($workScheduleData['is_flex_time']) ? validateInput($workScheduleData['is_flex_time'], 'Is Flex Time') : null;
+        $is_flex_time = isset($workScheduleData['is_flex_time']) && $workScheduleData['is_flex_time'] === 'true' ? true : false;
         $core_start_time = null; $core_end_time = null; $total_hrs_per_week = null;
-        if($is_flex_time){
-            // $core_start_time = isset($workScheduleData['core_start_time']) ? 
-            //     date('Y-m-d H:i:s', strtotime(validateInput($workScheduleData['core_start_time'], 'Core Start Time'))) : '1970-01-01 00:00:00';
-
-            // $core_end_time = isset($workScheduleData['core_end_time']) ? 
-            //     date('Y-m-d H:i:s', strtotime(validateInput($workScheduleData['core_end_time'], 'Core End Time'))) : '1970-01-01 00:00:00';
-            // $core_start_time = date('Y-m-d H:i:s', strtotime(validateInput('12:00AM', 'Core End Time')));
-            // $core_end_time = date('Y-m-d H:i:s', strtotime(validateInput('11:59PM', 'Core End Time')));
-            $total_hrs_per_week = isset($workScheduleData['total_hrs_per_week']) ? (int) validateInput($workScheduleData['total_hrs_per_week'], 'Total Hours Per Week') : null;
+        if($is_flex_time === true){
+            $total_hrs_per_week = isset($workScheduleData['total_hrs_per_week']) ? (int) validateInput($workScheduleData['total_hrs_per_week'], 'Total Hours Per Week') * 6 : null;
         }
-        $total_work_hrs = isset($workScheduleData['total_work_hrs']) ? (int) (validateNumericIdentifier($workScheduleData['total_work_hrs'], 1, 3, 'Total Work Hours') * 6): null;
+        $total_work_hrs = isset($workScheduleData['total_work_hrs']) ? (int) (validateNumericIdentifier($workScheduleData['total_work_hrs'], 1, 4, 'Total Work Hours')): null;
         $start_date = isset($workScheduleData['start_date']) ? validateInput($workScheduleData['start_date'], 'Start Date') : null;
         
-
-
-        // echo "Employee: " . $employee . PHP_EOL;
-        // echo "Start Time: " . $start_time . PHP_EOL;
-        // echo "End Time: " . $end_time . PHP_EOL;
-        // echo "Is Flex Time: " . ($is_flex_time === null ? 'null' : ($is_flex_time ? 'true' : 'false')) . PHP_EOL;
-
-        // if ($is_flex_time) {
-        //     echo "Core Start Time: " . $core_start_time . PHP_EOL;
-        //     echo "Core End Time: " . $core_end_time . PHP_EOL;
-        //     echo "Total Hours Per Week: " . ($total_hrs_per_week === null ? 'null' : $total_hrs_per_week) . PHP_EOL;
-        // }
-
-        // echo "Total Work Hours: " . ($total_work_hrs === null ? 'null' : $total_work_hrs) . PHP_EOL;
-        // echo "Start Date: " . ($start_date === null ? 'null' : $start_date) . PHP_EOL;
-        // echo "Formatted Start Date: " . $startDate . PHP_EOL;
 
         $newWorkSchedule = new WorkSchedule(
             id: null,
@@ -159,6 +151,18 @@ try {
         $workScheduleRepository = new WorkScheduleRepository($workScheduleDao);
         $workScheduleService = new WorkScheduleService($workScheduleRepository);
         $createResult = $workScheduleService->createWorkSchedule($newWorkSchedule);
+        $lastWorkScheduleId = $workScheduleService->fetchLastWorkScheduleId();
+        
+        if ($lastWorkScheduleId === 0) {
+            $lastWorkScheduleId = getLastInsertIdBySql($pdo);
+        }
+        
+
+        if($breakScheduleData){
+            createBreakSchedules($pdo, $lastWorkScheduleId, $breakScheduleData);
+        }
+        
+
         if($createResult === ActionResult::SUCCESS){
             die("
             <script>
@@ -175,6 +179,28 @@ try {
 
         return;
     }
+    
+    if($action === 'delete'){
+        $hashed_id = $_POST['token'] ?? null;
+        if(!$hashed_id){
+            return;
+        }
+        $workScheduleRepository = new WorkScheduleRepository($workScheduleDao);
+        $workScheduleService = new WorkScheduleService($workScheduleRepository);
+        $deleteResult = $workScheduleService->deleteWorkSchedule($hashed_id);
+
+        if ($deleteResult === ActionResult::SUCCESS) {
+            die("
+            <script>
+                showSuccessDeletion();
+            </script>
+            ");
+        } else {
+            echo "Failed to delete work schedule. Please try again.";
+        }
+        return;
+    }
+
     echo "Invalid action specified.";
 } catch (Exception $e) {
     echo "Error: " . $e->getMessage();
@@ -210,7 +236,7 @@ function validateNumericIdentifier($value, $minLength, $maxLength, $fieldName = 
     $escapedFieldName = htmlspecialchars($fieldName, ENT_QUOTES, 'UTF-8');
 
     // Check if the value is strictly numeric
-    if (!ctype_digit($value)) {
+    if (!is_numeric($value)) {
         echo "
         <script>
             missingFieldValues('{$escapedFieldName}');
@@ -230,4 +256,34 @@ function validateNumericIdentifier($value, $minLength, $maxLength, $fieldName = 
     }
 
     return $value;
+}
+
+function getLastInsertIdBySql($pdo): int{
+    // Fallback: Manually retrieve the last inserted ID
+    $stmt = $pdo->query("SELECT id FROM work_schedules ORDER BY id DESC LIMIT 1");
+    $lastWorkScheduleId = $stmt->fetchColumn();
+    return $lastWorkScheduleId;
+}
+
+function createBreakSchedules($pdo, $workScheduleId, $breakSchedules){
+    $breakScheduleDao = new BreakScheduleDao($pdo);
+    $breakScheduleRepo = new BreakScheduleRepository($breakScheduleDao);
+    $breakScheduleService = new BreakScheduleService($breakScheduleRepo);
+    $createdCounter = 0;
+    foreach ($breakSchedules as $breakSchedule){
+        $newBreakSchedule = new BreakSchedule(
+            id: null,
+            workScheduleId: $workScheduleId,
+            breakTypeId: $breakSchedule['id'],
+            startTime: $breakSchedule['start_time'],
+            endTime: $breakSchedule['end_time'],
+            isFlexible: 0,
+            earliestStartTime: null,
+            latestEndTime: null
+        );
+        $createResult = $breakScheduleService->createBreakSchedule($newBreakSchedule);
+        if($createResult === ActionResult::SUCCESS){
+            $createdCounter++;
+        }
+    }
 }

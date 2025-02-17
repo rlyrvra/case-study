@@ -263,6 +263,11 @@ class WorkScheduleDao
 
                         break;
 
+                    case "IS NOT NULL":
+                        $whereClauses[] = "{$column} {$operator}";
+
+                        break;
+
                     case "BETWEEN":
                         $whereClauses    [] = "{$column} {$operator} ? AND ?";
                         $queryParameters [] = $filterCriterion["lower_bound"];
@@ -553,6 +558,11 @@ class WorkScheduleDao
     public function delete(int|string $workScheduleId, bool $isHashedId = false): ActionResult
     {
         return $this->softDelete($workScheduleId, $isHashedId);
+    }
+
+    public function fetchLastInsertedId(): int
+    {
+        return $this->pdo->lastInsertId();
     }
 
     private function softDelete(int|string $workScheduleId, bool $isHashedId = false): ActionResult

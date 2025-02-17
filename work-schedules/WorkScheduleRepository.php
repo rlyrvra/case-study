@@ -55,6 +55,11 @@ class WorkScheduleRepository
         return $this->workScheduleDao->getRecurrenceDates($recurrenceRule, $startDate, $endDate);
     }
 
+    public function fetchLastWorkScheduleById(): int
+    {
+        return $this->workScheduleDao->fetchLastInsertedId();
+    }
+
     public function deleteWorkSchedule(int|string $workScheduleId, bool $isHashedId = false): ActionResult
     {
         return $this->workScheduleDao->delete($workScheduleId, $isHashedId);

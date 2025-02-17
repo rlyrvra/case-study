@@ -4,10 +4,20 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
     exit('This resource is only accessible via AJAX requests.');
 }
 
+require_once __DIR__ . '/../WorkSchedule.php';
+require_once __DIR__ . '/../WorkScheduleRepository.php';
+require_once __DIR__ . '/../WorkScheduleService.php';
+require_once __DIR__ . '/../WorkScheduleDao.php';
+
 require_once __DIR__ . '/../../breaks/BreakType.php';
 require_once __DIR__ . '/../../breaks/BreakTypeDao.php';
 require_once __DIR__ . '/../../breaks/BreakTypeRepository.php';
 require_once __DIR__ . '/../../breaks/BreakTypeService.php';
+
+require_once __DIR__ . '/../../breaks/BreakSchedule.php';
+require_once __DIR__ . '/../../breaks/BreakScheduleDao.php';
+require_once __DIR__ . '/../../breaks/BreakScheduleRepository.php';
+require_once __DIR__ . '/../../breaks/BreakScheduleService.php';
 
 require_once __DIR__ . '/../../includes/Helper.php';
 require_once __DIR__ . '/../../database/database.php';
@@ -68,6 +78,57 @@ try {
         </script>
         ");
         return;
+    }
+
+    if($action === 'fetchBreakSchedule'){
+        $token = $_POST['token'] ?? null;
+        if (!$token) {
+            return;
+        } 
+
+        $workScheduleDao = new WorkScheduleDao($pdo);
+        $workScheduleRepo = new WorkScheduleRepository($workScheduleDao);
+        $workScheduleService = new WorkScheduleService($workScheduleRepo);
+
+        $selectedColumns = ['start_time', 'end_time', 'is_flextime', 'total_hours_per_week', 'total_work_hours'];
+        $filterCriteria = [];
+        $filterCriteria[] = [
+            "column" => "work_schedule.id",
+            "operator" => "=",
+            "value" => $token
+        ];
+
+        $result = $workScheduleService->fetchAllWorkSchedules($selectedColumns, $filterCriteria, [], 1);
+        $workScheduleData = $result['result_set'];
+
+        $breakScheduleDao = new BreakScheduleDao($pdo);
+        $breakScheduleRepo = new BreakScheduleRepository($breakScheduleDao);
+        $breakScheduleService = new BreakScheduleService($breakScheduleRepo);
+
+
+        $selectedColumns = ['break_type_id', 'start_time', 'end_time'];
+        $filterCriteria = [];
+        $filterCriteria[] = [
+            "column" => "break_schedule.work_schedule_id",
+            "operator" => "=",
+            "value" => $token
+        ];
+
+        $result = $breakScheduleService->fetchAllBreakSchedules($selectedColumns, $filterCriteria, [], 5);
+        $breakScheduleData = $result['result_set'];
+
+
+        $currentData = [
+            ["work_schedule_data" => $workScheduleData],
+            ["break_schedules_data" => $breakScheduleData]
+        ];
+
+        die("
+        <script>
+        currentBreakSchedule = " . json_encode($currentData) .
+        "
+        </script>
+        ");
     }
 
 

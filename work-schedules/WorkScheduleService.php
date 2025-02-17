@@ -44,4 +44,9 @@ class WorkScheduleService
     {
         return $this->workScheduleRepository->deleteWorkSchedule($workScheduleId, $isHashedId);
     }
+
+    public function fetchLastWorkScheduleId(): int
+    {
+        return $this->workScheduleRepository->fetchLastWorkScheduleById();
+    }
 }

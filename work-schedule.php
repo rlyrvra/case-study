@@ -33,9 +33,9 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
 />
 
 <!-- Ajax -->
-<script src="work-schedules/modules/work-schedules-ajax.js?v1.7"></script>
+<script src="work-schedules/modules/work-schedules-ajax.js?v1.10"></script>
 <!-- Scripts -->
-<script src="work-schedules/modules/work-schedules-scripts.js?v1.7"></script>
+<script src="work-schedules/modules/work-schedules-scripts.js?v1.10"></script>
 <!-- Ajax -->
 <script src="work-schedules/modules/work-schedules-break-ajax.js?v1.1"></script>
 <!-- Scripts -->
@@ -94,6 +94,7 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
       document.getElementById("work-schedules-menu").classList.add("active");
     </script>
     <?php require_once __DIR__ . '/work-schedules/modules/work-schedules-modal-add-form.php' ?>
+    <?php require_once __DIR__ . '/work-schedules/modules/work-schedules-modal-update-form.php' ?>
     <?php require_once __DIR__ . '/work-schedules/modules/work-schedules-modal-breaks.php' ?>
     <!-- Layout container -->
     <div class="layout-page">
@@ -161,13 +162,16 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
 $(document).ready(function(){
   fetchAllWorkSchedules();
   populateEmployeeSelect(document.getElementById("select_employee"));
+  fetchBreakTypes();
 });
 </script>
 
 <div id="fetch_break_types">
 
 </div>
+<div id="fetch_break_schedule">
 
+</div>
 
 
 <!-- Core JS -->
