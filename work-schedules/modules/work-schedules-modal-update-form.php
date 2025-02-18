@@ -123,7 +123,7 @@
                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                     <i class="bx bx-arrow-back bx-xs"></i>Close
                 </button>
-                <button type="submit" class="btn btn-info" onclick="updateWorkSchedule();"><i class="bx bx-edit-alt bx-xs"></i>Update</button>
+                <button type="submit" class="btn btn-info" onclick="updateWorkScheduleBreak(this);" id="update_work_schedule_button"><i class="bx bx-edit-alt bx-xs"></i>Update</button>
             </div>   
             
         </div>

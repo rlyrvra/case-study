@@ -142,7 +142,7 @@ try {
         } else if ($createResult === ActionResult::FAILURE){
             echo "
             <script> 
-            //failedCreateUpdateTryAgain(); 
+            failedCreateUpdateTryAgain(); 
             </script>";
         }
         return;

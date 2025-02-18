@@ -121,9 +121,6 @@ try {
         
         
 
-        
-
-
         $employee = isset($workScheduleData['employee']) ? validateInput($workScheduleData['employee'], 'Employee') : '';
         $start_time = isset($workScheduleData['start_time']) ? 
             date('Y-m-d H:i:s', strtotime(validateInput($workScheduleData['start_time'], 'Start Time'))) : '1970-01-01 00:00:00';
@@ -135,7 +132,7 @@ try {
             $total_hrs_per_week = isset($workScheduleData['total_hrs_per_week']) ? (int) validateInput($workScheduleData['total_hrs_per_week'], 'Total Hours Per Week') * 6 : null;
         }
         $total_work_hrs = isset($workScheduleData['total_work_hrs']) ? (int) (validateNumericIdentifier($workScheduleData['total_work_hrs'], 1, 4, 'Total Work Hours')): null;
-        $start_date = isset($workScheduleData['start_date']) ? validateInput($workScheduleData['start_date'], 'Start Date') : null;
+        $start_date = '2024-01-01';
         
 
         $newWorkSchedule = new WorkSchedule(
@@ -146,7 +143,7 @@ try {
             isFlextime: $is_flex_time,
             totalHoursPerWeek: $total_hrs_per_week,
             totalWorkHours: $total_work_hrs,
-            startDate: '2024-01-01',
+            startDate: $startDate,
             recurrenceRule: "FREQ=WEEKLY;INTERVAL=1;DTSTART={$start_date};BYDAY=MO,TU,WE,TH,FR,SA"
         );
 
@@ -170,6 +167,7 @@ try {
                 $messageComposed .= "Work Schedule was created successfully";
                 break;
             default:
+                $pdo->rollback();
                 die("
                 <script>
                     showError();
@@ -229,6 +227,185 @@ try {
 
         return;
     }
+
+    if($action === 'update'){
+        $workScheduleData = $_POST['work_schedule'] ?? null;
+        $breakDifferences = $_POST['break_schedules'] ?? null; 
+        $workScheduleId = $_POST['token'] ?? null; 
+        if (!$workScheduleData) {
+            return;
+        }
+        if (!$breakDifferences) {
+            return;
+        }
+        if (!$workScheduleId) {
+            return;
+        }
+
+
+        $breakTobeUpdated = [];
+        $breakTobeCreated = [];
+        if ($breakDifferences && is_array($breakDifferences)) {
+            foreach ($breakDifferences as $breakSchedule) {
+                if (isset($breakSchedule['id'])) {
+                    // If "id" exists, add to the "to be updated" array
+                    $breakTobeUpdated[] = $breakSchedule;
+                } else {
+                    // If "id" does not exist, add to the "to be created" array
+                    $breakTobeCreated[] = $breakSchedule;
+                }
+            }
+        }
+        // print_r($workScheduleData);
+        // echo "<br>";
+        // print_r($breakTobeUpdated);
+        // echo "<br>";
+        // print_r($breakTobeCreated);
+        // echo "<br>";
+        // echo "Token: " . $workScheduleId . "</br>";
+
+        $selectedColumns = ['employee_id'];
+        $filterCriteria = [
+            [
+                "column" => "work_schedule.id",
+                "operator" => "=",
+                "value" => $workScheduleId
+            ]
+        ];
+
+        $workScheduleRepository = new WorkScheduleRepository($workScheduleDao);
+        $workScheduleService = new WorkScheduleService($workScheduleRepository);
+        $employeeId = $workScheduleService->fetchAllWorkSchedules($selectedColumns, $filterCriteria, [], 1)['result_set'][0]['employee_id'];
+
+        // echo "Emp-ID: " . $employeeId . "<br>";
+
+        $employee = $employeeId;
+        $start_time = isset($workScheduleData['start_time']) ? 
+            date('Y-m-d H:i:s', strtotime(validateInput($workScheduleData['start_time'], 'Start Time'))) : '1970-01-01 00:00:00';
+        $end_time = isset($workScheduleData['end_time']) ? 
+            date('Y-m-d H:i:s', strtotime(validateInput($workScheduleData['end_time'], 'End Time'))) : '1970-01-01 00:00:00';
+        $is_flex_time = isset($workScheduleData['is_flex_time']) && $workScheduleData['is_flex_time'] === 'true' ? true : false;
+        $core_start_time = null; $core_end_time = null; $total_hrs_per_week = null;
+        if($is_flex_time === true){
+            $total_hrs_per_week = isset($workScheduleData['total_hrs_per_week']) ? (int) validateInput($workScheduleData['total_hrs_per_week'], 'Total Hours Per Week') * 6 : null;
+        }
+        $total_work_hrs = isset($workScheduleData['total_work_hrs']) ? (int) (validateNumericIdentifier($workScheduleData['total_work_hrs'], 1, 4, 'Total Work Hours')): null;
+        $start_date = '2024-01-01';
+        
+
+        $updatedWorkSchedule = new WorkSchedule(
+            id: $workScheduleId,
+            employeeId: $employee,
+            startTime: $start_time,
+            endTime: $end_time,
+            isFlextime: $is_flex_time,
+            totalHoursPerWeek: $total_hrs_per_week,
+            totalWorkHours: $total_work_hrs,
+            startDate: $start_date,
+            recurrenceRule: "FREQ=WEEKLY;INTERVAL=1;DTSTART={$start_date};BYDAY=MO,TU,WE,TH,FR,SA"
+        );
+
+        $updateResult = $workScheduleService->updateWorkSchedule($updatedWorkSchedule);
+
+        $messageComposed = '';
+        $indicator = 'success';
+
+        switch ($updateResult) {
+            case ActionResult::FAILURE:
+                die("
+                <script>
+                    showError();
+                </script>
+                ");
+                break;
+            case ActionResult::SUCCESS:
+                $messageComposed .= "Work Schedule was updated successfully";
+                break;
+            default:
+                $pdo->rollback();
+                die("
+                <script>
+                    showError();
+                </script>
+                ");
+                break;
+        }
+
+        $pdo->beginTransaction();
+
+        if ($updateResult !== ActionResult::SUCCESS) {
+            $pdo->rollback();
+            return;
+        }
+
+        // Normalize $breakTobeCreated by renaming break_type_id into id
+        foreach ($breakTobeCreated as &$break) {
+            if (isset($break['break_type_id'])) {
+                $break['id'] = $break['break_type_id'];
+                unset($break['break_type_id']);
+            }
+        }
+        unset($break); // Break the reference
+
+        $breakScheduleResult = null;
+        if (!empty($breakTobeCreated)) {
+            $breakScheduleResult = createBreakSchedules($pdo, $workScheduleId, $breakTobeCreated);
+        }
+       
+        if(isset($breakScheduleResult['action'])){
+            switch ($breakScheduleResult['action']) {
+                case ActionResult::FAILURE:
+                    $messageComposed .= " and creating breaks had encountered an error";
+                    $indicator = 'warning';
+                    $pdo->rollback();
+                    break;
+                case ActionResult::SUCCESS:
+                    $messageComposed .= " and " . $breakScheduleResult['number'] . " break(s) was attached successfully";
+                    break;
+                default:
+                    break;
+            }
+        }
+        
+
+        //echo $messageComposed . "<br>";
+
+        $breakScheduleResult = null;
+        if (!empty($breakTobeUpdated)) {
+            $breakScheduleResult = updateBreakSchedules($pdo, $workScheduleId, $breakTobeUpdated);
+        }
+       
+        if(isset($breakScheduleResult['action'])){
+            switch ($breakScheduleResult['action']) {
+                case ActionResult::FAILURE:
+                    $messageComposed .= " and updating breaks had encountered an error";
+                    $indicator = 'warning';
+                    $pdo->rollback();
+                    break;
+                case ActionResult::SUCCESS:
+                    $messageComposed .= " and " . $breakScheduleResult['number'] . " break(s) was updated successfully";
+                    break;
+                default:
+                    break;
+            }
+        }
+        
+
+
+        $pdo->commit();
+
+        if ($updateResult === ActionResult::SUCCESS) {
+            die("
+            <script>
+                showSuccessCreate('$messageComposed', '$indicator');
+            </script>
+            ");
+        }
+
+        return;
+    }
+
+
     
     if($action === 'delete'){
         $hashed_id = $_POST['token'] ?? null;
@@ -350,5 +527,36 @@ function createBreakSchedules($pdo, $workScheduleId, $breakSchedules){
     return [
         "action" => ActionResult::SUCCESS,
         "number" => $createdCounter
+    ];
+}
+
+function updateBreakSchedules($pdo, $workScheduleId, $breakSchedules){
+    print_r($breakSchedules);
+    $breakScheduleDao = new BreakScheduleDao($pdo);
+    $breakScheduleRepo = new BreakScheduleRepository($breakScheduleDao);
+    $breakScheduleService = new BreakScheduleService($breakScheduleRepo);
+    $updatedCounter = 0;
+    foreach ($breakSchedules as $breakSchedule){
+        $updatedBreakSchedule = new BreakSchedule(
+            id: (int) $breakSchedule['id'],
+            workScheduleId: $workScheduleId,
+            breakTypeId: $breakSchedule['break_type_id'],
+            startTime: $breakSchedule['start_time'],
+            endTime: $breakSchedule['end_time'],
+            isFlexible: 0,
+            earliestStartTime: null,
+            latestEndTime: null
+        );
+        $updateResult = $breakScheduleService->updateBreakSchedule($updatedBreakSchedule);
+
+        if($updateResult === ActionResult::SUCCESS){
+            $updatedCounter++;
+        }else if($updateResult === ActionResult::FAILURE){
+            return ActionResult::FAILURE;
+        }
+    }
+    return [
+        "action" => ActionResult::SUCCESS,
+        "number" => $updatedCounter
     ];
 }

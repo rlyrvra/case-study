@@ -33,9 +33,9 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
 />
 
 <!-- Ajax -->
-<script src="work-schedules/modules/work-schedules-ajax.js?v1.10"></script>
+<script src="work-schedules/modules/work-schedules-ajax.js?v1.12"></script>
 <!-- Scripts -->
-<script src="work-schedules/modules/work-schedules-scripts.js?v1.11"></script>
+<script src="work-schedules/modules/work-schedules-scripts.js?v1.14"></script>
 <!-- Ajax -->
 <script src="work-schedules/modules/work-schedules-break-ajax.js?v1.1"></script>
 <!-- Scripts -->
@@ -82,6 +82,11 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
 
 <!-- Sweet Alert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<style>
+  .swal2-container {
+    z-index: 1100 !important; /* Higher than Bootstrap's modal */
+}
+</style>
 </head>
 <body>
 <!-- Layout wrapper -->

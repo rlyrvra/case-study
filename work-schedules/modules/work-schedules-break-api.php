@@ -25,6 +25,7 @@ require_once __DIR__ . '/../../database/database.php';
 
 try {
     $breakTypeDao = new BreakTypeDao($pdo);
+    $breakScheduleDao = new BreakScheduleDao($pdo);
     $action = $_POST['action'] ?? '';
 
     if($action === 'fetchAll'){
@@ -101,17 +102,22 @@ try {
         $result = $workScheduleService->fetchAllWorkSchedules($selectedColumns, $filterCriteria, [], 1);
         $workScheduleData = $result['result_set'];
 
-        $breakScheduleDao = new BreakScheduleDao($pdo);
         $breakScheduleRepo = new BreakScheduleRepository($breakScheduleDao);
         $breakScheduleService = new BreakScheduleService($breakScheduleRepo);
 
 
-        $selectedColumns = ['break_type_id', 'start_time', 'end_time'];
+        $selectedColumns = ['id', 'break_type_id', 'start_time', 'end_time'];
         $filterCriteria = [];
+
         $filterCriteria[] = [
             "column" => "break_schedule.work_schedule_id",
             "operator" => "=",
             "value" => $token
+        ];
+
+        $filterCriteria[] = [
+            "column" => "break_schedule.deleted_at",
+            "operator" => "IS NULL"
         ];
 
         $result = $breakScheduleService->fetchAllBreakSchedules($selectedColumns, $filterCriteria, [], 5);
@@ -211,7 +217,35 @@ try {
             </script>
             ");
         } else {
-            echo "Failed to create breaks. Please try again.";
+            die("
+            <script>
+                alert('Error encountered deleting break type');
+            </script>");
+        }
+        return;
+    }
+
+    if($action === 'deleteBreakSchedule'){
+        $token = $_POST['token'] ?? null;
+        if (!$token) {
+            return;
+        } 
+
+        $breakScheduleRepo = new BreakScheduleRepository($breakScheduleDao);
+        $breakScheduleService = new BreakScheduleService($breakScheduleRepo);
+        $result = $breakScheduleService->deleteBreakSchedule($token);
+        if ($result !== ActionResult::FAILURE) {
+            die("
+            <script>
+                showSuccessDeletionBreakSchedule();
+            </script>
+            ");
+        } else {
+            die("
+            <script>
+                alert('Error encountered deleting break schedules');
+            </script>
+            ");
         }
         return;
     }

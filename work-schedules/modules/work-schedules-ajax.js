@@ -130,6 +130,49 @@ function deleteWorkSchedule(button){
     
 }
 
+function updateWorkScheduleBreak(button){
+    const token = parseInt(button.getAttribute('data-token'), 10);
+    const start_time = document.getElementById('update_startTime').value;
+    const end_time = document.getElementById('update_endTime').value;
+    const is_flex_time = document.getElementById('update_isFlextime').checked;
+    const total_hrs_per_week = document.getElementById('update_totalHoursPerWeek').value;
+    const total_work_hrs = document.getElementById('update_totalWorkHours').value;
+    const currentBreaks = currentBreakSchedule[1].break_schedules_data; 
+    const rows = document.getElementById('update_break_assignment_table_body').getElementsByTagName('tr');
+    const selectedBreaks = getCreateBreaksValues(rows);
+    const breakDifferences = findDifferences(currentBreaks, selectedBreaks);
+    const work_schedule = {
+        token: token,
+        start_time: start_time,
+        end_time: end_time,
+        is_flex_time: is_flex_time,
+        total_hrs_per_week: total_hrs_per_week,
+        total_work_hrs: total_work_hrs,
+    };
+
+    // console.log(work_schedule);
+    
+    // console.log(breakDifferences);
+
+    $.ajax({
+        url: 'work-schedules/modules/work-schedules-api',
+        type: 'POST',
+        data: {
+            action: 'update',
+            token: token,
+            work_schedule: work_schedule,
+            break_schedules: breakDifferences
+        },
+        success: function(response) {
+            $('#response-test').html(response);
+            fetchAllWorkSchedules();
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log("AJAX Error: " + textStatus + ": " + errorThrown);
+        }
+    });
+}
+
 
 let breakTypes;
 function fetchBreakTypes(){
@@ -163,6 +206,26 @@ function fetchWorkScheduleAndBreak(button){
             $('#fetch_break_schedule').html(response);
             updateWorkScheduleData(currentBreakSchedule);
             populateWorkSchedulesBreak(currentBreakSchedule, token);
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log("AJAX Error: " + textStatus + ": " + errorThrown);
+        }
+    });
+}
+
+
+function deleteBreakSchedules(button){
+    const row = button.closest('tr');  // Get the closest row
+    const token = row.getAttribute('data-token');
+    $.ajax({
+        url: 'work-schedules/modules/work-schedules-break-api',
+        type: 'POST',
+        data: {
+            action: 'deleteBreakSchedule',
+            token: token
+        },
+        success: function(response) {
+            $('#response-test').html(response);
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log("AJAX Error: " + textStatus + ": " + errorThrown);
