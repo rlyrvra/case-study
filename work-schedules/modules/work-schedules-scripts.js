@@ -61,18 +61,11 @@ document.addEventListener('DOMContentLoaded', function () {
 document.addEventListener("DOMContentLoaded", function () {
     const startTimeSelect = document.getElementById("startTime");
     const endTimeSelect = document.getElementById("endTime");
-
-    endTimeSelect.addEventListener("change", function(){
-        calculateWorkHours(
-            startTime = document.getElementById("startTime").value,
-            endTime = document.getElementById("endTime").value,
-            selectedBreaks = getCreateBreaksValues(),
-            totalWorkHrs = document.getElementById("totalWorkHours"),
-        );
-    });
+    
+    endTimeSelect.addEventListener("change", createCalculateWorkHrs);
 });
 
-function calculateWorkHours(startTime, endTime, selectedBreaks, totalWorkHrs) {
+function calculateWorkHours(rows, startTime, endTime, selectedBreaks, totalWorkHrs) {
     if (startTime && endTime) {
         const startDate = new Date(`1970-01-01T${convertTo24Hour(startTime)}`);
         const endDate = new Date(`1970-01-01T${convertTo24Hour(endTime)}`);
@@ -102,7 +95,20 @@ function calculateWorkHours(startTime, endTime, selectedBreaks, totalWorkHrs) {
 
         totalWorkHrs.value = diff;
     }
+    
+    
 }
+
+function createCalculateWorkHrs(){
+    const rows = document.getElementById('create_break_assignment_table_body').getElementsByTagName('tr');
+    const startTime = document.getElementById("startTime").value;
+    const endTime = document.getElementById("endTime").value;
+    const selectedBreaks = getCreateBreaksValues(rows);
+    const totalWorkHrs = document.getElementById("totalWorkHours");
+    calculateWorkHours(rows, startTime, endTime, selectedBreaks, totalWorkHrs);
+}
+
+
 
 function convertTo24Hour(time) {
     const [hours, minutes, period] = time.match(/(\d+):(\d+)(AM|PM)/).slice(1);
@@ -140,7 +146,7 @@ function addWorkSchedulesBreakCreate() {
         <span class="badge bg-badge" id="paid_status"></span>
     </td>
     <td>
-        <select class="form-select" id="create_start_time" name="create_start_time" required onchange="updateEndTime(this); calculateWorkHours();">
+        <select class="form-select" id="create_start_time" name="create_start_time" required onchange="updateEndTime(this); createCalculateWorkHrs();">
             <option value="" selected disabled>Select start time...</option>
             <option value="12:00AM">12:00AM</option>
             <option value="1:00AM">1:00AM</option>
@@ -172,7 +178,7 @@ function addWorkSchedulesBreakCreate() {
         <input type="text" class="form-control" id="create_end_time" readonly required/>
     </td>
     <td>
-        <button class="btn btn-danger" title="Click to Delete" onclick="cancelBreakAssignment(this); calculateWorkHours();">
+        <button class="btn btn-danger" title="Click to Delete" onclick="cancelBreakAssignment(this); createCalculateWorkHrs();">
             <i class="bx bx-trash"></i>
         </button> 
     </td>
@@ -180,18 +186,15 @@ function addWorkSchedulesBreakCreate() {
     row.innerHTML = breaksAddHTML;
     tableBody.appendChild(row);
     rowAddedWork = true;
-    updatePaidStatus(row.querySelector('#create_breaks'), row.querySelector('#paid_status'));
+    updatePaidStatus(row.querySelector('#create_breaks'));
 
 }
 
-function updatePaidStatus(
-    select, 
-    status, 
-    row = select.closest('tr'),
-    startTime = row.querySelector('#create_start_time'), 
-    time_start = '', 
-    endTime = row.querySelector('#create_end_time'), 
-    time_end = ''){
+function updatePaidStatus(select){
+    const row = select.closest('tr');
+    const status = row.querySelector('#paid_status');
+    const startTime = row.querySelector('#create_start_time');
+    const endTime = row.querySelector('#create_end_time');
     const token = parseInt(select.value, 10);
     const matchingBreak = breakTypes.find(breakType => breakType.id === token);
     const matchingBreakPaid = matchingBreak.is_paid;
@@ -205,8 +208,8 @@ function updatePaidStatus(
         paidStatus.classList.remove('bg-success');
         paidStatus.innerHTML = "UNPAID"
     }
-    startTime.value = time_start;
-    endTime.value = time_end;
+    startTime.value = '';
+    endTime.value = '';
 
 }
 
@@ -220,7 +223,7 @@ function updateEndTime(select){
     const sumTime = new Date(startTime.getTime() + addMinutes * 60000).toLocaleTimeString('en-US', format);
     row.querySelector('#create_end_time').value = sumTime;
     rowAddedWork = false;
-    getCreateBreaksValues();
+    getCreateBreaksValues(rows = document.getElementById('create_break_assignment_table_body').getElementsByTagName('tr'));
 }
 
 function cancelBreakAssignment(button){
@@ -269,7 +272,7 @@ function updateWorkScheduleData(data){
 }
 
 
-function populateWorkSchedulesBreak(data) {
+function populateWorkSchedulesBreak(data, token = '') {
     const tableBody = document.getElementById('update_break_assignment_table_body'); // Ensure we target tbody
     tableBody.innerHTML = "";
     if(tableBody.rows.length >= 5){
@@ -281,9 +284,10 @@ function populateWorkSchedulesBreak(data) {
     const currentBreaks = data[1].break_schedules_data; 
     currentBreaks.forEach(currentBreak => {
         const row = document.createElement('tr');
+        row.setAttribute('data-token', token);
         let breaksAddHTML = `
         <td>
-            <select class="form-select" id="update_breaks" name="update_breaks" required onchange="updatePaidStatus(this)">
+            <select class="form-select" id="update_breaks" name="update_breaks" required onchange="updatePaidStatusUpdateForm(this)">
                 `;
         breakTypes.forEach(breakType => {
             breaksAddHTML += "<option value='" + breakType.id + "'>" + breakType.name + "</option>";
@@ -295,7 +299,7 @@ function populateWorkSchedulesBreak(data) {
             <span class="badge bg-badge" id="update_paid_status"></span>
         </td>
         <td>
-            <select class="form-select" id="update_start_time" name="update_start_time" required onchange="updateEndTime(this); calculateWorkHours();">
+            <select class="form-select" id="update_start_time" name="update_start_time" required onchange="updateEndTime(this); updateCalculateWorkHrs();">
                 <option value="" selected disabled>Select start time...</option>
                 <option value="12:00AM">12:00AM</option>
                 <option value="1:00AM">1:00AM</option>
@@ -327,38 +331,141 @@ function populateWorkSchedulesBreak(data) {
             <input type="text" class="form-control" id="update_end_time" readonly required/>
         </td>
         <td>
-            <button class="btn btn-danger" title="Click to Delete" onclick="cancelBreakAssignment(this); calculateWorkHours();">
+            <button class="btn btn-danger" title="Click to Delete" onclick="cancelBreakAssignment(this); updateCalculateWorkHrs();">
                 <i class="bx bx-trash"></i>
             </button> 
         </td>
         `;
         row.innerHTML = breaksAddHTML;
         tableBody.appendChild(row);
-        document.getElementById("update_breaks").value = currentBreak.break_type_id;
-        updatePaidStatus(
-        select = row.querySelector('#update_breaks'), 
-        status = row.querySelector('#update_paid_status'),
-        row,
-        startTime = row.querySelector('#update_start_time'),
+        updateSelect = row.querySelector('#update_breaks');
+        updateSelect.value = currentBreak.break_type_id;
+        updatePaidStatusUpdateForm(
+        select = updateSelect, 
         time_start = new Date(`1970-01-01T${currentBreak.start_time}`).toLocaleTimeString('en-US', { timeStyle: 'short', hour12: true }).replace(/\s/g, ''),
-        endTime = row.querySelector('#update_end_time'),
         time_end = new Date(`1970-01-01T${currentBreak.end_time}`).toLocaleTimeString('en-US', { timeStyle: 'short', hour12: true }).replace(/\s/g, '')
         );
     });
-    
+    updateCalculateWorkHrs();
+}
 
+let rowAddedUpdate = false;
+function updateWorkSchedulesBreakCreate(){
+    if(rowAddedUpdate){
+        return;
+    }
+    const tableBody = document.getElementById('update_break_assignment_table_body'); // Ensure we target tbody
+    if(tableBody.rows.length >= 5){
+        return;
+    }
+    const row = document.createElement('tr');
+
+    let breaksAddHTML = `
+    <td>
+        <select class="form-select" id="update_breaks" name="update_breaks" required onchange="updatePaidStatusUpdateForm(this)">
+            `;
+    breakTypes.forEach(breakType => {
+        breaksAddHTML += "<option value='" + breakType.id + "'>" + breakType.name + "</option>";
+    });
+    breaksAddHTML += `
+        </select>
+    </td>
+    <td>
+        <span class="badge bg-badge" id="update_paid_status"></span>
+    </td>
+    <td>
+        <select class="form-select" id="update_start_time" name="update_start_time" required onchange="updateEndTimeAssignment(this); updateCalculateWorkHrs();">
+            <option value="" selected disabled>Select start time...</option>
+            <option value="12:00AM">12:00AM</option>
+            <option value="1:00AM">1:00AM</option>
+            <option value="2:00AM">2:00AM</option>
+            <option value="3:00AM">3:00AM</option>
+            <option value="4:00AM">4:00AM</option>
+            <option value="5:00AM">5:00AM</option>
+            <option value="6:00AM">6:00AM</option>
+            <option value="7:00AM">7:00AM</option>
+            <option value="8:00AM">8:00AM</option>
+            <option value="9:00AM">9:00AM</option>
+            <option value="10:00AM">10:00AM</option>
+            <option value="11:00AM">11:00AM</option>
+            <option value="12:00PM">12:00PM</option>
+            <option value="1:00PM">1:00PM</option>
+            <option value="2:00PM">2:00PM</option>
+            <option value="3:00PM">3:00PM</option>
+            <option value="4:00PM">4:00PM</option>
+            <option value="5:00PM">5:00PM</option>
+            <option value="6:00PM">6:00PM</option>
+            <option value="7:00PM">7:00PM</option>
+            <option value="8:00PM">8:00PM</option>
+            <option value="9:00PM">9:00PM</option>
+            <option value="10:00PM">10:00PM</option>
+            <option value="11:00PM">11:00PM</option>
+        </select>
+    </td>
+    <td>
+        <input type="text" class="form-control" id="update_end_time" readonly required/>
+    </td>
+    <td>
+        <button class="btn btn-danger" title="Click to Delete" onclick="deleteBreakAssignment(this); updateCalculateWorkHrs();">
+            <i class="bx bx-trash"></i>
+        </button> 
+    </td>
+    `;
+    row.innerHTML = breaksAddHTML;
+    tableBody.appendChild(row);
+    rowAddedUpdate = true;
+    updatePaidStatusUpdateForm(row.querySelector('#update_breaks'));
+}
+
+function updatePaidStatusUpdateForm(select, time_start = '', time_end = ''){
+    const row = select.closest('tr');
+    const status = row.querySelector('#update_paid_status');
+    const startTime = row.querySelector('#update_start_time');
+    const endTime = row.querySelector('#update_end_time');
+    const token = parseInt(select.value, 10);
+    const matchingBreak = breakTypes.find(breakType => breakType.id === token);
+    const matchingBreakPaid = matchingBreak.is_paid;
+    const paidStatus = status;
+    if(matchingBreakPaid === 1){
+        paidStatus.classList.remove('bg-danger');
+        paidStatus.classList.add('bg-success');
+        paidStatus.innerHTML = "PAID"
+    }else{
+        paidStatus.classList.add('bg-danger');
+        paidStatus.classList.remove('bg-success');
+        paidStatus.innerHTML = "UNPAID"
+    }
+    startTime.value = time_start;
+    endTime.value = time_end;
 }
 
 function updateCalculateWorkHrs(){
     const rows = document.getElementById('update_break_assignment_table_body').getElementsByTagName('tr');
-    calculateWorkHours(
-        startTime = document.getElementById("update_startTime").value,
-        endTime = document.getElementById("update_endTime").value,
-        selectedBreaks = getCreateBreaksValues(rows),
-        totalWorkHrs = document.getElementById("update_totalWorkHours")
-    );
+    const startTime = document.getElementById("update_startTime").value;
+    const endTime = document.getElementById("update_endTime").value;
+    const selectedBreaks = getCreateBreaksValues(rows);
+    const totalWorkHrs = document.getElementById("update_totalWorkHours");
+    calculateWorkHours(rows, startTime, endTime, selectedBreaks, totalWorkHrs);
 }
 
+function deleteBreakAssignment(button){
+    const row = button.parentNode.parentNode;
+    row.parentNode.removeChild(row);
+    rowAddedUpdate = false;
+}
+
+function updateEndTimeAssignment(select){
+    const row = select.closest('tr');  // Get the closest row
+    const token = parseInt(row.querySelector('#update_breaks').value, 10);
+    const matchingBreak = breakTypes.find(breakType => breakType.id === token);
+    const format = { timeStyle: 'short', hour12: true };
+    const startTime = new Date(`1970-01-01T${convertTo24Hour(row.querySelector('#update_startTime').value)}`);
+    const addMinutes = matchingBreak.duration_in_minutes;
+    const sumTime = new Date(startTime.getTime() + addMinutes * 60000).toLocaleTimeString('en-US', format);
+    row.querySelector('#update_endTime').value = sumTime;
+    rowAddedWork = false;
+    getCreateBreaksValues(rows = document.getElementById('create_break_assignment_table_body').getElementsByTagName('tr'));
+}
 
 
 
@@ -389,13 +496,12 @@ function missingFieldValues(fieldName){
     });
 }
 
-function showSuccessCreate() {
+function showSuccessCreate(message = 'The work schedule has been created successfully.', indicator = 'success') {
     $('#add_work_schedules').modal('hide');
     Swal.fire({
         title: 'Success!',
-        text: 'The work schedule has been created successfully.',
-        icon: 'success',
-        timer: 2000,
+        text: message,
+        icon: indicator,
         confirmButtonText: 'OK'
     });
 }

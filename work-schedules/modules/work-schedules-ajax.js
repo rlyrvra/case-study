@@ -84,7 +84,8 @@ function createWorkSchedule(){
         total_hrs_per_week: total_hrs_per_week,
         total_work_hrs: total_work_hrs,
     };
-    const breakSchedules = getCreateBreaksValues();
+    const rows = document.getElementById('create_break_assignment_table_body').getElementsByTagName('tr');
+    const breakSchedules = getCreateBreaksValues(rows);
 
     //console.log(work_schedule);
 
@@ -161,7 +162,7 @@ function fetchWorkScheduleAndBreak(button){
         success: function(response) {
             $('#fetch_break_schedule').html(response);
             updateWorkScheduleData(currentBreakSchedule);
-            populateWorkSchedulesBreak(currentBreakSchedule);
+            populateWorkSchedulesBreak(currentBreakSchedule, token);
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log("AJAX Error: " + textStatus + ": " + errorThrown);

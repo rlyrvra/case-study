@@ -117,7 +117,9 @@ try {
         $breakScheduleData = $_POST['break_schedules'] ?? null; 
         if (!$workScheduleData) {
             return;
-        } 
+        }
+        
+        
 
         
 
@@ -148,31 +150,79 @@ try {
             recurrenceRule: "FREQ=WEEKLY;INTERVAL=1;DTSTART={$start_date};BYDAY=MO,TU,WE,TH,FR,SA"
         );
 
+
         $workScheduleRepository = new WorkScheduleRepository($workScheduleDao);
         $workScheduleService = new WorkScheduleService($workScheduleRepository);
         $createResult = $workScheduleService->createWorkSchedule($newWorkSchedule);
         $lastWorkScheduleId = $workScheduleService->fetchLastWorkScheduleId();
-        
+        $messageComposed = '';
+        $indicator = 'success';
+
+        switch ($createResult) {
+            case ActionResult::FAILURE:
+                die("
+                <script>
+                    showError();
+                </script>
+                ");
+                break;
+            case ActionResult::SUCCESS:
+                $messageComposed .= "Work Schedule was created successfully";
+                break;
+            default:
+                die("
+                <script>
+                    showError();
+                </script>
+                ");
+                break;
+        }
+
+        $pdo->beginTransaction();
+
         if ($lastWorkScheduleId === 0) {
             $lastWorkScheduleId = getLastInsertIdBySql($pdo);
         }
         
 
-        if($breakScheduleData){
-            createBreakSchedules($pdo, $lastWorkScheduleId, $breakScheduleData);
+        if ($createResult !== ActionResult::SUCCESS) {
+            $pdo->rollback();
+            return;
         }
-        
 
-        if($createResult === ActionResult::SUCCESS){
+        $breakScheduleResult = null;
+        if ($breakScheduleData) {
+            $breakScheduleResult = createBreakSchedules($pdo, $lastWorkScheduleId, $breakScheduleData);
+        }
+       
+
+        switch ($breakScheduleResult['action']) {
+            case ActionResult::FAILURE:
+                $messageComposed .= " and creating breaks had encountered an error";
+                $indicator = 'warning';
+                $pdo->rollback();
+                break;
+            case ActionResult::SUCCESS:
+                $messageComposed .= " and " . $breakScheduleResult['number'] . " break(s) was attached successfully";
+                break;
+            default:
+                $messageComposed .= " and creating breaks had uncatchable error";
+                $indicator = 'warning';
+                break;
+        }
+
+        $pdo->commit();
+
+        // print_r($workScheduleData);
+        // echo "<br> ID: " . $lastWorkScheduleId . "<br>";
+        // echo "" . $messageComposed . "<br>";
+        // print_r($breakScheduleData);
+        // echo "" . $messageComposed . "<br>";
+
+        if ($createResult === ActionResult::SUCCESS) {
             die("
             <script>
-                showSuccessCreate();
-            </script>
-            ");
-        }else {
-            die("
-            <script>
-                showError();
+                showSuccessCreate('$messageComposed', '$indicator');
             </script>
             ");
         }
@@ -185,19 +235,27 @@ try {
         if(!$hashed_id){
             return;
         }
+        $pdo->beginTransaction();
         $workScheduleRepository = new WorkScheduleRepository($workScheduleDao);
         $workScheduleService = new WorkScheduleService($workScheduleRepository);
         $deleteResult = $workScheduleService->deleteWorkSchedule($hashed_id);
 
         if ($deleteResult === ActionResult::SUCCESS) {
+            $pdo->commit();
             die("
             <script>
                 showSuccessDeletion();
             </script>
             ");
-        } else {
-            echo "Failed to delete work schedule. Please try again.";
+        } else if($deleteResult === ActionResult::FAILURE){
+            $pdo->rollback();
+            die("
+            <script>
+                showError();
+            </script>
+            ");
         }
+        
         return;
     }
 
@@ -282,8 +340,15 @@ function createBreakSchedules($pdo, $workScheduleId, $breakSchedules){
             latestEndTime: null
         );
         $createResult = $breakScheduleService->createBreakSchedule($newBreakSchedule);
+
         if($createResult === ActionResult::SUCCESS){
             $createdCounter++;
+        }else if($createResult === ActionResult::FAILURE){
+            return ActionResult::FAILURE;
         }
     }
+    return [
+        "action" => ActionResult::SUCCESS,
+        "number" => $createdCounter
+    ];
 }
