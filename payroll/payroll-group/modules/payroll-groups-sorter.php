@@ -76,7 +76,7 @@
             <select class="form-select" id="search_at" name="search_at" placeholder="Search At">
                 <option value="none" selected>All</option>
                 <option value="name">Name</option>
-                <option value="description">Description</option>
+                <option value="pay_frequency">Frequeny</option>
             </select>
         </div>  
     </div>

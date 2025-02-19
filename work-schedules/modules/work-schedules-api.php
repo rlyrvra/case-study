@@ -193,21 +193,23 @@ try {
             $breakScheduleResult = createBreakSchedules($pdo, $lastWorkScheduleId, $breakScheduleData);
         }
        
-
-        switch ($breakScheduleResult['action']) {
-            case ActionResult::FAILURE:
-                $messageComposed .= " and creating breaks had encountered an error";
-                $indicator = 'warning';
-                $pdo->rollback();
-                break;
-            case ActionResult::SUCCESS:
-                $messageComposed .= " and " . $breakScheduleResult['number'] . " break(s) was attached successfully";
-                break;
-            default:
-                $messageComposed .= " and creating breaks had uncatchable error";
-                $indicator = 'warning';
-                break;
+        if(isset($breakScheduleResult['action'])){
+            switch ($breakScheduleResult['action']) {
+                case ActionResult::FAILURE:
+                    $messageComposed .= " and creating breaks had encountered an error";
+                    $indicator = 'warning';
+                    $pdo->rollback();
+                    break;
+                case ActionResult::SUCCESS:
+                    $messageComposed .= " and " . $breakScheduleResult['number'] . " break(s) was attached successfully";
+                    break;
+                default:
+                    $messageComposed .= " and creating breaks had uncatchable error";
+                    $indicator = 'warning';
+                    break;
+            }
         }
+        
 
         $pdo->commit();
 

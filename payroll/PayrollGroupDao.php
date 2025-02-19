@@ -320,7 +320,7 @@ class PayrollGroupDao
 
             error_log("Database Error: An error occurred while updating the payroll group. " .
                       "Exception: {$exception->getMessage()}");
-
+            
             return ActionResult::FAILURE;
         }
     }
