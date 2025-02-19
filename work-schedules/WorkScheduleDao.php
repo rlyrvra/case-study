@@ -495,7 +495,7 @@ class WorkScheduleDao
         }
     }
 
-    public function update(WorkSchedule $workSchedule, bool $isHashedId = false): ActionResult
+    public function update(WorkSchedule $workSchedule): ActionResult
     {
         $query = "
             UPDATE work_schedules
@@ -510,7 +510,7 @@ class WorkScheduleDao
             WHERE
         ";
 
-        if ($isHashedId) {
+        if (is_string($workSchedule->getId())) {
             $query .= " SHA2(id, 256) = :work_schedule_id";
         } else {
             $query .= " id = :work_schedule_id";
@@ -555,9 +555,9 @@ class WorkScheduleDao
         }
     }
 
-    public function delete(int|string $workScheduleId, bool $isHashedId = false): ActionResult
+    public function delete(int|string $workScheduleId): ActionResult
     {
-        return $this->softDelete($workScheduleId, $isHashedId);
+        return $this->softDelete($workScheduleId);
     }
 
     public function fetchLastInsertedId(): int
@@ -565,7 +565,7 @@ class WorkScheduleDao
         return $this->pdo->lastInsertId();
     }
 
-    private function softDelete(int|string $workScheduleId, bool $isHashedId = false): ActionResult
+    private function softDelete(int|string $workScheduleId): ActionResult
     {
         $query = "
             UPDATE work_schedules
@@ -574,7 +574,7 @@ class WorkScheduleDao
             WHERE
         ";
 
-        if ($isHashedId) {
+        if (is_string($workScheduleId)) {
             $query .= " SHA2(id, 256) = :work_schedule_id";
         } else {
             $query .= " id = :work_schedule_id";

@@ -91,10 +91,15 @@ $filterCriteria = [
     ]
 ];
 
-$rfidUid = '123456789';
-$currentDateTime = '2025-01-01 08:00:00';
+$overtimeRateAssignment = new OvertimeRateAssignment(
+    null,
+    null,
+    null,
+    null
+);
 
-print_r($attendanceService->handleRfidTap($rfidUid, $currentDateTime));
+print_r($overtimeRateAssignmentDao->create($overtimeRateAssignment));
+
 /*
 $currentDateTime = '2025-01-01 12:00:00';
 $response = $attendanceService->handleRfidTap($rfidUid, $currentDateTime);
