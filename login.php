@@ -13,7 +13,7 @@ if(isset($_GET['r']) && $_GET['r']){
 
 ?>
 <!-- Scripts -->
-<script src="requests/login/login-ajax-requests.js?v=1.5"></script>
+<script src="requests/login/login-ajax-requests.js?v=1.6"></script>
 <title>
 smartWAGE Login
 </title>

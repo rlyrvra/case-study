@@ -8,7 +8,7 @@ function login(){
         return;
     }
 
-    console.log(`Username: ${username}, Password: ${password}, Remember: ${remember}`);
+    //console.log(`Username: ${username}, Password: ${password}, Remember: ${remember}`);
     $.ajax({
         url: 'requests/login/login-api',
         method: 'POST',

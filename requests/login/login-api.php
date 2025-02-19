@@ -24,6 +24,10 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
             "column" => "employee.password",
             "operator" => "=",
             "value" => $password
+        ],
+        [
+            "column" => "employee.deleted_at",
+            "operator" => "IS NULL"
         ]
     ];
 
