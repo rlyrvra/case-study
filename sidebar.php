@@ -111,8 +111,8 @@
             </a>
         </li>
 
-        <li class="menu-item">
-            <a href="maintenance-login" class="menu-link">
+        <li class="menu-item" id="overtime-rate-menu">
+            <a href="overtime-rate.php" class="menu-link">
             <div data-i18n="Under Maintenance">Overtime Rates</div>
             </a>
         </li>
