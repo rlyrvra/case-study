@@ -16,7 +16,7 @@ if($_SESSION['access_role'] !== 'Admin'){
 
 </style>
 <head>
-<title> Departments </title>
+<title> smartWage | Departments </title>
 <!-- font-awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <!-- jQuery -->
@@ -107,14 +107,14 @@ if($_SESSION['access_role'] !== 'Admin'){
               </div>
             </div> -->
 
-            <hr/>
+       
 
             <div class="container-fluid card pt-3 pb-3 mt-5 mb-5">
               <?php require_once __DIR__ . '/departments/modules/departments-sorter.php' ?>
               <div class="spinner-border spinner-border-lg text-primary text-center w-px-25 h-px-25" role="status" id="loadingSpinner"></div>
             </div>
 
-            <hr/>
+
 
             <div class="container-fluid card pt-5 pb-3 mt-5">
               <div class="card-header">
@@ -128,7 +128,7 @@ if($_SESSION['access_role'] !== 'Admin'){
               </div>
             </div>
 
-            <hr/>
+          
 
             
             <script>

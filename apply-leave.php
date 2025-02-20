@@ -18,7 +18,7 @@ if(isset($_GET['s']) && $_GET['s'] == true){
 
 </style>
 <head>
-<title> Apply Leave </title>
+<title> smartWage | Apply Leave </title>
 <!-- font-awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <!-- jQuery -->
@@ -99,7 +99,7 @@ if(isset($_GET['s']) && $_GET['s'] == true){
             <div class="container-fluid mb-3 d-flex align-items-center">
                 <h1 class="text-center mb-4 mx-auto display-1">Apply Leave</h1>
             </div>
-            <hr/>
+
             <div class="row">
               <!-- Form Section -->
               <div id="response-test"></div>
