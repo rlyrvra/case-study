@@ -107,7 +107,7 @@ if($_SESSION['access_role'] !== 'Admin'){
               </div>
             </div> -->
 
-            <hr/>
+       
 
             <div class="container-fluid card pt-3 pb-3 mt-5 mb-5">
               <?php require_once __DIR__ . '/departments/modules/departments-sorter.php' ?>
