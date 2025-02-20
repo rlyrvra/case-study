@@ -36,6 +36,12 @@
         margin-right: 100px;
     }
 
+    .nav-link:hover{
+        color: rgba(88, 232, 119, 1) !important;
+        background: rgba(88, 232, 119, 0.1) !important;
+        border-radius: 10px;
+    }
+
     
 
     .hero {
