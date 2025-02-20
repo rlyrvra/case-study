@@ -36,9 +36,11 @@
           <!-- <td><?php //echo htmlspecialchars($i); ?></td> -->
           <td><?php echo htmlspecialchars($row['name']); ?></td>
           <td>
-            <?php echo !empty($row['department_head_full_name']) 
-              ? htmlspecialchars($row['department_head_full_name']) 
-              : 'Unassigned'; ?>
+            <?php if (!empty($row['department_head_full_name'])): ?>
+              <?php echo htmlspecialchars($row['department_head_full_name']); ?>
+            <?php else: ?>
+              <span class="badge bg-label-danger">Unassigned</span>
+            <?php endif; ?>
           </td>
           <td><?php echo htmlspecialchars($row['description']); ?></td>
           <td><span class="badge 
