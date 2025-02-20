@@ -105,7 +105,7 @@ if($_SESSION['access_role'] !== 'Admin'){
                 
               </div>
             </div> -->
-            <hr/>
+            
 
             <div class="container-fluid card pt-3 pb-3 mt-5 mb-5">
               <?php require_once __DIR__ . '/job-titles/modules/job-titles-sorter.php' ?>
@@ -117,7 +117,7 @@ if($_SESSION['access_role'] !== 'Admin'){
                 
               </div>
             </div> -->
-            <hr/>
+            
 
             <div class="container-fluid card pt-5 pb-3 mt-5">
               <div class="card-header">

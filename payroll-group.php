@@ -109,7 +109,7 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
             <div class="visually-hidden spinner-border spinner-border-lg text-primary text-center w-px-25 h-px-25" role="status" id="loadingSpinner"></div>
           </div>
 
-          <hr/>
+
 
           <div class="container-fluid card pt-5 pb-3 mt-5">
               <div class="card-header">

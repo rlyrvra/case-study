@@ -1,15 +1,4 @@
 <div class="controls d-flex justify-content-between flex-column flex-lg-row"> 
-    <!--Entries Per Page Text-->
-    <div class="col-auto align mx-1 d-flex align-items-center"> 
-        <label for="entries-per-page" class="mx-1">Show:</label>
-        <select class="form-select" id="entries-per-page" onchange="fetchAllEmployees();">
-            <option value="10">10</option>
-            <option value="25">25</option>
-            <option value="50">50</option>
-            <option value="100">100</option>
-        </select>
-        <label for="entries-per-page" class="mx-1" >Entries</label>  
-    </div>
     
     <!-- Sort By -->
     <div class="dropdown sort mx-1 d-flex align align-items-center">
@@ -29,7 +18,20 @@
         <li><a class="dropdown-item" href="#" data-group="order_by" data-value="ASC">Ascending</a></li>
         <li><a class="dropdown-item selected" href="#" data-group="order_by" data-value="DESC">Descending</a></li>
     </ul>
-    </div>  
+    </div>
+
+     <!--Entries Per Page Text-->
+     <div class="col-auto align mx-1 d-flex align-items-center"> 
+        <label for="entries-per-page" class="mx-1">Show</label>
+        <select class="form-select" id="entries-per-page" onchange="fetchAllEmployees();">
+            <option value="10">10</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+        </select>
+        <label for="entries-per-page" class="mx-1" >Entries</label>  
+    </div> 
+
     <div class="dropdown filter flex-fill w-25 col-auto mx-1">
         <div class="input-group">
             <span class="input-group-text"><i class="bx bx-filter fs-4 lh-0"></i></span>

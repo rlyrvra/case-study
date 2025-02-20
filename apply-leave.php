@@ -99,7 +99,7 @@ if(isset($_GET['s']) && $_GET['s'] == true){
             <div class="container-fluid mb-3 d-flex align-items-center">
                 <h1 class="text-center mb-4 mx-auto display-1">Apply Leave</h1>
             </div>
-            <hr/>
+
             <div class="row">
               <!-- Form Section -->
               <div id="response-test"></div>

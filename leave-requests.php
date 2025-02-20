@@ -102,14 +102,14 @@ if(isset($_GET['aR']) && $_GET['aR'] == true){
           </div>
 
 
-          <hr/>
+
 
           <div class="container-fluid card pt-3 pb-3 mt-5 mb-5">
             <?php require_once __DIR__ . '/leaves/leave-approvals/modules/leave-requests-sorter.php' ?>
             <div class="visually-hidden spinner-border spinner-border-lg text-primary text-center w-px-25 h-px-25" role="status" id="loadingSpinner"></div>
           </div>
 
-          <hr/>
+
 
           <div class="container-fluid card pt-5 pb-3 mt-5">
             <div class="card-header">
@@ -122,7 +122,7 @@ if(isset($_GET['aR']) && $_GET['aR'] == true){
             </div>
           </div>
 
-          <hr/>
+
         </div>
       </div>
       <?php require_once __DIR__ . '/footer.php' ?>

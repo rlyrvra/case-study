@@ -119,7 +119,7 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
                 </button>
               </h2>
 
-              <hr/>
+
 
               <div
                 id="date_body"
@@ -145,14 +145,14 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
             
           </div>
 
-          <hr/>
+
 
           <div class="container-fluid card pt-3 pb-3 mt-5 mb-5">
             <?php require_once __DIR__ . '/holidays/modules/holidays-sorter.php' ?>
             <div class="visually-hidden spinner-border spinner-border-lg text-primary text-center w-px-25 h-px-25" role="status" id="loadingSpinner"></div>
           </div>
 
-          <hr/>
+
 
           <div class="container-fluid card pt-5 pb-3 mt-5">
             <div class="card-header">
@@ -168,7 +168,7 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
           </div>
 
 
-          <hr/>
+
 
 
         </div>
