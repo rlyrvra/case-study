@@ -41,6 +41,9 @@
         background: rgba(88, 232, 119, 0.1) !important;
         border-radius: 10px;
     }
+    .navbar-nav{
+        --bs-nav-link-hover-color:rgba(88, 232, 119, 1) !important;
+    }
 
     
 
