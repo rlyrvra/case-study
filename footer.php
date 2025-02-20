@@ -1,4 +1,14 @@
 <!-- Footer -->
+<style>
+.footer {
+    text-align: center;
+    margin-top: 50px;
+    padding: 20px;
+    background-color: #2f5932;
+    color: #ffffff;
+    border-radius: 10px;
+}
+</style>
 <footer class="content-footer footer bg-footer-theme mt-3">
     <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
         <div class="mb-2 mb-md-0">
