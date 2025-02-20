@@ -525,7 +525,7 @@ class EmployeeDao
             WHERE
         ";
 
-        if ( ! is_int($employee->getId())) {
+        if ( ! is_numeric($employee->getId())) {
             $query .= " SHA2(id, 256) = :employee_id";
         } else {
             $query .= " id = :employee_id";
@@ -618,7 +618,7 @@ class EmployeeDao
             WHERE
         ";
 
-        if ( ! is_int($employeeId)) {
+        if ( ! is_numeric($employeeId)) {
             $query .= " SHA2(id, 256) = :employee_id";
         } else {
             $query .= " id = :employee_id";
@@ -697,7 +697,7 @@ class EmployeeDao
             WHERE
         ";
 
-        if ( ! is_int($employeeId)) {
+        if ( ! is_numeric($employeeId)) {
             $query .= " SHA2(id, 256) = :employee_id";
         } else {
             $query .= " id = :employee_id";

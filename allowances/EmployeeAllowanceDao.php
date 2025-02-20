@@ -261,7 +261,7 @@ class EmployeeAllowanceDao
             WHERE
         ";
 
-        if ( ! is_int($employeeAllowanceId)) {
+        if ( ! is_numeric($employeeAllowanceId)) {
             $query .= " SHA2(id, 256) = :employee_allowance_id";
         } else {
             $query .= " id = :employee_allowance_id";

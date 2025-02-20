@@ -242,7 +242,7 @@ class AllowanceDao
             WHERE
         ";
 
-        if ( ! is_int($allowance->getId())) {
+        if ( ! is_numeric($allowance->getId())) {
             $query .= " SHA2(id, 256) = :allowance_id";
         } else {
             $query .= " id = :allowance_id";
@@ -300,7 +300,7 @@ class AllowanceDao
             WHERE
         ";
 
-        if ( ! is_int($allowanceId)) {
+        if ( ! is_numeric($allowanceId)) {
             $query .= " SHA2(id, 256) = :allowance_id";
         } else {
             $query .= " id = :allowance_id";
