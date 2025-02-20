@@ -4,6 +4,7 @@ function login(){
     const password = document.getElementById('password').value;
     const remember = document.getElementById('remember').checked;
 
+
     if(username.length <= 0 || password.length <= 0){
         showEmptyFields();
         return;

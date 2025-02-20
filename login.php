@@ -13,7 +13,7 @@ if(isset($_GET['r']) && $_GET['r']){
 
 ?>
 <!-- Scripts -->
-<script src="requests/login/login-ajax-requests.js?v=1.7"></script>
+<script src="requests/login/login-ajax-requests.js?v=1.8"></script>
 <title>
 smartWage | Login
 </title>
@@ -87,7 +87,7 @@ body{
     <div class="container p-5">
         <div id="response"></div>
         <div class="row">
-            <div class="col mt-5">
+            <div class="col col-lg-row mt-5">
                 <div class="row header-smart">
                     <h1 class="display-1">SMART</h1>
                 </div>
@@ -95,10 +95,10 @@ body{
                     <h1 class="display-1">WAGE</h1>
                 </div>
             </div>
-            <div class="col">
+            <div class="col col-lg-row">
                 <div class="login-container p-5">
                     <h1 class="text-center mb-4">LOGIN</h1>
-                    <form onsubmit="event.preventDefault()">
+                    <form onsubmit="event.preventDefault()" id="login_form">
                         <div class="mb-3">
                             <label for="username" class="form-label">Username</label>
                             <input type="text" class="form-control" id="username" name="username" required value="" maxlength="100">
