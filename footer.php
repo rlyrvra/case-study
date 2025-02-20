@@ -5,7 +5,7 @@
     margin-top: 50px;
     padding: 20px;
     background-color: #2f5932;
-    color: #ffffff;
+    color:rgb(0, 0, 0);
     border-radius: 10px;
 }
 </style>
