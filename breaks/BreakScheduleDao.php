@@ -67,7 +67,7 @@ class BreakScheduleDao
 
             error_log("Database Error: An error occurred while creating the break schedule. " .
                       "Exception: {$exception->getMessage()}");
-            echo $exception->getMessage();
+
             return ActionResult::FAILURE;
         }
     }
@@ -375,7 +375,7 @@ class BreakScheduleDao
             WHERE
         ";
 
-        if ( ! ctype_digit($breakSchedule->getId())) {
+        if ( ! ctype_digit( (string) $breakSchedule->getId())) {
             $query .= " SHA2(id, 256) = :break_schedule_id";
         } else {
             $query .= " id = :break_schedule_id";
@@ -432,7 +432,7 @@ class BreakScheduleDao
             WHERE
         ";
 
-        if ( ! ctype_digit($breakScheduleId)) {
+        if ( ! ctype_digit( (string) $breakScheduleId)) {
             $query .= " SHA2(id, 256) = :break_schedule_id";
         } else {
             $query .= " id = :break_schedule_id";

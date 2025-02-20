@@ -52,7 +52,7 @@ class LeaveRequestAttachmentDao
 
             error_log("Database Error: An error occurred while creating the attachment. " .
                       "Exception: {$exception->getMessage()}");
-            echo $exception->getMessage();
+
             return ActionResult::FAILURE;
         }
     }
@@ -211,7 +211,7 @@ class LeaveRequestAttachmentDao
         } catch (PDOException $exception) {
             error_log("Database Error: An error occurred while fetching the attachments. " .
                       "Exception: {$exception->getMessage()}");
-            echo $exception->getMessage();
+
             return ActionResult::FAILURE;
         }
     }
@@ -230,7 +230,7 @@ class LeaveRequestAttachmentDao
             WHERE
         ";
 
-        if ( ! ctype_digit($leaveRequestAttachmentId)) {
+        if ( ! ctype_digit( (string) $leaveRequestAttachmentId)) {
             $query .= " SHA2(id, 256) = :leave_request_attachment_id";
         } else {
             $query .= " id = :leave_request_attachment_id";

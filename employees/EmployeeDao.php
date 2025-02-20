@@ -461,7 +461,7 @@ class EmployeeDao
         } catch (PDOException $exception) {
             error_log("Database Error: An error occurred while fetching the employees. " .
                       "Exception: {$exception->getMessage()}");
-            echo $exception->getMessage();
+
             return ActionResult::FAILURE;
         }
     }
@@ -525,7 +525,7 @@ class EmployeeDao
             WHERE
         ";
 
-        if ( ! ctype_digit($employee->getId())) {
+        if ( ! ctype_digit( (string) $employee->getId())) {
             $query .= " SHA2(id, 256) = :employee_id";
         } else {
             $query .= " id = :employee_id";
@@ -604,7 +604,7 @@ class EmployeeDao
 
             error_log("Database Error: An error occurred while creating the employee. " .
                       "Exception: {$exception->getMessage()}");
-            
+
             return ActionResult::FAILURE;
         }
     }
@@ -618,7 +618,7 @@ class EmployeeDao
             WHERE
         ";
 
-        if ( ! ctype_digit($employeeId)) {
+        if ( ! ctype_digit( (string) $employeeId)) {
             $query .= " SHA2(id, 256) = :employee_id";
         } else {
             $query .= " id = :employee_id";
@@ -697,7 +697,7 @@ class EmployeeDao
             WHERE
         ";
 
-        if ( ! ctype_digit($employeeId)) {
+        if ( ! ctype_digit( (string) $employeeId)) {
             $query .= " SHA2(id, 256) = :employee_id";
         } else {
             $query .= " id = :employee_id";

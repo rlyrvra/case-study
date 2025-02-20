@@ -249,8 +249,6 @@ class EmploymentTypeBenefitDao
             {$offsetClause}
         ";
 
-        //echo "<pre> $query </pre>";
-
         try {
             $statement = $this->pdo->prepare($query);
 
@@ -297,7 +295,7 @@ class EmploymentTypeBenefitDao
         } catch (PDOException $exception) {
             error_log("Database Error: An error occurred while fetching employment type benefits. " .
                       "Exception: {$exception->getMessage()}");
-            echo $exception->getMessage();
+
             return ActionResult::FAILURE;
         }
     }
@@ -355,7 +353,7 @@ class EmploymentTypeBenefitDao
             WHERE
         ";
 
-        if ( ! ctype_digit($employmentTypeBenefitId)) {
+        if ( ! ctype_digit( (string) $employmentTypeBenefitId)) {
             $query .= " SHA2(id, 256) = :employment_benefit_id";
         } else {
             $query .= " id = :employment_benefit_id";

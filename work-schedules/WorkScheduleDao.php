@@ -74,7 +74,7 @@ class WorkScheduleDao
 
             error_log("Database Error: An error occurred while creating the work schedule. " .
                       "Exception: {$exception->getMessage()}");
-            echo $exception->getMessage();
+
             return ActionResult::FAILURE;
         }
     }
@@ -178,7 +178,6 @@ class WorkScheduleDao
 
             "employee_rfid_uid"        => "employee.rfid_uid                  AS employee_rfid_uid"       ,
             "employee_full_name"       => "employee.full_name                 AS employee_full_name"      ,
-            "employee_email_address"   => "employee.email_address             AS employee_email_address"  ,
             "employee_job_title_id"    => "employee.job_title_id              AS employee_job_title_id"   ,
             "employee_department_id"   => "employee.department_id             AS employee_department_id"  ,
             "employee_profile_picture" => "employee.profile_picture           AS employee_profile_picture",
@@ -259,11 +258,6 @@ class WorkScheduleDao
                         break;
 
                     case "IS NULL":
-                        $whereClauses[] = "{$column} {$operator}";
-
-                        break;
-
-                    case "IS NOT NULL":
                         $whereClauses[] = "{$column} {$operator}";
 
                         break;
@@ -377,7 +371,7 @@ class WorkScheduleDao
         } catch (PDOException $exception) {
             error_log("Database Error: An error occurred while fetching the work schedules. " .
                       "Exception: {$exception->getMessage()}");
-            echo $exception->getMessage();
+
             return ActionResult::FAILURE;
         }
     }
@@ -421,7 +415,6 @@ class WorkScheduleDao
             $datesToExclude = "";
 
             if (strpos($recurrenceRule, "EXDATE=") !== false) {
-
                 list($recurrenceRule, $datesToExclude) = explode("EXDATE=", $recurrenceRule);
                 $datesToExclude = rtrim($datesToExclude, ";");
             }
@@ -510,7 +503,7 @@ class WorkScheduleDao
             WHERE
         ";
 
-        if ( ! ctype_digit($workSchedule->getId())) {
+        if ( ! ctype_digit( (string) $workSchedule->getId())) {
             $query .= " SHA2(id, 256) = :work_schedule_id";
         } else {
             $query .= " id = :work_schedule_id";
@@ -550,7 +543,7 @@ class WorkScheduleDao
 
             error_log("Database Error: An error occurred while updating the work schedule. " .
                       "Exception: {$exception->getMessage()}");
-            echo $exception->getMessage();
+
             return ActionResult::FAILURE;
         }
     }
@@ -558,11 +551,6 @@ class WorkScheduleDao
     public function delete(int|string $workScheduleId): ActionResult
     {
         return $this->softDelete($workScheduleId);
-    }
-
-    public function fetchLastInsertedId(): int
-    {
-        return $this->pdo->lastInsertId();
     }
 
     private function softDelete(int|string $workScheduleId): ActionResult
@@ -574,7 +562,7 @@ class WorkScheduleDao
             WHERE
         ";
 
-        if ( ! ctype_digit($workScheduleId)) {
+        if ( ! ctype_digit( (string) $workScheduleId)) {
             $query .= " SHA2(id, 256) = :work_schedule_id";
         } else {
             $query .= " id = :work_schedule_id";

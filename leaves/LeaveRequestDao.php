@@ -101,7 +101,6 @@ class LeaveRequestDao
 
             "employee_full_name"       => "employee.full_name          AS employee_full_name"      ,
             "employee_profile_picture" => "employee.profile_picture    AS employee_profile_picture",
-            "employee_email_address"   => "employee.email_address      AS employee_email_address"  ,
             "employee_job_title_id"    => "employee.job_title_id       AS employee_job_title_id"   ,
             "employee_department_id"   => "employee.department_id      AS employee_department_id"  ,
             "employee_supervisor_id"   => "employee.supervisor_id      AS employee_supervisor_id"  ,
@@ -335,7 +334,7 @@ class LeaveRequestDao
         } catch (PDOException $exception) {
             error_log("Database Error: An error occurred while fetching the leave requests. " .
                       "Exception: {$exception->getMessage()}");
-            echo $exception->getMessage();
+
             return ActionResult::FAILURE;
         }
     }
@@ -355,7 +354,7 @@ class LeaveRequestDao
             WHERE
         ";
 
-        if ( ! ctype_digit($leaveRequest->getId())) {
+        if ( ! ctype_digit( (string) $leaveRequest->getId())) {
             $query .= " SHA2(id, 256) = :leave_request_id";
         } else {
             $query .= " id = :leave_request_id";
@@ -409,7 +408,7 @@ class LeaveRequestDao
             WHERE
         ";
 
-        if ( ! ctype_digit($leaveRequestId)) {
+        if ( ! ctype_digit( (string) $leaveRequestId)) {
             $query .= " SHA2(id, 256) = :leave_request_id";
         } else {
             $query .= " id = :leave_request_id";
@@ -504,7 +503,7 @@ class LeaveRequestDao
             WHERE
         ";
 
-        if ( ! ctype_digit($employeeId)) {
+        if ( ! ctype_digit( (string) $employeeId)) {
             $query .= " SHA2(employee_id, 256) = :employee_id";
         } else {
             $query .= " employee_id = :employee_id";
@@ -551,7 +550,7 @@ class LeaveRequestDao
             WHERE
         ";
 
-        if ( ! ctype_digit($leaveRequestId)) {
+        if ( ! ctype_digit( (string) $leaveRequestId)) {
             $query .= " SHA2(id, 256) = :leave_request_id";
         } else {
             $query .= " id = :leave_request_id";

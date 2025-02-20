@@ -55,7 +55,6 @@ class EmployeeAllowanceDao
 
             error_log("Database Error: An error occurred while assigning the allowance to employee. " .
                       "Exception: {$exception->getMessage()}");
-            echo $exception->getMessage();
 
             return ActionResult::FAILURE;
         }
@@ -194,7 +193,7 @@ class EmployeeAllowanceDao
             {$limitClause}
             {$offsetClause}
         ";
-        //echo $query;
+
         try {
             $statement = $this->pdo->prepare($query);
 
@@ -241,8 +240,7 @@ class EmployeeAllowanceDao
         } catch (PDOException $exception) {
             error_log("Database Error: An error occurred while fetching employee allowances. " .
                       "Exception: {$exception->getMessage()}");
-            //echo $exception->getMessage();
-            
+
             return ActionResult::FAILURE;
         }
     }
@@ -261,7 +259,7 @@ class EmployeeAllowanceDao
             WHERE
         ";
 
-        if ( ! ctype_digit($employeeAllowanceId)) {
+        if ( ! ctype_digit( (string) $employeeAllowanceId)) {
             $query .= " SHA2(id, 256) = :employee_allowance_id";
         } else {
             $query .= " id = :employee_allowance_id";

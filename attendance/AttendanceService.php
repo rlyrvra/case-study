@@ -210,7 +210,7 @@ class AttendanceService
                 'direction' => 'DESC'
             ],
             [
-                'column'    => 'work_schedule_snapshot_start_time',
+                'column'    => 'work_schedule_snapshot.start_time',
                 'direction' => 'DESC'
             ]
         ];
@@ -281,7 +281,6 @@ class AttendanceService
 
                 $workScheduleColumns = [
                     'id'                  ,
-                    'employee_id'         ,
                     'start_time'          ,
                     'end_time'            ,
                     'is_flextime'         ,
@@ -386,6 +385,8 @@ class AttendanceService
                     }
                 }
 
+                $currentWorkSchedule['employee_id'] = $employeeId;
+
                 $workScheduleStartDateTime = new DateTime($currentWorkSchedule['start_time']);
                 $workScheduleEndDateTime   = new DateTime($currentWorkSchedule['end_time'  ]);
 
@@ -420,13 +421,20 @@ class AttendanceService
 
                         if ($previousWorkScheduleEndDateTime > $adjustedWorkScheduleStartDateTime) {
                             $earlyCheckInWindow = max(0,
-                                $previousWorkScheduleEndDateTime->diff($workScheduleStartDateTime)->h * 60 +
-                                $previousWorkScheduleEndDateTime->diff($workScheduleStartDateTime)->i
+                                $workScheduleStartDateTime->diff($previousWorkScheduleEndDateTime)->h * 60 +
+                                $workScheduleStartDateTime->diff($previousWorkScheduleEndDateTime)->i
                             );
 
                             $adjustedWorkScheduleStartDateTime = (clone $workScheduleStartDateTime)
                                 ->modify('-' . $earlyCheckInWindow . ' minutes');
                         }
+                    }
+
+                    if ($currentDateTime < $adjustedWorkScheduleStartDateTime) {
+                        return [
+                            'status'  => 'warning',
+                            'message' => 'You are not allowed to check in early.'
+                        ];
                     }
                 }
             }
@@ -452,8 +460,8 @@ class AttendanceService
             $workScheduleEndDate   = new DateTime($workScheduleEndDateTime  ->format('Y-m-d'));
 
             if ($workScheduleEndDate > $workScheduleStartDate &&
-                $currentDate === $workScheduleEndDate &&
-                $workScheduleEndDateTime->format('H:i:s') !== '00:00:00') {
+                $workScheduleEndDateTime->format('H:i:s') !== '00:00:00' &&
+                $currentDate === $workScheduleEndDate) {
 
                 $leaveRequestColumns = [
                     'is_half_day'  ,
@@ -558,6 +566,7 @@ class AttendanceService
                         "break_schedule_snapshot_is_flexible"         => "is_flexible"                   ,
                         "break_schedule_snapshot_earliest_start_time" => "earliest_start_time"           ,
                         "break_schedule_snapshot_latest_end_time"     => "latest_end_time"               ,
+
                         "break_type_snapshot_duration_in_minutes"     => "break_type_duration_in_minutes",
                         "break_type_snapshot_is_paid"                 => "break_type_is_paid"
                     ];
@@ -565,7 +574,7 @@ class AttendanceService
                     $breakSchedules['result_set'] = array_map(function ($item) use ($mapKeys) {
                         $newItem = [];
                         foreach ($mapKeys as $oldKey => $newKey) {
-                            if (isset($item[$oldKey])) {
+                            if (array_key_exists($oldKey, $item)) {
                                 $newItem[$newKey] = $item[$oldKey];
                             }
                         }
@@ -799,13 +808,6 @@ class AttendanceService
                 return [
                     'status'  => 'success',
                     'message' => 'Checked-in recorded successfully.'
-                ];
-            }
-
-            if ( ! $workSchedule['is_flextime'] && $currentDateTime < $adjustedWorkScheduleStartDateTime) {
-                return [
-                    'status'  => 'warning',
-                    'message' => 'You are not allowed to check in early.'
                 ];
             }
 
@@ -1069,7 +1071,7 @@ class AttendanceService
                 ->modify('-' . $earlyCheckInWindow . ' minutes');
 
             $checkInDateTime  = new DateTime($lastAttendanceRecord['check_in_time']);
-            $checkOutDateTime = $currentDateTime;
+            $checkOutDateTime = clone $currentDateTime;
 
             $employeeBreakColumns = [
                 'break_schedule_snapshot_id'                 ,
@@ -1368,8 +1370,8 @@ class AttendanceService
                 $earlyCheckOutInMinutes = ($lastAttendanceRecord['work_schedule_snapshot_total_work_hours'] - $totalHoursWorked) * 60;
                 $currentAttendanceStatus = 'Undertime';
 
-            } elseif (floor($totalHoursWorked) > $lastAttendanceRecord['work_schedule_snapshot_total_work_hours']) {
-                $overtimeHours = floor($totalHoursWorked) - $lastAttendanceRecord['work_schedule_snapshot_total_work_hours'];
+            } elseif ($totalHoursWorked > $lastAttendanceRecord['work_schedule_snapshot_total_work_hours']) {
+                $overtimeHours = $totalHoursWorked - $lastAttendanceRecord['work_schedule_snapshot_total_work_hours'];
                 $currentAttendanceStatus = 'Overtime';
 
             } elseif ($lastAttendanceRecord['attendance_status'] !== 'Late') {
