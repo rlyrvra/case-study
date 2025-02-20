@@ -7,7 +7,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Lobster&display=swap" rel="stylesheet">
     
-    <title>smartWage</title>
+    <title>Welcome to smartWage - Simplify Your Payroll Today</title>
     <link rel="icon" type="image/x-icon" href="img/logo-files/logo1.ico" />
 
     <script src="https://kit.fontawesome.com/e82c3ed260.js" crossorigin="anonymous"></script>
