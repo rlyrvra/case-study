@@ -232,12 +232,8 @@ try {
 
     if($action === 'update'){
         $workScheduleData = $_POST['work_schedule'] ?? null;
-        $breakDifferences = $_POST['break_schedules'] ?? null; 
         $workScheduleId = $_POST['token'] ?? null; 
         if (!$workScheduleData) {
-            return;
-        }
-        if (!$breakDifferences) {
             return;
         }
         if (!$workScheduleId) {
@@ -258,13 +254,7 @@ try {
                 }
             }
         }
-        // print_r($workScheduleData);
-        // echo "<br>";
-        // print_r($breakTobeUpdated);
-        // echo "<br>";
-        // print_r($breakTobeCreated);
-        // echo "<br>";
-        // echo "Token: " . $workScheduleId . "</br>";
+        
 
         $selectedColumns = ['employee_id'];
         $filterCriteria = [

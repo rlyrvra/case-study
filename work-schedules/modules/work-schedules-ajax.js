@@ -135,7 +135,6 @@ function updateWorkScheduleBreak(button){
     const start_time = document.getElementById('update_startTime').value;
     const end_time = document.getElementById('update_endTime').value;
     const is_flex_time = document.getElementById('update_isFlextime').checked;
-    const total_hrs_per_week = document.getElementById('update_totalHoursPerWeek').value;
     const total_work_hrs = document.getElementById('update_totalWorkHours').value;
     const currentBreaks = currentBreakSchedule[1].break_schedules_data; 
     const rows = document.getElementById('update_break_assignment_table_body').getElementsByTagName('tr');
@@ -165,7 +164,7 @@ function updateWorkScheduleBreak(button){
         },
         success: function(response) {
             $('#response-test').html(response);
-            fetchAllWorkSchedules();
+            //fetchAllWorkSchedules();
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log("AJAX Error: " + textStatus + ": " + errorThrown);
