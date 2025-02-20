@@ -24,7 +24,7 @@
                     <div class="modal-box">
                         <h6 class="text-center">Break Type Details</h6>
                         <div id="breaks-create-table" class="table-responsive text-no-wrap">
-                            
+                            <div class="visually-hidden container-fluid spinner-border spinner-border-lg d-flex align-items-center justify-content-center w-px-700 h-px-700" role="status"></div>
                         </div>
                         <div class="mt-3">
                             <button class="btn btn-success float-end" onclick="addBreakRowCreate()">Add a break type ▼</button>

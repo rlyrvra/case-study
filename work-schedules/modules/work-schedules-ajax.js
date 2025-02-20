@@ -37,6 +37,20 @@ function fetchAllWorkSchedules(page = 1){
     //     End Date: ${endDate}, 
     //     Search Text: ${search}`);
 
+    var loadingSpinner = document.getElementById("loadingSpinner");
+    loadingSpinner.classList.remove("visually-hidden");
+
+
+    if(!skeletonLoaded){
+        loadSkeletonView(7, ['#', 'Employee Name', 'Start Time', 'End Time', 'Work Hours', 'Action'] , numberEntries, document.getElementById("skeleton-workSchedule-table"));
+        document.getElementById('skeleton-workSchedule-table').classList.remove("visually-hidden");
+        document.getElementById('work-schedules-table').classList.add("visually-hidden");
+        skeletonLoaded = true;
+    }else{
+        document.getElementById('skeleton-workSchedule-table').classList.remove("visually-hidden");
+        document.getElementById('work-schedules-table').classList.add("visually-hidden");
+    }
+
 
     $.ajax({
         url: 'work-schedules/modules/work-schedules-api',
@@ -56,6 +70,8 @@ function fetchAllWorkSchedules(page = 1){
         },
         success: function(response) {
             loadingSpinner.classList.add("visually-hidden");
+            document.getElementById('skeleton-workSchedule-table').classList.add("visually-hidden");
+            document.getElementById('work-schedules-table').classList.remove("visually-hidden");
             $('#work-schedules-table').html(response);
         },
         error: function(jqXHR, textStatus, errorThrown) {
@@ -165,7 +181,7 @@ function updateWorkScheduleBreak(button){
         },
         success: function(response) {
             $('#response-test').html(response);
-            //fetchAllWorkSchedules();
+            fetchAllWorkSchedules();
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log("AJAX Error: " + textStatus + ": " + errorThrown);

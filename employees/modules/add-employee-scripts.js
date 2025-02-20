@@ -1,6 +1,7 @@
 var buttons;
 var forms;
 var maxPageForm = 0;
+
 $(document).ready(function (){
     buttons = [
     document.getElementById("personal_information_btn"),
@@ -198,6 +199,83 @@ $(document).ready(function() {
         }
     });
 });
+let rfidOutput = document.getElementById("rfid-label");
+let rfidText = document.getElementById("rfid");
+let rfidShow = document.getElementById("rfid-label-output");
+$(document).ready(function () {
+    rfidText = document.getElementById("rfid");
+    rfidOutput = document.getElementById("rfid-label");
+    rfidShow = document.getElementById("rfid-label-output");
+});
+
+let lastKeyPressTime = Date.now();
+let rfidScanning = false;
+
+// Function to capture keypress and display RFID data
+document.addEventListener("keydown", function(event) {
+
+    if(!rfidScanning){
+        return;
+    }
+    if(rfidOutput.innerText === 'XXXXXXXXXXXX'){
+        rfidOutput.innerText = ""; // Clear the output
+    }
+
+    let key = event.key;
+
+    // Function to reset the output every 5 seconds
+    function resetOutput() {
+        let currentTime = Date.now();
+        // If 5 seconds have passed since the last key press, clear the output
+        if (currentTime - lastKeyPressTime >= 50) {
+            rfidOutput.innerText = ""; // Clear the output
+        }
+    }
+
+    // Set a timer to call resetOutput every second (to check inactivity)
+    setInterval(resetOutput, 50);
+
+    // Check if the key pressed is part of the RFID card number
+    if (key.length === 1) {
+    // Display the pressed key (card data)
+    rfidOutput.innerText += key;
+    lastKeyPressTime = Date.now();
+    }
+
+    // Optionally clear output when Enter is pressed (card is fully read)
+    if (key === "Enter" && rfidOutput.innerText.length > 0) {
+        console.log("RFID Card Read: " + rfidOutput.innerText);
+        rfidText.value = rfidOutput.innerText;
+        rfidShow.innerText = rfidOutput.innerText;
+        
+        
+    
+    }
+
+});
+
+function confirmRFID(){
+    $('#rfid_modal').modal('hide');
+    Swal.fire({
+        title: 'Success!',
+        text: 'This RFID has been successfully captured.',
+        icon: 'success',
+        confirmButtonText: 'OK'
+    });
+    rfidScanning = false;
+    rfidOutput.innerText = "XXXXXXXXXXXX";
+    rfidShow.innerText = "XXXXXXXXXXXX";
+}
+
+function turnOnScanning(){
+    rfidScanning = true;
+}
+
+function closeRFIDModal() {
+    $('#rfid_modal').modal('hide');
+    rfidScanning = false;
+    rfidOutput.innerText = "XXXXXXXXXXXX";
+}
 
 
 function showInvalidProfilePicture(){
@@ -277,4 +355,5 @@ function showSuccessCreate() {
         }
     });
 }
+
 

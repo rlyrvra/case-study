@@ -33,7 +33,7 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
 />
 
 <!-- Ajax -->
-<script src="work-schedules/modules/work-schedules-ajax.js?v1.14"></script>
+<script src="work-schedules/modules/work-schedules-ajax.js?v1.15"></script>
 <!-- Scripts -->
 <script src="work-schedules/modules/work-schedules-scripts.js?v1.15"></script>
 <!-- Ajax -->
@@ -41,7 +41,12 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
 <!-- Scripts -->
 <script src="work-schedules/modules/work-schedules-break-scripts.js?v1.1"></script>
 
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<!---Skeletons--->
+<script src="requests/table-skeleton.js?v1.2"></script>
+<!---Skeletons CSS-->
+<link rel="stylesheet" href="requests/table-skeleton.css?v1.1" />
+
+
 
 
 <!-- Fonts -->
@@ -51,6 +56,8 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
   href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
   rel="stylesheet"
 />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <!-- Icons. Uncomment required icon fonts -->
 <link rel="stylesheet" href="assets/vendor/fonts/boxicons.css" />
@@ -141,9 +148,9 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
                 <h5>List of Work Schedules
               </div>
               <div class="card-body">
+              <div id="skeleton-workSchedule-table" class="visually-hidden table-responsive text-no-wrap"></div>
                 <div id="work-schedules-table" class="table-responsive text-no-wrap">
                   <div class="container-fluid spinner-border spinner-border-lg d-flex align-items-center justify-content-center w-px-700 h-px-700" role="status"></div>
-                  <?php require_once __DIR__ . '/work-schedules/modules/work-schedules-table.php' ?>
                 </div>
               </div>
             </div>

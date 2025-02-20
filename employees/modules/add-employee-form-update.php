@@ -55,59 +55,59 @@ if($resultSet["total_row_count"] <= 0){
     <h3 class="form-title">Personal Information: (1/6)</h3>
     <form onsubmit="event.preventDefault()" id="personal_information">
         <div class="row mb-3">
-        <div class="col-md-4">
-            <label for="firstName" class="form-label">First Name*</label>
-            <input type="text" class="form-control" id="firstName" placeholder="First Name" value='<?php echo $employees[0]['first_name'];?>'>
-        </div>
-        <div class="col-md-4">
-            <label for="middleName" class="form-label">Middle Name</label>
-            <input type="text" class="form-control" id="middleName" placeholder="Middle Name" value='<?php echo $employees[0]['middle_name'];?>'>
-        </div>
-        <div class="col-md-4">
-            <label for="lastName" class="form-label">Last Name*</label>
-            <input type="text" class="form-control" id="lastName" placeholder="Last Name" value='<?php echo $employees[0]['last_name'];?>'>
-        </div>
-        </div>
-        <div class="row mb-3">
-        <div class="col-md-4">
-            <label for="dob" class="form-label">Date of Birth*</label>
-            <input type="date" class="form-control" id="dob" value='<?php echo $employees[0]['date_of_birth'];?>'>
-        </div>
-        <div class="col-md-4">
-            <label for="gender" class="form-label">Gender*</label>
-            <select id="gender" class="form-select">
-                <option disabled <?php echo empty($employees[0]['gender']) ? 'selected' : ''; ?>>Choose...</option>
-                <option value="Male" <?php echo $employees[0]['gender'] === 'Male' ? 'selected' : ''; ?>>Male</option>
-                <option value="Female" <?php echo $employees[0]['gender'] === 'Female' ? 'selected' : ''; ?>>Female</option>
-                <option value="Other" <?php echo $employees[0]['gender'] === 'Other' ? 'selected' : ''; ?>>Other</option>
-            </select>
-        </div>
-        <div class="col-md-4">
-            <label for="maritalStatus" class="form-label">Marital Status*</label>
-            <select id="maritalStatus" class="form-select">
-                <option disabled>Choose...</option>
-                <option value="Single" <?php echo $employees[0]['marital_status'] === 'Single' ? 'selected' : ''; ?>>Single</option>
-                <option value="Married" <?php echo $employees[0]['marital_status'] === 'Married' ? 'selected' : ''; ?>>Married</option>
-                <option value="Divorced" <?php echo $employees[0]['marital_status'] === 'Divorced' ? 'selected' : ''; ?>>Divorced</option>
-                <option value="Widowed" <?php echo $employees[0]['marital_status'] === 'Widowed' ? 'selected' : ''; ?>>Widowed</option>
-            </select>
-        </div>
-        </div>
-        <div class="row mb-3">
-        <div class="col-md-6">
-            <label for="nationality" class="form-label">Nationality*</label>
-            <input type="text" class="form-control" id="nationality" placeholder="Nationality" value='<?php echo $employees[0]['nationality'];?>'>
-        </div>
-        <div class="col-md-6">
-            <label for="religion" class="form-label">Religion</label>
-            <input type="text" class="form-control" id="religion" placeholder="Religion" value='<?php echo $employees[0]['religion'];?>'>
-        </div>
-        </div>
-        <div class="row mb-3">
-        <div class="col-md-12">
-            <label for="profilePicture" class="form-label">Profile Picture (MAX: 2MB)</label>
-            <input type="file" class="form-control" id="profilePicture" accept=".jpg" onchange="previewImage(event)">
-        </div>
+            <div class="col-md-4">
+                <label for="firstName" class="form-label">First Name*</label>
+                <input type="text" class="form-control" id="firstName" placeholder="First Name" value='<?php echo $employees[0]['first_name'];?>'>
+            </div>
+            <div class="col-md-4">
+                <label for="middleName" class="form-label">Middle Name</label>
+                <input type="text" class="form-control" id="middleName" placeholder="Middle Name" value='<?php echo $employees[0]['middle_name'];?>'>
+            </div>
+            <div class="col-md-4">
+                <label for="lastName" class="form-label">Last Name*</label>
+                <input type="text" class="form-control" id="lastName" placeholder="Last Name" value='<?php echo $employees[0]['last_name'];?>'>
+            </div>
+            </div>
+            <div class="row mb-3">
+            <div class="col-md-4">
+                <label for="dob" class="form-label">Date of Birth*</label>
+                <input type="date" class="form-control" id="dob" value='<?php echo $employees[0]['date_of_birth'];?>'>
+            </div>
+            <div class="col-md-4">
+                <label for="gender" class="form-label">Gender*</label>
+                <select id="gender" class="form-select">
+                    <option disabled <?php echo empty($employees[0]['gender']) ? 'selected' : ''; ?>>Choose...</option>
+                    <option value="Male" <?php echo $employees[0]['gender'] === 'Male' ? 'selected' : ''; ?>>Male</option>
+                    <option value="Female" <?php echo $employees[0]['gender'] === 'Female' ? 'selected' : ''; ?>>Female</option>
+                    <option value="Other" <?php echo $employees[0]['gender'] === 'Other' ? 'selected' : ''; ?>>Other</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label for="maritalStatus" class="form-label">Marital Status*</label>
+                <select id="maritalStatus" class="form-select">
+                    <option disabled>Choose...</option>
+                    <option value="Single" <?php echo $employees[0]['marital_status'] === 'Single' ? 'selected' : ''; ?>>Single</option>
+                    <option value="Married" <?php echo $employees[0]['marital_status'] === 'Married' ? 'selected' : ''; ?>>Married</option>
+                    <option value="Divorced" <?php echo $employees[0]['marital_status'] === 'Divorced' ? 'selected' : ''; ?>>Divorced</option>
+                    <option value="Widowed" <?php echo $employees[0]['marital_status'] === 'Widowed' ? 'selected' : ''; ?>>Widowed</option>
+                </select>
+            </div>
+            </div>
+            <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="nationality" class="form-label">Nationality*</label>
+                <input type="text" class="form-control" id="nationality" placeholder="Nationality" value='<?php echo $employees[0]['nationality'];?>'>
+            </div>
+            <div class="col-md-6">
+                <label for="religion" class="form-label">Religion</label>
+                <input type="text" class="form-control" id="religion" placeholder="Religion" value='<?php echo $employees[0]['religion'];?>'>
+            </div>
+            </div>
+            <div class="row mb-3">
+            <div class="col-md-12">
+                <label for="profilePicture" class="form-label">Profile Picture (MAX: 2MB)</label>
+                <input type="file" class="form-control" id="profilePicture" accept=".jpg" onchange="previewImage(event)">
+            </div>
         </div>
     </form>
     </div>
@@ -181,7 +181,33 @@ if($resultSet["total_row_count"] <= 0){
         <div class="row mb-3">
         <div class="col-md-6">
             <label for="rfid" class="form-label">RFID Tag*</label>
-            <input type="number" class="form-control" id="rfid" placeholder="Enter RFID Tag" value='<?php echo $employees[0]['rfid_uid'];?>'>
+            <div class="input-group" name="rfid">
+                <button type="button" class="input-group-text button btn-primary" data-bs-toggle="modal" data-bs-target="#rfid_modal"  onclick="turnOnScanning();"><i class="bx bx-card fs-4 lh-0"></i></button>
+                <input type="text" class="form-control" id="rfid" placeholder="Scan your RFID tag" required readonly value='<?php echo $employees[0]['rfid_uid'];?>'>
+            </div>
+        </div>
+        <!-- RFID Modal -->
+        <div class="modal fade" id="rfid_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="rfid_modalLabel">Scan your RFID</h5>
+                        <!-- Remove this button if you don't want a close button -->
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="closeRFIDModal()"></button>
+                    </div>
+                    <div class="modal-body">
+                        <img src="img/tap.webp" alt="tap-your-rfid" class='h-auto card-img mb-3'></img>
+                        <h1 class="display-1 text-center" id="rfid-label">XXXXXXXXXXXX</h1>
+                        <h2 class="display-2 text-center" id="rfid-label-output">XXXXXXXXXXXX</h2>
+                        <h6 class="display-6 text-muted">Make sure you click on the website to be able to capture the card.</h6>
+                    </div>
+                    <div class="modal-footer">
+                        <!-- Provide a controlled way to close it, like a confirmation button -->
+                        <button type="button" class="col btn btn-success" onclick="confirmRFID()">Confirm</button>
+                        <button type="button" class="col btn btn-danger" onclick="closeRFIDModal()">Close</button>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="col-md-6">
             <label for="employee-code" class="form-label">Employee Code*</label>
