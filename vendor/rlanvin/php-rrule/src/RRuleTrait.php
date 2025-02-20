@@ -157,7 +157,7 @@ trait RRuleTrait
 
 	public function getNthOccurrenceFrom($date, $index)
 	{
-		if (! is_numeric($index)) {
+		if (! ctype_digit($index)) {
 			throw new \InvalidArgumentException('Malformed index (must be a numeric)');
 		}
 
