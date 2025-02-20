@@ -123,9 +123,9 @@
         <?php
         if($_SESSION['access_role'] == 'Admin' || $_SESSION['access_role'] == 'Manager'){
         echo '
-        <li class="menu-item">
+        <li class="menu-item" id="holiday-menu">
             <a href="holiday" class="menu-link">
-            <div data-i18n="Under Maintenance">Holidays</div>
+            <div>Holidays</div>
             </a>
         </li>';
         }

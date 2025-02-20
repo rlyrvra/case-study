@@ -44,7 +44,7 @@ if(isset($_GET['m']) && $_GET['m'] === 'u'){
 }
 .form-container {
   background-color: #eaf7ea;
-  border-radius: 5px;
+  border-radius: 0.4rem;
   border: 2px solid #16423C;
 }
 .form-container label {
@@ -54,9 +54,11 @@ if(isset($_GET['m']) && $_GET['m'] === 'u'){
   font-size: 1.5rem;
   font-weight: bold;
   margin-bottom: 20px;
+  /* color: #fff; */
 }
 .form-label {
   font-weight: bold;
+  /* color: #fff; */
 }
 </style>
 <head>
@@ -76,7 +78,7 @@ if(isset($_GET['m']) && $_GET['m'] === 'u'){
 <!-- Ajax -->
 <script src="employees/modules/add-employee-ajax.js?v1.5"></script>
 <!-- Scripts -->
-<script src="employees/modules/add-employee-scripts.js?v1.6"></script>
+<script src="employees/modules/add-employee-scripts.js?v1.10"></script>
 
 
 

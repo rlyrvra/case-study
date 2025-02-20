@@ -80,6 +80,20 @@
       </tr>
     <?php endif; ?>
   </tbody>
+  <tfoot class="table-border-bottom-0">
+      <th style='width: 1%;'>#</th>
+      <th>NAME</th>
+      <th>DEPARTMENT HEAD</th>
+      <th>DESCRIPTION</th>
+      <th>STATUS</th>
+      <th>Created At</th>
+      <!-- <th>Created By</th> -->
+      <th>Updated At</th>
+      <!-- <th>Updated By</th> -->
+      <?php if (isset($status) && $status === 'Archived') echo "<th>Deleted At</th>"; ?>
+      <?php //if (isset($status) && $status === 'Archived') echo "<th>Deleted By</th>"; ?>
+      <?php if (!isset($status) || $status !== 'Archived') echo "<th style='width: 14%'>Action</th>"; ?> 
+  </tfoot>
 </table>
 
 <!-- Pagination Block (Placed after the table) -->

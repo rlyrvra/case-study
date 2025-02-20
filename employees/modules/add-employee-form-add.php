@@ -4,64 +4,64 @@
     <h3 class="form-title">Personal Information: (1/6)</h3>
     <form onsubmit="event.preventDefault()" id="personal_information">
         <div class="row mb-3">
-        <div class="col-md-4">
-            <label for="firstName" class="form-label">First Name*</label>
-            <input type="text" class="form-control" id="firstName" placeholder="First Name" required>
-        </div>
-        <div class="col-md-4">
-            <label for="middleName" class="form-label">Middle Name</label>
-            <input type="text" class="form-control" id="middleName" placeholder="Middle Name" required>
-        </div>
-        <div class="col-md-4">
-            <label for="lastName" class="form-label">Last Name*</label>
-            <input type="text" class="form-control" id="lastName" placeholder="Last Name" required>
-        </div>
-        </div>
-        <div class="row mb-3">
-        <div class="col-md-4">
-            <label for="dob" class="form-label">Date of Birth*</label>
-            <input type="date" class="form-control" id="dob" required>
-        </div>
-        <div class="col-md-4">
-            <label for="gender" class="form-label">Gender*</label>
-            <select id="gender" class="form-select" required>
-                <option value="" selected disabled>Choose...</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Other">Other</option>
-            </select>
-        </div>
-        <div class="col-md-4">
-            <label for="maritalStatus" class="form-label">Marital Status*</label>
-            <select id="maritalStatus" class="form-select" required>
-                <option value="" selected disabled>Choose...</option>
-                <option value="Single">Single</option>
-                <option value="Married">Married</option>
-                <option value="Divorced">Divorced</option>
-                <option value="Widowed">Widowed</option>
-            </select>
-        </div>
-        </div>
-        <div class="row mb-3">
-        <div class="col-md-6">
-            <label for="nationality" class="form-label">Nationality*</label>
-            <input type="text" class="form-control" id="nationality" placeholder="Nationality" required>
-        </div>
-        <div class="col-md-6">
-            <label for="religion" class="form-label">Religion</label>
-            <input type="text" class="form-control" id="religion" placeholder="Religion">
-        </div>
-        </div>
-        <div class="row mb-3">
-        <div class="col-md-12">
-            <label for="profilePicture" class="form-label">Profile Picture (MAX: 2MB)</label>
-            <input type="file" class="form-control" id="profilePicture" accept=".jpg" onchange="previewImage(event)">
-        </div>
-        </div>
-        <div class="row mb-3">
-        <div class="col-md-12 justify-content-end d-flex">
-            <button type="submit" class="btn btn-primary" id="personal_info_submit" onclick="nextForm(2, this)" data-form="personal_information">Submit</button>
-        </div>
+            <div class="col-md-4">
+                <label for="firstName" class="form-label">First Name*</label>
+                <input type="text" class="form-control" id="firstName" placeholder="John" required>
+            </div>
+            <div class="col-md-4">
+                <label for="middleName" class="form-label">Middle Name</label>
+                <input type="text" class="form-control" id="middleName" placeholder="Smith" required>
+            </div>
+            <div class="col-md-4">
+                <label for="lastName" class="form-label">Last Name*</label>
+                <input type="text" class="form-control" id="lastName" placeholder="Doe" required>
+            </div>
+            </div>
+            <div class="row mb-3">
+            <div class="col-md-4">
+                <label for="dob" class="form-label">Date of Birth*</label>
+                <input type="date" class="form-control" id="dob" required>
+            </div>
+            <div class="col-md-4">
+                <label for="gender" class="form-label">Gender*</label>
+                <select id="gender" class="form-select" required>
+                    <option value="" selected disabled>Choose...</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label for="maritalStatus" class="form-label">Marital Status*</label>
+                <select id="maritalStatus" class="form-select" required>
+                    <option value="" selected disabled>Choose...</option>
+                    <option value="Single">Single</option>
+                    <option value="Married">Married</option>
+                    <option value="Divorced">Divorced</option>
+                    <option value="Widowed">Widowed</option>
+                </select>
+            </div>
+            </div>
+            <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="nationality" class="form-label">Nationality*</label>
+                <input type="text" class="form-control" id="nationality" placeholder="Nationality" required>
+            </div>
+            <div class="col-md-6">
+                <label for="religion" class="form-label">Religion</label>
+                <input type="text" class="form-control" id="religion" placeholder="Religion">
+            </div>
+            </div>
+            <div class="row mb-3">
+            <div class="col-md-12">
+                <label for="profilePicture" class="form-label">Profile Picture (MAX: 2MB)</label>
+                <input type="file" class="form-control" id="profilePicture" accept=".jpg" onchange="previewImage(event)">
+            </div>
+            </div>
+            <div class="row mb-3">
+            <div class="col-md-12 justify-content-end d-flex">
+                <button type="submit" class="btn btn-primary" id="personal_info_submit" onclick="nextForm(2, this)" data-form="personal_information">Submit</button>
+            </div>
         </div>
     </form>
     </div>
@@ -93,11 +93,11 @@
         <div class="row mb-3">
         <div class="col-md-6">
             <label for="phone" class="form-label">Phone Number*</label>
-            <input type="text" class="form-control" id="phone" placeholder="Enter phone number" required>
+            <input type="text" class="form-control" id="phone" placeholder="+63 958 999 3454" required>
         </div>
         <div class="col-md-6">
             <label for="email" class="form-label">Email Address*</label>
-            <input type="email" class="form-control" id="email" placeholder="Enter email address" required>
+            <input type="email" class="form-control" id="email" placeholder="john.doe@example.com" required>
         </div>
         </div>
         <div class="mb-3">
@@ -145,7 +145,33 @@
         <div class="row mb-3">
         <div class="col-md-6">
             <label for="rfid" class="form-label">RFID Tag*</label>
-            <input type="text" class="form-control" id="rfid" placeholder="Enter RFID Tag" required>
+            <div class="input-group" name="rfid">
+                <button type="button" class="input-group-text button btn-primary" data-bs-toggle="modal" data-bs-target="#rfid_modal" onclick="turnOnScanning();"><i class="bx bx-card fs-4 lh-0"></i></button>
+                <input type="text" class="form-control" id="rfid" placeholder="Scan your RFID tag" required readonly>
+            </div>
+        </div>
+        <!-- RFID Modal -->
+        <div class="modal fade" id="rfid_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="rfid_modalLabel">Scan your RFID</h5>
+                        <!-- Remove this button if you don't want a close button -->
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="closeRFIDModal()"></button>
+                    </div>
+                    <div class="modal-body">
+                        <img src="img/tap.webp" alt="tap-your-rfid" class='h-auto card-img mb-3'></img>
+                        <h1 class="display-1 text-center visually-hidden" id="rfid-label">XXXXXXXXXXXX</h1>
+                        <h2 class="display-2 text-center mb-3" id="rfid-label-output">XXXXXXXXXXXX</h2>
+                        <h6 class="text-muted">Make sure you click on the website to be able to capture the card.</h6>
+                    </div>
+                    <div class="modal-footer">
+                        <!-- Provide a controlled way to close it, like a confirmation button -->
+                        <button type="button" class="col btn btn-success" onclick="confirmRFID()">Confirm</button>
+                        <button type="button" class="col btn btn-danger" onclick="closeRFIDModal()">Close</button>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="col-md-6">
             <label for="employee-code" class="form-label">Employee Code*</label>
