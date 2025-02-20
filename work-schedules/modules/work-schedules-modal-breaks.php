@@ -11,9 +11,26 @@
                     aria-label="Close"
                 ></button>
             </div>
-
             <div class="modal-body">
-
+                <style>
+                    .modal-box {
+                        background: white;
+                        border-radius: 10px;
+                        padding: 20px;
+                        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                    }
+                </style>
+                <div class="d-flex justify-content-center align-items-center bg-light">
+                    <div class="modal-box">
+                        <h6 class="text-center">Break Type Details</h6>
+                        <div id="breaks-create-table" class="table-responsive text-no-wrap">
+                            
+                        </div>
+                        <div class="mt-3">
+                            <button class="btn btn-success float-end" onclick="addBreakRowCreate()">Add a break type ▼</button>
+                        </div>
+                    </div>
+                </div>
             </div>
             
             <div class="modal-footer">

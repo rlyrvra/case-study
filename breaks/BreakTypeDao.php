@@ -29,8 +29,12 @@ class BreakTypeDao
             )
         ";
 
+        $isLocalTransaction = ! $this->pdo->inTransaction();
+
         try {
-            $this->pdo->beginTransaction();
+            if ($isLocalTransaction) {
+                $this->pdo->beginTransaction();
+            }
 
             $statement = $this->pdo->prepare($query);
 
@@ -41,20 +45,16 @@ class BreakTypeDao
 
             $statement->execute();
 
-            $breakType->setId($this->pdo->lastInsertId());
-
-            if ($this->createHistory($breakType) === ActionResult::FAILURE) {
-                $this->pdo->rollBack();
-
-                return ActionResult::FAILURE;
+            if ($isLocalTransaction) {
+                $this->pdo->commit();
             }
-
-            $this->pdo->commit();
 
             return ActionResult::SUCCESS;
 
         } catch (PDOException $exception) {
-            $this->pdo->rollBack();
+            if ($isLocalTransaction) {
+                $this->pdo->rollBack();
+            }
 
             error_log("Database Error: An error occurred while creating the break type. " .
                       "Exception: {$exception->getMessage()}");
@@ -63,10 +63,10 @@ class BreakTypeDao
         }
     }
 
-    public function createHistory(BreakType $breakType): ActionResult
+    public function createSnapshot(BreakTypeSnapshot $breakTypeSnapshot): int|ActionResult
     {
         $query = "
-            INSERT INTO break_types_history (
+            INSERT INTO break_type_snapshots (
                 break_type_id                    ,
                 name                             ,
                 duration_in_minutes              ,
@@ -82,21 +82,37 @@ class BreakTypeDao
             )
         ";
 
+        $isLocalTransaction = ! $this->pdo->inTransaction();
+
         try {
+            if ($isLocalTransaction) {
+                $this->pdo->beginTransaction();
+            }
+
             $statement = $this->pdo->prepare($query);
 
-            $statement->bindValue(":break_type_id"                    , $breakType->getId()                      , Helper::getPdoParameterType($breakType->getId()                      ));
-            $statement->bindValue(":name"                             , $breakType->getName()                    , Helper::getPdoParameterType($breakType->getName()                    ));
-            $statement->bindValue(":duration_in_minutes"              , $breakType->getDurationInMinutes()       , Helper::getPdoParameterType($breakType->getDurationInMinutes()       ));
-            $statement->bindValue(":is_paid"                          , $breakType->isPaid()                     , Helper::getPdoParameterType($breakType->isPaid()                     ));
-            $statement->bindValue(":is_require_break_in_and_break_out", $breakType->isRequireBreakInAndBreakOut(), Helper::getPdoParameterType($breakType->isRequireBreakInAndBreakOut()));
+            $statement->bindValue(":break_type_id"                    , $breakTypeSnapshot->getBreakTypeId()             , Helper::getPdoParameterType($breakTypeSnapshot->getBreakTypeId()             ));
+            $statement->bindValue(":name"                             , $breakTypeSnapshot->getName()                    , Helper::getPdoParameterType($breakTypeSnapshot->getName()                    ));
+            $statement->bindValue(":duration_in_minutes"              , $breakTypeSnapshot->getDurationInMinutes()       , Helper::getPdoParameterType($breakTypeSnapshot->getDurationInMinutes()       ));
+            $statement->bindValue(":is_paid"                          , $breakTypeSnapshot->isPaid()                     , Helper::getPdoParameterType($breakTypeSnapshot->isPaid()                     ));
+            $statement->bindValue(":is_require_break_in_and_break_out", $breakTypeSnapshot->isRequireBreakInAndBreakOut(), Helper::getPdoParameterType($breakTypeSnapshot->isRequireBreakInAndBreakOut()));
 
             $statement->execute();
 
-            return ActionResult::SUCCESS;
+            $lastInsertId = $this->pdo->lastInsertId();
+
+            if ($isLocalTransaction) {
+                $this->pdo->commit();
+            }
+
+            return $lastInsertId;
 
         } catch (PDOException $exception) {
-            error_log("Database Error: An error occurred while creating the break type history. " .
+            if ($isLocalTransaction) {
+                $this->pdo->rollBack();
+            }
+
+            error_log("Database Error: An error occurred while creating the break type snapshot. " .
                       "Exception: {$exception->getMessage()}");
 
             return ActionResult::FAILURE;
@@ -110,7 +126,7 @@ class BreakTypeDao
         ? int   $limit                = null,
         ? int   $offset               = null,
           bool  $includeTotalRowCount = true
-    ): ActionResult|array {
+    ): array|ActionResult {
 
         $tableColumns = [
             "id"                                => "break_type.id                                AS id"                               ,
@@ -137,6 +153,7 @@ class BreakTypeDao
 
         if (empty($filterCriteria)) {
             $whereClauses[] = "break_type.deleted_at IS NULL";
+
         } else {
             foreach ($filterCriteria as $filterCriterion) {
                 $column   = $filterCriterion["column"  ];
@@ -174,6 +191,7 @@ class BreakTypeDao
                 if (isset($sortCriterion["direction"])) {
                     $direction = $sortCriterion["direction"];
                     $orderByClauses[] = "{$column} {$direction}";
+
                 } elseif (isset($sortCriterion["custom_order"])) {
                     $customOrder = $sortCriterion["custom_order"];
                     $caseExpressions = ["CASE {$column}"];
@@ -263,13 +281,13 @@ class BreakTypeDao
         }
     }
 
-    public function fetchLatestHistoryId(int $breakTypeId): int|ActionResult
+    public function fetchLatestSnapshotById(int $breakTypeId): array|ActionResult
     {
         $query = "
             SELECT
-                id
+                *
             FROM
-                break_types_history
+                break_type_snapshots
             WHERE
                 break_type_id = :break_type_id
             ORDER BY
@@ -284,17 +302,17 @@ class BreakTypeDao
 
             $statement->execute();
 
-            return $statement->fetchColumn() ?: ActionResult::FAILURE;
+            return $statement->fetch(PDO::FETCH_ASSOC) ?: [];
 
         } catch (PDOException $exception) {
-            error_log("Database Error: An error occurred while fetching the break type history ID. " .
+            error_log("Database Error: An error occurred while fetching the break type snapshot. " .
                       "Exception: {$exception->getMessage()}");
 
             return ActionResult::FAILURE;
         }
     }
 
-    public function update(BreakType $breakType, bool $isHashedId = false): ActionResult
+    public function update(BreakType $breakType): ActionResult
     {
         $query = "
             UPDATE break_types
@@ -306,14 +324,18 @@ class BreakTypeDao
             WHERE
         ";
 
-        if ($isHashedId) {
+        if (is_string($breakType->getId())) {
             $query .= " SHA2(id, 256) = :break_type_id";
         } else {
             $query .= " id = :break_type_id";
         }
 
+        $isLocalTransaction = ! $this->pdo->inTransaction();
+
         try {
-            $this->pdo->beginTransaction();
+            if ($isLocalTransaction) {
+                $this->pdo->beginTransaction();
+            }
 
             $statement = $this->pdo->prepare($query);
 
@@ -326,18 +348,16 @@ class BreakTypeDao
 
             $statement->execute();
 
-            if ($this->createHistory($breakType) === ActionResult::FAILURE) {
-                $this->pdo->rollBack();
-
-                return ActionResult::FAILURE;
+            if ($isLocalTransaction) {
+                $this->pdo->commit();
             }
-
-            $this->pdo->commit();
 
             return ActionResult::SUCCESS;
 
         } catch (PDOException $exception) {
-            $this->pdo->rollBack();
+            if ($isLocalTransaction) {
+                $this->pdo->rollBack();
+            }
 
             error_log("Database Error: An error occurred while updating the break type. " .
                       "Exception: {$exception->getMessage()}");
@@ -346,12 +366,12 @@ class BreakTypeDao
         }
     }
 
-    public function delete(int|string $breakTypeId, bool $isHashedId = false): ActionResult
+    public function delete(int|string $breakTypeId): ActionResult
     {
-        return $this->softDelete($breakTypeId, $isHashedId);
+        return $this->softDelete($breakTypeId);
     }
 
-    private function softDelete(int|string $breakTypeId, bool $isHashedId = false): ActionResult
+    private function softDelete(int|string $breakTypeId): ActionResult
     {
         $query = "
             UPDATE break_types
@@ -360,14 +380,18 @@ class BreakTypeDao
             WHERE
         ";
 
-        if ($isHashedId) {
+        if (is_string($breakTypeId)) {
             $query .= " SHA2(id, 256) = :break_type_id";
         } else {
             $query .= " id = :break_type_id";
         }
 
+        $isLocalTransaction = ! $this->pdo->inTransaction();
+
         try {
-            $this->pdo->beginTransaction();
+            if ($isLocalTransaction) {
+                $this->pdo->beginTransaction();
+            }
 
             $statement = $this->pdo->prepare($query);
 
@@ -375,12 +399,16 @@ class BreakTypeDao
 
             $statement->execute();
 
-            $this->pdo->commit();
+            if ($isLocalTransaction) {
+                $this->pdo->commit();
+            }
 
             return ActionResult::SUCCESS;
 
         } catch (PDOException $exception) {
-            $this->pdo->rollBack();
+            if ($isLocalTransaction) {
+                $this->pdo->rollBack();
+            }
 
             error_log("Database Error: An error occurred while deleting the break type. " .
                       "Exception: {$exception->getMessage()}");

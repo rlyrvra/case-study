@@ -23,7 +23,7 @@ class PayslipRepository
         ? int   $limit                = null,
         ? int   $offset               = null,
           bool  $includeTotalRowCount = true
-    ): ActionResult|array {
+    ): array|ActionResult {
 
         return $this->payslipDao->fetchAll(
             columns             : $columns             ,
@@ -35,8 +35,8 @@ class PayslipRepository
         );
     }
 
-    public function updatePayslip(Payslip $payslip, bool $isHashedId = false): ActionResult
+    public function updatePayslip(Payslip $payslip): ActionResult
     {
-        return $this->payslipDao->update($payslip, $isHashedId);
+        return $this->payslipDao->update($payslip);
     }
 }

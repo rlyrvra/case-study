@@ -37,8 +37,12 @@ class LeaveRequestDao
             )
         ";
 
+        $isLocalTransaction = ! $this->pdo->inTransaction();
+
         try {
-            $this->pdo->beginTransaction();
+            if ($isLocalTransaction) {
+                $this->pdo->beginTransaction();
+            }
 
             $statement = $this->pdo->prepare($query);
 
@@ -53,12 +57,16 @@ class LeaveRequestDao
 
             $statement->execute();
 
-            $this->pdo->commit();
+            if ($isLocalTransaction) {
+                $this->pdo->commit();
+            }
 
             return ActionResult::SUCCESS;
 
         } catch (PDOException $exception) {
-            $this->pdo->rollBack();
+            if ($isLocalTransaction) {
+                $this->pdo->rollBack();
+            }
 
             error_log("Database Error: An error occurred while creating the leave request. " .
                       "Exception: {$exception->getMessage()}");
@@ -74,7 +82,7 @@ class LeaveRequestDao
         ? int   $limit                = null,
         ? int   $offset               = null,
           bool  $includeTotalRowCount = true
-    ): ActionResult|array {
+    ): array|ActionResult {
 
         $tableColumns = [
             "id"                       => "leave_request.id            AS id"                      ,
@@ -181,6 +189,7 @@ class LeaveRequestDao
 
         if (empty($filterCriteria)) {
             $whereClauses[] = "leave_request.deleted_at IS NULL";
+
         } else {
             foreach ($filterCriteria as $filterCriterion) {
                 $column   = $filterCriterion["column"  ];
@@ -239,6 +248,7 @@ class LeaveRequestDao
                 if (isset($sortCriterion["direction"])) {
                     $direction = $sortCriterion["direction"];
                     $orderByClauses[] = "{$column} {$direction}";
+
                 } elseif (isset($sortCriterion["custom_order"])) {
                     $customOrder = $sortCriterion["custom_order"];
                     $caseExpressions = ["CASE {$column}"];
@@ -330,7 +340,7 @@ class LeaveRequestDao
         }
     }
 
-    public function update(LeaveRequest $leaveRequest, bool $isHashedId = false): ActionResult
+    public function update(LeaveRequest $leaveRequest): ActionResult
     {
         $query = "
             UPDATE leave_requests
@@ -345,14 +355,18 @@ class LeaveRequestDao
             WHERE
         ";
 
-        if ($isHashedId) {
+        if (is_string($leaveRequest->getId())) {
             $query .= " SHA2(id, 256) = :leave_request_id";
         } else {
             $query .= " id = :leave_request_id";
         }
 
+        $isLocalTransaction = ! $this->pdo->inTransaction();
+
         try {
-            $this->pdo->beginTransaction();
+            if ($isLocalTransaction) {
+                $this->pdo->beginTransaction();
+            }
 
             $statement = $this->pdo->prepare($query);
 
@@ -368,12 +382,16 @@ class LeaveRequestDao
 
             $statement->execute();
 
-            $this->pdo->commit();
+            if ($isLocalTransaction) {
+                $this->pdo->commit();
+            }
 
             return ActionResult::SUCCESS;
 
         } catch (PDOException $exception) {
-            $this->pdo->rollBack();
+            if ($isLocalTransaction) {
+                $this->pdo->rollBack();
+            }
 
             error_log("Database Error: An error occurred while updating the leave request. " .
                       "Exception: {$exception->getMessage()}");
@@ -382,7 +400,7 @@ class LeaveRequestDao
         }
     }
 
-    public function updateStatus(int|string $leaveRequestId, string $status, bool $isHashedId = false): ActionResult
+    public function updateStatus(int|string $leaveRequestId, string $status): ActionResult
     {
         $query = "
             UPDATE leave_requests
@@ -391,14 +409,18 @@ class LeaveRequestDao
             WHERE
         ";
 
-        if ($isHashedId) {
+        if (is_string($leaveRequestId)) {
             $query .= " SHA2(id, 256) = :leave_request_id";
         } else {
             $query .= " id = :leave_request_id";
         }
 
+        $isLocalTransaction = ! $this->pdo->inTransaction();
+
         try {
-            $this->pdo->beginTransaction();
+            if ($isLocalTransaction) {
+                $this->pdo->beginTransaction();
+            }
 
             $statement = $this->pdo->prepare($query);
 
@@ -408,12 +430,16 @@ class LeaveRequestDao
 
             $statement->execute();
 
-            $this->pdo->commit();
+            if ($isLocalTransaction) {
+                $this->pdo->commit();
+            }
 
             return ActionResult::SUCCESS;
 
         } catch (PDOException $exception) {
-            $this->pdo->rollBack();
+            if ($isLocalTransaction) {
+                $this->pdo->rollBack();
+            }
 
             error_log("Database Error: An error occurred while updating the status of the leave request. " .
                       "Exception: {$exception->getMessage()}");
@@ -437,8 +463,12 @@ class LeaveRequestDao
                 END
         ";
 
+        $isLocalTransaction = ! $this->pdo->inTransaction();
+
         try {
-            $this->pdo->beginTransaction();
+            if ($isLocalTransaction) {
+                $this->pdo->beginTransaction();
+            }
 
             $statement = $this->pdo->prepare($query);
 
@@ -446,12 +476,16 @@ class LeaveRequestDao
 
             $statement->execute();
 
-            $this->pdo->commit();
+            if ($isLocalTransaction) {
+                $this->pdo->commit();
+            }
 
             return ActionResult::SUCCESS;
 
         } catch (PDOException $exception) {
-            $this->pdo->rollBack();
+            if ($isLocalTransaction) {
+                $this->pdo->rollBack();
+            }
 
             error_log("Database Error: An error occurred while updating the leave request statuses. " .
                       "Exception: {$exception->getMessage()}");
@@ -460,7 +494,7 @@ class LeaveRequestDao
         }
     }
 
-    public function isEmployeeOnLeave(int|string $employeeId, bool $isHashedId = false): ActionResult|array|null
+    public function isEmployeeOnLeave(int|string $employeeId): array|null|ActionResult
     {
         $query = "
             SELECT
@@ -470,7 +504,7 @@ class LeaveRequestDao
             WHERE
         ";
 
-        if ($isHashedId) {
+        if (is_string($employeeId)) {
             $query .= " SHA2(employee_id, 256) = :employee_id";
         } else {
             $query .= " employee_id = :employee_id";
@@ -503,12 +537,12 @@ class LeaveRequestDao
         }
     }
 
-    public function delete(int|string $leaveRequestId, bool $isHashedId = false): ActionResult
+    public function delete(int|string $leaveRequestId): ActionResult
     {
-        return $this->softDelete($leaveRequestId, $isHashedId);
+        return $this->softDelete($leaveRequestId);
     }
 
-    private function softDelete(int|string $leaveRequestId, bool $isHashedId = false): ActionResult
+    private function softDelete(int|string $leaveRequestId): ActionResult
     {
         $query = "
             UPDATE leave_requests
@@ -517,14 +551,18 @@ class LeaveRequestDao
             WHERE
         ";
 
-        if ($isHashedId) {
+        if (is_string($leaveRequestId)) {
             $query .= " SHA2(id, 256) = :leave_request_id";
         } else {
             $query .= " id = :leave_request_id";
         }
 
+        $isLocalTransaction = ! $this->pdo->inTransaction();
+
         try {
-            $this->pdo->beginTransaction();
+            if ($isLocalTransaction) {
+                $this->pdo->beginTransaction();
+            }
 
             $statement = $this->pdo->prepare($query);
 
@@ -532,12 +570,16 @@ class LeaveRequestDao
 
             $statement->execute();
 
-            $this->pdo->commit();
+            if ($isLocalTransaction) {
+                $this->pdo->commit();
+            }
 
             return ActionResult::SUCCESS;
 
         } catch (PDOException $exception) {
-            $this->pdo->rollBack();
+            if ($isLocalTransaction) {
+                $this->pdo->rollBack();
+            }
 
             error_log("Database Error: An error occurred while deleting the leave request. " .
                       "Exception: {$exception->getMessage()}");

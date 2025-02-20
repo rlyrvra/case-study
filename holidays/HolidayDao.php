@@ -35,8 +35,12 @@ class HolidayDao
             )
         ";
 
+        $isLocalTransaction = ! $this->pdo->inTransaction();
+
         try {
-            $this->pdo->beginTransaction();
+            if ($isLocalTransaction) {
+                $this->pdo->beginTransaction();
+            }
 
             $statement = $this->pdo->prepare($query);
 
@@ -50,12 +54,16 @@ class HolidayDao
 
             $statement->execute();
 
-            $this->pdo->commit();
+            if ($isLocalTransaction) {
+                $this->pdo->commit();
+            }
 
             return ActionResult::SUCCESS;
 
         } catch (PDOException $exception) {
-            $this->pdo->rollBack();
+            if ($isLocalTransaction) {
+                $this->pdo->rollBack();
+            }
 
             error_log("Database Error: An error occurred while creating the holiday. " .
                       "Exception: {$exception->getMessage()}");
@@ -71,7 +79,7 @@ class HolidayDao
         ? int   $limit                = null,
         ? int   $offset               = null,
           bool  $includeTotalRowCount = true
-    ): ActionResult|array {
+    ): array|ActionResult {
 
         $tableColumns = [
             "id"                    => "holiday.id                    AS id"                   ,
@@ -101,6 +109,7 @@ class HolidayDao
 
         if (empty($filterCriteria)) {
             $whereClauses[] = "holiday.deleted_at IS NULL";
+
         } else {
             foreach ($filterCriteria as $filterCriterion) {
                 $column   = $filterCriterion["column"  ];
@@ -140,6 +149,7 @@ class HolidayDao
                 if (isset($sortCriterion["direction"])) {
                     $direction = $sortCriterion["direction"];
                     $orderByClauses[] = "{$column} {$direction}";
+
                 } elseif (isset($sortCriterion["custom_order"])) {
                     $customOrder = $sortCriterion["custom_order"];
                     $caseExpressions = ["CASE {$column}"];
@@ -229,7 +239,7 @@ class HolidayDao
         }
     }
 
-    public function update(Holiday $holiday, bool $isHashedId = false): ActionResult
+    public function update(Holiday $holiday): ActionResult
     {
         $query = "
             UPDATE holidays
@@ -244,14 +254,18 @@ class HolidayDao
             WHERE
         ";
 
-        if ($isHashedId) {
+        if (is_string($holiday->getId())) {
             $query .= " SHA2(id, 256) = :holiday_id";
         } else {
             $query .= " id = :holiday_id";
         }
 
+        $isLocalTransaction = ! $this->pdo->inTransaction();
+
         try {
-            $this->pdo->beginTransaction();
+            if ($isLocalTransaction) {
+                $this->pdo->beginTransaction();
+            }
 
             $statement = $this->pdo->prepare($query);
 
@@ -267,12 +281,16 @@ class HolidayDao
 
             $statement->execute();
 
-            $this->pdo->commit();
+            if ($isLocalTransaction) {
+                $this->pdo->commit();
+            }
 
             return ActionResult::SUCCESS;
 
         } catch (PDOException $exception) {
-            $this->pdo->rollBack();
+            if ($isLocalTransaction) {
+                $this->pdo->rollBack();
+            }
 
             error_log("Database Error: An error occurred while updating the holiday. " .
                       "Exception: {$exception->getMessage()}");
@@ -281,12 +299,12 @@ class HolidayDao
         }
     }
 
-    public function delete(int|string $holidayId, bool $isHashedId = false): ActionResult
+    public function delete(int|string $holidayId): ActionResult
     {
-        return $this->softDelete($holidayId, $isHashedId);
+        return $this->softDelete($holidayId);
     }
 
-    private function softDelete(int|string $holidayId, bool $isHashedId = false): ActionResult
+    private function softDelete(int|string $holidayId): ActionResult
     {
         $query = "
             UPDATE holidays
@@ -296,14 +314,18 @@ class HolidayDao
             WHERE
         ";
 
-        if ($isHashedId) {
+        if (is_string($holidayId)) {
             $query .= " SHA2(id, 256) = :holiday_id";
         } else {
             $query .= " id = :holiday_id";
         }
 
+        $isLocalTransaction = ! $this->pdo->inTransaction();
+
         try {
-            $this->pdo->beginTransaction();
+            if ($isLocalTransaction) {
+                $this->pdo->beginTransaction();
+            }
 
             $statement = $this->pdo->prepare($query);
 
@@ -311,12 +333,16 @@ class HolidayDao
 
             $statement->execute();
 
-            $this->pdo->commit();
+            if ($isLocalTransaction) {
+                $this->pdo->commit();
+            }
 
             return ActionResult::SUCCESS;
 
         } catch (PDOException $exception) {
-            $this->pdo->rollBack();
+            if ($isLocalTransaction) {
+                $this->pdo->rollBack();
+            }
 
             error_log("Database Error: An error occurred while deleting the holiday. " .
                       "Exception: {$exception->getMessage()}");

@@ -12,7 +12,7 @@ class EmployeeDao
         $this->pdo = $pdo;
     }
 
-    public function create(Employee $employee): ActionResult|string
+    public function create(Employee $employee): ActionResult
     {
         $query = "
             INSERT INTO employees (
@@ -113,8 +113,12 @@ class EmployeeDao
             )
         ";
 
+        $isLocalTransaction = ! $this->pdo->inTransaction();
+
         try {
-            $this->pdo->beginTransaction();
+            if ($isLocalTransaction) {
+                $this->pdo->beginTransaction();
+            }
 
             $statement = $this->pdo->prepare($query);
 
@@ -167,12 +171,16 @@ class EmployeeDao
 
             $statement->execute();
 
-            $this->pdo->commit();
+            if ($isLocalTransaction) {
+                $this->pdo->commit();
+            }
 
             return ActionResult::SUCCESS;
 
         } catch (PDOException $exception) {
-            $this->pdo->rollBack();
+            if ($isLocalTransaction) {
+                $this->pdo->rollBack();
+            }
 
             error_log("Database Error: An error occurred while creating the employee. " .
                       "Exception: {$exception->getMessage()}");
@@ -188,7 +196,7 @@ class EmployeeDao
         ? int   $limit                = null,
         ? int   $offset               = null,
           bool  $includeTotalRowCount = true
-    ): ActionResult|array {
+    ): array|ActionResult {
 
         $tableColumns = [
             "id"                              => "employee.id                              AS id"                             ,
@@ -313,6 +321,7 @@ class EmployeeDao
 
         if (empty($filterCriteria)) {
             $whereClauses[] = "employee.deleted_at is NULL";
+
         } else {
             foreach ($filterCriteria as $filterCriterion) {
                 $column   = $filterCriterion["column"  ];
@@ -457,12 +466,12 @@ class EmployeeDao
         }
     }
 
-    public function fetchLastInsertedId(): int|string
+    public function fetchLastInsertedId(): int
     {
         return $this->pdo->lastInsertId();
     }
 
-    public function update(Employee $employee, bool $isHashedId = false): ActionResult|string
+    public function update(Employee $employee): ActionResult
     {
         $query = "
             UPDATE employees
@@ -516,14 +525,18 @@ class EmployeeDao
             WHERE
         ";
 
-        if ($isHashedId) {
+        if (is_string($employee->getId())) {
             $query .= " SHA2(id, 256) = :employee_id";
         } else {
             $query .= " id = :employee_id";
         }
 
+        $isLocalTransaction = ! $this->pdo->inTransaction();
+
         try {
-            $this->pdo->beginTransaction();
+            if ($isLocalTransaction) {
+                $this->pdo->beginTransaction();
+            }
 
             $statement = $this->pdo->prepare($query);
 
@@ -578,12 +591,16 @@ class EmployeeDao
 
             $statement->execute();
 
-            $this->pdo->commit();
+            if ($isLocalTransaction) {
+                $this->pdo->commit();
+            }
 
             return ActionResult::SUCCESS;
 
         } catch (PDOException $exception) {
-            $this->pdo->rollBack();
+            if ($isLocalTransaction) {
+                $this->pdo->rollBack();
+            }
 
             error_log("Database Error: An error occurred while creating the employee. " .
                       "Exception: {$exception->getMessage()}");
@@ -592,7 +609,7 @@ class EmployeeDao
         }
     }
 
-    public function changePassword(int|string $employeeId, string $newHashedPassword, bool $isHashedId = false): ActionResult
+    public function changePassword(int|string $employeeId, string $newHashedPassword): ActionResult
     {
         $query = "
             UPDATE employees
@@ -601,14 +618,18 @@ class EmployeeDao
             WHERE
         ";
 
-        if ($isHashedId) {
+        if (is_string($employeeId)) {
             $query .= " SHA2(id, 256) = :employee_id";
         } else {
             $query .= " id = :employee_id";
         }
 
+        $isLocalTransaction = ! $this->pdo->inTransaction();
+
         try {
-            $this->pdo->beginTransaction();
+            if ($isLocalTransaction) {
+                $this->pdo->beginTransaction();
+            }
 
             $statement = $this->pdo->prepare($query);
 
@@ -618,12 +639,16 @@ class EmployeeDao
 
             $statement->execute();
 
-            $this->pdo->commit();
+            if ($isLocalTransaction) {
+                $this->pdo->commit();
+            }
 
             return ActionResult::SUCCESS;
 
         } catch (PDOException $exception) {
-            $this->pdo->rollBack();
+            if ($isLocalTransaction) {
+                $this->pdo->rollBack();
+            }
 
             error_log("Database Error: An error occurred while changing the password. " .
                       "Exception: {$exception->getMessage()}");
@@ -632,7 +657,7 @@ class EmployeeDao
         }
     }
 
-    public function countTotalRecords(): ActionResult|int
+    public function countTotalRecords(): int|ActionResult
     {
         $query = "
             SELECT
@@ -658,12 +683,12 @@ class EmployeeDao
         }
     }
 
-    public function delete(int|string $employeeId, bool $isHashedId = false): ActionResult
+    public function delete(int|string $employeeId): ActionResult
     {
-        return $this->softDelete($employeeId, $isHashedId);
+        return $this->softDelete($employeeId);
     }
 
-    private function softDelete(int|string $employeeId, bool $isHashedId = false): ActionResult
+    private function softDelete(int|string $employeeId): ActionResult
     {
         $query = "
             UPDATE employees
@@ -672,14 +697,18 @@ class EmployeeDao
             WHERE
         ";
 
-        if ($isHashedId) {
+        if (is_string($employeeId)) {
             $query .= " SHA2(id, 256) = :employee_id";
         } else {
             $query .= " id = :employee_id";
         }
 
+        $isLocalTransaction = ! $this->pdo->inTransaction();
+
         try {
-            $this->pdo->beginTransaction();
+            if ($isLocalTransaction) {
+                $this->pdo->beginTransaction();
+            }
 
             $statement = $this->pdo->prepare($query);
 
@@ -687,12 +716,16 @@ class EmployeeDao
 
             $statement->execute();
 
-            $this->pdo->commit();
+            if ($isLocalTransaction) {
+                $this->pdo->commit();
+            }
 
             return ActionResult::SUCCESS;
 
         } catch (PDOException $exception) {
-            $this->pdo->rollBack();
+            if ($isLocalTransaction) {
+                $this->pdo->rollBack();
+            }
 
             error_log("Database Error: An error occurred while deleting the employee. " .
                       "Exception: {$exception->getMessage()}");

@@ -23,7 +23,7 @@ class EmploymentTypeBenefitRepository
         ? int   $limit                = null,
         ? int   $offset               = null,
           bool  $includeTotalRowCount = true
-    ): ActionResult|array {
+    ): array|ActionResult {
 
         return $this->employmentTypeBenefitDao->fetchAll(
             columns             : $columns             ,
@@ -35,8 +35,8 @@ class EmploymentTypeBenefitRepository
         );
     }
 
-    public function deleteEmploymentTypeBenefit(int|string $employmentTypeBenefitId, bool $isHashedId = false): ActionResult
+    public function deleteEmploymentTypeBenefit(int|string $employmentTypeBenefitId): ActionResult
     {
-        return $this->employmentTypeBenefitDao->delete($employmentTypeBenefitId, $isHashedId);
+        return $this->employmentTypeBenefitDao->delete($employmentTypeBenefitId);
     }
 }

@@ -16,6 +16,11 @@ class BreakTypeRepository
         return $this->breakTypeDao->create($breakType);
     }
 
+    public function createBreakTypeSnapshot(BreakTypeSnapshot $breakTypeSnapshot): int|ActionResult
+    {
+        return $this->breakTypeDao->createSnapshot($breakTypeSnapshot);
+    }
+
     public function fetchAllBreakTypes(
         ? array $columns              = null,
         ? array $filterCriteria       = null,
@@ -23,7 +28,7 @@ class BreakTypeRepository
         ? int   $limit                = null,
         ? int   $offset               = null,
           bool  $includeTotalRowCount = true
-    ): ActionResult|array {
+    ): array|ActionResult {
 
         return $this->breakTypeDao->fetchAll(
             columns             : $columns             ,
@@ -35,18 +40,18 @@ class BreakTypeRepository
         );
     }
 
-    public function fetchLatestBreakTypeHistoryId(int $breakTypeId): int|null|ActionResult
+    public function fetchLatestBreakTypeSnapshotById(int $breakTypeId): array|ActionResult
     {
-        return $this->breakTypeDao->fetchLatestHistoryId($breakTypeId);
+        return $this->breakTypeDao->fetchLatestSnapshotById($breakTypeId);
     }
 
-    public function updateBreakType(BreakType $breakType, bool $isHashedId = false): ActionResult
+    public function updateBreakType(BreakType $breakType): ActionResult
     {
-        return $this->breakTypeDao->update($breakType, $isHashedId);
+        return $this->breakTypeDao->update($breakType);
     }
 
-    public function deleteBreakType(int|string $breakTypeId, bool $isHashedId = false): ActionResult
+    public function deleteBreakType(int|string $breakTypeId): ActionResult
     {
-        return $this->breakTypeDao->delete($breakTypeId, $isHashedId);
+        return $this->breakTypeDao->delete($breakTypeId);
     }
 }

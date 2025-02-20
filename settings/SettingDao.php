@@ -19,7 +19,7 @@ class SettingDao
         ? int   $limit                = null,
         ? int   $offset               = null,
           bool  $includeTotalRowCount = true
-    ): ActionResult|array {
+    ): array|ActionResult {
 
         $tableColumns = [
             "id"            => "setting.id            AS id"           ,
@@ -95,6 +95,7 @@ class SettingDao
                 if (isset($sortCriterion["direction"])) {
                     $direction = $sortCriterion["direction"];
                     $orderByClauses[] = "{$column} {$direction}";
+
                 } elseif (isset($sortCriterion["custom_order"])) {
                     $customOrder = $sortCriterion["custom_order"];
                     $caseExpressions = ["CASE {$column}"];
@@ -194,8 +195,12 @@ class SettingDao
                 group_name = :group_name
         ";
 
+        $isLocalTransaction = ! $this->pdo->inTransaction();
+
         try {
-            $this->pdo->beginTransaction();
+            if ($isLocalTransaction) {
+                $this->pdo->beginTransaction();
+            }
 
             $statement = $this->pdo->prepare($query);
 
@@ -206,12 +211,16 @@ class SettingDao
 
             $statement->execute();
 
-            $this->pdo->commit();
+            if ($isLocalTransaction) {
+                $this->pdo->commit();
+            }
 
             return ActionResult::SUCCESS;
 
         } catch (PDOException $exception) {
-            $this->pdo->rollBack();
+            if ($isLocalTransaction) {
+                $this->pdo->rollBack();
+            }
 
             error_log("Database Error: An error occurred while updating the setting. " .
                       "Exception: {$exception->getMessage()}");

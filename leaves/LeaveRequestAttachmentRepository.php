@@ -23,7 +23,7 @@ class LeaveRequestAttachmentRepository
         ? int   $limit                = null,
         ? int   $offset               = null,
           bool  $includeTotalRowCount = true
-    ): ActionResult|array {
+    ): array|ActionResult {
 
         return $this->leaveRequestAttachmentDao->fetchAll(
             columns             : $columns             ,
@@ -35,8 +35,8 @@ class LeaveRequestAttachmentRepository
         );
     }
 
-    public function deleteLeaveRequestAttachment(int|string $leaveRequestAttachmentId, bool $isHashedId = false): ActionResult
+    public function deleteLeaveRequestAttachment(int|string $leaveRequestAttachmentId): ActionResult
     {
-        return $this->leaveRequestAttachmentDao->delete($leaveRequestAttachmentId, $isHashedId);
+        return $this->leaveRequestAttachmentDao->delete($leaveRequestAttachmentId);
     }
 }

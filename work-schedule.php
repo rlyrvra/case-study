@@ -33,9 +33,13 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
 />
 
 <!-- Ajax -->
-<script src="work-schedules/modules/work-schedules-ajax.js?v1.4"></script>
+<script src="work-schedules/modules/work-schedules-ajax.js?v1.12"></script>
 <!-- Scripts -->
-<script src="work-schedules/modules/work-schedules-scripts.js?v1.5"></script>
+<script src="work-schedules/modules/work-schedules-scripts.js?v1.14"></script>
+<!-- Ajax -->
+<script src="work-schedules/modules/work-schedules-break-ajax.js?v1.1"></script>
+<!-- Scripts -->
+<script src="work-schedules/modules/work-schedules-break-scripts.js?v1.1"></script>
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -78,6 +82,11 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
 
 <!-- Sweet Alert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<style>
+  .swal2-container {
+    z-index: 1100 !important; /* Higher than Bootstrap's modal */
+}
+</style>
 </head>
 <body>
 <!-- Layout wrapper -->
@@ -90,6 +99,7 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
       document.getElementById("work-schedules-menu").classList.add("active");
     </script>
     <?php require_once __DIR__ . '/work-schedules/modules/work-schedules-modal-add-form.php' ?>
+    <?php require_once __DIR__ . '/work-schedules/modules/work-schedules-modal-update-form.php' ?>
     <?php require_once __DIR__ . '/work-schedules/modules/work-schedules-modal-breaks.php' ?>
     <!-- Layout container -->
     <div class="layout-page">
@@ -101,7 +111,7 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
             <div id="response-test"></div>
             <div class="container-fluid mb-3 d-flex justify-content-between flex-column flex-lg-row">
               <h1 class="display-1">Work Schedules</h1>
-              <button type="button" class="btn btn-success btn-xl" data-bs-toggle="modal" data-bs-target="#add_work_schedules">
+              <button type="button" class="btn btn-success btn-xl" data-bs-toggle="modal" data-bs-target="#add_work_schedules" onclick="fetchBreakTypes()">
                 <i class="bx bx-plus bx-lg"></i>Add Work Schedule
               </button>
               
@@ -110,7 +120,7 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
             <div class="container-fluid mb-3 d-flex justify-content-between flex-column flex-lg-row">
               <h1 class="display-2">Breaks</h1>
               <button type="button" class="btn btn-success btn-xl" data-bs-toggle="modal" data-bs-target="#add_breaks">
-                <i class="bx bx-plus bx-lg"></i>Add Breaks
+                <i class="bx bx-plus bx-lg"></i>Add Break Types
               </button>
 
             </div>
@@ -157,9 +167,16 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
 $(document).ready(function(){
   fetchAllWorkSchedules();
   populateEmployeeSelect(document.getElementById("select_employee"));
+  fetchBreakTypes();
 });
 </script>
 
+<div id="fetch_break_types">
+
+</div>
+<div id="fetch_break_schedule">
+
+</div>
 
 
 <!-- Core JS -->

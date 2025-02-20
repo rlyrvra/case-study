@@ -1,3 +1,4 @@
+let attempts = 5;
 function login(){
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
@@ -8,7 +9,11 @@ function login(){
         return;
     }
 
-    //console.log(`Username: ${username}, Password: ${password}, Remember: ${remember}`);
+    if(attempts <= 0){
+        const location = "login";
+        window.location.href = location;
+    }
+
     $.ajax({
         url: 'requests/login/login-api',
         method: 'POST',

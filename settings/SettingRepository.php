@@ -18,7 +18,7 @@ class SettingRepository
         ? int   $limit                = null,
         ? int   $offset               = null,
           bool  $includeTotalRowCount = true
-    ): ActionResult|array {
+    ): array|ActionResult {
 
         return $this->settingDao->fetchAll(
             columns             : $columns             ,
@@ -30,7 +30,7 @@ class SettingRepository
         );
     }
 
-    public function fetchSettingValue(string $settingKey, string $groupName): ActionResult|string
+    public function fetchSettingValue(string $settingKey, string $groupName): string|ActionResult
     {
         $columns = [
             "setting_value"

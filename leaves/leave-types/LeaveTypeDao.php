@@ -76,7 +76,7 @@ class LeaveTypeDao
         ? int   $limit                = null,
         ? int   $offset               = null,
           bool  $includeTotalRowCount = true
-    ): ActionResult|array {
+    ): array|ActionResult {
 
         $tableColumns = [
             "id"                     => "leave_type.id                     AS id"                    ,
@@ -105,6 +105,7 @@ class LeaveTypeDao
 
         if (empty($filterCriteria)) {
             $whereClauses[] = "leave_type.deleted_at IS NULL";
+
         } else {
             foreach ($filterCriteria as $filterCriterion) {
                 $column   = $filterCriterion["column"  ];
@@ -241,7 +242,7 @@ class LeaveTypeDao
         }
     }
 
-    public function update(LeaveType $leaveType, bool $isHashedId = false): ActionResult
+    public function update(LeaveType $leaveType): ActionResult
     {
         $query = "
             UPDATE leave_types
@@ -255,7 +256,7 @@ class LeaveTypeDao
             WHERE
         ";
 
-        if ($isHashedId) {
+        if (is_string($leaveType->getId())) {
             $query .= " SHA2(id, 256) = :leave_type_id";
         } else {
             $query .= " id = :leave_type_id";
@@ -299,12 +300,12 @@ class LeaveTypeDao
         }
     }
 
-    public function delete(int|string $leaveTypeId, bool $isHashedId = false): ActionResult
+    public function delete(int|string $leaveTypeId): ActionResult
     {
-        return $this->softDelete($leaveTypeId, $isHashedId);
+        return $this->softDelete($leaveTypeId);
     }
 
-    private function softDelete(int|string $leaveTypeId, bool $isHashedId = false): ActionResult
+    private function softDelete(int|string $leaveTypeId): ActionResult
     {
         $query = "
             UPDATE leave_types
@@ -314,7 +315,7 @@ class LeaveTypeDao
             WHERE
         ";
 
-        if ($isHashedId) {
+        if (is_string($leaveTypeId)) {
             $query .= " SHA2(id, 256) = :leave_type_id";
         } else {
             $query .= " id = :leave_type_id";

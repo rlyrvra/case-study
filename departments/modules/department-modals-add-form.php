@@ -20,19 +20,19 @@
                 </div>
                 <form onsubmit="event.preventDefault();" id="add-departments-form">
                     <div class="mb-3">
-                        <label for="create_department_name" class="form-label">Department Name*</label>
-                        <input type="text" class="form-control" id="create_department_name" name="create_department_name" required value="">
+                        <label for="create_department_name" class="form-label">Department Name*:</label>
+                        <input type="text" class="form-control" id="create_department_name" name="create_department_name" required placeholder="Ex. Warehouse and Management">
                     </div>
                     <div class="mb-3">
-                        <label for="create_department_head" class="form-label">Department Head</label>
+                        <label for="create_department_head" class="form-label">Department Head:</label>
                         <select class="form-select" id="create_department_head" name="create_department_head" placeholder="Enter Department"></select>
                     </div>
                     <div class="mb-3">
-                        <label for="create_department_description" class="form-label">Department Description</label>
-                        <textarea class="form-control" id="create_department_description" name="create_department_description"></textarea>
+                        <label for="create_department_description" class="form-label">Department Description:</label>
+                        <textarea class="form-control" id="create_department_description" name="create_department_description" placeholder="Ex. Sample Description"></textarea>
                     </div>
                     <div class="mb-3">
-                        <label for="create_department_status" class="form-label">Department Status*</label>
+                        <label for="create_department_status" class="form-label">Department Status*:</label>
                         <select class="form-select" id="create_department_status" name="create_department_status" value="">
                             <option value="Active">Active</option>
                             <option value="Inactive">Inactive</option>

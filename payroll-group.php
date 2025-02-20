@@ -28,9 +28,9 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <!-- Ajax -->
-<script src="payroll/payroll-group/modules/payroll-groups-ajax.js?v1.1"></script>
+<script src="payroll/payroll-group/modules/payroll-groups-ajax.js?v1.3"></script>
 <!-- Scripts -->
-<script src="payroll/payroll-group/modules/payroll-groups-scripts.js?v1.1"></script>
+<script src="payroll/payroll-group/modules/payroll-groups-scripts.js?v1.3"></script>
 
 
 <!-- Fonts -->
@@ -81,44 +81,47 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
     
     <?php require_once __DIR__ . '/sidebar.php' ?>
     <script>
-      document.getElementById("dashboard-menu").classList.add("active");
+      document.getElementById("payroll-menu").classList.add("open");
+      document.getElementById("payrollGroup-menu").classList.add("active");
     </script>
 
     <!-- Layout container -->
     <div class="layout-page">
     <?php require_once __DIR__ . '/user.php' ?>
-
+  
+    <?php require_once __DIR__ . '/payroll/payroll-group/modules/payroll-groups-modals-add-form.php' ?>
+    <?php require_once __DIR__ . '/payroll/payroll-group/modules/payroll-groups-modals-update-form.php' ?>
       <!-- / Navbar -->
       <div class="content-wrapper">
         <div class="container-fluid px-5">
-        <div id="response-test"></div>
-            
-        <div class="container-fluid mt-5 mb-3 d-flex justify-content-between flex-column flex-lg-row">
-            <h1 class="display-1">Payroll Groups</h1>
-            <button type="button" class="btn btn-success btn-xl" data-bs-toggle="modal" data-bs-target="#add-holidays-modal">
-              <i class="bx bx-plus bx-lg"></i>Add Payroll Group
-            </button>
-            
-        </div>
+          <div id="response-test"></div>
+              
+          <div class="container-fluid mt-5 mb-3 d-flex justify-content-between flex-column flex-lg-row">
+              <h1 class="display-1">Payroll Groups</h1>
+              <button type="button" class="btn btn-success btn-xl" data-bs-toggle="modal" data-bs-target="#add-payrollGroups-modal">
+                <i class="bx bx-plus bx-lg"></i>Add Payroll Group
+              </button>
+              
+          </div>
 
-        <div class="container-fluid card pt-3 pb-3 mt-5 mb-5">
-          <?php require_once __DIR__ . '/payroll/payroll-group/modules/payroll-groups-sorter.php' ?>
-          <div class="visually-hidden spinner-border spinner-border-lg text-primary text-center w-px-25 h-px-25" role="status" id="loadingSpinner"></div>
-        </div>
+          <div class="container-fluid card pt-3 pb-3 mt-5 mb-5">
+            <?php require_once __DIR__ . '/payroll/payroll-group/modules/payroll-groups-sorter.php' ?>
+            <div class="visually-hidden spinner-border spinner-border-lg text-primary text-center w-px-25 h-px-25" role="status" id="loadingSpinner"></div>
+          </div>
 
-        <hr/>
+          <hr/>
 
-        <div class="container-fluid card pt-5 pb-3 mt-5">
-            <div class="card-header">
-              <h5>List of Payroll Groups
-            </div>
-            <div class="card-body">
-              <div id="payroll-group-table" class="table-responsive text-no-wrap">
-              <?php require_once __DIR__ . '/payroll/payroll-group/modules/payroll-groups-table.php' ?>
-              <div class="container-fluid spinner-border spinner-border-lg d-flex align-items-center justify-content-center w-px-700 h-px-700" role="status"></div>
+          <div class="container-fluid card pt-5 pb-3 mt-5">
+              <div class="card-header">
+                <h5>List of Payroll Groups
+              </div>
+              <div class="card-body">
+                <div id="payroll-group-table" class="table-responsive text-no-wrap">
+                <?php require_once __DIR__ . '/payroll/payroll-group/modules/payroll-groups-table.php' ?>
+                <div class="container-fluid spinner-border spinner-border-lg d-flex align-items-center justify-content-center w-px-700 h-px-700" role="status"></div>
+                </div>
               </div>
             </div>
-          </div>
 
         </div>
       </div>

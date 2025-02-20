@@ -11,18 +11,18 @@ class OvertimeRateAssignmentRepository
         $this->overtimeRateAssignmentDao = $overtimeRateAssignmentDao;
     }
 
-    public function createOvertimeRateAssignment(OvertimeRateAssignment $overtimeRateAssignment): ActionResult|int
+    public function createOvertimeRateAssignment(OvertimeRateAssignment $overtimeRateAssignment): int|ActionResult
     {
         return $this->overtimeRateAssignmentDao->create($overtimeRateAssignment);
     }
 
-    public function assignOvertimeRateAssignment(OvertimeRateAssignment $overtimeRateAssignment, array $overtimeRates, bool $isHashedId = false): ActionResult
+    public function assignOvertimeRateAssignment(OvertimeRateAssignment $overtimeRateAssignment, array $overtimeRates): ActionResult
     {
-        return $this->overtimeRateAssignmentDao->assign($overtimeRateAssignment, $overtimeRates, $isHashedId);
+        return $this->overtimeRateAssignmentDao->assign($overtimeRateAssignment, $overtimeRates);
     }
 
-    public function findOvertimeRateAssignmentId(OvertimeRateAssignment $overtimeRateAssignment, bool $isHashedId = false): ActionResult|int
+    public function findOvertimeRateAssignmentId(OvertimeRateAssignment $overtimeRateAssignment): int|ActionResult
     {
-        return $this->overtimeRateAssignmentDao->findId($overtimeRateAssignment, $isHashedId);
+        return $this->overtimeRateAssignmentDao->findId($overtimeRateAssignment);
     }
 }

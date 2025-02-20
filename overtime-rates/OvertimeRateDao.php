@@ -35,8 +35,12 @@ class OvertimeRateDao
             )
         ";
 
+        $isLocalTransaction = ! $this->pdo->inTransaction();
+
         try {
-            $this->pdo->beginTransaction();
+            if ($isLocalTransaction) {
+                $this->pdo->beginTransaction();
+            }
 
             $statement = $this->pdo->prepare($query);
 
@@ -50,12 +54,16 @@ class OvertimeRateDao
 
             $statement->execute();
 
-            $this->pdo->commit();
+            if ($isLocalTransaction) {
+                $this->pdo->commit();
+            }
 
             return ActionResult::SUCCESS;
 
         } catch (PDOException $exception) {
-            $this->pdo->rollBack();
+            if ($isLocalTransaction) {
+                $this->pdo->rollBack();
+            }
 
             error_log("Database Error: An error occurred while creating the overtime rate. " .
                       "Exception: {$exception->getMessage()}");
@@ -64,7 +72,7 @@ class OvertimeRateDao
         }
     }
 
-    public function fetchOvertimeRates(int $overtimeRateAssignmentId, bool $isHashedId = false): ActionResult|array
+    public function fetchOvertimeRates(int $overtimeRateAssignmentId): array|ActionResult
     {
         $query = "
             SELECT
@@ -81,7 +89,7 @@ class OvertimeRateDao
             WHERE
         ";
 
-        if ($isHashedId) {
+        if (is_string($overtimeRateAssignmentId)) {
             $query .= " SHA2(overtime_rate_assignment_id, 256) = :overtime_rate_assignment_id";
         } else {
             $query .= " overtime_rate_assignment_id = :overtime_rate_assignment_id";
@@ -104,7 +112,7 @@ class OvertimeRateDao
         }
     }
 
-    public function update(OvertimeRate $overtimeRate, bool $isHashedId = false): ActionResult
+    public function update(OvertimeRate $overtimeRate): ActionResult
     {
         $query = "
             UPDATE overtime_rates
@@ -116,22 +124,24 @@ class OvertimeRateDao
             WHERE
         ";
 
-        if ($isHashedId) {
-            $query .= "
-                SHA2(overtime_rate_assignment_id, 256) = :overtime_rate_assignment_id
-            AND
-                SHA2(id, 256) = :overtime_rate_id
-            ";
+        if (is_string($overtimeRate->getOvertimeRateAssignmentId())) {
+            $query .= "SHA2(overtime_rate_assignment_id, 256) = :overtime_rate_assignment_id ";
         } else {
-            $query .= "
-                overtime_rate_assignment_id = :overtime_rate_assignment_id
-            AND
-                id = :overtime_rate_id
-            ";
+            $query .= "overtime_rate_assignment_id = :overtime_rate_assignment_id ";
         }
 
+        if (is_string($overtimeRate->getId())) {
+            $query .= "AND SHA2(id, 256) = :overtime_rate_id";
+        } else {
+            $query .= "AND id = :overtime_rate_id";
+        }
+
+        $isLocalTransaction = ! $this->pdo->inTransaction();
+
         try {
-            $this->pdo->beginTransaction();
+            if ($isLocalTransaction) {
+                $this->pdo->beginTransaction();
+            }
 
             $statement = $this->pdo->prepare($query);
 
@@ -145,12 +155,16 @@ class OvertimeRateDao
 
             $statement->execute();
 
-            $this->pdo->commit();
+            if ($isLocalTransaction) {
+                $this->pdo->commit();
+            }
 
             return ActionResult::SUCCESS;
 
         } catch (PDOException $exception) {
-            $this->pdo->rollBack();
+            if ($isLocalTransaction) {
+                $this->pdo->rollBack();
+            }
 
             error_log("Database Error: An error occurred while updating the overtime rate. " .
                       "Exception: {$exception->getMessage()}");

@@ -23,7 +23,7 @@ class HolidayService
         ? int   $limit                = null,
         ? int   $offset               = null,
           bool  $includeTotalRowCount = true
-    ): ActionResult|array {
+    ): array|ActionResult {
 
         return $this->holidayRepository->fetchAllHolidays(
             columns             : $columns             ,
@@ -35,18 +35,18 @@ class HolidayService
         );
     }
 
-    public function updateHoliday(Holiday $holiday, bool $isHashedId = false): ActionResult
+    public function updateHoliday(Holiday $holiday): ActionResult
     {
-        return $this->holidayRepository->updateHoliday($holiday, $isHashedId);
+        return $this->holidayRepository->updateHoliday($holiday);
     }
 
-    public function getHolidayDatesForPeriod(string $startDate, string $endDate): ActionResult|array
+    public function getHolidayDatesForPeriod(string $startDate, string $endDate): array|ActionResult
     {
         return $this->holidayRepository->getHolidayDatesForPeriod($startDate, $endDate);
     }
 
-    public function deleteHoliday(int|string $holidayId, bool $isHashedId = false): ActionResult
+    public function deleteHoliday(int|string $holidayId): ActionResult
     {
-        return $this->holidayRepository->deleteHoliday($holidayId, $isHashedId);
+        return $this->holidayRepository->deleteHoliday($holidayId);
     }
 }

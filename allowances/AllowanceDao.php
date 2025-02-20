@@ -31,8 +31,12 @@ class AllowanceDao
             )
         ";
 
+        $isLocalTransaction = ! $this->pdo->inTransaction();
+
         try {
-            $this->pdo->beginTransaction();
+            if ($isLocalTransaction) {
+                $this->pdo->beginTransaction();
+            }
 
             $statement = $this->pdo->prepare($query);
 
@@ -44,12 +48,16 @@ class AllowanceDao
 
             $statement->execute();
 
-            $this->pdo->commit();
+            if ($isLocalTransaction) {
+                $this->pdo->commit();
+            }
 
             return ActionResult::SUCCESS;
 
         } catch (PDOException $exception) {
-            $this->pdo->rollBack();
+            if ($isLocalTransaction) {
+                $this->pdo->rollBack();
+            }
 
             error_log("Database Error: An error occurred while creating the allowance. " .
                       "Exception: {$exception->getMessage()}");
@@ -65,7 +73,7 @@ class AllowanceDao
         ? int   $limit                = null,
         ? int   $offset               = null,
           bool  $includeTotalRowCount = true
-    ): ActionResult|array {
+    ): array|ActionResult {
 
         $tableColumns = [
             "id"          => "allowance.id          AS id"         ,
@@ -93,6 +101,7 @@ class AllowanceDao
 
         if (empty($filterCriteria)) {
             $whereClauses[] = "allowance.deleted_at IS NULL";
+
         } else {
             foreach ($filterCriteria as $filterCriterion) {
                 $column   = $filterCriterion["column"  ];
@@ -220,7 +229,7 @@ class AllowanceDao
         }
     }
 
-    public function update(Allowance $allowance, bool $isHashedId = false): ActionResult
+    public function update(Allowance $allowance): ActionResult
     {
         $query = "
             UPDATE allowances
@@ -233,14 +242,18 @@ class AllowanceDao
             WHERE
         ";
 
-        if ($isHashedId) {
+        if (is_string($allowance->getId())) {
             $query .= " SHA2(id, 256) = :allowance_id";
         } else {
             $query .= " id = :allowance_id";
         }
 
+        $isLocalTransaction = ! $this->pdo->inTransaction();
+
         try {
-            $this->pdo->beginTransaction();
+            if ($isLocalTransaction) {
+                $this->pdo->beginTransaction();
+            }
 
             $statement = $this->pdo->prepare($query);
 
@@ -254,12 +267,16 @@ class AllowanceDao
 
             $statement->execute();
 
-            $this->pdo->commit();
+            if ($isLocalTransaction) {
+                $this->pdo->commit();
+            }
 
             return ActionResult::SUCCESS;
 
         } catch (PDOException $exception) {
-            $this->pdo->rollBack();
+            if ($isLocalTransaction) {
+                $this->pdo->rollBack();
+            }
 
             error_log("Database Error: An error occurred while updating the allowance. " .
                       "Exception: {$exception->getMessage()}");
@@ -268,12 +285,12 @@ class AllowanceDao
         }
     }
 
-    public function delete(int|string $allowanceId, bool $isHashedId = false): ActionResult
+    public function delete(int|string $allowanceId): ActionResult
     {
-        return $this->softDelete($allowanceId, $isHashedId);
+        return $this->softDelete($allowanceId);
     }
 
-    private function softDelete(int|string $allowanceId, bool $isHashedId = false): ActionResult
+    private function softDelete(int|string $allowanceId): ActionResult
     {
         $query = "
             UPDATE allowances
@@ -283,14 +300,18 @@ class AllowanceDao
             WHERE
         ";
 
-        if ($isHashedId) {
+        if (is_string($allowanceId)) {
             $query .= " SHA2(id, 256) = :allowance_id";
         } else {
             $query .= " id = :allowance_id";
         }
 
+        $isLocalTransaction = ! $this->pdo->inTransaction();
+
         try {
-            $this->pdo->beginTransaction();
+            if ($isLocalTransaction) {
+                $this->pdo->beginTransaction();
+            }
 
             $statement = $this->pdo->prepare($query);
 
@@ -298,12 +319,16 @@ class AllowanceDao
 
             $statement->execute();
 
-            $this->pdo->commit();
+            if ($isLocalTransaction) {
+                $this->pdo->commit();
+            }
 
             return ActionResult::SUCCESS;
 
         } catch (PDOException $exception) {
-            $this->pdo->rollBack();
+            if ($isLocalTransaction) {
+                $this->pdo->rollBack();
+            }
 
             error_log("Database Error: An error occurred while deleting the allowance. " .
                       "Exception: {$exception->getMessage()}");

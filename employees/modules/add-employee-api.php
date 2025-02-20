@@ -142,7 +142,7 @@ try {
         } else if ($createResult === ActionResult::FAILURE){
             echo "
             <script> 
-            //failedCreateUpdateTryAgain(); 
+            failedCreateUpdateTryAgain(); 
             </script>";
         }
         return;
@@ -261,7 +261,7 @@ try {
         );
 
 
-        $updateResult = $employeeService->updateEmployee($updatedEmployee, true);
+        $updateResult = $employeeService->updateEmployee($updatedEmployee);
 
         
         assignLeaveEntitlementsHashed($hashed_id, $employment_type);

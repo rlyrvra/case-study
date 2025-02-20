@@ -23,7 +23,7 @@ class PayrollGroupService
         ? int   $limit                = null,
         ? int   $offset               = null,
           bool  $includeTotalRowCount = true
-    ): ActionResult|array {
+    ): array|ActionResult {
 
         return $this->payrollGroupRepository->fetchAllPayrollGroups(
             columns             : $columns             ,
@@ -35,13 +35,13 @@ class PayrollGroupService
         );
     }
 
-    public function updatePayrollGroup(PayrollGroup $payrollGroup, bool $isHashedId = false): ActionResult
+    public function updatePayrollGroup(PayrollGroup $payrollGroup): ActionResult
     {
-        return $this->payrollGroupRepository->updatePayrollGroup($payrollGroup, $isHashedId);
+        return $this->payrollGroupRepository->updatePayrollGroup($payrollGroup);
     }
 
-    public function deletePayrollGroup(int|string $payrollGroupId, bool $isHashedId = false): ActionResult
+    public function deletePayrollGroup(int|string $payrollGroupId): ActionResult
     {
-        return $this->payrollGroupRepository->deletePayrollGroup($payrollGroupId, $isHashedId);
+        return $this->payrollGroupRepository->deletePayrollGroup($payrollGroupId);
     }
 }

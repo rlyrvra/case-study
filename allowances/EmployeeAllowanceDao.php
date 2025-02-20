@@ -27,8 +27,12 @@ class EmployeeAllowanceDao
             )
         ";
 
+        $isLocalTransaction = ! $this->pdo->inTransaction();
+
         try {
-            $this->pdo->beginTransaction();
+            if ($isLocalTransaction) {
+                $this->pdo->beginTransaction();
+            }
 
             $statement = $this->pdo->prepare($query);
 
@@ -38,12 +42,16 @@ class EmployeeAllowanceDao
 
             $statement->execute();
 
-            $this->pdo->commit();
+            if ($isLocalTransaction) {
+                $this->pdo->commit();
+            }
 
             return ActionResult::SUCCESS;
 
         } catch (PDOException $exception) {
-            $this->pdo->rollBack();
+            if ($isLocalTransaction) {
+                $this->pdo->rollBack();
+            }
 
             error_log("Database Error: An error occurred while assigning the allowance to employee. " .
                       "Exception: {$exception->getMessage()}");
@@ -60,7 +68,7 @@ class EmployeeAllowanceDao
         ? int   $limit                = null,
         ? int   $offset               = null,
           bool  $includeTotalRowCount = true
-    ): ActionResult|array {
+    ): array|ActionResult {
 
         $tableColumns = [
             "id"                  => "employee_allowance.id           AS id"                 ,
@@ -103,6 +111,7 @@ class EmployeeAllowanceDao
 
         if (empty($filterCriteria)) {
             $whereClauses[] = "employee_allowance.deleted_at IS NULL";
+
         } else {
             foreach ($filterCriteria as $filterCriterion) {
                 $column   = $filterCriterion["column"  ];
@@ -238,12 +247,12 @@ class EmployeeAllowanceDao
         }
     }
 
-    public function delete(int|string $employeeAllowanceId, bool $isHashedId = false): ActionResult
+    public function delete(int|string $employeeAllowanceId): ActionResult
     {
-        return $this->softDelete($employeeAllowanceId, $isHashedId);
+        return $this->softDelete($employeeAllowanceId);
     }
 
-    private function softDelete(int|string $employeeAllowanceId, bool $isHashedId = false): ActionResult
+    private function softDelete(int|string $employeeAllowanceId): ActionResult
     {
         $query = "
             UPDATE employee_allowances
@@ -252,14 +261,18 @@ class EmployeeAllowanceDao
             WHERE
         ";
 
-        if ($isHashedId) {
+        if (is_string($employeeAllowanceId)) {
             $query .= " SHA2(id, 256) = :employee_allowance_id";
         } else {
             $query .= " id = :employee_allowance_id";
         }
 
+        $isLocalTransaction = ! $this->pdo->inTransaction();
+
         try {
-            $this->pdo->beginTransaction();
+            if ($isLocalTransaction) {
+                $this->pdo->beginTransaction();
+            }
 
             $statement = $this->pdo->prepare($query);
 
@@ -267,12 +280,16 @@ class EmployeeAllowanceDao
 
             $statement->execute();
 
-            $this->pdo->commit();
+            if ($isLocalTransaction) {
+                $this->pdo->commit();
+            }
 
             return ActionResult::SUCCESS;
 
         } catch (PDOException $exception) {
-            $this->pdo->rollBack();
+            if ($isLocalTransaction) {
+                $this->pdo->rollBack();
+            }
 
             error_log("Database Error: An error occurred while fetching employee allowances. " .
                       "Exception: {$exception->getMessage()}");

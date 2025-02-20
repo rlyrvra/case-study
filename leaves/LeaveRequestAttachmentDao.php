@@ -25,8 +25,12 @@ class LeaveRequestAttachmentDao
             )
         ";
 
+        $isLocalTransaction = ! $this->pdo->inTransaction();
+
         try {
-            $this->pdo->beginTransaction();
+            if ($isLocalTransaction) {
+                $this->pdo->beginTransaction();
+            }
 
             $statement = $this->pdo->prepare($query);
 
@@ -35,12 +39,16 @@ class LeaveRequestAttachmentDao
 
             $statement->execute();
 
-            $this->pdo->commit();
+            if ($isLocalTransaction) {
+                $this->pdo->commit();
+            }
 
             return ActionResult::SUCCESS;
 
         } catch (PDOException $exception) {
-            $this->pdo->rollBack();
+            if ($isLocalTransaction) {
+                $this->pdo->rollBack();
+            }
 
             error_log("Database Error: An error occurred while creating the attachment. " .
                       "Exception: {$exception->getMessage()}");
@@ -56,7 +64,7 @@ class LeaveRequestAttachmentDao
         ? int   $limit                = null,
         ? int   $offset               = null,
           bool  $includeTotalRowCount = true
-    ): ActionResult|array {
+    ): array|ActionResult {
 
         $tableColumns = [
             "id"               => "leave_request_attachment.id               AS id"              ,
@@ -80,6 +88,7 @@ class LeaveRequestAttachmentDao
 
         if (empty($filterCriteria)) {
             $whereClauses[] = "attachment.deleted_at IS NULL";
+
         } else {
             foreach ($filterCriteria as $filterCriterion) {
                 $column   = $filterCriterion["column"  ];
@@ -117,6 +126,7 @@ class LeaveRequestAttachmentDao
                 if (isset($sortCriterion["direction"])) {
                     $direction = $sortCriterion["direction"];
                     $orderByClauses[] = "{$column} {$direction}";
+
                 } elseif (isset($sortCriterion["custom_order"])) {
                     $customOrder = $sortCriterion["custom_order"];
                     $caseExpressions = ["CASE {$column}"];
@@ -206,12 +216,12 @@ class LeaveRequestAttachmentDao
         }
     }
 
-    public function delete(int|string $leaveRequestAttachmentId, bool $isHashedId = false): ActionResult
+    public function delete(int|string $leaveRequestAttachmentId): ActionResult
     {
-        return $this->softDelete($leaveRequestAttachmentId, $isHashedId);
+        return $this->softDelete($leaveRequestAttachmentId);
     }
 
-    private function softDelete(int|string $leaveRequestAttachmentId, bool $isHashedId = false): ActionResult
+    private function softDelete(int|string $leaveRequestAttachmentId): ActionResult
     {
         $query = "
             UPDATE leave_request_attachments
@@ -220,14 +230,18 @@ class LeaveRequestAttachmentDao
             WHERE
         ";
 
-        if ($isHashedId) {
+        if (is_string($leaveRequestAttachmentId)) {
             $query .= " SHA2(id, 256) = :leave_request_attachment_id";
         } else {
             $query .= " id = :leave_request_attachment_id";
         }
 
+        $isLocalTransaction = ! $this->pdo->inTransaction();
+
         try {
-            $this->pdo->beginTransaction();
+            if ($isLocalTransaction) {
+                $this->pdo->beginTransaction();
+            }
 
             $statement = $this->pdo->prepare($query);
 
@@ -235,12 +249,16 @@ class LeaveRequestAttachmentDao
 
             $statement->execute();
 
-            $this->pdo->commit();
+            if ($isLocalTransaction) {
+                $this->pdo->commit();
+            }
 
             return ActionResult::SUCCESS;
 
         } catch (PDOException $exception) {
-            $this->pdo->rollBack();
+            if ($isLocalTransaction) {
+                $this->pdo->rollBack();
+            }
 
             error_log("Database Error: An error occurred while deleting the attachment. " .
                       "Exception: {$exception->getMessage()}");

@@ -23,7 +23,7 @@ class DepartmentService
         ? int   $limit                = null,
         ? int   $offset               = null,
           bool  $includeTotalRowCount = true
-    ): ActionResult|array {
+    ): array|ActionResult {
 
         return $this->departmentRepository->fetchAllDepartments(
             columns             : $columns             ,
@@ -35,23 +35,23 @@ class DepartmentService
         );
     }
 
-    public function fetchEmployeeCountsPerDepartment(): ActionResult|array
+    public function fetchEmployeeCountsPerDepartment(): array|ActionResult
     {
         return $this->departmentRepository->fetchEmployeeCountsPerDepartment();
     }
 
-    public function isEmployeeDepartmentHead(int|string $employeeId, bool $isHashedId = false): ActionResult|bool
+    public function isEmployeeDepartmentHead(int|string $employeeId): bool|ActionResult
     {
-        return $this->departmentRepository->isEmployeeDepartmentHead($employeeId, $isHashedId);
+        return $this->departmentRepository->isEmployeeDepartmentHead($employeeId);
     }
 
-    public function updateDepartment(Department $department, bool $isHashedId = false): ActionResult
+    public function updateDepartment(Department $department): ActionResult
     {
-        return $this->departmentRepository->updateDepartment($department, $isHashedId);
+        return $this->departmentRepository->updateDepartment($department);
     }
 
-    public function deleteDepartment(int|string $departmentId, bool $isHashedId = false): ActionResult
+    public function deleteDepartment(int|string $departmentId): ActionResult
     {
-        return $this->departmentRepository->deleteDepartment($departmentId, $isHashedId);
+        return $this->departmentRepository->deleteDepartment($departmentId);
     }
 }

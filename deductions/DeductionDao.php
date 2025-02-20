@@ -31,8 +31,12 @@ class DeductionDao
             )
         ";
 
+        $isLocalTransaction = ! $this->pdo->inTransaction();
+
         try {
-            $this->pdo->beginTransaction();
+            if ($isLocalTransaction) {
+                $this->pdo->beginTransaction();
+            }
 
             $statement = $this->pdo->prepare($query);
 
@@ -44,12 +48,16 @@ class DeductionDao
 
             $statement->execute();
 
-            $this->pdo->commit();
+            if ($isLocalTransaction) {
+                $this->pdo->commit();
+            }
 
             return ActionResult::SUCCESS;
 
         } catch (PDOException $exception) {
-            $this->pdo->rollBack();
+            if ($isLocalTransaction) {
+                $this->pdo->rollBack();
+            }
 
             error_log("Database Error: An error occurred while creating the deduction. " .
                       "Exception: {$exception->getMessage()}");
@@ -65,7 +73,7 @@ class DeductionDao
         ? int   $limit                = null,
         ? int   $offset               = null,
           bool  $includeTotalRowCount = true
-    ): ActionResult|array {
+    ): array|ActionResult {
 
         $tableColumns = [
             "id"             => "deduction.id             AS id"            ,
@@ -93,6 +101,7 @@ class DeductionDao
 
         if (empty($filterCriteria)) {
             $whereClauses[] = "deduction.deleted_at IS NULL";
+
         } else {
             foreach ($filterCriteria as $filterCriterion) {
                 $column   = $filterCriterion["column"  ];
@@ -225,7 +234,7 @@ class DeductionDao
         }
     }
 
-    public function update(Deduction $deduction, bool $isHashedId = false): ActionResult
+    public function update(Deduction $deduction): ActionResult
     {
         $query = "
             UPDATE deductions
@@ -238,14 +247,18 @@ class DeductionDao
             WHERE
         ";
 
-        if ($isHashedId) {
+        if (is_string($deduction->getId())) {
             $query .= " SHA2(id, 256) = :deduction_id";
         } else {
             $query .= " id = :deduction_id";
         }
 
+        $isLocalTransaction = ! $this->pdo->inTransaction();
+
         try {
-            $this->pdo->beginTransaction();
+            if ($isLocalTransaction) {
+                $this->pdo->beginTransaction();
+            }
 
             $statement = $this->pdo->prepare($query);
 
@@ -259,12 +272,16 @@ class DeductionDao
 
             $statement->execute();
 
-            $this->pdo->commit();
+            if ($isLocalTransaction) {
+                $this->pdo->commit();
+            }
 
             return ActionResult::SUCCESS;
 
         } catch (PDOException $exception) {
-            $this->pdo->rollBack();
+            if ($isLocalTransaction) {
+                $this->pdo->rollBack();
+            }
 
             error_log("Database Error: An error occurred while updating the deduction. " .
                       "Exception: {$exception->getMessage()}");
@@ -273,12 +290,12 @@ class DeductionDao
         }
     }
 
-    public function delete(int|string $deductionId, bool $isHashedId = false): ActionResult
+    public function delete(int|string $deductionId): ActionResult
     {
-        return $this->softDelete($deductionId, $isHashedId);
+        return $this->softDelete($deductionId);
     }
 
-    private function softDelete(int|string $deductionId, bool $isHashedId = false): ActionResult
+    private function softDelete(int|string $deductionId): ActionResult
     {
         $query = "
             UPDATE deductions
@@ -288,14 +305,18 @@ class DeductionDao
             WHERE
         ";
 
-        if ($isHashedId) {
+        if (is_string($deductionId)) {
             $query .= " SHA2(id, 256) = :deduction_id";
         } else {
             $query .= " id = :deduction_id";
         }
 
+        $isLocalTransaction = ! $this->pdo->inTransaction();
+
         try {
-            $this->pdo->beginTransaction();
+            if ($isLocalTransaction) {
+                $this->pdo->beginTransaction();
+            }
 
             $statement = $this->pdo->prepare($query);
 
@@ -303,12 +324,16 @@ class DeductionDao
 
             $statement->execute();
 
-            $this->pdo->commit();
+            if ($isLocalTransaction) {
+                $this->pdo->commit();
+            }
 
             return ActionResult::SUCCESS;
 
         } catch (PDOException $exception) {
-            $this->pdo->rollBack();
+            if ($isLocalTransaction) {
+                $this->pdo->rollBack();
+            }
 
             error_log("Database Error: An error occurred while deleting the deduction. " .
                       "Exception: {$exception->getMessage()}");

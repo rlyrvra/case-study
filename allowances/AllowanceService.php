@@ -23,7 +23,7 @@ class AllowanceService
         ? int   $limit                = null,
         ? int   $offset               = null,
           bool  $includeTotalRowCount = true
-    ): ActionResult|array {
+    ): array|ActionResult {
 
         return $this->allowanceRepository->fetchAllAllowances(
             columns             : $columns             ,
@@ -35,13 +35,13 @@ class AllowanceService
         );
     }
 
-    public function updateAllowance(Allowance $allowance, bool $isHashedId = false): ActionResult
+    public function updateAllowance(Allowance $allowance): ActionResult
     {
-        return $this->allowanceRepository->updateAllowance($allowance, $isHashedId);
+        return $this->allowanceRepository->updateAllowance($allowance);
     }
 
-    public function deleteAllowance(int|string $allowanceId, bool $isHashedId = false): ActionResult
+    public function deleteAllowance(int|string $allowanceId): ActionResult
     {
-        return $this->allowanceRepository->deleteAllowance($allowanceId, $isHashedId);
+        return $this->allowanceRepository->deleteAllowance($allowanceId);
     }
 }

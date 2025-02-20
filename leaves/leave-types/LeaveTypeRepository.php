@@ -23,7 +23,7 @@ class LeaveTypeRepository
         ? int   $limit                = null,
         ? int   $offset               = null,
           bool  $includeTotalRowCount = true
-    ): ActionResult|array {
+    ): array|ActionResult {
 
         return $this->leaveTypeDao->fetchAll(
             columns             : $columns             ,
@@ -35,13 +35,13 @@ class LeaveTypeRepository
         );
     }
 
-    public function updateLeaveType(LeaveType $leaveType, bool $isHashedId = false): ActionResult
+    public function updateLeaveType(LeaveType $leaveType): ActionResult
     {
-        return $this->leaveTypeDao->update($leaveType, $isHashedId);
+        return $this->leaveTypeDao->update($leaveType);
     }
 
-    public function deleteLeaveType(int|string $leaveTypeId, bool $isHashedId = false): ActionResult
+    public function deleteLeaveType(int|string $leaveTypeId): ActionResult
     {
-        return $this->leaveTypeDao->delete($leaveTypeId, $isHashedId);
+        return $this->leaveTypeDao->delete($leaveTypeId);
     }
 }

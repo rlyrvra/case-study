@@ -29,8 +29,12 @@ class DepartmentDao
             )
         ";
 
+        $isLocalTransaction = ! $this->pdo->inTransaction();
+
         try {
-            $this->pdo->beginTransaction();
+            if ($isLocalTransaction) {
+                $this->pdo->beginTransaction();
+            }
 
             $statement = $this->pdo->prepare($query);
 
@@ -41,12 +45,16 @@ class DepartmentDao
 
             $statement->execute();
 
-            $this->pdo->commit();
+            if ($isLocalTransaction) {
+                $this->pdo->commit();
+            }
 
             return ActionResult::SUCCESS;
 
         } catch (PDOException $exception) {
-            $this->pdo->rollBack();
+            if ($isLocalTransaction) {
+                $this->pdo->rollBack();
+            }
 
             error_log("Database Error: An error occurred while creating the department. " .
                       "Exception: {$exception->getMessage()}");
@@ -62,7 +70,7 @@ class DepartmentDao
         ? int   $limit                = null,
         ? int   $offset               = null,
           bool  $includeTotalRowCount = true
-    ): ActionResult|array {
+    ): array|ActionResult {
 
         $tableColumns = [
             "id"                        => "department.id                 AS id"                       ,
@@ -102,6 +110,7 @@ class DepartmentDao
 
         if (empty($filterCriteria)) {
             $whereClauses[] = "department.deleted_at IS NULL";
+
         } else {
             foreach ($filterCriteria as $filterCriterion) {
                 $column   = $filterCriterion["column"  ];
@@ -231,7 +240,7 @@ class DepartmentDao
         }
     }
 
-    public function fetchEmployeeCountsPerDepartment(): ActionResult|array
+    public function fetchEmployeeCountsPerDepartment(): array|ActionResult
     {
         $query = "
             SELECT
@@ -278,7 +287,7 @@ class DepartmentDao
         }
     }
 
-    public function update(Department $department, bool $isHashedId = false): ActionResult
+    public function update(Department $department): ActionResult
     {
         $query = "
             UPDATE departments
@@ -290,14 +299,18 @@ class DepartmentDao
             WHERE
         ";
 
-        if ($isHashedId) {
+        if (is_string($department->getId())) {
             $query .= " SHA2(id, 256) = :department_id";
         } else {
             $query .= " id = :department_id";
         }
 
+        $isLocalTransaction = ! $this->pdo->inTransaction();
+
         try {
-            $this->pdo->beginTransaction();
+            if ($isLocalTransaction) {
+                $this->pdo->beginTransaction();
+            }
 
             $statement = $this->pdo->prepare($query);
 
@@ -310,12 +323,16 @@ class DepartmentDao
 
             $statement->execute();
 
-            $this->pdo->commit();
+            if ($isLocalTransaction) {
+                $this->pdo->commit();
+            }
 
             return ActionResult::SUCCESS;
 
         } catch (PDOException $exception) {
-            $this->pdo->rollBack();
+            if ($isLocalTransaction) {
+                $this->pdo->rollBack();
+            }
 
             error_log("Database Error: An error occurred while updating the department. " .
                       "Exception: {$exception->getMessage()}");
@@ -324,7 +341,7 @@ class DepartmentDao
         }
     }
 
-    public function isDepartmentHead(int|string $employeeId, bool $isHashedId = false): ActionResult|bool
+    public function isDepartmentHead(int|string $employeeId): bool|ActionResult
     {
         $query = "
             SELECT
@@ -334,7 +351,7 @@ class DepartmentDao
             WHERE
         ";
 
-        if ($isHashedId) {
+        if (is_string($employeeId)) {
             $query .= " SHA2(department_head_id, 256) = :employee_id";
         } else {
             $query .= " department_head_id = :employee_id";
@@ -364,12 +381,12 @@ class DepartmentDao
         }
     }
 
-    public function delete(int|string $departmentId, bool $isHashedId = false): ActionResult
+    public function delete(int|string $departmentId): ActionResult
     {
-        return $this->softDelete($departmentId, $isHashedId);
+        return $this->softDelete($departmentId);
     }
 
-    private function softDelete(int|string $departmentId, bool $isHashedId = false): ActionResult
+    private function softDelete(int|string $departmentId): ActionResult
     {
         $query = "
             UPDATE departments
@@ -379,14 +396,18 @@ class DepartmentDao
             WHERE
         ";
 
-        if ($isHashedId) {
+        if (is_string($departmentId)) {
             $query .= " SHA2(id, 256) = :department_id";
         } else {
             $query .= " id = :department_id";
         }
 
+        $isLocalTransaction = ! $this->pdo->inTransaction();
+
         try {
-            $this->pdo->beginTransaction();
+            if ($isLocalTransaction) {
+                $this->pdo->beginTransaction();
+            }
 
             $statement = $this->pdo->prepare($query);
 
@@ -394,12 +415,16 @@ class DepartmentDao
 
             $statement->execute();
 
-            $this->pdo->commit();
+            if ($isLocalTransaction) {
+                $this->pdo->commit();
+            }
 
             return ActionResult::SUCCESS;
 
         } catch (PDOException $exception) {
-            $this->pdo->rollBack();
+            if ($isLocalTransaction) {
+                $this->pdo->rollBack();
+            }
 
             error_log("Database Error: An error occurred while deleting the department. " .
                       "Exception: {$exception->getMessage()}");

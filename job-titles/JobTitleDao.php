@@ -29,8 +29,12 @@ class JobTitleDao
             )
         ";
 
+        $isLocalTransaction = ! $this->pdo->inTransaction();
+
         try {
-            $this->pdo->beginTransaction();
+            if ($isLocalTransaction) {
+                $this->pdo->beginTransaction();
+            }
 
             $statement = $this->pdo->prepare($query);
 
@@ -41,12 +45,16 @@ class JobTitleDao
 
             $statement->execute();
 
-            $this->pdo->commit();
+            if ($isLocalTransaction) {
+                $this->pdo->commit();
+            }
 
             return ActionResult::SUCCESS;
 
         } catch (PDOException $exception) {
-            $this->pdo->rollBack();
+            if ($isLocalTransaction) {
+                $this->pdo->rollBack();
+            }
 
             error_log("Database Error: An error occurred while creating the job title. " .
                       "Exception: {$exception->getMessage()}");
@@ -62,7 +70,7 @@ class JobTitleDao
         ? int   $limit                = null,
         ? int   $offset               = null,
           bool  $includeTotalRowCount = true
-    ): ActionResult|array {
+    ): array|ActionResult {
 
         $tableColumns = [
             "id"              => "job_title.id            AS id"             ,
@@ -102,6 +110,7 @@ class JobTitleDao
 
         if (empty($filterCriteria)) {
             $whereClauses[] = "job_title.deleted_at IS NULL";
+
         } else {
             foreach ($filterCriteria as $filterCriterion) {
                 $column   = $filterCriterion["column"  ];
@@ -231,7 +240,7 @@ class JobTitleDao
         }
     }
 
-    public function update(JobTitle $jobTitle, bool $isHashedId = false): ActionResult
+    public function update(JobTitle $jobTitle): ActionResult
     {
         $query = "
             UPDATE job_titles
@@ -243,14 +252,18 @@ class JobTitleDao
             WHERE
         ";
 
-        if ($isHashedId) {
+        if (is_string($jobTitle->getId())) {
             $query .= " SHA2(id, 256) = :job_title_id";
         } else {
             $query .= " id = :job_title_id";
         }
 
+        $isLocalTransaction = ! $this->pdo->inTransaction();
+
         try {
-            $this->pdo->beginTransaction();
+            if ($isLocalTransaction) {
+                $this->pdo->beginTransaction();
+            }
 
             $statement = $this->pdo->prepare($query);
 
@@ -263,12 +276,16 @@ class JobTitleDao
 
             $statement->execute();
 
-            $this->pdo->commit();
+            if ($isLocalTransaction) {
+                $this->pdo->commit();
+            }
 
             return ActionResult::SUCCESS;
 
         } catch (PDOException $exception) {
-            $this->pdo->rollBack();
+            if ($isLocalTransaction) {
+                $this->pdo->rollBack();
+            }
 
             error_log("Database Error: An error occurred while updating the job title. " .
                       "Exception: {$exception->getMessage()}");
@@ -277,12 +294,12 @@ class JobTitleDao
         }
     }
 
-    public function delete(int|string $jobTitleId, bool $isHashedId = false): ActionResult
+    public function delete(int|string $jobTitleId): ActionResult
     {
-        return $this->softDelete($jobTitleId, $isHashedId);
+        return $this->softDelete($jobTitleId);
     }
 
-    private function softDelete(int|string $jobTitleId, bool $isHashedId = false): ActionResult
+    private function softDelete(int|string $jobTitleId): ActionResult
     {
         $query = "
             UPDATE job_titles
@@ -292,14 +309,18 @@ class JobTitleDao
             WHERE
         ";
 
-        if ($isHashedId) {
+        if (is_string($jobTitleId)) {
             $query .= " SHA2(id, 256) = :job_title_id";
         } else {
             $query .= " id = :job_title_id";
         }
 
+        $isLocalTransaction = ! $this->pdo->inTransaction();
+
         try {
-            $this->pdo->beginTransaction();
+            if ($isLocalTransaction) {
+                $this->pdo->beginTransaction();
+            }
 
             $statement = $this->pdo->prepare($query);
 
@@ -307,12 +328,16 @@ class JobTitleDao
 
             $statement->execute();
 
-            $this->pdo->commit();
+            if ($isLocalTransaction) {
+                $this->pdo->commit();
+            }
 
             return ActionResult::SUCCESS;
 
         } catch (PDOException $exception) {
-            $this->pdo->rollBack();
+            if ($isLocalTransaction) {
+                $this->pdo->rollBack();
+            }
 
             error_log("Database Error: An error occurred while deleting the job title. " .
                       "Exception: {$exception->getMessage()}");

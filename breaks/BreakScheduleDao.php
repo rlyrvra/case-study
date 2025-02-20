@@ -1,22 +1,15 @@
 <?php
 
-require_once __DIR__ . "/../work-schedules/WorkScheduleDao.php";
-require_once __DIR__ . "/BreakTypeDao.php"                     ;
+require_once __DIR__ . "/../includes/Helper.php"            ;
+require_once __DIR__ . "/../includes/enums/ActionResult.php";
 
 class BreakScheduleDao
 {
-    private readonly PDO             $pdo            ;
-    private readonly WorkScheduleDao $workScheduleDao;
-    private readonly BreakTypeDao    $breakTypeDao   ;
+    private readonly PDO $pdo;
 
-    public function __construct(
-        PDO             $pdo            ,
-        WorkScheduleDao $workScheduleDao,
-        BreakTypeDao    $breakTypeDao
-    ) {
-        $this->pdo             = $pdo            ;
-        $this->workScheduleDao = $workScheduleDao;
-        $this->breakTypeDao    = $breakTypeDao   ;
+    public function __construct(PDO $pdo)
+    {
+        $this->pdo = $pdo;
     }
 
     public function create(BreakSchedule $breakSchedule): ActionResult
@@ -42,8 +35,12 @@ class BreakScheduleDao
             )
         ";
 
+        $isLocalTransaction = ! $this->pdo->inTransaction();
+
         try {
-            $this->pdo->beginTransaction();
+            if ($isLocalTransaction) {
+                $this->pdo->beginTransaction();
+            }
 
             $statement = $this->pdo->prepare($query);
 
@@ -57,89 +54,83 @@ class BreakScheduleDao
 
             $statement->execute();
 
-            $breakSchedule->setId($this->pdo->lastInsertId());
-
-            if ($this->createHistory($breakSchedule) === ActionResult::FAILURE) {
-                $this->pdo->rollBack();
-
-                return ActionResult::FAILURE;
+            if ($isLocalTransaction) {
+                $this->pdo->commit();
             }
-
-            $this->pdo->commit();
 
             return ActionResult::SUCCESS;
 
         } catch (PDOException $exception) {
-            $this->pdo->rollBack();
+            if ($isLocalTransaction) {
+                $this->pdo->rollBack();
+            }
 
             error_log("Database Error: An error occurred while creating the break schedule. " .
                       "Exception: {$exception->getMessage()}");
-
+            echo $exception->getMessage();
             return ActionResult::FAILURE;
         }
     }
 
-    private function createHistory(BreakSchedule $breakSchedule): ActionResult
+    public function createSnapshot(BreakScheduleSnapshot $breakScheduleSnapshot): int|ActionResult
     {
         $query = "
-            INSERT INTO break_schedules_history (
-                break_schedule_id       ,
-                work_schedule_history_id,
-                break_type_history_id   ,
-                start_time              ,
-                end_time                ,
-                is_flexible             ,
-                earliest_start_time     ,
+            INSERT INTO break_schedule_snapshots (
+                break_schedule_id        ,
+                work_schedule_snapshot_id,
+                break_type_snapshot_id   ,
+                start_time               ,
+                end_time                 ,
+                is_flexible              ,
+                earliest_start_time      ,
                 latest_end_time
             )
             VALUES (
-                :break_schedule_id       ,
-                :work_schedule_history_id,
-                :break_type_history_id   ,
-                :start_time              ,
-                :end_time                ,
-                :is_flexible             ,
-                :earliest_start_time     ,
+                :break_schedule_id        ,
+                :work_schedule_snapshot_id,
+                :break_type_snapshot_id   ,
+                :start_time               ,
+                :end_time                 ,
+                :is_flexible              ,
+                :earliest_start_time      ,
                 :latest_end_time
             )
         ";
 
+        $isLocalTransaction = ! $this->pdo->inTransaction();
+
         try {
-            $workScheduleHistoryId = $this->workScheduleDao
-                ->fetchLatestHistoryId(
-                    $breakSchedule->getWorkScheduleId()
-                );
-
-            if ($workScheduleHistoryId === ActionResult::FAILURE) {
-                return ActionResult::FAILURE;
-            }
-
-            $breakTypeHistoryId = $this->breakTypeDao
-                ->fetchLatestHistoryId(
-                    $breakSchedule->getBreakTypeId()
-                );
-
-            if ($breakTypeHistoryId === ActionResult::FAILURE) {
-                return ActionResult::FAILURE;
+            if ($isLocalTransaction) {
+                $this->pdo->beginTransaction();
             }
 
             $statement = $this->pdo->prepare($query);
 
-            $statement->bindValue(":break_schedule_id"       , $breakSchedule->getId()               , Helper::getPdoParameterType($breakSchedule->getId()               ));
-            $statement->bindValue(":work_schedule_history_id", $workScheduleHistoryId                , Helper::getPdoParameterType($workScheduleHistoryId                ));
-            $statement->bindValue(":break_type_history_id"   , $breakTypeHistoryId                   , Helper::getPdoParameterType($breakTypeHistoryId                   ));
-            $statement->bindValue(":start_time"              , $breakSchedule->getStartTime()        , Helper::getPdoParameterType($breakSchedule->getStartTime()        ));
-            $statement->bindValue(":end_time"                , $breakSchedule->getEndTime()          , Helper::getPdoParameterType($breakSchedule->getEndTime()          ));
-            $statement->bindValue(":is_flexible"             , $breakSchedule->isFlexible()          , Helper::getPdoParameterType($breakSchedule->isFlexible()          ));
-            $statement->bindValue(":earliest_start_time"     , $breakSchedule->getEarliestStartTime(), Helper::getPdoParameterType($breakSchedule->getEarliestStartTime()));
-            $statement->bindValue(":latest_end_time"         , $breakSchedule->getLatestEndTime()    , Helper::getPdoParameterType($breakSchedule->getLatestEndTime()    ));
+            $statement->bindValue(":break_schedule_id"        , $breakScheduleSnapshot->getBreakScheduleId()       , Helper::getPdoParameterType($breakScheduleSnapshot->getBreakScheduleId()       ));
+            $statement->bindValue(":work_schedule_snapshot_id", $breakScheduleSnapshot->getWorkScheduleSnapshotId(), Helper::getPdoParameterType($breakScheduleSnapshot->getWorkScheduleSnapshotId()));
+            $statement->bindValue(":break_type_snapshot_id"   , $breakScheduleSnapshot->getBreakTypeSnapshotId()   , Helper::getPdoParameterType($breakScheduleSnapshot->getBreakTypeSnapshotId()   ));
+            $statement->bindValue(":start_time"               , $breakScheduleSnapshot->getStartTime()             , Helper::getPdoParameterType($breakScheduleSnapshot->getStartTime()             ));
+            $statement->bindValue(":end_time"                 , $breakScheduleSnapshot->getEndTime()               , Helper::getPdoParameterType($breakScheduleSnapshot->getEndTime()               ));
+            $statement->bindValue(":is_flexible"              , $breakScheduleSnapshot->isFlexible()               , Helper::getPdoParameterType($breakScheduleSnapshot->isFlexible()               ));
+            $statement->bindValue(":earliest_start_time"      , $breakScheduleSnapshot->getEarliestStartTime()     , Helper::getPdoParameterType($breakScheduleSnapshot->getEarliestStartTime()     ));
+            $statement->bindValue(":latest_end_time"          , $breakScheduleSnapshot->getLatestEndTime()         , Helper::getPdoParameterType($breakScheduleSnapshot->getLatestEndTime()         ));
 
             $statement->execute();
 
-            return ActionResult::SUCCESS;
+            $lastInsertId = $this->pdo->lastInsertId();
+
+            if ($isLocalTransaction) {
+                $this->pdo->commit();
+            }
+
+            return $lastInsertId;
 
         } catch (PDOException $exception) {
-            error_log("Database Error: An error occurred while creating the break schedule history. " .
+            if ($isLocalTransaction) {
+                $this->pdo->rollBack();
+            }
+
+            error_log("Database Error: An error occurred while creating the break schedule snapshot. " .
                       "Exception: {$exception->getMessage()}");
 
             return ActionResult::FAILURE;
@@ -153,7 +144,7 @@ class BreakScheduleDao
         ? int   $limit                = null,
         ? int   $offset               = null,
           bool  $includeTotalRowCount = true
-    ): ActionResult|array {
+    ): array|ActionResult {
 
         $tableColumns = [
             "id"                                => "break_schedule.id                            AS id"                               ,
@@ -205,6 +196,7 @@ class BreakScheduleDao
 
         if (empty($filterCriteria)) {
             $whereClauses[] = "break_schedule.deleted_at IS NULL";
+
         } else {
             foreach ($filterCriteria as $filterCriterion) {
                 $column   = $filterCriterion["column"  ];
@@ -247,6 +239,7 @@ class BreakScheduleDao
                 if (isset($sortCriterion["direction"])) {
                     $direction = $sortCriterion["direction"];
                     $orderByClauses[] = "{$column} {$direction}";
+
                 } elseif (isset($sortCriterion["custom_order"])) {
                     $customOrder = $sortCriterion["custom_order"];
                     $caseExpressions = ["CASE {$column}"];
@@ -338,13 +331,13 @@ class BreakScheduleDao
         }
     }
 
-    public function fetchLatestHistoryId(int $breakScheduleId): int|ActionResult
+    public function fetchLatestSnapshotById(int $breakScheduleId): array|ActionResult
     {
         $query = "
             SELECT
-                id
+                *
             FROM
-                break_schedules_history
+                break_schedule_snapshots
             WHERE
                 break_schedule_id = :break_schedule_id
             ORDER BY
@@ -359,17 +352,17 @@ class BreakScheduleDao
 
             $statement->execute();
 
-            return $statement->fetchColumn() ?: ActionResult::FAILURE;
+            return $statement->fetch(PDO::FETCH_ASSOC) ?: [];
 
         } catch (PDOException $exception) {
-            error_log("Database Error: An error occurred while fetching the break schedule history ID. " .
+            error_log("Database Error: An error occurred while fetching the latest break schedule snapshot. " .
                       "Exception: {$exception->getMessage()}");
 
             return ActionResult::FAILURE;
         }
     }
 
-    public function update(BreakSchedule $breakSchedule, bool $isHashedId = false): ActionResult
+    public function update(BreakSchedule $breakSchedule): ActionResult
     {
         $query = "
             UPDATE break_schedules
@@ -382,14 +375,18 @@ class BreakScheduleDao
             WHERE
         ";
 
-        if ($isHashedId) {
+        if (is_string($breakSchedule->getId())) {
             $query .= " SHA2(id, 256) = :break_schedule_id";
         } else {
             $query .= " id = :break_schedule_id";
         }
 
+        $isLocalTransaction = ! $this->pdo->inTransaction();
+
         try {
-            $this->pdo->beginTransaction();
+            if ($isLocalTransaction) {
+                $this->pdo->beginTransaction();
+            }
 
             $statement = $this->pdo->prepare($query);
 
@@ -403,18 +400,16 @@ class BreakScheduleDao
 
             $statement->execute();
 
-            if ($this->createHistory($breakSchedule) === ActionResult::FAILURE) {
-                $this->pdo->rollBack();
-
-                return ActionResult::FAILURE;
+            if ($isLocalTransaction) {
+                $this->pdo->commit();
             }
-
-            $this->pdo->commit();
 
             return ActionResult::SUCCESS;
 
         } catch (PDOException $exception) {
-            $this->pdo->rollBack();
+            if ($isLocalTransaction) {
+                $this->pdo->rollBack();
+            }
 
             error_log("Database Error: An error occurred while updating the break schedule. " .
                       "Exception: {$exception->getMessage()}");
@@ -423,12 +418,12 @@ class BreakScheduleDao
         }
     }
 
-    public function delete(int|string $breakScheduleId, bool $isHashedId = false): ActionResult
+    public function delete(int|string $breakScheduleId): ActionResult
     {
-        return $this->softDelete($breakScheduleId, $isHashedId);
+        return $this->softDelete($breakScheduleId);
     }
 
-    private function softDelete(int|string $breakScheduleId, bool $isHashedId = false): ActionResult
+    private function softDelete(int|string $breakScheduleId): ActionResult
     {
         $query = "
             UPDATE break_schedules
@@ -437,14 +432,18 @@ class BreakScheduleDao
             WHERE
         ";
 
-        if ($isHashedId) {
+        if (is_string($breakScheduleId)) {
             $query .= " SHA2(id, 256) = :break_schedule_id";
         } else {
             $query .= " id = :break_schedule_id";
         }
 
+        $isLocalTransaction = ! $this->pdo->inTransaction();
+
         try {
-            $this->pdo->beginTransaction();
+            if ($isLocalTransaction) {
+                $this->pdo->beginTransaction();
+            }
 
             $statement = $this->pdo->prepare($query);
 
@@ -452,12 +451,16 @@ class BreakScheduleDao
 
             $statement->execute();
 
-            $this->pdo->commit();
+            if ($isLocalTransaction) {
+                $this->pdo->commit();
+            }
 
             return ActionResult::SUCCESS;
 
         } catch (PDOException $exception) {
-            $this->pdo->rollBack();
+            if ($isLocalTransaction) {
+                $this->pdo->rollBack();
+            }
 
             error_log("Database Error: An error occurred while deleting the break schedule. " .
                       "Exception: {$exception->getMessage()}");

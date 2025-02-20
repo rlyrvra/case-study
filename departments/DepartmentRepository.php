@@ -23,7 +23,7 @@ class DepartmentRepository
         ? int   $limit                = null,
         ? int   $offset               = null,
           bool  $includeTotalRowCount = true
-    ): ActionResult|array {
+    ): array|ActionResult {
 
         return $this->departmentDao->fetchAll(
             columns             : $columns             ,
@@ -35,23 +35,23 @@ class DepartmentRepository
         );
     }
 
-    public function fetchEmployeeCountsPerDepartment(): ActionResult|array
+    public function fetchEmployeeCountsPerDepartment(): array|ActionResult
     {
         return $this->departmentDao->fetchEmployeeCountsPerDepartment();
     }
 
-    public function isEmployeeDepartmentHead(int|string $employeeId, bool $isHashedId = false): ActionResult|bool
+    public function isEmployeeDepartmentHead(int|string $employeeId): bool|ActionResult
     {
-        return $this->departmentDao->isDepartmentHead($employeeId, $isHashedId);
+        return $this->departmentDao->isDepartmentHead($employeeId);
     }
 
-    public function updateDepartment(Department $department, bool $isHashedId = false): ActionResult
+    public function updateDepartment(Department $department): ActionResult
     {
-        return $this->departmentDao->update($department, $isHashedId);
+        return $this->departmentDao->update($department);
     }
 
-    public function deleteDepartment(int|string $departmentId, bool $isHashedId = false): ActionResult
+    public function deleteDepartment(int|string $departmentId): ActionResult
     {
-        return $this->departmentDao->delete($departmentId, $isHashedId);
+        return $this->departmentDao->delete($departmentId);
     }
 }

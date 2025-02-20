@@ -12,7 +12,7 @@ class LeaveEntitlementDao
         $this->pdo = $pdo;
     }
 
-    public function create(LeaveEntitlement $leaveEntitlement, bool $isHashedId = false): ActionResult
+    public function create(LeaveEntitlement $leaveEntitlement): ActionResult
     {
         $isExistingQuery = "
             SELECT
@@ -22,18 +22,16 @@ class LeaveEntitlementDao
             WHERE
         ";
 
-        if ($isHashedId) {
-            $isExistingQuery .= "
-                SHA2(employee_id, 256) = :employee_id
-            AND
-                SHA2(leave_type_id, 256) = :leave_type_id
-            ";
+        if (is_string($leaveEntitlement->getEmployeeId())) {
+            $isExistingQuery .= "SHA2(employee_id, 256) = :employee_id ";
         } else {
-            $isExistingQuery .= "
-                employee_id = :employee_id
-            AND
-                leave_type_id = :leave_type_id
-            ";
+            $isExistingQuery .= "employee_id = :employee_id ";
+        }
+
+        if (is_string($leaveEntitlement->getLeaveTypeId())) {
+            $isExistingQuery .= "AND SHA2(leave_type_id, 256) = :leave_type_id";
+        } else {
+            $isExistingQuery .= "AND leave_type_id = :leave_type_id";
         }
 
         $isExistingQuery .= "
@@ -66,18 +64,16 @@ class LeaveEntitlementDao
             WHERE
         ";
 
-        if ($isHashedId) {
-            $updateQuery .= "
-                SHA2(employee_id, 256) = :employee_id
-            AND
-                SHA2(leave_type_id, 256) = :leave_type_id
-            ";
+        if (is_string($leaveEntitlement->getEmployeeId())) {
+            $updateQuery .= "SHA2(employee_id, 256) = :employee_id ";
         } else {
-            $updateQuery .= "
-                employee_id = :employee_id
-            AND
-                leave_type_id = :leave_type_id
-            ";
+            $updateQuery .= "employee_id = :employee_id ";
+        }
+
+        if (is_string($leaveEntitlement->getLeaveTypeId())) {
+            $updateQuery .= "AND SHA2(leave_type_id, 256) = :leave_type_id";
+        } else {
+            $updateQuery .= "AND leave_type_id = :leave_type_id";
         }
 
         $updateQuery .= "
@@ -85,8 +81,12 @@ class LeaveEntitlementDao
                 deleted_at IS NULL
         ";
 
+        $isLocalTransaction = ! $this->pdo->inTransaction();
+
         try {
-            $this->pdo->beginTransaction();
+            if ($isLocalTransaction) {
+                $this->pdo->beginTransaction();
+            }
 
             $isExistingStatement = $this->pdo->prepare($isExistingQuery);
 
@@ -123,7 +123,9 @@ class LeaveEntitlementDao
             return ActionResult::SUCCESS;
 
         } catch (PDOException $exception) {
-            $this->pdo->rollBack();
+            if ($isLocalTransaction) {
+                $this->pdo->rollBack();
+            }
 
             error_log("Database Error: An error occurred while creating or updating the leave entitlement. " .
                       "Exception: {$exception->getMessage()}");
@@ -139,7 +141,7 @@ class LeaveEntitlementDao
         ? int   $limit                = null,
         ? int   $offset               = null,
           bool  $includeTotalRowCount = true
-    ): ActionResult|array {
+    ): array|ActionResult {
 
         $tableColumns = [
             "id"                      => "leave_entitlement.id                      AS id"                     ,
@@ -195,6 +197,7 @@ class LeaveEntitlementDao
 
         if (empty($filterCriteria)) {
             $whereClauses[] = "leave_entitlement.deleted_at IS NULL";
+
         } else {
             foreach ($filterCriteria as $filterCriterion) {
                 $column   = $filterCriterion["column"  ];
@@ -329,7 +332,7 @@ class LeaveEntitlementDao
         }
     }
 
-    public function updateBalance(LeaveEntitlement $leaveEntitlement, bool $isHashedId = false): ActionResult
+    public function updateBalance(LeaveEntitlement $leaveEntitlement): ActionResult
     {
         $query = "
             UPDATE leave_entitlements
@@ -339,24 +342,24 @@ class LeaveEntitlementDao
             WHERE
         ";
 
-        if ($isHashedId) {
-            $query .= "
-                SHA2(employee_id, 256) = :employee_id
-            AND
-                SHA2(leave_type_id, 256) = :leave_type_id
-            ";
+        if (is_string($leaveEntitlement->getEmployeeId())) {
+            $query .= "SHA2(employee_id, 256) = :employee_id ";
         } else {
-            $query .= "
-                employee_id = :employee_id
-            AND
-                leave_type_id = :leave_type_id
-            ";
+            $query .= "employee_id = :employee_id ";
         }
 
-        //echo "<pre> $query </pre>";
+        if (is_string($leaveEntitlement->getLeaveTypeId())) {
+            $query .= "AND SHA2(leave_type_id, 256) = :leave_type_id";
+        } else {
+            $query .= "AND leave_type_id = :leave_type_id";
+        }
+
+        $isLocalTransaction = ! $this->pdo->inTransaction();
 
         try {
-            $this->pdo->beginTransaction();
+            if ($isLocalTransaction) {
+                $this->pdo->beginTransaction();
+            }
 
             $statement = $this->pdo->prepare($query);
 
@@ -368,12 +371,16 @@ class LeaveEntitlementDao
 
             $statement->execute();
 
-            $this->pdo->commit();
+            if ($isLocalTransaction) {
+                $this->pdo->commit();
+            }
 
             return ActionResult::SUCCESS;
 
         } catch (PDOException $exception) {
-            $this->pdo->rollBack();
+            if ($isLocalTransaction) {
+                $this->pdo->rollBack();
+            }
 
             error_log("Database Error: An error occurred while updating the leave entitlement. " .
                       "Exception: {$exception->getMessage()}");
@@ -382,7 +389,7 @@ class LeaveEntitlementDao
         }
     }
 
-    public function resetEmployeeAllLeaveBalances(int|string $employeeId, bool $isHashedId = false)
+    public function resetEmployeeAllLeaveBalances(int|string $employeeId)
     {
         $query = "
             UPDATE leave_entitlements
@@ -392,14 +399,18 @@ class LeaveEntitlementDao
             WHERE
         ";
 
-        if ($isHashedId) {
+        if (is_string($employeeId)) {
             $query .= " SHA2(employee_id, 256) = :employee_id";
         } else {
             $query .= " employee_id = :employee_id";
         }
 
+        $isLocalTransaction = ! $this->pdo->inTransaction();
+
         try {
-            $this->pdo->beginTransaction();
+            if ($isLocalTransaction) {
+                $this->pdo->beginTransaction();
+            }
 
             $statement = $this->pdo->prepare($query);
 
@@ -407,12 +418,16 @@ class LeaveEntitlementDao
 
             $statement->execute();
 
-            $this->pdo->commit();
+            if ($isLocalTransaction) {
+                $this->pdo->commit();
+            }
 
             return ActionResult::SUCCESS;
 
         } catch (PDOException $exception) {
-            $this->pdo->rollBack();
+            if ($isLocalTransaction) {
+                $this->pdo->rollBack();
+            }
 
             error_log("Database Error: An error occurred while resetting all an employee's leave balances. " .
                       "Exception: {$exception->getMessage()}");
@@ -421,12 +436,12 @@ class LeaveEntitlementDao
         }
     }
 
-    public function delete(int|string $leaveEntitlementId, bool $isHashedId = false): ActionResult
+    public function delete(int|string $leaveEntitlementId): ActionResult
     {
-        return $this->softDelete($leaveEntitlementId, $isHashedId);
+        return $this->softDelete($leaveEntitlementId);
     }
 
-    private function softDelete(int|string $leaveEntitlementId, bool $isHashedId = false): ActionResult
+    private function softDelete(int|string $leaveEntitlementId): ActionResult
     {
         $query = "
             UPDATE leave_entitlements
@@ -435,14 +450,18 @@ class LeaveEntitlementDao
             WHERE
         ";
 
-        if ($isHashedId) {
+        if (is_string($leaveEntitlementId)) {
             $query .= " SHA2(id, 256) = :leave_entitlement_id";
         } else {
             $query .= " id = :leave_entitlement_id";
         }
 
+        $isLocalTransaction = ! $this->pdo->inTransaction();
+
         try {
-            $this->pdo->beginTransaction();
+            if ($isLocalTransaction) {
+                $this->pdo->beginTransaction();
+            }
 
             $statement = $this->pdo->prepare($query);
 
@@ -450,12 +469,16 @@ class LeaveEntitlementDao
 
             $statement->execute();
 
-            $this->pdo->commit();
+            if ($isLocalTransaction) {
+                $this->pdo->commit();
+            }
 
             return ActionResult::SUCCESS;
 
         } catch (PDOException $exception) {
-            $this->pdo->rollBack();
+            if ($isLocalTransaction) {
+                $this->pdo->rollBack();
+            }
 
             error_log("Database Error: An error occurred while deleting the leave entitlement. " .
                       "Exception: {$exception->getMessage()}");

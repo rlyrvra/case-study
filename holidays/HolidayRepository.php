@@ -23,7 +23,7 @@ class HolidayRepository
         ? int   $limit                = null,
         ? int   $offset               = null,
           bool  $includeTotalRowCount = true
-    ): ActionResult|array {
+    ): array|ActionResult {
 
         return $this->holidayDao->fetchAll(
             columns             : $columns             ,
@@ -35,12 +35,12 @@ class HolidayRepository
         );
     }
 
-    public function updateHoliday(Holiday $holiday, bool $isHashedId = false): ActionResult
+    public function updateHoliday(Holiday $holiday): ActionResult
     {
-        return $this->holidayDao->update($holiday, $isHashedId);
+        return $this->holidayDao->update($holiday);
     }
 
-    public function getHolidayDatesForPeriod(string $startDate, string $endDate): ActionResult|array
+    public function getHolidayDatesForPeriod(string $startDate, string $endDate): array|ActionResult
     {
         $columns = [
             'name'                 ,
@@ -119,8 +119,8 @@ class HolidayRepository
         return $datesMarkedAsHoliday;
     }
 
-    public function deleteHoliday(int|string $holidayId, bool $isHashedId = false): ActionResult
+    public function deleteHoliday(int|string $holidayId): ActionResult
     {
-        return $this->holidayDao->delete($holidayId, $isHashedId);
+        return $this->holidayDao->delete($holidayId);
     }
 }

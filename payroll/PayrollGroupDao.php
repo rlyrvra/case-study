@@ -39,8 +39,12 @@ class PayrollGroupDao
             )
         ";
 
+        $isLocalTransaction = ! $this->pdo->inTransaction();
+
         try {
-            $this->pdo->beginTransaction();
+            if ($isLocalTransaction) {
+                $this->pdo->beginTransaction();
+            }
 
             $statement = $this->pdo->prepare($query);
 
@@ -56,12 +60,16 @@ class PayrollGroupDao
 
             $statement->execute();
 
-            $this->pdo->commit();
+            if ($isLocalTransaction) {
+                $this->pdo->commit();
+            }
 
             return ActionResult::SUCCESS;
 
         } catch (PDOException $exception) {
-            $this->pdo->rollBack();
+            if ($isLocalTransaction) {
+                $this->pdo->rollBack();
+            }
 
             error_log("Database Error: An error occurred while creating the payroll group. " .
                       "Exception: {$exception->getMessage()}");
@@ -77,7 +85,7 @@ class PayrollGroupDao
         ? int   $limit                = null,
         ? int   $offset               = null,
           bool  $includeTotalRowCount = true
-    ): ActionResult|array {
+    ): array|ActionResult {
 
         $tableColumns = [
             "id"                         => "payroll_group.id                         AS id"                        ,
@@ -109,6 +117,7 @@ class PayrollGroupDao
 
         if (empty($filterCriteria)) {
             $whereClauses[] = "payroll_group.deleted_at IS NULL";
+
         } else {
             foreach ($filterCriteria as $filterCriterion) {
                 $column   = $filterCriterion["column"  ];
@@ -252,7 +261,7 @@ class PayrollGroupDao
         }
     }
 
-    public function update(PayrollGroup $payrollGroup, bool $isHashedId = false): ActionResult
+    public function update(PayrollGroup $payrollGroup): ActionResult
     {
         $query = "
             UPDATE payroll_groups
@@ -269,14 +278,18 @@ class PayrollGroupDao
             WHERE
         ";
 
-        if ($isHashedId) {
+        if (is_string($payrollGroup->getId())) {
             $query .= " SHA2(id, 256) = :payroll_group_id";
         } else {
             $query .= " id = :payroll_group_id";
         }
 
+        $isLocalTransaction = ! $this->pdo->inTransaction();
+
         try {
-            $this->pdo->beginTransaction();
+            if ($isLocalTransaction) {
+                $this->pdo->beginTransaction();
+            }
 
             $statement = $this->pdo->prepare($query);
 
@@ -294,26 +307,30 @@ class PayrollGroupDao
 
             $statement->execute();
 
-            $this->pdo->commit();
+            if ($isLocalTransaction) {
+                $this->pdo->commit();
+            }
 
             return ActionResult::SUCCESS;
 
         } catch (PDOException $exception) {
-            $this->pdo->rollBack();
+            if ($isLocalTransaction) {
+                $this->pdo->rollBack();
+            }
 
             error_log("Database Error: An error occurred while updating the payroll group. " .
                       "Exception: {$exception->getMessage()}");
-
+            
             return ActionResult::FAILURE;
         }
     }
 
-    public function delete(int|string $payrollGroupId, bool $isHashedId = false): ActionResult
+    public function delete(int|string $payrollGroupId): ActionResult
     {
-        return $this->softDelete($payrollGroupId, $isHashedId);
+        return $this->softDelete($payrollGroupId);
     }
 
-    private function softDelete(int|string $payrollGroupId, bool $isHashedId = false): ActionResult
+    private function softDelete(int|string $payrollGroupId): ActionResult
     {
         $query = "
             UPDATE payroll_groups
@@ -323,14 +340,18 @@ class PayrollGroupDao
             WHERE
         ";
 
-        if ($isHashedId) {
+        if (is_string($payrollGroupId)) {
             $query .= " SHA2(id, 256) = :payroll_group_id";
         } else {
             $query .= " id = :payroll_group_id";
         }
 
+        $isLocalTransaction = ! $this->pdo->inTransaction();
+
         try {
-            $this->pdo->beginTransaction();
+            if ($isLocalTransaction) {
+                $this->pdo->beginTransaction();
+            }
 
             $statement = $this->pdo->prepare($query);
 
@@ -338,12 +359,16 @@ class PayrollGroupDao
 
             $statement->execute();
 
-            $this->pdo->commit();
+            if ($isLocalTransaction) {
+                $this->pdo->commit();
+            }
 
             return ActionResult::SUCCESS;
 
         } catch (PDOException $exception) {
-            $this->pdo->rollBack();
+            if ($isLocalTransaction) {
+                $this->pdo->rollBack();
+            }
 
             error_log("Database Error: An error occurred while deleting the payroll group. " .
                       "Exception: {$exception->getMessage()}");

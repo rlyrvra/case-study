@@ -16,11 +16,6 @@ class WorkScheduleService
         return $this->workScheduleRepository->createWorkSchedule($workSchedule);
     }
 
-    public function createWorkScheduleHistory(WorkSchedule $workSchedule): ActionResult
-    {
-        return $this->workScheduleRepository->createWorkScheduleHistory($workSchedule);
-    }
-
     public function fetchAllWorkSchedules(
         ? array $columns              = null,
         ? array $filterCriteria       = null,
@@ -28,7 +23,7 @@ class WorkScheduleService
         ? int   $limit                = null,
         ? int   $offset               = null,
           bool  $includeTotalRowCount = true
-    ): ActionResult|array {
+    ): array|ActionResult {
 
         return $this->workScheduleRepository->fetchAllWorkSchedules(
             columns             : $columns             ,
@@ -40,23 +35,18 @@ class WorkScheduleService
         );
     }
 
-    public function fetchLatestWorkScheduleHistoryId(int $workScheduleId): int|null|ActionResult
+    public function updateWorkSchedule(WorkSchedule $workSchedule): ActionResult
     {
-        return $this->workScheduleRepository->fetchLatestWorkScheduleHistoryId($workScheduleId);
+        return $this->workScheduleRepository->updateWorkSchedule($workSchedule);
     }
 
-    public function fetchWorkScheduleLastInsertedId(): ActionResult|int
+    public function deleteWorkSchedule(int|string $workScheduleId): ActionResult
     {
-        return $this->workScheduleRepository->fetchWorkScheduleLastInsertedId();
+        return $this->workScheduleRepository->deleteWorkSchedule($workScheduleId);
     }
 
-    public function updateWorkSchedule(WorkSchedule $workSchedule, bool $isHashedId = false): ActionResult
+    public function fetchLastWorkScheduleId(): int
     {
-        return $this->workScheduleRepository->updateWorkSchedule($workSchedule, $isHashedId);
-    }
-
-    public function deleteWorkSchedule(int|string $workScheduleId, bool $isHashedId = false): ActionResult
-    {
-        return $this->workScheduleRepository->deleteWorkSchedule($workScheduleId, $isHashedId);
+        return $this->workScheduleRepository->fetchLastWorkScheduleById();
     }
 }

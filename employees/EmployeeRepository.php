@@ -23,7 +23,7 @@ class EmployeeRepository
         ? int   $limit                = null,
         ? int   $offset               = null,
           bool  $includeTotalRowCount = true
-    ): ActionResult|array {
+    ): array|ActionResult {
 
         return $this->employeeDao->fetchAll(
             columns             : $columns             ,
@@ -35,28 +35,28 @@ class EmployeeRepository
         );
     }
 
-    public function fetchLastEmployeeId(): int|string
+    public function fetchLastEmployeeId(): int
     {
         return $this->employeeDao->fetchLastInsertedId();
     }
 
-    public function updateEmployee(Employee $employee, bool $isHashedId = false): ActionResult
+    public function updateEmployee(Employee $employee): ActionResult
     {
-        return $this->employeeDao->update($employee, $isHashedId);
+        return $this->employeeDao->update($employee);
     }
 
-    public function changePassword(int|string $employeeId, string $newHashedPassword, bool $isHashedId = false): ActionResult
+    public function changePassword(int|string $employeeId, string $newHashedPassword): ActionResult
     {
-        return $this->employeeDao->changePassword($employeeId, $newHashedPassword, $isHashedId);
+        return $this->employeeDao->changePassword($employeeId, $newHashedPassword);
     }
 
-    public function countTotalRecords(): ActionResult|int
+    public function countTotalRecords(): int|ActionResult
     {
         return $this->employeeDao->countTotalRecords();
     }
 
-    public function deleteEmployee(int|string $employeeId, bool $isHashedId = false): ActionResult
+    public function deleteEmployee(int|string $employeeId): ActionResult
     {
-        return $this->employeeDao->delete($employeeId, $isHashedId);
+        return $this->employeeDao->delete($employeeId);
     }
 }

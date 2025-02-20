@@ -41,3 +41,150 @@ function getByDate(){
     var byDate = selectedOptions.by_date;
     return byDate;
 }
+
+function showFrequencyOptions(selectElement, form) {
+    // Get the selected option
+    var selectedOption = selectElement.options[selectElement.selectedIndex];
+    
+    // Get the data-target attribute value
+    var dataTarget = selectedOption.getAttribute('data-target');
+    
+    // Example: Show the corresponding container
+    if (dataTarget) {
+        // Hide all containers first (optional)
+        form.querySelectorAll('.frequency-container').forEach(function(container) {
+            container.classList.add("visually-hidden");
+            container.querySelectorAll('.form-control').forEach(childTarget =>{
+                childTarget.required = false;
+                childTarget.value = '';
+            });
+        });
+        
+        // Show the selected container
+        var targetContainer = document.getElementById(dataTarget);
+        if (targetContainer) {
+            targetContainer.classList.remove("visually-hidden");
+            targetContainer.querySelectorAll('.form-control').forEach(childTarget =>{
+                childTarget.required = true;
+            });
+        }
+    }
+}
+
+function calculateSecondPay(form){
+    const semiFirst = parseInt(form.querySelector("#semi_monthly_first_cutoff").value, 10);
+    const semiSecond = form.querySelector("#semi_monthly_second_cutoff");
+    semiSecond.value = semiFirst + 15;
+}
+
+function calculateSecondPayUpdate(form){
+    const semiFirst = parseInt(form.querySelector("#update_semi_monthly_first_cutoff").value, 10);
+    const semiSecond = form.querySelector("#update_semi_monthly_second_cutoff");
+    semiSecond.value = semiFirst + 15;
+}
+
+
+
+function updatePayrollGroupClick(button){
+    const row = button.closest('tr');
+    const payrollGroupData = {
+        token: row.getAttribute('data-id'),
+        name: row.getAttribute('data-name'),
+        payroll_frequency: row.getAttribute('data-payfreq'),
+        day_of_weekly_cutoff: row.getAttribute('data-weekly-cutoff'),
+        day_of_biweekly_cutoff: row.getAttribute('data-biweekly-cutoff'),
+        semi_monthly_first_cutoff: row.getAttribute('data-semimonthly-first-cutoff'),
+        semi_monthly_second_cutoff: row.getAttribute('data-semimonthly-second-cutoff'),
+        payday_offset: row.getAttribute('data-payday-offset'),
+        payday_adjustment: row.getAttribute('data-payday-adjustment'),
+        status: row.getAttribute('data-status')
+    };
+    
+    const nameInput = $('#update_name');
+    
+    // Set the value of the input field with ID 'update_name' to the name from payrollGroupData
+    nameInput.val(payrollGroupData.name);
+    
+    // You can continue by setting other fields similarly
+    const payrollFrequencyInput = $('#update_pay_frequency');
+    payrollFrequencyInput.val(payrollGroupData.payroll_frequency);
+
+    showFrequencyOptions(document.getElementById('update_pay_frequency'), document.getElementById('update_payrollGroups_form'));
+    
+    const weeklyCutoffInput = $('#update_weekly_payday');
+    weeklyCutoffInput.val(payrollGroupData.day_of_weekly_cutoff);
+    
+    const biweeklyCutoffInput = $('#update_bi_weekly_payday');
+    biweeklyCutoffInput.val(payrollGroupData.day_of_biweekly_cutoff);
+    
+    const semiMonthlyFirstCutoffInput = $('#update_semi_monthly_first_cutoff');
+    semiMonthlyFirstCutoffInput.val(payrollGroupData.semi_monthly_first_cutoff);
+    
+    const semiMonthlySecondCutoffInput = $('#update_semi_monthly_second_cutoff');
+    semiMonthlySecondCutoffInput.val(payrollGroupData.semi_monthly_second_cutoff);
+    
+    const paydayOffsetInput = $('#update_payday_offset');
+    paydayOffsetInput.val(payrollGroupData.payday_offset);
+    
+    const paydayAdjustmentInput = $('#update_payment_adjustment');
+    paydayAdjustmentInput.val(payrollGroupData.payday_adjustment);
+    
+    const statusInput = $('#update_status');
+    statusInput.val(payrollGroupData.status);
+
+    const updateButton = document.getElementById('update_payrollGroup_button');
+    updateButton.setAttribute('data-token', payrollGroupData.token);
+
+
+}
+
+function showSuccessCreate() {
+    $('#add-payrollGroups-modal').modal('hide');
+    Swal.fire({
+        title: 'Success!',
+        text: 'This payroll group has been created successfully.',
+        icon: 'success',
+        timer: 2000,
+        confirmButtonText: 'OK'
+    });
+}
+
+function showSuccessDeletion() {
+    $('#add-payrollGroups-modal').modal('hide');
+    Swal.fire({
+        title: 'Success!',
+        text: 'This payroll group has been deleted successfully.',
+        icon: 'success',
+        timer: 2000,
+        confirmButtonText: 'OK'
+    });
+}
+
+function showSuccessUpdate() {
+    $('#update-payrollGroups-modal').modal('hide');
+    Swal.fire({
+        title: 'Success!',
+        text: 'This payroll group has been updated successfully.',
+        icon: 'success',
+        timer: 2000,
+        confirmButtonText: 'OK'
+    });
+}
+
+
+function confirmDeletePayrollGroup(button) {
+    $('#add-payrollGroups-modal').modal('hide');
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "Do you want to delete this payroll group?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+        deletePayrollGroup(button);
+        }
+    });
+}

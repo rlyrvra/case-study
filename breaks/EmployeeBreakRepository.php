@@ -30,28 +30,30 @@ class EmployeeBreakRepository
         ? array $columns              = null,
         ? array $filterCriteria       = null,
         ? array $sortCriteria         = null,
+        ? array $groupByColumns       = null,
         ? int   $limit                = null,
         ? int   $offset               = null,
           bool  $includeTotalRowCount = true
-    ): ActionResult|array {
+    ): array|ActionResult {
 
         return $this->employeeBreakDao->fetchAll(
             columns             : $columns             ,
             filterCriteria      : $filterCriteria      ,
             sortCriteria        : $sortCriteria        ,
+            groupByColumns      : $groupByColumns      ,
             limit               : $limit               ,
             offset              : $offset              ,
             includeTotalRowCount: $includeTotalRowCount
         );
     }
 
-    public function updateEmployeeBreak(EmployeeBreak $employeeBreak, bool $isHashedId = false): ActionResult
+    public function updateEmployeeBreak(EmployeeBreak $employeeBreak): ActionResult
     {
-        return $this->employeeBreakDao->update($employeeBreak, $isHashedId);
+        return $this->employeeBreakDao->update($employeeBreak);
     }
 
-    public function deleteEmployeeBreak(int|string $employeeBreakId, bool $isHashedId = false): ActionResult
+    public function deleteEmployeeBreak(int|string $employeeBreakId): ActionResult
     {
-        return $this->employeeBreakDao->delete($employeeBreakId, $isHashedId);
+        return $this->employeeBreakDao->delete($employeeBreakId);
     }
 }

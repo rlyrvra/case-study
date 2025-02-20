@@ -39,8 +39,12 @@ class EmploymentTypeBenefitDao
             )
         ";
 
+        $isLocalTransaction = ! $this->pdo->inTransaction();
+
         try {
-            $this->pdo->beginTransaction();
+            if ($isLocalTransaction) {
+                $this->pdo->beginTransaction();
+            }
 
             $statement = $this->pdo->prepare($query);
 
@@ -51,12 +55,16 @@ class EmploymentTypeBenefitDao
 
             $statement->execute();
 
-            $this->pdo->commit();
+            if ($isLocalTransaction) {
+                $this->pdo->commit();
+            }
 
             return ActionResult::SUCCESS;
 
         } catch (PDOException $exception) {
-            $this->pdo->rollBack();
+            if ($isLocalTransaction) {
+                $this->pdo->rollBack();
+            }
 
             error_log("Database Error: An error occurred while creating the employment type benefit. " .
                       "Exception: {$exception->getMessage()}");
@@ -72,7 +80,7 @@ class EmploymentTypeBenefitDao
         ? int   $limit                = null,
         ? int   $offset               = null,
           bool  $includeTotalRowCount = true
-    ): ActionResult|array {
+    ): array|ActionResult {
 
         $tableColumns = [
             "id"                                => "employment_type_benefit.id              AS id"                               ,
@@ -162,6 +170,7 @@ class EmploymentTypeBenefitDao
 
         if (empty($filterCriteria)) {
             $whereClauses[] = "employment_type_benefit.deleted_at IS NULL";
+
         } else {
             foreach ($filterCriteria as $filterCriterion) {
                 $column   = $filterCriterion["column"  ];
@@ -293,7 +302,7 @@ class EmploymentTypeBenefitDao
         }
     }
 
-    public function checkIfExists(EmploymentTypeBenefit $benefit): ActionResult|bool
+    public function checkIfExists(EmploymentTypeBenefit $benefit): bool|ActionResult
     {
         $query = "
             SELECT
@@ -332,12 +341,12 @@ class EmploymentTypeBenefitDao
         }
     }
 
-    public function delete(int|string $employmentTypeBenefitId, bool $isHashedId = false): ActionResult
+    public function delete(int|string $employmentTypeBenefitId): ActionResult
     {
-        return $this->softDelete($employmentTypeBenefitId, $isHashedId);
+        return $this->softDelete($employmentTypeBenefitId);
     }
 
-    private function softDelete(int|string $employmentTypeBenefitId, bool $isHashedId = false): ActionResult
+    private function softDelete(int|string $employmentTypeBenefitId): ActionResult
     {
         $query = "
             UPDATE employment_type_benefits
@@ -346,14 +355,18 @@ class EmploymentTypeBenefitDao
             WHERE
         ";
 
-        if ($isHashedId) {
+        if (is_string($employmentTypeBenefitId)) {
             $query .= " SHA2(id, 256) = :employment_benefit_id";
         } else {
             $query .= " id = :employment_benefit_id";
         }
 
+        $isLocalTransaction = ! $this->pdo->inTransaction();
+
         try {
-            $this->pdo->beginTransaction();
+            if ($isLocalTransaction) {
+                $this->pdo->beginTransaction();
+            }
 
             $statement = $this->pdo->prepare($query);
 
@@ -361,12 +374,16 @@ class EmploymentTypeBenefitDao
 
             $statement->execute();
 
-            $this->pdo->commit();
+            if ($isLocalTransaction) {
+                $this->pdo->commit();
+            }
 
             return ActionResult::SUCCESS;
 
         } catch (PDOException $exception) {
-            $this->pdo->rollBack();
+            if ($isLocalTransaction) {
+                $this->pdo->rollBack();
+            }
 
             error_log("Database Error: An error occurred while deleting the employment type benefit. " .
                       "Exception: {$exception->getMessage()}");
