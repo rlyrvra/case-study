@@ -83,7 +83,7 @@ class RfcParser
 
 		if ($dtstart) {
 			$nb_dtstart = 1;
-			if ( ! is_int($dtstart)) {
+			if ( ! is_numeric($dtstart)) {
 				if (strlen($dtstart) == 10) {
 					$dtstart_type = 'date';
 				}

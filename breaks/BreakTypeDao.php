@@ -324,7 +324,7 @@ class BreakTypeDao
             WHERE
         ";
 
-        if ( ! is_int($breakType->getId())) {
+        if ( ! is_numeric($breakType->getId())) {
             $query .= " SHA2(id, 256) = :break_type_id";
         } else {
             $query .= " id = :break_type_id";
@@ -380,7 +380,7 @@ class BreakTypeDao
             WHERE
         ";
 
-        if ( ! is_int($breakTypeId)) {
+        if ( ! is_numeric($breakTypeId)) {
             $query .= " SHA2(id, 256) = :break_type_id";
         } else {
             $query .= " id = :break_type_id";

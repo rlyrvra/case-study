@@ -247,7 +247,7 @@ class DeductionDao
             WHERE
         ";
 
-        if ( ! is_int($deduction->getId())) {
+        if ( ! is_numeric($deduction->getId())) {
             $query .= " SHA2(id, 256) = :deduction_id";
         } else {
             $query .= " id = :deduction_id";
@@ -305,7 +305,7 @@ class DeductionDao
             WHERE
         ";
 
-        if ( ! is_int($deductionId)) {
+        if ( ! is_numeric($deductionId)) {
             $query .= " SHA2(id, 256) = :deduction_id";
         } else {
             $query .= " id = :deduction_id";

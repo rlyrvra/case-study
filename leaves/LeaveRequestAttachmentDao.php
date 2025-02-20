@@ -230,7 +230,7 @@ class LeaveRequestAttachmentDao
             WHERE
         ";
 
-        if ( ! is_int($leaveRequestAttachmentId)) {
+        if ( ! is_numeric($leaveRequestAttachmentId)) {
             $query .= " SHA2(id, 256) = :leave_request_attachment_id";
         } else {
             $query .= " id = :leave_request_attachment_id";
