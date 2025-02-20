@@ -111,13 +111,13 @@
         
         <li class="menu-item" id="work-schedules-menu">
             <a href="work-schedule.php" class="menu-link">
-            <div data-i18n="Under Maintenance">Work Schedules</div>
+            <div>Work Schedules</div>
             </a>
         </li>
 
-        <li class="menu-item">
-            <a href="maintenance-login" class="menu-link">
-            <div data-i18n="Under Maintenance">Overtime Rates</div>
+        <li class="menu-item" id="overtime-rate-menu">
+            <a href="overtime-rate.php" class="menu-link">
+            <div>Overtime Rates</div>
             </a>
         </li>
         <?php
@@ -275,9 +275,9 @@
 
     <!-- Log Out -->
     <li class="menu-item">
-        <a href="#" class="menu-link" onclick="window.location.href='requests/login/logout'">
+        <a href="#" class="menu-link" onclick="confirmLogout();">
         <i class="menu-icon tf-icons bx bx-log-out"></i>
-        <div data-i18n="Tables">Log Out</div>
+        <div>Log Out</div>
         </a>
     </li>
     </ul>

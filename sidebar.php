@@ -262,7 +262,7 @@
     <li class="menu-item">
         <a href="#" class="menu-link" onclick="confirmLogout()">
         <i class="menu-icon tf-icons bx bx-log-out"></i>
-        <div data-i18n="Tables">Log Out</div>
+        <div>Log Out</div>
         </a>
     </li>
     </ul>
