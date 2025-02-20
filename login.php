@@ -15,7 +15,7 @@ if(isset($_GET['r']) && $_GET['r']){
 <!-- Scripts -->
 <script src="requests/login/login-ajax-requests.js?v=1.7"></script>
 <title>
-smartWAGE Login
+smartWage | Login
 </title>
 <link rel="icon" type="image/x-icon" href="img/logo-files/logo1.ico" />
 <style>
