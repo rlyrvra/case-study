@@ -1,10 +1,8 @@
-
 <?php
 // table.php
 // Expecting $data to be passed from api.php
 ?>
 <style>
-
 </style>
 <!-- Table Rendering -->
 <table class="table table-bordered table-hover table-striped">
@@ -37,13 +35,17 @@
           <!-- <td><?php //echo htmlspecialchars($row['id']); ?></td> -->
           <!-- <td><?php //echo htmlspecialchars($i); ?></td> -->
           <td><?php echo htmlspecialchars($row['name']); ?></td>
-          <td><?php echo htmlspecialchars($row['department_head_full_name']); ?></td>
+          <td>
+            <?php echo !empty($row['department_head_full_name']) 
+              ? htmlspecialchars($row['department_head_full_name']) 
+              : 'Unassigned'; ?>
+          </td>
           <td><?php echo htmlspecialchars($row['description']); ?></td>
           <td><span class="badge 
           <?php 
           if($row['status'] === "Active"){
             echo "bg-label-primary";
-          }else if($row['status'] === "Inctive"){
+          }else if($row['status'] === "Inactive"){
             echo "bg-label-warning";
           }else{
             echo "bg-label-danger";
@@ -51,11 +53,11 @@
           
           ?> me-1"><?php echo htmlspecialchars($row['status']); ?></span>
           </td>
-          <td><?php echo htmlspecialchars($row['created_at']); ?></td>
+          <td><?php echo htmlspecialchars(date("l, F j, Y, g:i A", strtotime($row['created_at']))); ?></td>
           <!-- <td><?php //echo htmlspecialchars($row['created_by']); ?></td> -->
-          <td><?php echo htmlspecialchars($row['updated_at']); ?></td>
+          <td><?php echo htmlspecialchars(date("l, F j, Y, g:i A", strtotime($row['updated_at']))); ?></td>
           <!-- <td><?php //echo htmlspecialchars($row['updated_by']); ?></td> -->
-          <?php if (isset($status) && $status === 'Archived') echo "<td>" . htmlspecialchars($row['deleted_at']) . "</td>"; ?>
+          <?php if (isset($status) && $status === 'Archived') echo "<td>" . htmlspecialchars(date("l, F j, Y, g:i A", strtotime($row['deleted_at']))) . "</td>"; ?>
           <?php //if (isset($status) && $status === 'Archived') echo "<td>" . htmlspecialchars($row['deleted_by']) . "</td>"; ?>
           <?php if (!isset($status) || $status !== 'Archived') echo
             '<td>
@@ -102,6 +104,7 @@
     </ul>
   </nav>
 </div>
+
 <style>
     .page-item:hover:not(.disabled){
         cursor: pointer !important;
