@@ -128,7 +128,7 @@ if($_SESSION['access_role'] !== 'Admin'){
               </div>
             </div>
 
-            <hr/>
+          
 
             
             <script>
