@@ -13,7 +13,7 @@ if(isset($_GET['r']) && $_GET['r']){
 
 ?>
 <!-- Scripts -->
-<script src="requests/login/login-ajax-requests.js?v=1.6"></script>
+<script src="requests/login/login-ajax-requests.js?v=1.7"></script>
 <title>
 smartWAGE Login
 </title>
@@ -101,11 +101,11 @@ body{
                     <form onsubmit="event.preventDefault()">
                         <div class="mb-3">
                             <label for="username" class="form-label">Username</label>
-                            <input type="text" class="form-control" id="username" name="username" required value="">
+                            <input type="text" class="form-control" id="username" name="username" required value="" maxlength="100">
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="password" name="password" required value="">
+                            <input type="password" class="form-control" id="password" name="password" required value="" maxlength="100">
                         </div>
                         <div class="mb-3 form-check">
                             <input type="checkbox" class="form-check-input" id="remember" name="remember" checked>

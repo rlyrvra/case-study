@@ -4,10 +4,10 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-function login_failed(){
+function login_failed(attempts){
     Swal.fire({
         title: 'Error!',
-        text: 'Username and/or password are invalid.',
+        text: 'Username and/or password are invalid. You only have ' + attempts + ' attempts left.',
         icon: 'error',
         confirmButtonText: 'OK'
     });
@@ -16,10 +16,12 @@ function login_failed(){
 </script>
 
 <?php
-    $script_call = "<script>
+    $script_call = "
+    <script>
         $(document).ready(function(){
-            login_failed();
+            login_failed(attempts);
         });
+        attempts--;
     </script>";
     echo $script_call;
 ?>

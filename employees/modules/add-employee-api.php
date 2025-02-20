@@ -261,7 +261,7 @@ try {
         );
 
 
-        $updateResult = $employeeService->updateEmployee($updatedEmployee, true);
+        $updateResult = $employeeService->updateEmployee($updatedEmployee);
 
         
         assignLeaveEntitlementsHashed($hashed_id, $employment_type);
