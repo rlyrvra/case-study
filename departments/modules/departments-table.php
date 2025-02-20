@@ -10,6 +10,7 @@
     <tr>
       <!-- <th>id</th> -->
       <!-- <th style="width: 2%">NO.</th> -->
+      <th style='width: 1%;'>#</th>
       <th>NAME</th>
       <th>DEPARTMENT HEAD</th>
       <th>DESCRIPTION</th>
@@ -25,7 +26,7 @@
   </thead>
   <tbody>
     <?php if (!empty($departments)): ?>
-      <?php $i = 1; foreach ($departments as $row): ?>
+      <?php $i = ($offset + 1); foreach ($departments as $row): ?>
         <tr data-id="<?php echo htmlspecialchars($row['id']); ?>" 
             data-name="<?php echo htmlspecialchars($row['name']); ?>" 
             data-dept-head-id="<?php echo htmlspecialchars($row['department_head_id']); ?>" 
@@ -33,7 +34,7 @@
             data-description="<?php echo htmlspecialchars($row['description']); ?>" 
             data-status="<?php echo htmlspecialchars($row['status']); ?>">
           <!-- <td><?php //echo htmlspecialchars($row['id']); ?></td> -->
-          <!-- <td><?php //echo htmlspecialchars($i); ?></td> -->
+          <td><?php echo htmlspecialchars($i); $i++;?></td>
           <td><?php echo htmlspecialchars($row['name']); ?></td>
           <td>
             <?php if (!empty($row['department_head_full_name'])): ?>
