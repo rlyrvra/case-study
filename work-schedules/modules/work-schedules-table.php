@@ -22,7 +22,7 @@
     </tr>
   </thead>
   <tbody>
-    <?php $i = 0;if (!empty($workSchedules)): ?>
+    <?php $i = $offset;if (!empty($workSchedules)): ?>
       <?php foreach ($workSchedules as $row): ?>
         <tr data-id="<?php echo htmlspecialchars($row['id']); ?>"
         >  
