@@ -232,6 +232,7 @@ try {
 
     if($action === 'update'){
         $workScheduleData = $_POST['work_schedule'] ?? null;
+        $breakDifferences = $_POST['break_schedules'] ?? null; 
         $workScheduleId = $_POST['token'] ?? null; 
         if (!$workScheduleData) {
             return;
