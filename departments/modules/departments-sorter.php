@@ -48,7 +48,7 @@
 
       <!--Entries Per Page -->
     <div class="align mx-1 d-flex align-items-center"> 
-        <label for="entries-per-page" class="mx-1">Show:</label>
+        <label for="entries-per-page" class="mx-1">Show</label>
         <select class="form-select" id="entries-per-page" onchange="fetchAllDepartments()">
             <option value="10">10</option>
             <option value="25">25</option>
@@ -57,7 +57,7 @@
         </select>
         <label for="entries-per-page" class="mx-1">Entries</label>  
     </div>
-    
+
     <!--Filter By Status-->
     <div class="dropdown filter flex-fill col-auto  mx-1">
         <div class="input-group">
