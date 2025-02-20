@@ -256,9 +256,10 @@ function updateWorkScheduleData(data){
 
     document.getElementById("update_startTime").value = normalizeTime(workSchedule.start_time);
     document.getElementById("update_endTime").value = normalizeTime(workSchedule.end_time);
+    document.getElementById("update_isFlextime").checked = workSchedule.is_flextime;
     if(workSchedule.is_flextime == 1) document.getElementById("update_flextimeOptions").classList.add('show');
     if(workSchedule.is_flextime == 0) document.getElementById("update_flextimeOptions").classList.remove('show');
-    document.getElementById("update_totalHoursPerWeek").value = workSchedule.total_hours_per_week;
+    document.getElementById("update_totalHoursPerWeek").value = parseFloat(workSchedule.total_hours_per_week / 6);
     document.getElementById("update_totalWorkHours").value = workSchedule.total_work_hours;
 }
 

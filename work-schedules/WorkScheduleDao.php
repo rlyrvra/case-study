@@ -550,7 +550,7 @@ class WorkScheduleDao
 
             error_log("Database Error: An error occurred while updating the work schedule. " .
                       "Exception: {$exception->getMessage()}");
-
+            echo $exception->getMessage();
             return ActionResult::FAILURE;
         }
     }
