@@ -524,14 +524,14 @@ function createBreakSchedules($pdo, $workScheduleId, $breakSchedules){
 }
 
 function updateBreakSchedules($pdo, $workScheduleId, $breakSchedules){
-    print_r($breakSchedules);
+    //print_r($breakSchedules);
     $breakScheduleDao = new BreakScheduleDao($pdo);
     $breakScheduleRepo = new BreakScheduleRepository($breakScheduleDao);
     $breakScheduleService = new BreakScheduleService($breakScheduleRepo);
     $updatedCounter = 0;
     foreach ($breakSchedules as $breakSchedule){
         $updatedBreakSchedule = new BreakSchedule(
-            id: (int) $breakSchedule['id'],
+            id: $breakSchedule['id'],
             workScheduleId: $workScheduleId,
             breakTypeId: $breakSchedule['break_type_id'],
             startTime: $breakSchedule['start_time'],
