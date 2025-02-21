@@ -16,8 +16,8 @@
       <th>frequency</th>
       <th>description</th>
       <th>status</th>
-      <th>created_at</th>
-      <th>pdated_at</th>
+      <th>Date Created</th>
+      <th>Date Modified</th>
       <?php //if ($status === "Archived") echo "<th>Deleted At</th>"; ?>
       <?php //if ($status === "Archived") echo "<th>Deleted By</th>"; ?>
       <th>Action</th>
