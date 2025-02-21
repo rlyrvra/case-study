@@ -20,7 +20,7 @@
                 </div>
                 <form onsubmit="event.preventDefault();" id="update_departments_form">
                     <div class="mb-3">
-                        <label for="update_department_name" class="form-label">Department Name</label>
+                        <label for="update_department_name" class="form-label">Department Name*</label>
                         <input type="text" class="form-control" id="update_department_name" name="update_department_name" required value="">
                     </div>
                     <div class="mb-3">
@@ -32,7 +32,7 @@
                         <textarea class="form-control" id="update_department_description" name="update_department_description"></textarea>
                     </div>
                     <div class="mb-3">
-                        <label for="update_department_status" class="form-label">Department Status</label>
+                        <label for="update_department_status" class="form-label">Department Status*</label>
                         <select class="form-select" id="update_department_status" name="update_department_status" value="">
                             <option value="Active">Active</option>
                             <option value="Inactive">Inactive</option>

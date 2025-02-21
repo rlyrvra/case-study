@@ -135,7 +135,7 @@ if(isset($_GET['m']) && $_GET['m'] === 'u'){
         <div class="container-fluid">
           <div class="container-fluid pt-5 pb-5">
             <div class="container-fluid mb-3 d-flex align-items-center">
-              <h1 class="display-1">Employees</h1>
+              <h1 class="display-1">Add Employee</h1>
             </div>
 
             <hr/>
