@@ -240,8 +240,8 @@ function getCreateBreaksValues(rows) {
             workScheduleBreaks.push({
                 id: breakTypeId,
                 paid: paid,
-                start_time: startTime,
-                end_time: endTime
+                start_time: convertTo24Hour(startTime),
+                end_time: convertTo24Hour(endTime)
             });
         }
     }
