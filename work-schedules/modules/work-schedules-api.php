@@ -143,7 +143,7 @@ try {
             isFlextime: $is_flex_time,
             totalHoursPerWeek: $total_hrs_per_week,
             totalWorkHours: $total_work_hrs,
-            startDate: $startDate,
+            startDate: $start_date,
             recurrenceRule: "FREQ=WEEKLY;INTERVAL=1;DTSTART={$start_date};BYDAY=MO,TU,WE,TH,FR,SA"
         );
 
