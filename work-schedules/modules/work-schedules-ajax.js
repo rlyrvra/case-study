@@ -211,7 +211,6 @@ let currentBreakSchedule;
 function fetchWorkScheduleAndBreak(button){
     const row = button.closest('tr');  // Get the closest row
     const token = row.getAttribute('data-id');
-    fetchBreakTypes();
     $.ajax({
         url: 'work-schedules/modules/work-schedules-break-api',
         type: 'POST',
