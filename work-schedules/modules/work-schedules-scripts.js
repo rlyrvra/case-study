@@ -468,14 +468,16 @@ function findDifferences(currentBreakSchedules, updatedBreakSchedules) {
       end_time: normalizeTime(currentBreak.end_time)
     }));
 
-    //console.log(normalizedCurrentBreakSchedules);
+    // console.log(normalizedCurrentBreakSchedules);
   
     // Process updatedBreakSchedules (remove "paid" and convert "id" to int)
     const processedUpdatedBreakSchedules = updatedBreakSchedules.map((updatedBreak) => {
       const { id, paid, ...rest } = updatedBreak; // Remove "paid" key
       return {
         ...rest,
-        break_type_id: parseInt(updatedBreak.id, 10) // Convert "id" to integer
+        break_type_id: parseInt(updatedBreak.id, 10), // Convert "id" to integer
+        start_time: normalizeTime(updatedBreak.start_time),
+        end_time:normalizeTime(updatedBreak.end_time),
       };
     });
 
@@ -507,7 +509,7 @@ function findDifferences(currentBreakSchedules, updatedBreakSchedules) {
     });
   
     
-    //console.log(differences);
+    // console.log(differences);
     return differences;
 }
 
