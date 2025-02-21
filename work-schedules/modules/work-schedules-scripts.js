@@ -412,6 +412,9 @@ function updatePaidStatusUpdateForm(select, time_start = '', time_end = ''){
     const startTime = row.querySelector('#update_start_time');
     const endTime = row.querySelector('#update_end_time');
     const token = parseInt(select.value, 10);
+    console.log(currentBreakSchedule);
+    console.log(breakTypes);
+    console.log(token);
     const matchingBreak = breakTypes.find(breakType => breakType.id === token);
     const matchingBreakPaid = matchingBreak.is_paid;
     const paidStatus = status;
