@@ -318,6 +318,7 @@ function populateWorkSchedulesBreak(data, token = '') {
         tableBody.appendChild(row);
         updateSelect = row.querySelector('#update_breaks');
         updateSelect.value = currentBreak.break_type_id;
+        console.log(currentBreak.break_type_id);
         updatePaidStatusUpdateForm(
         select = updateSelect, 
         time_start = normalizeTime(currentBreak.start_time),
