@@ -151,7 +151,7 @@ try {
         $workScheduleRepository = new WorkScheduleRepository($workScheduleDao);
         $workScheduleService = new WorkScheduleService($workScheduleRepository);
         $createResult = $workScheduleService->createWorkSchedule($newWorkSchedule);
-        $lastWorkScheduleId = $workScheduleService->fetchLastWorkScheduleId();
+        $lastWorkScheduleId = $pdo->lastInsertId();
         $messageComposed = '';
         $indicator = 'success';
 
