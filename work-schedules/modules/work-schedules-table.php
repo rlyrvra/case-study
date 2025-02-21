@@ -44,7 +44,7 @@
           <?php if (!isset($status) || $status !== 'Archived'){
             echo
             '<td>
-              <button class="btn btn-info" title="Click to Edit" onclick="fetchWorkScheduleAndBreak(this);" data-bs-toggle="modal" data-bs-target="#update_work_schedules"> 
+              <button class="btn btn-info" title="Click to Edit" onclick="fetchBreakTypes(); fetchWorkScheduleAndBreak(this);" data-bs-toggle="modal" data-bs-target="#update_work_schedules"> 
                 <i class="bx bx-edit-alt"></i>
               </button> 
               <button class="btn btn-danger" title="Click to Delete" onclick="confirmDeleteWorkSchedule(this)">
