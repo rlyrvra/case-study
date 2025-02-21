@@ -318,7 +318,6 @@ function populateWorkSchedulesBreak(data, token = '') {
         tableBody.appendChild(row);
         updateSelect = row.querySelector('#update_breaks');
         updateSelect.value = currentBreak.break_type_id;
-        console.log(currentBreak.break_type_id);
         updatePaidStatusUpdateForm(
         select = updateSelect, 
         time_start = normalizeTime(currentBreak.start_time),
@@ -413,9 +412,6 @@ function updatePaidStatusUpdateForm(select, time_start = '', time_end = ''){
     const startTime = row.querySelector('#update_start_time');
     const endTime = row.querySelector('#update_end_time');
     const token = parseInt(select.value, 10);
-    console.log(currentBreakSchedule);
-    console.log(breakTypes);
-    console.log(token);
     const matchingBreak = breakTypes.find(breakType => breakType.id === token);
     const matchingBreakPaid = matchingBreak.is_paid;
     const paidStatus = status;
