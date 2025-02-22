@@ -35,6 +35,7 @@
             data-is-encashable="<?php echo htmlspecialchars($row['is_encashable']); ?>" 
             data-description="<?php echo htmlspecialchars($row['description']); ?>" 
             data-status="<?php echo htmlspecialchars($row['status']); ?>">
+          <td><?php echo htmlspecialchars($i); $i++;?></td>
           <td><?php echo htmlspecialchars($row['name']); ?></td>
           <td><?php echo htmlspecialchars($row['maximum_number_of_days']); ?></td>
           <td><span class="badge badge center 
