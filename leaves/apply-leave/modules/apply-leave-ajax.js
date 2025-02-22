@@ -46,11 +46,9 @@
 // }
 
 function createLeaveRequest() {
-    if(calculateTotalNumberOfDays()) return;
+    if(!calculateTotalNumberOfDays()) return;
     const form = document.getElementById('apply_leave_form');
-    if (!form.checkValidity()) {
-        return;
-    }
+    if (!form.checkValidity()) return;
 
     const leaveType = document.getElementById('leaveType').value;
     const startDate = document.getElementById('startDate').value;
@@ -83,6 +81,8 @@ function createLeaveRequest() {
     for (let i = 0; i < attachments.length; i++) {
         leaveRequestData.append('attachments[]', attachments[i]);
     }
+
+    console.log(leaveRequestData);
 
     // Make AJAX request
     $.ajax({
