@@ -11,27 +11,27 @@
 <table class="table table-bordered table-hover">
   <thead>
     <tr>
+      <th style='width: 1%;'>#</th>
       <th>Job Title</th>
       <th>Department</th>
       <th>Description</th>
       <th>Status</th>
-      <th>Date Created</th>
-      <!-- <th>Created By</th> -->
-      <th>Date Modified</th>
-      <!-- <th>Updated By</th> -->
-      <?php if (isset($status) && $status === 'Archived') echo "<th>Deleted At</th>"; ?>
+      <th>CREATED AT</th>
+      <th>UPDATED AT</th>
+      <?php if (isset($status) && $status === 'Archived') echo "<th>DELETED AT</th>"; ?>
       <?php if (!isset($status) || $status !== 'Archived') echo "<th style='width: 14%'>Action</th>"; ?> 
     </tr>
   </thead>
   <tbody>
     <?php if (!empty($jobTitles)): ?>
-      <?php foreach ($jobTitles as $row): ?>
+      <?php $i = ($offset + 1); foreach ($jobTitles as $row): ?>
         <tr data-id="<?php echo htmlspecialchars($row['id']); ?>" 
             data-title="<?php echo htmlspecialchars($row['title']); ?>" 
             data-department-id="<?php echo htmlspecialchars($row['department_id']); ?>" 
             data-department-name="<?php echo htmlspecialchars($row['department_name']); ?>" 
             data-description="<?php echo htmlspecialchars($row['description']); ?>" 
             data-status="<?php echo htmlspecialchars($row['status']); ?>">
+          <td><?php echo htmlspecialchars($i); $i++;?></td>
           <td><?php echo htmlspecialchars($row['title']); ?></td>
           <td><?php echo htmlspecialchars($row['department_name']); ?></td>
           <td><?php echo htmlspecialchars($row['description']); ?></td>
@@ -39,19 +39,15 @@
           <?php 
           if($row['status'] === "Active"){
             echo "bg-label-primary";
-          }else if($row['status'] === "Inctive"){
+          }else if($row['status'] === "Inactive"){
             echo "bg-label-warning";
           }else{
             echo "bg-label-danger";
           }
-          
           ?> me-1"><?php echo htmlspecialchars($row['status']); ?></td>
-          <td><?php echo htmlspecialchars($row['created_at']); ?></td>
-          <!-- <td><?php //echo htmlspecialchars($row['created_by']); ?></td> -->
-          <td><?php echo htmlspecialchars($row['updated_at']); ?></td>
-          <!-- <td><?php //echo htmlspecialchars($row['updated_by']); ?></td> -->
-          <?php if (isset($status) && $status === 'Archived') echo "<td>" . htmlspecialchars($row['deleted_at']) . "</td>"; ?>
-          <!-- <?php //if (isset($status) && $status === 'Archived') echo "<td>" . htmlspecialchars($row['deleted_by']) . "</td>"; ?> -->
+          <td><?php echo strtoupper(htmlspecialchars($row['created_at'])); ?></td>
+          <td><?php echo strtoupper(htmlspecialchars($row['updated_at'])); ?></td>
+          <?php if (isset($status) && $status === 'Archived') echo "<td>" . strtoupper(htmlspecialchars($row['deleted_at'])) . "</td>"; ?>
           <?php if (!isset($status) || $status !== 'Archived') echo
             '<td>
               <button class="btn btn-info" title="Click to Edit" onclick="updateJobTitleClick(this)" data-bs-toggle="modal" data-bs-target="#update_job_titles_modal"> 
@@ -66,10 +62,21 @@
       <?php endforeach; ?>
     <?php else: ?>
       <tr>
-        <td colspan="10">No data available</td>
+        <td colspan="8" style="text-align: center; padding: 20px; font-style: italic; color: #888;">No data available</td>
       </tr>
     <?php endif; ?>
   </tbody>
+  <tfoot class="table-border-bottom-0">
+    <th style='width: 1%;'>#</th>
+    <th>Job Title</th>
+    <th>Department</th>
+    <th>Description</th>
+    <th>Status</th>
+    <th>CREATED AT</th>
+    <th>UPDATED AT</th>
+    <?php if (isset($status) && $status === 'Archived') echo "<th>DELETED AT</th>"; ?>
+    <?php if (!isset($status) || $status !== 'Archived') echo "<th style='width: 14%'>Action</th>"; ?> 
+  </tfoot>
 </table>
 
 <!-- Pagination Block (Placed after the table) -->
