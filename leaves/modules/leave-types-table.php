@@ -86,7 +86,7 @@
       <?php endforeach; ?>
     <?php else: ?>
       <tr>
-        <td colspan="9" style="text-align: center; padding: 20px; color: #888;">No data available</td> 
+        <td colspan="10" style="text-align: center; padding: 20px; color: #888;">No data available</td> 
       </tr>
     <?php endif; ?>
   </tbody>

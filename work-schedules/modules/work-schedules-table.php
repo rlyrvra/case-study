@@ -59,7 +59,7 @@
       <?php endforeach; ?>
     <?php else: ?>
       <tr>
-        <td colspan="6">No data available</td>
+        <td colspan="6" style="text-align: center; padding: 20px; color: #888;">No data available</td> 
       </tr>
     <?php endif; ?>
   </tbody>
