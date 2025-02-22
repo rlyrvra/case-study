@@ -1,5 +1,6 @@
 <?php
 
+require_once __DIR__ . "/OvertimeRate.php"                ;
 require_once __DIR__ . "/OvertimeRateDao.php"             ;
 
 require_once __DIR__ . "/../departments/DepartmentDao.php";
@@ -34,7 +35,7 @@ class OvertimeRateAssignmentDao
         $jobTitleId   = $overtimeRateAssignment->getJobTitleId()  ;
         $employeeId   = $overtimeRateAssignment->getEmployeeId()  ;
 
-        if ( ! ctype_digit( (string) $departmentId)) {
+        if ( ! ctype_digit( (string) $departmentId) && $departmentId !== null) {
             $departmentColumns = [
                 "id"
             ];
@@ -54,14 +55,15 @@ class OvertimeRateAssignmentDao
                 includeTotalRowCount: false
             );
 
-            if ($departmentId === ActionResult::FAILURE || empty($departmentId['result_set'])) {
+            if ($departmentId === ActionResult::FAILURE) {
+                echo 'A<br>';
                 return ActionResult::FAILURE;
             }
 
             $departmentId = $departmentId['result_set'][0]['id'];
         }
 
-        if ( ! ctype_digit( (string) $jobTitleId)) {
+        if ( ! ctype_digit( (string) $jobTitleId) && $jobTitleId !== null) {
             $jobTitleColumns = [
                 "id"
             ];
@@ -81,14 +83,15 @@ class OvertimeRateAssignmentDao
                 includeTotalRowCount: false
             );
 
-            if ($jobTitleId === ActionResult::FAILURE || empty($jobTitleId['result_set'])) {
+            if ($jobTitleId === ActionResult::FAILURE) {
+                echo 'B<br>';// 
                 return ActionResult::FAILURE;
             }
 
             $jobTitleId = $jobTitleId['result_set'][0]['id'];
         }
 
-        if ( ! ctype_digit( (string) $employeeId)) {
+        if ( ! ctype_digit( (string) $employeeId) && $employeeId !== null) {
             $employeeColumns = [
                 "id"
             ];
@@ -108,7 +111,7 @@ class OvertimeRateAssignmentDao
                 includeTotalRowCount: false
             );
 
-            if ($employeeId === ActionResult::FAILURE || empty($employeeId['result_set'])) {
+            if ($employeeId === ActionResult::FAILURE) {
                 return ActionResult::FAILURE;
             }
 
@@ -172,8 +175,15 @@ class OvertimeRateAssignmentDao
                 $this->pdo->beginTransaction();
             }
 
+            // echo "Overtime Rates ID Model: " . ($overtimeRateAssignment->getId() ?? 'null') . "<br>";
+            // echo "Department ID Model: " . ($overtimeRateAssignment->getDepartmentId() ?? 'null') . "<br>";
+            // echo "Job Title ID Model: " . ($overtimeRateAssignment->getJobTitleId() ?? 'null') . "<br>";
+            // echo "Employee ID Model: " . ($overtimeRateAssignment->getEmployeeId() ?? 'null') . "<br>";
+
             $overtimeRateAssignmentId = $this->fetchId($overtimeRateAssignment);
 
+            
+            // echo '<pre>';
             if ($overtimeRateAssignmentId === ActionResult::FAILURE) {
                 if ($isLocalTransaction) {
                     $this->pdo->rollBack();
@@ -193,16 +203,26 @@ class OvertimeRateAssignmentDao
                     return ActionResult::FAILURE;
                 }
 
-                foreach ($overtimeRates as $overtimeRate) {
-                    $overtimeRate->setOvertimeRateAssignmentId($overtimeRateAssignmentId);
 
-                    $result = $this->overtimeRateDao->create($overtimeRate);
+                foreach ($overtimeRates as $overtimeRate) {
+                    $newOvertimeRate = new OvertimeRate(
+                        id: null,
+                        overtimeRateAssignmentId: $overtimeRateAssignmentId,
+                        dayType: $overtimeRate['day_type'],
+                        holidayType: $overtimeRate['holiday_type'],
+                        regularTimeRate: $overtimeRate['regular_time_rate'],
+                        overtimeRate: $overtimeRate['overtime_rate'],
+                        nightDifferentialRate: $overtimeRate['night_differential_rate'],
+                        nightDifferentialAndOvertimeRate: $overtimeRate['night_differential_and_overtime_rate']
+                    );
+
+                    $result = $this->overtimeRateDao->create($newOvertimeRate);
 
                     if ($result === ActionResult::FAILURE) {
                         if ($isLocalTransaction) {
                             $this->pdo->rollBack();
                         }
-
+                        echo '2<br>';
                         return ActionResult::FAILURE;
                     }
                 }
@@ -210,7 +230,7 @@ class OvertimeRateAssignmentDao
                 if ($isLocalTransaction) {
                     $this->pdo->commit();
                 }
-
+//echo 'Successfully created';
                 return ActionResult::SUCCESS;
             }
 
@@ -221,7 +241,7 @@ class OvertimeRateAssignmentDao
                     if ($isLocalTransaction) {
                         $this->pdo->rollBack();
                     }
-
+                    echo '3<br>';
                     return ActionResult::FAILURE;
                 }
             }
@@ -239,7 +259,8 @@ class OvertimeRateAssignmentDao
 
             error_log("Database Error: An error occurred while assigning overtime rates. " .
                       "Exception: {$exception->getMessage()}");
-
+            echo $exception->getMessage();
+            echo '4<br>';
             return ActionResult::FAILURE;
         }
     }
@@ -385,31 +406,10 @@ class OvertimeRateAssignmentDao
                 id
             FROM
                 overtime_rate_assignments
-            WHERE
+            WHERE employee_id = :employee_id AND job_title_id = :job_title_id AND department_id = :department_id LIMIT 1
         ";
 
-        if ( ! ctype_digit( (string) $overtimeRateAssignment->getEmployeeId())) {
-            $query .= " SHA2(employee_id, 256) = SHA2(:employee_id, 256) ";
-        } else {
-            $query .= " employee_id = :employee_id ";
-        }
-
-        if ( ! ctype_digit( (string) $overtimeRateAssignment->getJobTitleId())) {
-            $query .= "AND SHA2(job_title_id, 256) = SHA2(:job_title_id, 256) ";
-        } else {
-            $query .= "AND job_title_id = :job_title_id ";
-        }
-
-        if ( ! ctype_digit( (string) $overtimeRateAssignment->getDepartmentId())) {
-            $query .= "AND SHA2(department_id, 256) = SHA2(:department_id, 256) ";
-        } else {
-            $query .= "AND department_id = :department_id ";
-        }
-
-        $query = "
-            LIMIT 1
-        ";
-
+        //echo "<pre> $query </pre>";
         try {
             $statement = $this->pdo->prepare($query);
 
@@ -430,7 +430,7 @@ class OvertimeRateAssignmentDao
         } catch (PDOException $exception) {
             error_log("Database Error: An error occurred while creating the overtime rate assignment. " .
                       "Exception: {$exception->getMessage()}");
-
+            echo $exception->getMessage();
             return ActionResult::FAILURE;
         }
     }

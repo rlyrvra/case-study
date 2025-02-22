@@ -30,3 +30,4 @@ class OvertimeRateAssignment
         return $this->employeeId;
     }
 }
+//kingina di pala model yun

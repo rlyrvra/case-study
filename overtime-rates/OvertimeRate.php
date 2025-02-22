@@ -24,7 +24,7 @@ class OvertimeRate
         return $this->overtimeRateAssignmentId;
     }
 
-    public function setOvertimeRateAssignmentId(int $overtimeRateAssignmentId): void
+    public function setOvertimeRateAssignmentId(int|string|null $overtimeRateAssignmentId): void
     {
         $this->overtimeRateAssignmentId = $overtimeRateAssignmentId;
     }

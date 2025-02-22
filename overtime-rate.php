@@ -18,7 +18,7 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
 
 </style>
 <head>
-<title> smartWage | Dashboard </title>
+<title> smartWage | Overtime Rates </title>
 <link rel="icon" type="image/x-icon" href="img/logo-files/logo1.ico" />
 <!-- font-awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -26,6 +26,18 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <!-- Sweet Alert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- Selectize CSS -->
+<link
+  rel="stylesheet"
+  href="assets/vendor/css/selectize.bootstrap5.css"
+/>
+
+<!-- Ajax -->
+<script src="overtime-rates/modules/overtime-rates-ajax.js?v1.1"></script>
+<!-- Scripts -->
+<script src="overtime-rates/modules/overtime-rates-scripts.js?v1.2"></script>
+
+
 <!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -84,8 +96,36 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
 
       <!-- / Navbar -->
       <div class="content-wrapper">
-        <div class="container-fluid">
-            
+        <div class="container-fluid pt-5 pb-5">
+          <div id="response-test"></div>
+          <div class="container-fluid mb-3">
+              <div class="container-fluid mb-3 d-flex justify-content-between flex-column flex-lg-row">
+                <h1 class="display-1">Overtime Rates</h1>
+                <button type="button" class="btn btn-success btn-xl" onclick="assignRates();">
+                  <i class="bx bx-dots-vertical bx-lg"></i>Apply Rates
+                </button>
+              </div>
+              
+          </div>
+
+
+          <div class="container-fluid card pt-3 pb-3 mt-5 mb-5">
+            <?php require_once __DIR__ . '/overtime-rates/modules/overtime-rates-sorter.php' ?>
+            <div class="visually-hidden spinner-border spinner-border-lg text-primary text-center w-px-25 h-px-25" role="status" id="loadingSpinner"></div>
+          </div>
+
+          <div class="container-fluid card pt-5 pb-3 mt-5">
+            <div class="card-header">
+              <h5>Overtime Rates Table
+            </div>
+            <div class="card-body">
+              <!-- <div id="skeleton-departments-table" class="visually-hidden table-responsive text-no-wrap"></div> -->
+              <div id="overtime-rates-table" class="table-responsive text-no-wrap">
+                <div class="visually-hidden container-fluid spinner-border spinner-border-lg d-flex align-items-center justify-content-center w-px-700 h-px-700" role="status"></div>
+                
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <?php require_once __DIR__ . '/footer.php' ?>
@@ -97,6 +137,245 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
   <div class="layout-overlay layout-menu-toggle"></div>
 </div>
 <!-- / Layout wrapper -->
+<?php require_once __DIR__ . '/overtime-rates/modules/overtime-rates-fetch-employee.php' ?>
+<script>
+$(document).ready(function() {
+  fetchAllOvertimeRates();
+});
+$(document).ready(function() {
+  populateSelectEmployee(document.getElementById("selectize_employee_sorter"));
+});
+</script>
+<script>
+  $(document).ready(function () {
+  const REGEX_EMAIL = "([a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@" + "(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)";
+  $("#selectize_employee_sorter").selectize({
+      persist: false,
+      maxItems: 1,
+      placeholder: 'Select an employee',
+      allowEmptyOption: true,
+      valueField: "id",
+      valueField: "id",
+      labelField: "description",
+      searchField: ["full_name", "email_address"],
+      options: employees,
+      render: {
+      item: function (item, escape) {
+          return (
+          "<div>" +
+          (item.full_name
+              ? '<span class="name">' + escape(item.full_name) + "</span>"
+              : "") +
+          (item.description
+              ? '<span class="description">' + escape(item.email_address) + "</span>"
+              : "") +
+          "</div>"
+          );
+      },
+      option: function (item, escape) {
+          var label = item.full_name || item.email_address;
+          var caption = item.full_name ? item.email_address : null;
+          return (
+          "<div>" +
+          '<span class="label">' +
+          escape(label) +
+          "</span>" +
+          (caption
+              ? '<span class="caption">' + escape(caption) + "</span>"
+              : "") +
+          "</div>"
+          );
+      },
+      },
+      createFilter: function (input) {
+      var match, regex;
+
+      // email@address.com
+      regex = new RegExp("^" + REGEX_EMAIL + "$", "i");
+      match = input.match(regex);
+      if (match) return !this.options.hasOwnProperty(match[0]);
+
+      // name <email@address.com>
+      regex = new RegExp("^([^<]*)<" + REGEX_EMAIL + ">$", "i");
+      match = input.match(regex);
+      if (match) return !this.options.hasOwnProperty(match[2]);
+
+      return false;
+      },
+      create: function (input) {
+      if (new RegExp("^" + REGEX_EMAIL + "$", "i").test(input)) {
+          return { email: input };
+      }
+      var match = input.match(
+          new RegExp("^([^<]*)<" + REGEX_EMAIL + ">$", "i")
+      );
+      if (match) {
+          return {
+          email: match[2],
+          name: $.trim(match[1]),
+          };
+      }
+      alert("Invalid email address.");
+      return false;
+      },
+  });
+});
+</script>
+<?php require_once __DIR__ . '/overtime-rates/modules/overtime-rates-fetch-job-titles.php' ?>
+<script>
+$(document).ready(function() {
+  populateJobTitleSelect(document.getElementById("selectize_jobTitle_sorter"));
+});
+</script>
+<script>
+$(document).ready(function () {
+  const REGEX_EMAIL = "([a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@" + "(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)";
+  $("#selectize_jobTitle_sorter").selectize({
+    persist: false,
+    maxItems: 1,
+    placeholder: 'Select a job title',
+    allowEmptyOption: true,
+    valueField: "id",
+    labelField: "description",
+    searchField: ["title", "description"],
+    options: jobTitles,
+    render: {
+      item: function (item, escape) {
+          return (
+          "<div>" +
+          (item.title
+              ? '<span class="name">' + escape(item.title) + "</span>"
+              : "") +
+          (item.description
+              ? '<span class="description">' + escape(item.description) + "</span>"
+              : "") +
+          "</div>"
+          );
+      },
+      option: function (item, escape) {
+          var label = item.title || item.description;
+          var caption = item.title ? item.description : null;
+          return (
+          "<div>" +
+          '<span class="label">' +
+          escape(label) +
+          "</span>" +
+          (caption
+              ? '<span class="caption">' + escape(caption) + "</span>"
+              : "") +
+          "</div>"
+          );
+      },
+    },
+    createFilter: function (input) {
+      var match, regex;
+
+      // email@address.com
+      regex = new RegExp("^" + REGEX_EMAIL + "$", "i");
+      match = input.match(regex);
+      if (match) return !this.options.hasOwnProperty(match[0]);
+
+      // name <email@address.com>
+      regex = new RegExp("^([^<]*)<" + REGEX_EMAIL + ">$", "i");
+      match = input.match(regex);
+      if (match) return !this.options.hasOwnProperty(match[2]);
+
+      return false;
+    },
+    create: function (input) {
+      if (new RegExp("^" + REGEX_EMAIL + "$", "i").test(input)) {
+          return { email: input };
+      }
+      var match = input.match(
+          new RegExp("^([^<]*)<" + REGEX_EMAIL + ">$", "i")
+      );
+      if (match) {
+          return {
+          email: match[2],
+          name: $.trim(match[1]),
+          };
+      }
+      alert("Invalid email address.");
+      return false;
+    },
+  });
+});
+</script>
+<?php require_once __DIR__ . '/overtime-rates/modules/overtime-rates-fetch-departments.php' ?>
+<script>
+$(document).ready(function () {
+  const REGEX_EMAIL = "([a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@" + "(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)";
+  $("#selectize_department_sorter").selectize({
+    persist: false,
+    maxItems: 1,
+    placeholder: 'Select a department',
+    allowEmptyOption: true,
+    valueField: "id",
+    labelField: "description",
+    searchField: ["name", "description"],
+    options: departments,
+    render: {
+      item: function (item, escape) {
+          return (
+          "<div>" +
+          (item.name
+              ? '<span class="name">' + escape(item.name) + "</span>"
+              : "") +
+          (item.description
+              ? '<span class="description">' + escape(item.description) + "</span>"
+              : "") +
+          "</div>"
+          );
+      },
+      option: function (item, escape) {
+          var label = item.name || item.description;
+          var caption = item.name ? item.description : null;
+          return (
+          "<div>" +
+          '<span class="label">' +
+          escape(label) +
+          "</span>" +
+          (caption
+              ? '<span class="caption">' + escape(caption) + "</span>"
+              : "") +
+          "</div>"
+          );
+      },
+    },
+    createFilter: function (input) {
+      var match, regex;
+
+      // email@address.com
+      regex = new RegExp("^" + REGEX_EMAIL + "$", "i");
+      match = input.match(regex);
+      if (match) return !this.options.hasOwnProperty(match[0]);
+
+      // name <email@address.com>
+      regex = new RegExp("^([^<]*)<" + REGEX_EMAIL + ">$", "i");
+      match = input.match(regex);
+      if (match) return !this.options.hasOwnProperty(match[2]);
+
+      return false;
+    },
+    create: function (input) {
+      if (new RegExp("^" + REGEX_EMAIL + "$", "i").test(input)) {
+          return { email: input };
+      }
+      var match = input.match(
+          new RegExp("^([^<]*)<" + REGEX_EMAIL + ">$", "i")
+      );
+      if (match) {
+          return {
+          email: match[2],
+          name: $.trim(match[1]),
+          };
+      }
+      alert("Invalid email address.");
+      return false;
+    },
+  });
+});
+</script>
 
 
 
@@ -121,5 +400,14 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
 
 <!-- Place this tag in your head or just before your close body tag. -->
 <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+<!-- Selectize -->
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/js/selectize.min.js"
+  integrity="sha512-IOebNkvA/HZjMM7MxL0NYeLYEalloZ8ckak+NDtOViP7oiYzG5vn6WVXyrJDiJPhl4yRdmNAG49iuLmhkUdVsQ=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+></script>
+
 </body>
 </html>
