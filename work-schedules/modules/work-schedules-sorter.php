@@ -1,4 +1,9 @@
 <div class="controls d-flex justify-content-between flex-column flex-lg-row"> 
+    <style>
+        .space{
+            padding-left: 5px;
+        }
+    </style>
     <div class="col-auto d-flex align-items-center mx-1">
         <!--Sort By dropdown-->
         <div class="ddropdown sort mx-1">
@@ -34,12 +39,12 @@
                 <li><a class="dropdown-item" href="#" data-group="by_date" data-value="created_at">Date Created</a></li>
                 <li><a class="dropdown-item" href="#" data-group="by_date" data-value="updated_at">Date Modified</a></li>
                 <li><hr/></li>
-                <div class=" m-3">
-                    <label for="dateStart">Start Date</label> 
+                <div class="space m-3">
+                    <label for="dateStart"><b>Start Date</b></label> 
                     <input type="date" id="dateStart"  class="form-control" required />
                 </div>
-                <div class=" m-3">
-                    <label for="dateEnd">End Date</label> 
+                <div class="space m-3">
+                    <label for="dateEnd"><b>End Date</b></label> 
                     <input type="date" id="dateEnd"  class="form-control" required />
                 </div>
             </ul>
