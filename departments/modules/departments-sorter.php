@@ -81,6 +81,9 @@
                 <option value="description">Description</option>
             </select>
         </div>
+        
+    </div>
+    <div class="search col-auto  flex-fill col-auto  mx-1">
         <div class="input-group ms-lg-1">
             <span class="input-group-text"><i class="bx bx-search-alt-2 fs-4 lh-0"></i></span>
             <input type="text" class="form-control" id="searchText" />
@@ -88,14 +91,6 @@
             </button>
         </div>  
     </div>
-    <!-- <div class="search col-auto  flex-fill col-auto  mx-1">
-        <div class="input-group ms-lg-1">
-            <span class="input-group-text"><i class="bx bx-search-alt-2 fs-4 lh-0"></i></span>
-            <input type="text" class="form-control" id="searchText" />
-            <button id="openModalBtn" class="btn btn-success" onclick="fetchAllDepartments()"> Search
-            </button>
-        </div>  
-    </div> -->
     
 </div>
 
