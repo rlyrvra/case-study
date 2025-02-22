@@ -93,7 +93,7 @@ if($_SESSION['access_role'] !== 'Admin'){
       <div class="content-wrapper">
         <div class="container-fluid pt-5 pb-5">
           <div class="container-fluid mb-3 d-flex align-items-center">
-              <h1 class="display-1">Job Title</h1>
+              <h1 class="display-1">Job Titles</h1>
               <button type="button" class="btn btn-success btn-xl ms-auto" data-bs-toggle="modal" data-bs-target="#add_job_titles_modal">
                 <i class="bx bx-plus bx-lg"></i>Add Job Titles
               </button>
