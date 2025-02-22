@@ -121,8 +121,6 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
 
           </div>
 
-          <hr/>
-
           <div class="container-fluid mb-3 d-flex justify-content-between flex-column flex-lg-row">
             <h1 class="display-3">Deductions</h1>
             <button type="button" class="btn btn-success btn-xl" data-bs-toggle="modal" data-bs-target="#add-deductions-modal">
