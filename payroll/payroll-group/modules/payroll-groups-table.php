@@ -12,6 +12,7 @@
     <tr>
       <!-- <th>id</th> -->
       <!-- <th style="width: 2%">NO.</th> -->
+      <th style='width: 1%;'>#</th>
       <th>Name</th>
       <th>Pay Frequency</th>
       <th>Cut Off</th>
@@ -50,7 +51,7 @@
   ?>
   <tbody>
     <?php if (!empty($payrollGroups)): ?>
-      <?php $i = 1; foreach ($payrollGroups as $row): ?>
+      <?php  $i = ($offset + 1);  foreach ($payrollGroups as $row): ?>
         <tr data-id="<?php echo htmlspecialchars($row['id']); ?>" 
             data-name="<?php echo htmlspecialchars($row['name']); ?>" 
             data-payfreq="<?php echo htmlspecialchars($row['payroll_frequency']); ?>" 
@@ -109,10 +110,25 @@
       <?php endforeach; ?>
     <?php else: ?>
       <tr>
-        <td colspan="9" class="text-center">No data available</td>
+       <td colspan="9" style="text-align: center; padding: 20px; color: #888;">No data available</td> 
       </tr>
     <?php endif; ?>
   </tbody>
+  <tfoot class="table-border-bottom-0">
+      <th style='width: 1%;'>#</th>
+      <th>Name</th>
+      <th>pay frequency</th>
+      <th>cut off</th>
+      <th>pay offset</th>
+      <th>status</th>
+      <th>Date Created</th>
+      <!-- <th>Created By</th> -->
+      <th>Date Modified</th>
+      <!-- <th>Updated By</th> -->
+      <?php if (isset($status) && $status === 'Archived') echo "<th>Deleted At</th>"; ?>
+      <?php //if (isset($status) && $status === 'Archived') echo "<th>Deleted By</th>"; ?>
+      <?php if (!isset($status) || $status !== 'Archived') echo "<th style='width: 13%;'>Action</th>"; ?>
+      </tfoot>
 </table>
 
 <!-- Pagination Block (Placed after the table) -->

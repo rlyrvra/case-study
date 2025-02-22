@@ -16,8 +16,8 @@
       <th>Department</th>
       <th>Description</th>
       <th>Status</th>
-      <th>CREATED AT</th>
-      <th>UPDATED AT</th>
+      <th>Date Created</th>
+      <th>Date Modified</th>
       <?php if (isset($status) && $status === 'Archived') echo "<th>DELETED AT</th>"; ?>
       <?php if (!isset($status) || $status !== 'Archived') echo "<th style='width: 14%'>Action</th>"; ?> 
     </tr>
@@ -45,8 +45,8 @@
             echo "bg-label-danger";
           }
           ?> me-1"><?php echo htmlspecialchars($row['status']); ?></td>
-          <td><?php echo strtoupper(htmlspecialchars($row['created_at'])); ?></td>
-          <td><?php echo strtoupper(htmlspecialchars($row['updated_at'])); ?></td>
+          <td><?php echo htmlspecialchars(date("l, F j, Y, g:i A", strtotime($row['created_at']))); ?></td>
+          <td><?php echo htmlspecialchars(date("l, F j, Y, g:i A", strtotime($row['updated_at']))); ?></td>
           <?php if (isset($status) && $status === 'Archived') echo "<td>" . strtoupper(htmlspecialchars($row['deleted_at'])) . "</td>"; ?>
           <?php if (!isset($status) || $status !== 'Archived') echo
             '<td>
@@ -62,21 +62,24 @@
       <?php endforeach; ?>
     <?php else: ?>
       <tr>
-        <td colspan="8" style="text-align: center; padding: 20px; font-style: italic; color: #888;">No data available</td>
+        <td colspan="8" style="text-align: center; padding: 20px; color: #888;">No data available</td>
       </tr>
     <?php endif; ?>
   </tbody>
+  
+  <?php if (!empty($jobTitles)): ?>
   <tfoot class="table-border-bottom-0">
     <th style='width: 1%;'>#</th>
     <th>Job Title</th>
     <th>Department</th>
     <th>Description</th>
     <th>Status</th>
-    <th>CREATED AT</th>
-    <th>UPDATED AT</th>
+    <th>Date Created</th>
+    <th>Date Modified</th>
     <?php if (isset($status) && $status === 'Archived') echo "<th>DELETED AT</th>"; ?>
     <?php if (!isset($status) || $status !== 'Archived') echo "<th style='width: 14%'>Action</th>"; ?> 
   </tfoot>
+  <?php endif; ?>
 </table>
 
 <!-- Pagination Block (Placed after the table) -->
