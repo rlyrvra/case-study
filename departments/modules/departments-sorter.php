@@ -74,7 +74,7 @@
     <!--Search At-->
     <div class="search col-auto  flex-fill col-auto  mx-1">
         <div class="input-group">
-            <span class="input-group-text"><i class="bx bx-category fs-4 lh-0"></i></span>
+            <span class="input-group-text"><i class="bx bx-search-alt-2 fs-4 lh-0"></i></span>
             <select class="form-select" id="search_at" name="search_at" placeholder="Search At">
                 <option value="none" selected>All</option>
                 <option value="name">Name</option>
