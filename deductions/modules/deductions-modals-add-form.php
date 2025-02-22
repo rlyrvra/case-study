@@ -13,7 +13,6 @@
             </div>
             
             <div class="modal-body">
-            <hr/>
 
             <form onsubmit='event.preventDefault()' id="add_deductions_form">
                 <!-- Name -->
@@ -55,9 +54,6 @@
                     </select>
                 </div>
 
-            
-
-            <hr/>
                 
             </div>
             <div class="modal-footer">

@@ -13,14 +13,15 @@
             </div>
             
             <div class="modal-body">
-                <hr/>
                 <form id="leave_type_form" onsubmit="event.preventDefault()">
                     <div class="row mb-4">
                         <label for="select_employee" class="form-label text-center"><strong class="display-5">Employee:</strong></label>
                         <select class="form-select selectize_select_employee" id="select_employee" name="select_Employee" placeholder="Select Employee" required onchange="fetchEmployeeLeaves();">
                         </select>
                     </div>
+
                     <hr/>
+
                     <div class="row mb-4 justify-content-center">
                         <button type="button" class="btn-lg btn-info col-auto mx-auto" 
                         data-bs-target="#leaveEntitlementModal"
@@ -41,7 +42,6 @@
                         </div>
                     </div>
                 
-                    </hr>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline-secondary" 
                         data-bs-dismiss="modal"

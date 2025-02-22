@@ -14,7 +14,6 @@
             </div>
             
             <div class="modal-body">
-                <hr/>
                 <form id="leave_type_form" onsubmit="event.preventDefault()">
                     <div class="row mb-4">
                         <label for="select_employee" class="form-label text-center"><strong class="display-5">Employee:</strong></label>

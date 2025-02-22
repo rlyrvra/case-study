@@ -14,7 +14,6 @@
             
             <div class="modal-body">
 
-            <hr/>
 
             <form onsubmit='event.preventDefault()' id="add_holidays_form">
                 <!-- Name -->
@@ -64,7 +63,6 @@
 
             
 
-            <hr/>
                 
             </div>
             <div class="modal-footer">
