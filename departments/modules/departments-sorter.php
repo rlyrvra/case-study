@@ -40,11 +40,11 @@
                 <li><a class="dropdown-item" href="#" data-group="by_date" data-value="updated_at">Date Modified</a></li>
                 <li><hr/></li>
                 <div class="space m-3">
-                    <p class="m-0 mx-3"><b>Start</b></p>
+                    <label for="dateStart" class="pb-1"><b>Start Date</b></label> 
                     <input type="date" id="dateStart"  class="form-control" required />
                 </div>
                 <div class="space m-3">
-                    <p class="m-0 mx-3"><b>End</b></p>
+                    <label for="dateStart" class="pb-1"><b>Start Date</b></label> 
                     <input type="date" id="dateEnd"  class="form-control" required />
                 </div>
             </ul>
