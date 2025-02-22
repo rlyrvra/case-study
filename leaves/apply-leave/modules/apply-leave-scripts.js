@@ -74,6 +74,11 @@ $(document).ready(function() {
 
 });
 
+function setStartDate(){
+    const startDate = document.getElementById('startDate');
+    startDate.disabled = false;
+}
+
 function setEndDateMin(date){
     const endDate = document.getElementById('endDate');
     if (!date.value || isNaN(new Date(date.value).getTime())){
@@ -103,6 +108,7 @@ function setEndDateMin(date){
 }
 
 function calculateTotalNumberOfDays(){
+    const leaveTypeInput = document.getElementById("leaveType").value;
     const startDateId = document.getElementById('startDate').value;
     const endDateId = document.getElementById('endDate').value;
     let startDate, endDate, totalNumberOfDays;
@@ -113,12 +119,12 @@ function calculateTotalNumberOfDays(){
     startDate = new Date(startDateId);
     endDate = new Date(endDateId);
     totalNumberOfDays = (endDate - startDate) / (1000 * 60 * 60 * 24);
-    if(startDate.getTime() === endDate.getTime()){
-        const isHalfDay = document.getElementById('endDate').checked;
+    const isHalfDay = document.getElementById('isHalfday').checked;
+    if(startDate.getDate() === endDate.getDate()){
         if(isHalfDay) totalNumberOfDays = 0.5;
         if(!isHalfDay) totalNumberOfDays = 1;
     }
-    if(!checkHalfDayValidity(totalNumberOfDays)){
+    if(!checkHalfDayValidity(totalNumberOfDays, isHalfDay)){
         return false;
     }
     $("#totalDays").val(totalNumberOfDays);
@@ -134,8 +140,8 @@ function calculateTotalNumberOfDays(){
 
 }
 
-function checkHalfDayValidity(numberOfDays){
-    if(numberOfDays != 1){
+function checkHalfDayValidity(numberOfDays, isHalfDay){
+    if(numberOfDays > 1 && isHalfDay === true){
         Swal.fire({
             title: 'Warning!',
             text: 'Half day requests are only available for one day leaves.',
@@ -143,8 +149,7 @@ function checkHalfDayValidity(numberOfDays){
             confirmButtonText: 'OK'
         }).then((result) => {
             if(result.isConfirmed){
-                document.getElementById('apply_leave_form').reset();
-                document.getElementById('leaveType').value = "";
+                formReset();
             }
         });
         return false;
@@ -177,6 +182,21 @@ function updateLeaveRequestClick(button){
     if(!calculateTotalNumberOfDays()) return;
 }
 
+function formReset(){
+    document.getElementById('apply_leave_form').reset();
+    const endDate = document.getElementById('endDate');
+    const startDate = document.getElementById('startDate');
+    const isHalfDay = document.getElementById('isHalfday').checked;
+    document.getElementById('leaveType').value = "";
+    document.getElementById('halfdayOptions').classList.remove("show");
+    isHalfDay.checked = false;
+    endDate.disabled = true;
+    startDate.disabled = true;
+    endDate.value = "";
+    startDate.value = "";
+    $("#totalDays").val("");
+}
+
 function showInvalidBalance(){
     Swal.fire({
         title: 'Error Request!',
@@ -185,8 +205,7 @@ function showInvalidBalance(){
         confirmButtonText: 'OK'
     }).then((result) => {
         if(result.isConfirmed){
-            document.getElementById('apply_leave_form').reset();
-            document.getElementById('leaveType').value = "";
+            formReset();
         }
     });
 }
@@ -199,8 +218,7 @@ function showSuccessRequest(){
         confirmButtonText: 'OK'
     }).then((result) => {
         if(result.isConfirmed){
-            document.getElementById('apply_leave_form').reset();
-            document.getElementById('leaveType').value = "";
+            formReset();
         }
     });
 }

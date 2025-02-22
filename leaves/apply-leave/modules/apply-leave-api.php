@@ -78,9 +78,9 @@ try {
         $leave_type_id = isset($_POST['leave_type_id']) ? (int) validateInput($_POST['leave_type_id'], 'Leave Type') : '';
         $start_date = isset($_POST['start_date']) ?  validateInput($_POST['start_date'], 'Start Date') : '';
         $end_date = isset($_POST['end_date']) ? validateInput($_POST['end_date'], 'End Date') : '';
-        $isHalfDay = isset($_POST['is_half_day']) ? validateInput($_POST['is_half_day'], 'Is Half Day') : null;
+        $isHalfDay = isset($_POST['is_half_day']) && $_POST['is_half_day'] === 'true' ? true : false;
         $halfDayPart = '';
-        if($isHalfDay == 'true'){
+        if($isHalfDay){
             $halfDayPart = isset($_POST['half_day_part']) ? validateInput($_POST['half_day_part'], 'Half Day Part') : null;
         }
         $reason = isset($_POST['reason']) ? validateInput($_POST['reason'], 'Reason') : '';

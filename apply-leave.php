@@ -34,9 +34,9 @@ if(isset($_GET['s']) && $_GET['s'] == true){
 />
 
 <!-- Ajax -->
-<script src="leaves/apply-leave/modules/apply-leave-ajax.js?v1.7"></script>
+<script src="leaves/apply-leave/modules/apply-leave-ajax.js?v1.6"></script>
 <!-- Scripts -->
-<script src="leaves/apply-leave/modules/apply-leave-scripts.js?v1.7"></script>
+<script src="leaves/apply-leave/modules/apply-leave-scripts.js?v1.5"></script>
 
 <!---Skeletons--->
 <script src="requests/table-skeleton.js?v1.2"></script>
@@ -109,7 +109,7 @@ if(isset($_GET['s']) && $_GET['s'] == true){
                       <form onsubmit="event.preventDefault()" id="apply_leave_form">
                           <div class="mb-3">
                               <label for="leaveType" class="form-label">Select Leave Type*</label>
-                              <select class="form-select" id="leaveType" name="leaveType" required onchange="selectEmployeeLeaves();">
+                              <select class="form-select" id="leaveType" name="leaveType" required onchange="selectEmployeeLeaves(); setStartDate();">
                               </select>
                           </div>
                           <div class="mb-3">
@@ -118,14 +118,14 @@ if(isset($_GET['s']) && $_GET['s'] == true){
                           </div>
                           <div class="mb-3">
                               <label for="startDate" class="form-label">Start Date*</label>
-                              <input type="date" class="form-control" id="startDate" name="startDate" required onchange="setEndDateMin(this)">
+                              <input type="date" class="form-control" id="startDate" name="startDate" required onchange="setEndDateMin(this)" disabled>
                           </div>
                           <div class="mb-3">
                               <label for="endDate" class="form-label">End Date*</label>
                               <input type="date" class="form-control" id="endDate" name="endDate" required onchange="calculateTotalNumberOfDays()" disabled>
                           </div>
                           <div class="form-check mb-3">
-                              <input class="form-check-input" type="checkbox" id="isHalfday" data-bs-toggle="collapse" data-bs-target="#halfdayOptions">
+                              <input class="form-check-input" type="checkbox" id="isHalfday" data-bs-toggle="collapse" data-bs-target="#halfdayOptions" onchange="calculateTotalNumberOfDays()">
                               <label class="form-check-label" for="isHalfday">Is Halfday</label>
                           </div>
                           <div class="collapse" id="halfdayOptions">
