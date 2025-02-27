@@ -93,7 +93,7 @@
                             <input type="number" class="form-control" id="update_totalWorkHours" name="update_totalWorkHours" min="0" readonly required>
                         </div>
                         <!-- Layout for Break Addition (work schedules) -->
-                        <div id="update_break_assignment">
+                        <div id="update_break_assignment" class="table-responsive">
                             <h6 class="text-center">Assign Breaks to this Schedule (0-5 breaks)</h6>
                             <table class="table table-hover mt-3">
                             <thead>
