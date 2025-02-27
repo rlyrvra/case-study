@@ -331,9 +331,9 @@ class OvertimeRateAssignmentDao
                 CASE";
 
         if ($employeeId === null || preg_match('/^[1-9]\d*$/', $employeeId)) {
-            $query .= "WHEN employee_id = :employee_id ";
+            $query .= " WHEN employee_id = :employee_id ";
         } else {
-            $query .= "WHEN SHA2(employee_id, 256) = :employee_id ";
+            $query .= " WHEN SHA2(employee_id, 256) = :employee_id ";
         }
 
         if ($jobTitleId === null || preg_match('/^[1-9]\d*$/', $jobTitleId)) {
@@ -441,6 +441,8 @@ class OvertimeRateAssignmentDao
         $query .= "
             LIMIT 1
         ";
+
+        
 
         try {
             $statement = $this->pdo->prepare($query);
