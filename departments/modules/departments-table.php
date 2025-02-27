@@ -15,9 +15,9 @@
       <th>DEPARTMENT HEAD</th>
       <th>DESCRIPTION</th>
       <th>STATUS</th>
-      <th>Created At</th>
+      <th>DATE CREATED</th>
       <!-- <th>Created By</th> -->
-      <th>Updated At</th>
+      <th>DATE MODIFIED</th>
       <!-- <th>Updated By</th> -->
       <?php if (isset($status) && $status === 'Archived') echo "<th>Deleted At</th>"; ?>
       <?php //if (isset($status) && $status === 'Archived') echo "<th>Deleted By</th>"; ?>
@@ -76,7 +76,7 @@
       <?php endforeach; ?>
     <?php else: ?>
       <tr>
-        <td colspan="7">No data available</td>
+        <td colspan="8" style="text-align: center; padding: 20px; color: #888;">No data available</td> 
       </tr>
     <?php endif; ?>
   </tbody>

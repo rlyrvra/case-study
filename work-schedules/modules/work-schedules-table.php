@@ -59,10 +59,20 @@
       <?php endforeach; ?>
     <?php else: ?>
       <tr>
-        <td colspan="6">No data available</td>
+        <td colspan="6" style="text-align: center; padding: 20px; color: #888;">No data available</td> 
       </tr>
     <?php endif; ?>
   </tbody>
+  <tfoot class="table-border-bottom-0">
+      <th style='width: 1%;'>#</th>
+      <th>Employee Name</th>
+      <th>Start Time</th>
+      <th>End Time</th>
+      <th>Work Hours</th>
+      <?php if (isset($status) && $status === 'Archived') echo "<th>Deleted At</th>"; ?>
+      <?php //if (isset($status) && $status === 'Archived') echo "<th>Deleted By</th>"; ?>
+      <?php if (!isset($status) || $status !== 'Archived') echo "<th style='width: 13%;'>Action</th>"; ?>
+      </tfoot>
 </table>
 
 <!-- Pagination Block (Placed after the table) -->

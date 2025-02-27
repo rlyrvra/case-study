@@ -15,9 +15,9 @@
       <th>Department</th>
       <th>Description</th>
       <th>Status</th>
-      <th>Created At</th>
+      <th>DATE CREATED</th>
       <!-- <th>Created By</th> -->
-      <th>Updated At</th>
+      <th>DATE MODIFIED</th>
       <!-- <th>Updated By</th> -->
       <?php if (isset($status) && $status === 'Archived') echo "<th>Deleted At</th>"; ?>
       <?php if (isset($status) && $status === 'Archived') echo "<th>Deleted By</th>"; ?>

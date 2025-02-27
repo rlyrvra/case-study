@@ -9,15 +9,16 @@
 <table class="table table-bordered table-hover">
   <thead>
     <tr>
+      <th style='width: 1%;'>#</th>
       <th>Name</th>
       <th>Maximum Number of Days</th>
       <th>Paid</th>
       <th>Encashable</th>
       <th>description</th>
       <th>status</th>
-      <th>Created At</th>
+      <th>Date Created</th>
       <!-- <th>Created By</th> -->
-      <th>Updated At</th>
+      <th>Date Modified</th>
       <!-- <th>Updated By</th> -->
       <?php if (isset($status) && $status === 'Archived') echo "<th>Deleted At</th>"; ?>
       <?php //if (isset($status) && $status === 'Archived') echo "<th>Deleted By</th>"; ?>
@@ -26,7 +27,7 @@
   </thead>
   <tbody>
     <?php if (!empty($leaveTypes)): ?>
-      <?php foreach ($leaveTypes as $row): ?>
+      <?php  $i = ($offset + 1); foreach ($leaveTypes as $row): ?>
         <tr data-id="<?php echo htmlspecialchars($row['id']); ?>" 
             data-name="<?php echo htmlspecialchars($row['name']); ?>" 
             data-maximum-number-of-days="<?php echo htmlspecialchars($row['maximum_number_of_days']); ?>"
@@ -34,6 +35,7 @@
             data-is-encashable="<?php echo htmlspecialchars($row['is_encashable']); ?>" 
             data-description="<?php echo htmlspecialchars($row['description']); ?>" 
             data-status="<?php echo htmlspecialchars($row['status']); ?>">
+          <td><?php echo htmlspecialchars($i); $i++;?></td>
           <td><?php echo htmlspecialchars($row['name']); ?></td>
           <td><?php echo htmlspecialchars($row['maximum_number_of_days']); ?></td>
           <td><span class="badge badge center 
@@ -64,9 +66,9 @@
           }
           
           ?> me-1"><?php echo htmlspecialchars($row['status']); ?></span></td>
-          <td><?php echo htmlspecialchars($row['created_at']); ?></td>
+          <td><?php echo htmlspecialchars(date("l, F j, Y, g:i A", strtotime($row['created_at']))); ?></td>
           <!-- <td><?php //echo htmlspecialchars($row['created_by']); ?></td> -->
-          <td><?php echo htmlspecialchars($row['updated_at']); ?></td>
+          <td><?php echo htmlspecialchars(date("l, F j, Y, g:i A", strtotime($row['updated_at']))); ?></td>
           <!-- <td><?php //echo htmlspecialchars($row['updated_by']); ?></td> -->
           <?php if (isset($status) && $status === 'Archived') echo "<td>" . htmlspecialchars($row['deleted_at']) . "</td>"; ?>
           <?php //if (isset($status) && $status === 'Archived') echo "<td>" . htmlspecialchars($row['deleted_by']) . "</td>"; ?>
@@ -84,10 +86,26 @@
       <?php endforeach; ?>
     <?php else: ?>
       <tr>
-        <td colspan="10">No data available</td>
+        <td colspan="10" style="text-align: center; padding: 20px; color: #888;">No data available</td> 
       </tr>
     <?php endif; ?>
   </tbody>
+  <tfoot class="table-border-bottom-0">
+      <th style='width: 1%;'>#</th>
+      <th>Name</th>
+      <th>Maximum Number of Days</th>
+      <th>Paid</th>
+      <th>Encashable</th>
+      <th>description</th>
+      <th>status</th>
+      <th>Date Created</th>
+      <!-- <th>Created By</th> -->
+      <th>Date Modified</th>
+      <!-- <th>Updated By</th> -->
+      <?php if (isset($status) && $status === 'Archived') echo "<th>Deleted At</th>"; ?>
+      <?php //if (isset($status) && $status === 'Archived') echo "<th>Deleted By</th>"; ?>
+      <?php if (!isset($status) || $status !== 'Archived') echo "<th style='width: 13%;'>Action</th>"; ?>
+  </tfoot>
 </table>
 
 <!-- Pagination Block (Placed after the table) -->

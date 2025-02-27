@@ -13,7 +13,6 @@
             </div>
             
             <div class="modal-body">
-                <hr/>
                 <form id="leave_type_form" onsubmit="event.preventDefault()">
                     <div class="mb-3">
                         <label for="update_name" class="form-label">Name</label>

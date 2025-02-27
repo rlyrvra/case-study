@@ -12,14 +12,15 @@
     <tr>
       <!-- <th>id</th> -->
       <!-- <th style="width: 2%">NO.</th> -->
+      <th style='width: 1%;'>#</th>
       <th>Name</th>
       <th>Amount</th>
       <th>Frequency</th>
       <th>Description</th>
       <th>Status</th>
-      <th>Created At</th>
+      <th>Date Created</th>
       <!-- <th>Created By</th> -->
-      <th>Updated At</th>
+      <th>Date Modified</th>
       <!-- <th>Updated By</th> -->
       <?php if (isset($status) && $status === 'Archived') echo "<th>Deleted At</th>"; ?>
       <?php //if (isset($status) && $status === 'Archived') echo "<th>Deleted By</th>"; ?>
@@ -28,7 +29,7 @@
   </thead>
   <tbody>
     <?php if (!empty($allowances)): ?>
-      <?php $i = 1; foreach ($allowances as $row): ?>
+      <?php $i = ($offset + 1); foreach ($allowances as $row): ?>
         <tr data-id="<?php echo htmlspecialchars($row['id']); ?>" 
             data-name="<?php echo htmlspecialchars($row['name']); ?>" 
             data-amount="<?php echo htmlspecialchars($row['amount']); ?>" 
@@ -37,6 +38,7 @@
             data-status="<?php echo htmlspecialchars($row['status']); ?>">
           <!-- <td><?php //echo htmlspecialchars($row['id']); ?></td> -->
           <!-- <td><?php //echo htmlspecialchars($i); ?></td> -->
+          <td><?php echo htmlspecialchars($i); $i++;?></td>
           <td><?php echo htmlspecialchars($row['name']); ?></td>
           <td><?php echo htmlspecialchars($row['amount']); ?></td>
           <td><?php echo htmlspecialchars($row['frequency']); ?></td>
@@ -53,9 +55,9 @@
           
           ?> me-1"><?php echo htmlspecialchars($row['status']); ?></span>
           </td>
-          <td><?php echo htmlspecialchars($row['created_at']); ?></td>
+          <td><?php echo htmlspecialchars(date("l, F j, Y, g:i A", strtotime($row['created_at']))); ?></td>
           <!-- <td><?php //echo htmlspecialchars($row['created_by']); ?></td> -->
-          <td><?php echo htmlspecialchars($row['updated_at']); ?></td>
+          <td><?php echo htmlspecialchars(date("l, F j, Y, g:i A", strtotime($row['updated_at']))); ?></td>
           <!-- <td><?php //echo htmlspecialchars($row['updated_by']); ?></td> -->
           <?php if (isset($status) && $status === 'Archived') echo "<td>" . htmlspecialchars($row['deleted_at']) . "</td>"; ?>
           <?php //if (isset($status) && $status === 'Archived') echo "<td>" . htmlspecialchars($row['deleted_by']) . "</td>"; ?>
@@ -73,10 +75,25 @@
       <?php endforeach; ?>
     <?php else: ?>
       <tr>
-        <td colspan="7">No data available</td>
+        <td colspan="10" style="text-align: center; padding: 20px; color: #888;">No data available</td> 
       </tr>
     <?php endif; ?>
   </tbody>
+  <tfoot class="table-border-bottom-0">
+      <th style='width: 1%;'>#</th>
+      <th>Name</th>
+      <th>ammount</th>
+      <th>frequency</th>
+      <th>description</th>
+      <th>status</th>
+      <th>Created At</th>
+      <!-- <th>Created By</th> -->
+      <th>Updated At</th>
+      <!-- <th>Updated By</th> -->
+      <?php if (isset($status) && $status === 'Archived') echo "<th>Deleted At</th>"; ?>
+      <?php //if (isset($status) && $status === 'Archived') echo "<th>Deleted By</th>"; ?>
+      <?php if (!isset($status) || $status !== 'Archived') echo "<th style='width: 13%;'>Action</th>"; ?>
+      </tfoot>
 </table>
 
 <!-- Pagination Block (Placed after the table) -->

@@ -49,7 +49,7 @@
     <li class="menu-item" id="job-titles-menu">
     <a href="job-title" class="menu-link">
     <i class="menu-icon tf-icons bx bx-vector"></i>
-        <div>Job Title </div>
+        <div>Job Titles </div>
     
     </a>
         

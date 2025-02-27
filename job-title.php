@@ -19,7 +19,7 @@ if($_SESSION['access_role'] !== 'Admin'){
 
 </style>
 <head>
-<title> smartWage | Job Titles </title>
+<title> Job Titles | smartWage </title>
 <!-- font-awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <!-- jQuery -->
@@ -95,7 +95,7 @@ if($_SESSION['access_role'] !== 'Admin'){
           <div class="container-fluid mb-3 d-flex align-items-center">
               <h1 class="display-1">Job Titles</h1>
               <button type="button" class="btn btn-success btn-xl ms-auto" data-bs-toggle="modal" data-bs-target="#add_job_titles_modal">
-                <i class="bx bx-plus bx-lg"></i>Add Job Title
+                <i class="bx bx-plus bx-lg"></i>Add Job Titles
               </button>
               
             </div>

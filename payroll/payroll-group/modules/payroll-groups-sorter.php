@@ -1,5 +1,9 @@
 <div class="controls d-flex justify-content-between flex-column flex-lg-row"> 
-   
+    <style>
+        .space{
+            padding-left: 5px;
+        }
+    </style>   
     <div class="col-auto d-flex align-items-center mx-1">
         <!--Sort By dropdown-->
         <div class="ddropdown sort mx-1">
@@ -35,12 +39,12 @@
                 <li><a class="dropdown-item" href="#" data-group="by_date" data-value="created_at">Date Created</a></li>
                 <li><a class="dropdown-item" href="#" data-group="by_date" data-value="updated_at">Date Modified</a></li>
                 <li><hr/></li>
-                <div class="space p-2">
-                    <label for="dateStart">Start Date</label> 
+                <div class="space m-3">
+                    <label for="dateStart" class="pb-1"><b>Start Date</b></label> 
                     <input type="date" id="dateStart"  class="form-control" required />
                 </div>
-                <div class="space p-2">
-                    <label for="dateEnd">End Date</label> 
+                <div class="space m-3">
+                    <label for="dateEnd" class="pb-1"><b>End Date</b></label> 
                     <input type="date" id="dateEnd"  class="form-control" required />
                 </div>
             </ul>
@@ -75,21 +79,16 @@
     <!--Search At-->
     <div class="search col-auto flex-fill col-auto mx-1">
         <div class="input-group">
-            <span class="input-group-text"><i class="bx bx-category fs-4 lh-0"></i></span>
+        <span class="input-group-text"><i class="bx bx-search-alt-2 fs-4 lh-0"></i></span>
             <select class="form-select" id="search_at" name="search_at" placeholder="Search At">
                 <option value="none" selected>All</option>
                 <option value="name">Name</option>
                 <option value="pay_frequency">Frequeny</option>
             </select>
-        </div>  
-    </div>
-    <div class="search col-auto flex-fill col-auto">
-        <div class="input-group ms-lg-3">
-            <span class="input-group-text"><i class="bx bx-search-alt-2 fs-4 lh-0"></i></span>
             <input type="text" class="form-control" id="searchText" />
             <button id="openModalBtn" class="btn btn-success" onclick="fetchAllPayrollGroups()"> Search
             </button>
-        </div>
+        </div>  
     </div>
 </div>
 

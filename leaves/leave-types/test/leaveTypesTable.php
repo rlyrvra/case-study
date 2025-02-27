@@ -14,9 +14,9 @@
       <th>is_paid</th>
       <th>description</th>
       <th>status</th>
-      <th>Created At</th>
+      <th>Date Created</th>
       <!-- <th>Created By</th> -->
-      <th>Updated At</th>
+      <th>Date Modified</th>
       <!-- <th>Updated By</th> -->
       <?php if (isset($status) && $status === 'Archived') echo "<th>Deleted At</th>"; ?>
       <?php //if (isset($status) && $status === 'Archived') echo "<th>Deleted By</th>"; ?>

@@ -62,7 +62,7 @@ if(isset($_GET['m']) && $_GET['m'] === 'u'){
 }
 </style>
 <head>
-<title> smartWage | Add Employee </title>
+<title> Add Employee | smartWage </title>
 <!-- font-awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <!-- jQuery -->
@@ -135,10 +135,8 @@ if(isset($_GET['m']) && $_GET['m'] === 'u'){
         <div class="container-fluid">
           <div class="container-fluid pt-5 pb-5">
             <div class="container-fluid mb-3 d-flex align-items-center">
-              <h1 class="display-1">Employees</h1>
+              <h1 class="display-1">Add Employee</h1>
             </div>
-
-            <hr/>
 
             <div class="container-fluid card pt-5 pb-5 mt-5 mb-5">
               <div class="row justify-content-center">

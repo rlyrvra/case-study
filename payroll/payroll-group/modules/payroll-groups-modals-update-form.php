@@ -13,7 +13,6 @@
             </div>
             
             <div class="modal-body">
-            <hr/>
 
             <form onsubmit='event.preventDefault()' id="update_payrollGroups_form">
                 <!-- Name -->
@@ -127,10 +126,6 @@
                         <option value="Inactive">Inactive</option>
                     </select>
                 </div>
-
-            
-
-            <hr/>
                 
             </div>
             <div class="modal-footer">

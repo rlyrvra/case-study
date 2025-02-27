@@ -13,7 +13,6 @@
             </div>
             
             <div class="modal-body">
-                <hr>
                 <div class="container mt-4">
                     <form onsubmit="event.preventDefault()" id="work_schedules_add_form">
                         <div class="input-group mb-3">
@@ -121,7 +120,6 @@
                         </div>
                     </form>  
                 </div>
-                <hr>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
