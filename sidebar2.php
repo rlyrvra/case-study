@@ -96,9 +96,9 @@
         <?php
         if($_SESSION['access_role'] != 'Admin'){
         echo '
-        <li class="menu-item">
-            <a href="maintenance-login" class="menu-link">
-            <div data-i18n="Error">My Attendance</div>
+        <li class="menu-item" id="my-attendance-menu">
+            <a href="my-attendance" class="menu-link">
+            <div>My Attendance</div>
             </a>
         </li>';
         }
@@ -236,7 +236,7 @@
         </li>
 
         <li class="menu-item" id="government-tables-menu">
-            <a href="form-layouts-horizontal.html" class="menu-link menu-toggle">
+            <a class="menu-link menu-toggle">
             <div data-i18n="Horizontal Form">Government Tables</div>
             
             </a>

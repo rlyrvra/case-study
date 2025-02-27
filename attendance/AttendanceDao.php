@@ -333,7 +333,7 @@ class AttendanceDao
         $filterParameters = [];
 
         if (empty($filterCriteria)) {
-            $whereClauses[] = "attendance.deleted_at is NULL";
+            $whereClauses[] = "attendance.deleted_at IS NULL";
 
         } else {
             foreach ($filterCriteria as $filterCriterion) {
@@ -430,6 +430,7 @@ class AttendanceDao
             {$offsetClause}
         ";
 
+        //echo "<pre> $query </pre>";
         try {
             $statement = $this->pdo->prepare($query);
 
@@ -453,6 +454,7 @@ class AttendanceDao
                     FROM
                         attendance AS attendance
                     {$joinClauses}
+                    WHERE
                         " . implode(" ", $whereClauses) . "
                 ";
 
@@ -475,7 +477,7 @@ class AttendanceDao
         } catch (PDOException $exception) {
             error_log("Database Error: An error occurred while fetching the attendance records. " .
                       "Exception: {$exception->getMessage()}");
-
+            //echo $exception->getMessage();
             return ActionResult::FAILURE;
         }
     }

@@ -94,9 +94,9 @@
         <div data-i18n="Misc">Attendance</div>
         </a>
         <ul class="menu-sub">
-        <li class="menu-item">
-            <a href="maintenance-login" class="menu-link">
-            <div data-i18n="Error">My Attendance</div>
+        <li class="menu-item" id="my-attendance-menu">
+            <a href="my-attendance" class="menu-link">
+            <div>My Attendance</div>
             </a>
         </li>
         <li class="menu-item">
