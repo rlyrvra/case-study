@@ -168,7 +168,7 @@ class OvertimeRateDao
 
             error_log("Database Error: An error occurred while updating the overtime rate. " .
                       "Exception: {$exception->getMessage()}");
-
+                      
             return ActionResult::FAILURE;
         }
     }
