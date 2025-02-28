@@ -10,9 +10,11 @@
     <tr>
       <th style='width: 1%;'>#</th>
       <th>Date</th>
+      <th>Day of Week</th>
       <th>Check In Time</th>
       <th>Check Out Time</th>
-      <th>Break Duration (in min)</th>
+      <th>Break Records</th>
+      <th>Total Break Duration</th>
       <th>Total Hours Worked</th>
       <th>Late Check In</th>
       <th>Early Check Out</th>
@@ -20,7 +22,6 @@
       <th>Overtime Approval</th>
       <th>Status</th>
       <th>Remarks</th>
-      <?php if (isset($actionsMode) && $actionsMode === 'Actions') echo "<th>Actions</th>"; ?>
     </tr>
   </thead>
   <tbody>
@@ -29,13 +30,24 @@
         <tr>
           <td><?php echo htmlspecialchars($i); $i++;?></td>
           <td>
-            <span class="badge bg-label-primary"><?php echo htmlspecialchars(date("l, F j, Y", strtotime($row['date']))); ?></span>
+            <span class="badge bg-label-primary"><?php echo htmlspecialchars(date("F j, Y", strtotime($row['date']))); ?></span>
           </td>
           <td>
-            <?php echo htmlspecialchars(date("g:i A", strtotime($row['check_in_time']))); ?>
+            <?php echo htmlspecialchars(date("l", strtotime($row['date']))); ?>
           </td>
           <td>
-            <?php echo htmlspecialchars(date("g:i A", strtotime($row['check_out_time']))); ?>
+            <?php echo htmlspecialchars(date("Y-m-d h:i:s A", strtotime($row['check_in_time']))); ?>
+          </td>
+          <td>
+            <?php echo htmlspecialchars(date("Y-m-d h:i:s A", strtotime($row['check_out_time']))); ?>
+          </td>
+          <td>
+            <button class="btn btn-info" 
+              title="See Breaks..." 
+              data-bs-toggle="modal" 
+              data-bs-target="#A<?php echo htmlspecialchars($row['id']); ?>"> 
+                  <i class="bx bx-time"></i></button>
+              <?php include __DIR__ . '/attendance-modal-breaks-table.php'; ?>
           </td>
           <td><?php echo htmlspecialchars($row['total_break_duration_in_minutes']); ?></td>
           <td><?php echo htmlspecialchars($row['total_hours_worked']); ?></td>
@@ -101,9 +113,11 @@
   <tfoot class="table-border-bottom-0">
       <th style='width: 1%;'>#</th>
       <th>Date</th>
+      <th>Day of Week</th>
       <th>Check In Time</th>
       <th>Check Out Time</th>
-      <th>Break Duration (in min)</th>
+      <th>Break Records</th>
+      <th>Total Break Duration</th>
       <th>Total Hours Worked</th>
       <th>Late Check In</th>
       <th>Early Check Out</th>
@@ -120,19 +134,19 @@
     <ul class="pagination pagination-lg">
       <!-- Previous Button -->
       <li class="page-item <?= $page <= 1 ? 'disabled' : '' ?>">
-        <a class="page-link" onclick="fetchAllDepartments('prev')" aria-label="Previous">
+        <a class="page-link" onclick="fetchAllMyAttendance('prev')" aria-label="Previous">
           <span aria-hidden="true">&laquo;</span>
         </a>
       </li>
       <?php for ($i = 1; $i <= $totalPages; $i++): ?>
         <!-- Page Numbers -->
         <li class="page-item <?= $i === $page ? 'active' : '' ?>">
-          <a class="page-link" onclick="fetchAllDepartments(<?php echo $i ?>)" ><?= $i ?></a>
+          <a class="page-link" onclick="fetchAllMyAttendance(<?php echo $i ?>)" ><?= $i ?></a>
         </li>
       <?php endfor; ?>
       <!-- Next Button -->
       <li class="page-item <?= $page >= $totalPages ? 'disabled' : '' ?>">
-        <a class="page-link" onclick="fetchAllDepartments('next')" aria-label="Next">
+        <a class="page-link" onclick="fetchAllMyAttendance('next')" aria-label="Next">
           <span aria-hidden="true">&raquo;</span>
         </a>
       </li>
