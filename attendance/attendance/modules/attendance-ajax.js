@@ -1,4 +1,4 @@
-function fetchAllMyAttendance(page = 1) {
+function fetchAllAttendance(page = 1) {
     var numberEntries = $("#entries-per-page").val();
     var pageNumber = getPage(page);
     var sortByColumn = getSortByColumn();
@@ -64,7 +64,7 @@ function fetchAllMyAttendance(page = 1) {
     }
 
     $.ajax({
-        url: "attendance/my-attendance/modules/attendance-api",
+        url: "attendance/attendance/modules/attendance-api",
         type: "POST",
         data: {
             action: "fetchAll",

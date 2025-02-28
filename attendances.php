@@ -26,7 +26,7 @@ if(isset($_GET['aR']) && $_GET['aR'] == true){
 
 </style>
 <head>
-<title> Dashboard </title>
+<title> smartWage |  Attendances </title>
 <link rel="icon" type="image/x-icon" href="img/logo-files/logo1.ico" />
 <!-- font-awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -34,6 +34,18 @@ if(isset($_GET['aR']) && $_GET['aR'] == true){
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <!-- Sweet Alert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<!-- Ajax -->
+<script src="attendance/attendance/modules/attendance-ajax.js?v1.2"></script>
+<!-- Scripts -->
+<script src="attendance/attendance/modules/attendance-scripts.js?v1.0"></script>
+
+<!---Skeletons--->
+<script src="requests/table-skeleton.js?v1.2"></script>
+<!---Skeletons CSS-->
+<link rel="stylesheet" href="requests/table-skeleton.css?v1.1" />
+
+
 <!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -82,7 +94,8 @@ if(isset($_GET['aR']) && $_GET['aR'] == true){
     
     <?php require_once __DIR__ . '/sidebar.php' ?>
     <script>
-      document.getElementById("dashboard-menu").classList.add("active");
+      document.getElementById("attendance-menu").classList.add("open");
+      document.getElementById("attendances-menu").classList.add("active");
     </script>
 
     <!-- Layout container -->
@@ -91,8 +104,30 @@ if(isset($_GET['aR']) && $_GET['aR'] == true){
 
       <!-- / Navbar -->
       <div class="content-wrapper">
-        <div class="container-fluid">
-            
+      <div class="container-fluid pt-5 pb-5">
+          <div class="container-fluid mb-3 d-flex justify-content-between flex-column flex-lg-row">
+              <h1 class="display-1">My Attendance</h1>
+          </div>
+
+          <div class="container-fluid card pt-3 pb-3 mt-5 mb-5">
+              <?php require_once __DIR__ . '/attendance/attendance/modules/attendance-sorter.php' ?>
+              <div class="spinner-border spinner-border-lg text-primary text-center w-px-25 h-px-25" role="status" id="loadingSpinner"></div>
+          </div>
+
+
+          <div class="container-fluid card pt-5 pb-3 mt-5">
+            <div class="card-header">
+              <h5>My Attendance</h5>
+            </div>
+            <div class="card-body">
+              <div id="skeleton-attendance-table" class="visually-hidden table-responsive text-no-wrap"></div>
+              <div id="my-attendance-table" class="table-responsive text-no-wrap">
+                <div class="visually-hidden container-fluid spinner-border spinner-border-lg d-flex align-items-center justify-content-center w-px-700 h-px-700" role="status"></div>
+              </div>
+            </div>
+          </div>
+
+
         </div>
       </div>
       <?php require_once __DIR__ . '/footer.php' ?>
@@ -104,7 +139,11 @@ if(isset($_GET['aR']) && $_GET['aR'] == true){
   <div class="layout-overlay layout-menu-toggle"></div>
 </div>
 <!-- / Layout wrapper -->
-
+<script>
+  $(document).ready(function (){
+    fetchAllAttendance();
+  });
+</script>
 
 
 <!-- Core JS -->

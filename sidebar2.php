@@ -90,7 +90,7 @@
     <li class="menu-item" id="attendance-menu">
         <a href="javascript:void(0);" class="menu-link menu-toggle">
         <i class="menu-icon tf-icons bx bx-calendar"></i>
-        <div data-i18n="Misc">Attendance</div>
+        <div>Attendance</div>
         </a>
         <ul class="menu-sub">
         <?php
@@ -103,8 +103,8 @@
         </li>';
         }
         ?>
-        <li class="menu-item">
-            <a href="maintenance-login" class="menu-link">
+        <li class="menu-item" id="attendances-menu">
+            <a href="attendances" class="menu-link">
             <div data-i18n="Under Maintenance">Attendance</div>
             </a>
         </li>

@@ -45,7 +45,7 @@
                     <div class="avatar avatar-online">
                     <?php 
                         if(!isset($_SESSION['profile_picture'])){
-                            echo "<img src='https://via.placeholder.com/50' alt='Profile Picture' class='w-px-35 h-auto rounded-circle' />";
+                            echo "<img src='https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&s=200' alt='Profile Picture' class='w-px-35 h-auto rounded-circle' />";
                             return;
                         }
                         // Render the image
@@ -62,7 +62,7 @@
                             <div class="avatar avatar-online">
                             <?php 
                                 if(!isset($_SESSION['profile_picture'])){
-                                    echo "<img src='https://via.placeholder.com/50' alt='Profile Picture' class='w-px-35 h-auto rounded-circle' />";
+                                    echo "<img src='https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&s=200' alt='Profile Picture' class='w-px-35 h-auto rounded-circle' />";
                                     return;
                                 }
                                 // Render the image

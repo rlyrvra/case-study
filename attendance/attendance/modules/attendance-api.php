@@ -34,11 +34,11 @@ try {
         
         $filterCriteria = [];
 
-        $filterCriteria[] = [
-            "column" => "work_schedule_snapshot.employee_id",
-            "operator" => "=",
-            "value" => $_SESSION['id']
-        ];
+        // $filterCriteria[] = [
+        //     "column" => "work_schedule_snapshot.employee_id",
+        //     "operator" => "=",
+        //     "value" => $_SESSION['id']
+        // ];
 
         if(!empty($status)){
             $filterCriteria[] = [

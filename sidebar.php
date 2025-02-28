@@ -99,8 +99,8 @@
             <div>My Attendance</div>
             </a>
         </li>
-        <li class="menu-item">
-            <a href="maintenance-login" class="menu-link">
+        <li class="menu-item" id="attendances-menu">
+            <a href="attendances" class="menu-link">
             <div data-i18n="Under Maintenance">Attendance</div>
             </a>
         </li>
