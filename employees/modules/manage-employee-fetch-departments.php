@@ -1,6 +1,7 @@
 <?php
-require_once __DIR__ . '/../../departments/DepartmentDao.php';
-require_once __DIR__ . '/../../departments/Department.php';
+require_once __DIR__ . '/../../departments/DepartmentService.php';
+require_once __DIR__ . '/../../employees/EmployeeService.php';
+
 
 require_once __DIR__ . '/../../includes/Helper.php';
 require_once __DIR__ . '/../../database/database.php';
@@ -8,6 +9,11 @@ require_once __DIR__ . '/../../database/database.php';
 function getDepartments(){
     global $pdo;
     $departmentDao = new DepartmentDao($pdo);
+    $departmentRepo = new DepartmentRepository($departmentDao);
+    $departmentService = new DepartmentService($departmentRepo);
+    $employeeDao = new EmployeeDao($pdo);
+    $employeeRepo = new EmployeeRepository($employeeDao);
+    $employeeService = new EmployeeService($employeeRepo);
     $selectedColumns = ["id", "name", "description"];
     $filterCriteria = [
         [
@@ -16,7 +22,43 @@ function getDepartments(){
             "value"    => "Active"
         ]
     ];
-    $data = $departmentDao->fetchAll($selectedColumns, $filterCriteria, []);
+
+    // if($_SESSION['access_role'] === 'Admin'){
+    //     //do nothing
+    // }
+
+    // if($_SESSION['access_role'] === 'Manager'){
+    //     if(!$departmentService->isEmployeeDepartmentHead($_SESSION['id'])){
+    //         return;
+    //     }
+    //     $departmentId = $employeeService->fetchAllEmployees(
+    //         ['department_id'],
+    //         [
+    //             [
+    //                 "column" => "employee.id",
+    //                 "operator" => "=",
+    //                 "value" => $_SESSION['id']
+    //             ]
+    //         ],
+    //         [],
+    //         1
+    //     )['result_set'][0]['department_id'];
+    //     $filterCriteria[] = [
+    //         "column" => "department.id",
+    //         "operator" => "=",
+    //         "value" => $departmentId
+    //     ];
+    // }
+
+    // if($_SESSION['access_role'] === 'Supervisor'){
+    //     $filterCriteria[] = [
+    //         "column" => "employee.supervisor_id",
+    //         "operator" => "=",
+    //         "value" => $_SESSION['id']
+    //     ];
+    // }
+    
+    $data = $departmentService->fetchAllDepartments($selectedColumns, $filterCriteria, []);
     $departments = $data['result_set'];
     return $departments;
 }

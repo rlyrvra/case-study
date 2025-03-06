@@ -31,8 +31,43 @@
                     </tr>
                 </thead>
                 <tbody>
-                    
-                    <?php echo "<pre>"; print_r($employeeBreakRecords); echo "</pre>";$myBreaks = $employeeBreakRecords[$row['work_schedule_snapshot_id']]['result_set']; ?>
+                    <?php
+                    $employeeBreakFilterCriteria = [
+                        [
+                            'column'   => 'employee_break.deleted_at',
+                            'operator' => 'IS NULL'
+                        ],
+                        [
+                            'column'   => 'break_schedule_snapshot.work_schedule_snapshot_id',
+                            'operator' => '='                                                ,
+                            'value'    => $row['work_schedule_snapshot_id']
+                        ],
+                        [
+                            'column'      => 'employee_break.created_at'                              ,
+                            'operator'    => 'BETWEEN'                                                ,
+                            'lower_bound' => htmlspecialchars(date("Y-m-d H:i:s", strtotime($row['date'] . ' ' . $row['work_schedule_snapshot_start_time']))),
+                            'upper_bound' => htmlspecialchars(date("Y-m-d H:i:s", strtotime($row['date'] . ' ' . $row['work_schedule_snapshot_end_time']))),
+                        ]
+                    ];
+
+                    //print_r($employeeBreakFilterCriteria);
+    
+                    $result = $employeeBreakDao->fetchAll(
+                    [
+                        'break_type_snapshot_name',
+                        'start_time',
+                        'end_time',
+                        'break_duration_in_minutes',
+                        'id'
+                    ], 
+                    $employeeBreakFilterCriteria);
+                    $myBreaks;
+                    if ($result !== ActionResult::FAILURE) {
+                        $myBreaks = $result['result_set'];
+                    }
+                    //print_r($myBreaks);
+                    ?>
+                   
                     <?php if (!empty($myBreaks)): ?>
                     <?php $d = 1; foreach ($myBreaks as $rowBreak): ?>
                         <tr>

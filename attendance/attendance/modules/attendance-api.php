@@ -102,9 +102,9 @@ try {
             foreach ($myAttendance as $attendanceRecord) {
                 $uniqueAttendanceRecords[$attendanceRecord['date']][$attendanceRecord['work_schedule_snapshot_id']] = $attendanceRecord;
             }
-            echo "<pre>";
-            print_r($uniqueAttendanceRecords);
-            echo "</pre>";
+            // echo "<pre>";
+            // print_r($uniqueAttendanceRecords);
+            // echo "</pre>";
             $employeeBreakRecords = [];
             foreach ($uniqueAttendanceRecords as $date => $uniqueRecords) {
                 foreach ($uniqueRecords as $uniqueAttendanceRecord) {
@@ -152,9 +152,9 @@ try {
                         ]
                     ];
 
-                    echo "adjustedWorkScheduleStartDateTime: " . $adjustedWorkScheduleStartDateTime->format('Y-m-d H:i:s') . "<br>";
-                    echo "workScheduleEndDateTime: " . $workScheduleEndDateTime          ->format('Y-m-d H:i:s') . "<br>";
-                    echo "workScheduleSnapshotId: " . $workScheduleSnapshotId . "<br>";
+                    // echo "adjustedWorkScheduleStartDateTime: " . $adjustedWorkScheduleStartDateTime->format('Y-m-d H:i:s') . "<br>";
+                    // echo "workScheduleEndDateTime: " . $workScheduleEndDateTime          ->format('Y-m-d H:i:s') . "<br>";
+                    // echo "workScheduleSnapshotId: " . $workScheduleSnapshotId . "<br>";
 
                     $employeeBreakRecordSortCriteria = [
                         [
@@ -176,9 +176,9 @@ try {
             }
         }
 
-        echo "<pre>";
-        print_r($employeeBreakRecords);
-        echo "</pre>";
+        // echo "<pre>";
+        // print_r($employeeBreakRecords);
+        // echo "</pre>";
 
         $totalAttendance = $result["total_row_count"];
         $totalPages = ceil($totalAttendance / $limit);

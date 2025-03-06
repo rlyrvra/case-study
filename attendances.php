@@ -3,18 +3,8 @@
 <?php require_once __DIR__ . '/includes/file-locations.php' ?>
 
 <?php
-require_once __DIR__ . '/login-checker.php';
-
-if(isset($_GET['r']) && $_GET['r'] == true){
-  include_once __DIR__ . '/sweet-alert-toasts/login/login-welcome.php';
-}
-
-if(isset($_GET['s']) && $_GET['s'] == true){
-  include_once __DIR__ . '/sweet-alert-toasts/login/login-success.php';
-}
-
-if(isset($_GET['aR']) && $_GET['aR'] == true){
-  include_once __DIR__ . '/sweet-alert-toasts/login/login-access-role-insufficient.php';
+if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager'){
+  header("Location: ". $SMARTWAGE_LOCATION ."/smartWage-index.php?aR=true");
 }
 ?>
 <!DOCTYPE html>

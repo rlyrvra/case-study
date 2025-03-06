@@ -9,6 +9,8 @@ require_once __DIR__ . '/../EmployeeService.php';
 require_once __DIR__ . '/../EmployeeRepository.php';
 require_once __DIR__ . '/../Employee.php';
 
+require_once __DIR__ . '/../../departments/DepartmentService.php';
+
 require_once __DIR__ . '/../../includes/Helper.php';
 require_once __DIR__ . "/../../includes/enums/ActionResult.php";
 require_once __DIR__ . '/../../database/database.php';
@@ -17,6 +19,11 @@ require_once __DIR__ . '/../../includes/session.php';
 
 try {
     $employeeDao = new EmployeeDao($pdo);
+    $employeeRepository = new EmployeeRepository($employeeDao);
+    $employeeService = new EmployeeService($employeeRepository);
+    $departmentDao = new DepartmentDao($pdo);
+    $departmentRepo = new DepartmentRepository($departmentDao);
+    $departmentService = new DepartmentService($departmentRepo);
     $action = $_POST['action'] ?? '';
 
     if ($action === 'fetchAll') {
@@ -47,16 +54,35 @@ try {
         }
 
         // if($_SESSION['access_role'] === 'Admin'){
-        //     // do nothing
-        // }else if($_SESSION['access_role'] === 'Manager'){
+        //     //do nothing
+        // }
+
+        // if($_SESSION['access_role'] === 'Manager'){
+        //     if(!$departmentService->isEmployeeDepartmentHead($_SESSION['id'])){
+        //         return;
+        //     }
+        //     $departmentId = $employeeService->fetchAllEmployees(
+        //         ['department_id'],
+        //         [
+        //             [
+        //                 "column" => "employee.id",
+        //                 "operator" => "=",
+        //                 "value" => $_SESSION['id']
+        //             ]
+        //         ],
+        //         [],
+        //         1
+        //     )['result_set'][0]['department_id'];
         //     $filterCriteria[] = [
-        //         "column" => "employee.manager_id" ,
+        //         "column" => "department.id",
         //         "operator" => "=",
-        //         "value" => $_SESSION['id']
+        //         "value" => $departmentId
         //     ];
-        // }else if($_SESSION['access_role'] === 'Supervisor'){
+        // }
+
+        // if($_SESSION['access_role'] === 'Supervisor'){
         //     $filterCriteria[] = [
-        //         "column" => "employee.supervisor_id" ,
+        //         "column" => "employee.supervisor_id",
         //         "operator" => "=",
         //         "value" => $_SESSION['id']
         //     ];
@@ -132,8 +158,6 @@ try {
                 "direction" => $_POST['sort_order']
             ]
         ];
-        $employeeRepository = new EmployeeRepository($employeeDao);
-        $employeeService = new EmployeeService($employeeRepository);
         $result = $employeeService->fetchAllEmployees($selectedColumns, $filterCriteria, $sortCriteria, $limit, $offset);
         $employees;
         if ($result !== ActionResult::FAILURE) {
