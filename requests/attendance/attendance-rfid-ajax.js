@@ -9,7 +9,6 @@ function handleRFID(rfid, date){
         rfid: rfid,
         date: date
     }
-    console.log(data);
 
     $.ajax({
         url: 'requests/attendance/attendance-rfid-api',
@@ -22,8 +21,8 @@ function handleRFID(rfid, date){
         },
         success: function(response) {
             $('#response-test').html(response);
-            // fetchAllAttendance();
-            // fetchAllBreaks();
+            fetchAllAttendance();
+            fetchAllBreaks();
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log("AJAX Error: " + textStatus + ": " + errorThrown);

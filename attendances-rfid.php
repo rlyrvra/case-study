@@ -389,13 +389,14 @@
         <div class="row d-flex">
             <!-- Left Side: Image and Buttons -->
             <div class="col-lg-3 col-12 d-flex flex-column flex-grow-1">
+                <span class="display-1 text-center visually-hidden" id="rfid-label"></span>
                 <!-- Button Group right above the image with little margin -->
                 <div class="row mb-2 d-flex justify-content-center">
                     <div class="btn-group">
-                        <input class="btn-check" type="radio" name="role" id="role-staff" value="Staff">
-                        <label class="btn btn-outline-primary" for="role-staff">Attendance</label>
-                        <input class="btn-check" type="radio" name="role" id="role-supervisor" value="Supervisor">
-                        <label class="btn btn-outline-primary" for="role-supervisor">Break</label>
+                        <input class="btn-check" type="radio" name="type" id="type-attendance" value="Attendance" checked>
+                        <label class="btn btn-outline-primary" for="type-attendance">Attendance</label>
+                        <input class="btn-check" type="radio" name="type" id="type-break" value="Break">
+                        <label class="btn btn-outline-primary" for="type-break">Break</label>
                     </div>
                 </div>
 
