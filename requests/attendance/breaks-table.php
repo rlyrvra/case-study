@@ -16,6 +16,9 @@
         <?php foreach ($breakRecords as $row): ?>
             <tr>
                 <!-- <td></td> -->
+                <?php if(empty($row['start_time'])){
+                    continue;
+                }?>
                 <td>
                     <?php echo htmlspecialchars($row['employee_code']); ?>
                 </td>

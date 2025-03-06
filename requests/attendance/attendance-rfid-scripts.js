@@ -34,13 +34,13 @@ document.addEventListener("keydown", function(event) {
 
     // Check if the key pressed is part of the RFID card number
     if (key.length === 1) {
-    // Display the pressed key (card data)
+        // Display the pressed key (card data)
         rfidOutput.innerText += key;
         lastKeyPressTime = Date.now();
     }
 
     // Optionally clear output when Enter is pressed (card is fully read)
-    if (key === "Enter" && rfidOutput.innerText.length > 0) {
+    if (key === "Enter" && rfidOutput.innerText.length > 5) {
         //console.log("RFID Card Read: " + rfidOutput.innerText + " Date: " + getFormattedDateTime());
         handleRFID(rfidOutput.innerText, getFormattedDateTime());
         

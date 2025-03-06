@@ -31,29 +31,72 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php $myBreaks = $employeeBreakRecords[$row['work_schedule_snapshot_id']]['result_set']; ?>
+                <?php
+                    $employeeBreakFilterCriteria = [
+                        [
+                            'column'   => 'employee_break.deleted_at',
+                            'operator' => 'IS NULL'
+                        ],
+                        [
+                            'column'   => 'break_schedule_snapshot.work_schedule_snapshot_id',
+                            'operator' => '='                                                ,
+                            'value'    => $row['work_schedule_snapshot_id']
+                        ],
+                        [
+                            'column'      => 'employee_break.created_at'                              ,
+                            'operator'    => 'BETWEEN'                                                ,
+                            'lower_bound' => htmlspecialchars(date("Y-m-d H:i:s", strtotime($row['date'] . ' ' . $row['work_schedule_snapshot_start_time'] . ' -1 hour'))),
+                            'upper_bound' => htmlspecialchars(date("Y-m-d H:i:s", strtotime($row['date'] . ' ' . $row['work_schedule_snapshot_end_time'] . ' +1 hour'))),
+                        ]
+                    ];
+
+                    //print_r($employeeBreakFilterCriteria);
+    
+                    $result = $employeeBreakDao->fetchAll(
+                    [
+                        'break_type_snapshot_name',
+                        'start_time',
+                        'end_time',
+                        'break_duration_in_minutes',
+                        'id'
+                    ], 
+                    $employeeBreakFilterCriteria);
+                    $myBreaks;
+                    if ($result !== ActionResult::FAILURE) {
+                        $myBreaks = $result['result_set'];
+                    }
+                    //print_r($myBreaks);
+                    ?>
+                   
                     <?php if (!empty($myBreaks)): ?>
-                    <?php $i = ($offset + 1); foreach ($myBreaks as $rowBreak): ?>
+                    <?php $d = 1; foreach ($myBreaks as $rowBreak): ?>
+                        <?php if(empty($rowBreak['start_time'])){
+                                continue;
+                        }?>
                         <tr>
-                        <td><?php echo htmlspecialchars($i); $i++;?></td>
-                        <td>
-                            <?php echo htmlspecialchars($rowBreak['break_type_snapshot_name']); ?>
-                        </td>
-                        <td>
-                            <?php echo htmlspecialchars(date("F j, Y", strtotime($row['date']))); ?>
-                        </td>
-                        <td>
-                            <?php echo htmlspecialchars(date("Y-m-d h:i:s A", strtotime($rowBreak['start_time']))); ?>
-                        </td>
-                        <td>
-                            <?php echo htmlspecialchars(date("Y-m-d h:i:s A", strtotime($rowBreak['end_time']))); ?>
-                        </td>
-                        <td>
-                            <?php echo htmlspecialchars($rowBreak['break_duration_in_minutes']); ?>
-                        </td>
-                        
+                            <td><?php echo htmlspecialchars($d); $d++;?></td>
+                            <td>
+                                <?php echo htmlspecialchars($rowBreak['break_type_snapshot_name']); ?>
+                            </td>
+                            <td>
+                                <?php echo htmlspecialchars(date("F j, Y", strtotime($row['date']))); ?>
+                            </td>
+                            <td>
+                                <?php echo htmlspecialchars(date("h:i:s A", strtotime($rowBreak['start_time']))); ?>
+                            </td>
+                            <td>
+                                <?php echo htmlspecialchars(date("h:i:s A", strtotime($rowBreak['end_time']))); ?>
+                            </td>
+                            <td>
+                                <?php echo htmlspecialchars($rowBreak['break_duration_in_minutes']); ?>
+                            </td>
                         </tr>
                     <?php endforeach; ?>
+                    <?php if ($d === 1): ?>
+                        <tr>
+                            <td colspan="7" class="text-center">No data available</td>
+                        </tr>
+                    <?php endif; ?>
                     <?php else: ?>
                     <tr>
                         <td colspan="7">No data available</td>

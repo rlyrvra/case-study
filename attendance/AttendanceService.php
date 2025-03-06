@@ -105,7 +105,7 @@ class AttendanceService
         if ($employeeId === ActionResult::FAILURE) {
             return [
                 'status'  => 'error',
-                'message' => 'An unexpected error occurred. Please try again later.'
+                'message' => 'An unexpected error occurred. Please try again later. EmployeeId not Found'
             ];
         }
 
@@ -169,7 +169,7 @@ class AttendanceService
         if ($isPaidHolidayToday === ActionResult::FAILURE) {
             return [
                 'status'  => 'error',
-                'message' => 'An unexpected error occurred. Please try again later.'
+                'message' => 'An unexpected error occurred. Please try again later. isPaidHoliday failure'
             ];
         }
 
@@ -223,7 +223,7 @@ class AttendanceService
             if ($isOnLeaveToday === ActionResult::FAILURE) {
                 return [
                     'status'  => 'error',
-                    'message' => 'An unexpected error occurred. Please try again later.'
+                    'message' => 'An unexpected error occurred. Please try again later. isOnLeaveToday failure'
                 ];
             }
 
@@ -307,7 +307,7 @@ class AttendanceService
         if ($lastAttendanceRecord === ActionResult::FAILURE) {
             return [
                 'status'  => 'error',
-                'message' => 'An unexpected error occurred. Please try again later.'
+                'message' => 'An unexpected error occurred. Please try again later. $lastAttendanceRecord failure'
             ];
         }
 
@@ -419,7 +419,7 @@ class AttendanceService
                 if ($workSchedules === ActionResult::FAILURE) {
                     return [
                         'status'  => 'error',
-                        'message' => 'An unexpected error occurred. Please try again later.'
+                        'message' => 'An unexpected error occurred. Please try again later. $workSchedules'
                     ];
                 }
 
@@ -447,7 +447,7 @@ class AttendanceService
                     if ($workScheduleDates === ActionResult::FAILURE) {
                         return [
                             'status'  => 'error',
-                            'message' => 'An unexpected error occurred. Please try again later.'
+                            'message' => 'An unexpected error occurred. Please try again later. $workScheduleDates'
                         ];
                     }
 
@@ -507,7 +507,7 @@ class AttendanceService
                     if ($earlyCheckInWindow === ActionResult::FAILURE) {
                         return [
                             'status' => 'error',
-                            'message' => 'An unexpected error occurred. Please try again later.'
+                            'message' => 'An unexpected error occurred. Please try again later. $earlyCheckInWindow'
                         ];
                     }
 
@@ -600,7 +600,7 @@ class AttendanceService
             if ($isPaidHolidayYesterday === ActionResult::FAILURE) {
                 return [
                     'status'  => 'error',
-                    'message' => 'An unexpected error occurred. Please try again later.'
+                    'message' => 'An unexpected error occurred. Please try again later. $isPaidHolidayYesterday'
                 ];
             }
 
@@ -656,7 +656,7 @@ class AttendanceService
                 if ($didLeaveOccurYesterday === ActionResult::FAILURE) {
                     return [
                         'status'  => 'error',
-                        'message' => 'An unexpected error occurred. Please try again later.'
+                        'message' => 'An unexpected error occurred. Please try again later. $didLeaveOccurYesterday'
                     ];
                 }
 
@@ -714,7 +714,7 @@ class AttendanceService
                 if ($breakSchedules === ActionResult::FAILURE) {
                     return [
                         'status'  => 'error',
-                        'message' => 'An unexpected error occurred. Please try again later.'
+                        'message' => 'An unexpected error occurred. Please try again later. $breakSchedules'
                     ];
                 }
 
@@ -793,7 +793,7 @@ class AttendanceService
                 if ($breakSchedules === ActionResult::FAILURE) {
                     return [
                         'status'  => 'error',
-                        'message' => 'An unexpected error occurred. Please try again later.'
+                        'message' => 'An unexpected error occurred. Please try again later. $breakSchedules2'
                     ];
                 }
             }
@@ -970,7 +970,7 @@ class AttendanceService
                 if ($attendanceCheckInResult === ActionResult::FAILURE) {
                     return [
                         'status'  => 'error',
-                        'message' => 'An unexpected error occurred. Please try again later.'
+                        'message' => 'An unexpected error occurred. Please try again later. $attendanceCheckInResult'
                     ];
                 }
 
@@ -993,7 +993,7 @@ class AttendanceService
                 if ($gracePeriod === ActionResult::FAILURE) {
                     return [
                         'status'  => 'error',
-                        'message' => 'An unexpected error occurred. Please try again later.'
+                        'message' => 'An unexpected error occurred. Please try again later. $gracePeriod'
                     ];
                 }
 
@@ -1011,7 +1011,7 @@ class AttendanceService
             if ($latestWorkScheduleSnapshot === ActionResult::FAILURE) {
                 return [
                     'status'  => 'error',
-                    'message' => 'An unexpected error occurred. Please try again later.'
+                    'message' => 'An unexpected error occurred. Please try again later. $latestWorkScheduleSnapshot'
                 ];
             }
 
@@ -1054,7 +1054,7 @@ class AttendanceService
                 if ($workScheduleSnapshotId === ActionResult::FAILURE) {
                     return [
                         'status'  => 'error',
-                        'message' => 'An unexpected error occurred. Please try again later.'
+                        'message' => 'An unexpected error occurred. Please try again later. $workScheduleSnapshotId'
                     ];
                 }
             }
@@ -1085,7 +1085,7 @@ class AttendanceService
 
                     return [
                         'status'  => 'error',
-                        'message' => 'An unexpected error occurred while checking in. Please try again later.'
+                        'message' => 'An unexpected error occurred while checking in. Please try again later. $attendanceCheckInResult'
                     ];
                 }
 
@@ -1102,7 +1102,7 @@ class AttendanceService
                             if ($latestBreakTypeSnapshot === ActionResult::FAILURE) {
                                 return [
                                     'status'  => 'error',
-                                    'message' => 'An unexpected error occurred. Please try again later.'
+                                    'message' => 'An unexpected error occurred. Please try again later. $latestBreakTypeSnapshot'
                                 ];
                             }
 
@@ -1131,7 +1131,7 @@ class AttendanceService
                                 if ($breakTypeSnapshotId === ActionResult::FAILURE) {
                                     return [
                                         'status'  => 'error',
-                                        'message' => 'An unexpected error occurred. Please try again later.'
+                                        'message' => 'An unexpected error occurred. Please try again later. $breakTypeSnapshotId'
                                     ];
                                 }
                             }
@@ -1142,7 +1142,7 @@ class AttendanceService
                             if ($latestBreakScheduleSnapshot === ActionResult::FAILURE) {
                                 return [
                                     'status'  => 'error',
-                                    'message' => 'An unexpected error occurred. Please try again later.'
+                                    'message' => 'An unexpected error occurred. Please try again later. $latestBreakScheduleSnapshot'
                                 ];
                             }
 
@@ -1171,7 +1171,7 @@ class AttendanceService
                                 if ($breakScheduleSnapshotId === ActionResult::FAILURE) {
                                     return [
                                         'status'  => 'error',
-                                        'message' => 'An unexpected error occurred. Please try again later.'
+                                        'message' => 'An unexpected error occurred. Please try again later. $breakScheduleSnapshotId'
                                     ];
                                 }
                             }
@@ -1192,7 +1192,7 @@ class AttendanceService
 
                                 return [
                                     'status'  => 'error',
-                                    'message' => 'An unexpected error occurred while checking in. Please try again later.'
+                                    'message' => 'An unexpected error occurred while checking in. Please try again later. $employeeBreakCreateResult'
                                 ];
                             }
                         }
@@ -1203,10 +1203,10 @@ class AttendanceService
 
             } catch (PDOException $exception) {
                 $this->pdo->rollback();
-
+                
                 return [
                     'status'  => 'error',
-                    'message' => 'An unexpected error occurred. Please try again later.'
+                    'message' => 'An unexpected error occurred. Please try again later. $PDOException'
                 ];
 
             } catch (Exception $exception) {
@@ -1214,7 +1214,7 @@ class AttendanceService
 
                 return [
                     'status'  => 'error',
-                    'message' => 'An unexpected error occurred. Please try again later.'
+                    'message' => 'An unexpected error occurred. Please try again later. $Exception'
                 ];
             }
 
@@ -1281,7 +1281,7 @@ class AttendanceService
             if ($employeeBreakFetchResult === ActionResult::FAILURE) {
                 return [
                     'status'  => 'error',
-                    'message' => 'An unexpected error occurred while checking in. Please try again later.'
+                    'message' => 'An unexpected error occurred while checking in. Please try again later. $employeeBreakFetchResult'
                 ];
             }
 
@@ -1459,7 +1459,7 @@ class AttendanceService
             if ($attendanceFetchResult === ActionResult::FAILURE) {
                 return [
                     'status'  => 'error',
-                    'message' => 'An unexpected error occurred while checking in. Please try again later.'
+                    'message' => 'An unexpected error occurred while checking in. Please try again later. $attendanceFetchResult'
                 ];
             }
 
@@ -1498,7 +1498,7 @@ class AttendanceService
 
             $earlyCheckOutInMinutes = 0;
             $overtimeHours          = 0;
-
+            
             if ($totalHoursWorked < $lastAttendanceRecord['work_schedule_snapshot_total_work_hours']) {
                 $earlyCheckOutInMinutes = ($lastAttendanceRecord['work_schedule_snapshot_total_work_hours'] - $totalHoursWorked) * 60;
                 $currentAttendanceStatus = 'Undertime';
@@ -1510,6 +1510,7 @@ class AttendanceService
             } elseif ($lastAttendanceRecord['attendance_status'] !== 'Late') {
                 $currentAttendanceStatus = 'Present';
             }
+            
 
             try {
                 $currentAttendanceRecord = new Attendance(
@@ -1533,7 +1534,7 @@ class AttendanceService
                 if ($attendanceCheckOutResult === ActionResult::FAILURE) {
                     return [
                         'status'  => 'error',
-                        'message' => 'An unexpected error occurred. Please try again later.'
+                        'message' => 'An unexpected error occurred. Please try again later. $attendanceCheckOutResult'
                     ];
                 }
 
@@ -1564,7 +1565,7 @@ class AttendanceService
 
                             return [
                                 'status' => 'error',
-                                'message' => 'Failed to update one or more attendance records.'
+                                'message' => 'Failed to update one or more attendance records. $attendanceUpdateResult'
                             ];
                         }
                     }
@@ -1577,7 +1578,7 @@ class AttendanceService
 
                 return [
                     'status'  => 'error',
-                    'message' => 'An unexpected error occurred. Please try again later.'
+                    'message' => 'An unexpected error occurred. Please try again later. PDOException'
                 ];
 
             } catch (Exception $exception) {
@@ -1585,7 +1586,7 @@ class AttendanceService
 
                 return [
                     'status'  => 'error',
-                    'message' => 'An unexpected error occurred. Please try again later.'
+                    'message' => 'An unexpected error occurred. Please try again later. Exception'
                 ];
             }
         }

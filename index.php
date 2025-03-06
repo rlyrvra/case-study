@@ -506,7 +506,7 @@
 
     <!-- Footer -->
     <footer>
-        <p>&copy; 2025 Smart Wage | Designed with Sneats Bootstrap Template</p>
+        <p>&copy; 2025 <a href="index">smartWage</a> | Designed with Sneats Bootstrap Template</p>
         <div>
             <a href="#">Privacy Policy</a> | <a href="#">Terms of Use</a>
         </div>

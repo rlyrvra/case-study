@@ -420,7 +420,7 @@
 
     <!-- Footer -->
     <footer class="text-center mt-auto py-3">
-        <p>&copy; 2025 Smart Wage | Designed with Sneats Bootstrap Template</p>
+        <p>&copy; 2025 <a href="index">smartWage</a> | Designed with Sneats Bootstrap Template</p>
         <div>
             <a href="#">Privacy Policy</a> | <a href="#">Terms of Use</a>
         </div>
@@ -428,8 +428,8 @@
 
 
 <script src="assets/vendor/libs/jquery/jquery.js"></script>
-<script src="requests/attendance/attendance-rfid-scripts.js?v1.2.1"></script>
-<script src="requests/attendance/attendance-rfid-ajax.js?v1.2.1"></script>
+<script src="requests/attendance/attendance-rfid-scripts.js?v1.2.2"></script>
+<script src="requests/attendance/attendance-rfid-ajax.js?v1.2.2"></script>
 
 </body>
 </html>

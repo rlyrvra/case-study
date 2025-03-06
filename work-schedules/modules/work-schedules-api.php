@@ -129,9 +129,9 @@ try {
         $is_flex_time = isset($workScheduleData['is_flex_time']) && $workScheduleData['is_flex_time'] === 'true' ? true : false;
         $core_start_time = null; $core_end_time = null; $total_hrs_per_week = null;
         if($is_flex_time === true){
-            $total_hrs_per_week = isset($workScheduleData['total_hrs_per_week']) ? (int) validateInput($workScheduleData['total_hrs_per_week'], 'Total Hours Per Week') * 6 : null;
+            $total_hrs_per_week = isset($workScheduleData['total_hrs_per_week']) ? (float) validateInput($workScheduleData['total_hrs_per_week'], 'Total Hours Per Week') * 6 : null;
         }
-        $total_work_hrs = isset($workScheduleData['total_work_hrs']) ? (int) (validateNumericIdentifier($workScheduleData['total_work_hrs'], 1, 4, 'Total Work Hours')): null;
+        $total_work_hrs = isset($workScheduleData['total_work_hrs']) ? (float) (validateNumericIdentifier($workScheduleData['total_work_hrs'], 1, 4, 'Total Work Hours')): null;
         $start_date = '2024-01-01';
         
 
@@ -280,9 +280,9 @@ try {
         $is_flex_time = isset($workScheduleData['is_flex_time']) && $workScheduleData['is_flex_time'] === 'true' ? true : false;
         $core_start_time = null; $core_end_time = null; $total_hrs_per_week = null;
         if($is_flex_time === true){
-            $total_hrs_per_week = isset($workScheduleData['total_hrs_per_week']) ? (int) validateInput($workScheduleData['total_hrs_per_week'], 'Total Hours Per Week') * 6 : null;
+            $total_hrs_per_week = isset($workScheduleData['total_hrs_per_week']) ? (float) validateInput($workScheduleData['total_hrs_per_week'], 'Total Hours Per Week') * 6 : null;
         }
-        $total_work_hrs = isset($workScheduleData['total_work_hrs']) ? (int) (validateNumericIdentifier($workScheduleData['total_work_hrs'], 1, 4, 'Total Work Hours')): null;
+        $total_work_hrs = isset($workScheduleData['total_work_hrs']) ? (float) (validateNumericIdentifier($workScheduleData['total_work_hrs'], 1, 4, 'Total Work Hours')): null;
         $start_date = '2024-01-01';
         
 
