@@ -175,13 +175,13 @@ try {
                 ");
                 break;
         }
-
+        
         $pdo->beginTransaction();
 
+        
         if ($lastWorkScheduleId === 0) {
             $lastWorkScheduleId = getLastInsertIdBySql($pdo);
         }
-        
 
         if ($createResult !== ActionResult::SUCCESS) {
             $pdo->rollback();
@@ -190,7 +190,7 @@ try {
 
         $breakScheduleResult = null;
         if ($breakScheduleData) {
-            $breakScheduleResult = createBreakSchedules($pdo, $lastWorkScheduleId, $breakScheduleData);
+            $breakScheduleResult = createBreakSchedules($pdo, getLastInsertIdBySql($pdo), $breakScheduleData);
         }
        
         if(isset($breakScheduleResult['action'])){
@@ -486,11 +486,15 @@ function validateNumericIdentifier($value, $minLength, $maxLength, $fieldName = 
     return $value;
 }
 
-function getLastInsertIdBySql($pdo): int{
-    // Fallback: Manually retrieve the last inserted ID
-    $stmt = $pdo->query("SELECT id FROM work_schedules ORDER BY id DESC LIMIT 1");
-    $lastWorkScheduleId = $stmt->fetchColumn();
-    return $lastWorkScheduleId;
+function getLastInsertIdBySql($pdo): int {
+    try {
+        $stmt = $pdo->query("SELECT id FROM work_schedules ORDER BY id DESC LIMIT 1");
+        $lastWorkScheduleId = $stmt->fetchColumn();
+        return $lastWorkScheduleId !== false ? (int) $lastWorkScheduleId : 0;
+    } catch (PDOException $e) {
+        error_log("Database error: " . $e->getMessage());
+        return 0; // Return 0 as a fallback
+    }
 }
 
 function createBreakSchedules($pdo, $workScheduleId, $breakSchedules){
@@ -504,10 +508,7 @@ function createBreakSchedules($pdo, $workScheduleId, $breakSchedules){
             workScheduleId: $workScheduleId,
             breakTypeId: $breakSchedule['id'],
             startTime: $breakSchedule['start_time'],
-            endTime: $breakSchedule['end_time'],
-            isFlexible: 0,
-            earliestStartTime: null,
-            latestEndTime: null
+            endTime: $breakSchedule['end_time']
         );
         $createResult = $breakScheduleService->createBreakSchedule($newBreakSchedule);
 
@@ -535,10 +536,7 @@ function updateBreakSchedules($pdo, $workScheduleId, $breakSchedules){
             workScheduleId: $workScheduleId,
             breakTypeId: $breakSchedule['break_type_id'],
             startTime: $breakSchedule['start_time'],
-            endTime: $breakSchedule['end_time'],
-            isFlexible: 0,
-            earliestStartTime: null,
-            latestEndTime: null
+            endTime: $breakSchedule['end_time']
         );
         $updateResult = $breakScheduleService->updateBreakSchedule($updatedBreakSchedule);
 

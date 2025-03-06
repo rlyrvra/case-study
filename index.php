@@ -314,7 +314,6 @@
                     <li class="nav-item"><a class="nav-link" href="#principles">Principles</a></li>
                     <li class="nav-item"><a class="nav-link" href="#compliance">Compliance</a></li>
                     <li class="nav-item"><a class="nav-link" href="#contact-us">Contact</a></li>
-
                 </ul>
             </div>
         </div>
@@ -327,7 +326,7 @@
         <div class="hero-text">
             <h1>Empowering Work, Simplifying Wages, Ensuring Trust.</h1>
             <p> Experience the power of seamless payroll, where exclusive benefits meet effortless convenience. </p>
-            <a href="#about" class="btn btn-outline-light btn-lg ms-2">Check Eligibility</a> <!--pwede to gawin yung sa attendance part-->
+            <a href="attendances-rfid" class="btn btn-outline-light btn-lg ms-2">Check Attendance</a> <!--pwede to gawin yung sa attendance part-->
         </div>
     </header>
 

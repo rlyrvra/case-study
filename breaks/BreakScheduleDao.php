@@ -58,7 +58,7 @@ class BreakScheduleDao
 
             error_log("Database Error: An error occurred while creating the break schedule. " .
                       "Exception: {$exception->getMessage()}");
-
+                      
             return ActionResult::FAILURE;
         }
     }

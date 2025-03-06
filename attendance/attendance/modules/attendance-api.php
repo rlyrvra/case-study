@@ -16,7 +16,6 @@ require_once __DIR__ . '/../../../breaks/EmployeeBreakService.php';
 
 require_once __DIR__ . '/../../../includes/Helper.php';
 require_once __DIR__ . '/../../../database/database.php';
-require_once __DIR__ . '/../../../includes/session.php';
 
 try {
     $attendanceDao = new AttendanceDao($pdo);
@@ -24,6 +23,7 @@ try {
     $action = $_POST['action'] ?? '';
 
     if ($action === 'fetchAll') {
+        $employeeId = isset($_POST['employee_id']) && $_POST['employee_id'] !== "0" ? $_POST['employee_id'] : null;
         $status = isset($_POST['filter_status']) && $_POST['filter_status'] ? $_POST['filter_status'] : null;
         $dateFilterColumn = isset($_POST['filter_date_column']) ? $_POST['filter_date_column'] : null;
         $dateStart = isset($_POST['filter_startDate']) && $dateFilterColumn !== "none" ? $_POST['filter_startDate'] : 0;
@@ -34,11 +34,13 @@ try {
         
         $filterCriteria = [];
 
-        // $filterCriteria[] = [
-        //     "column" => "work_schedule_snapshot.employee_id",
-        //     "operator" => "=",
-        //     "value" => $_SESSION['id']
-        // ];
+        if(!empty($employeeId)){
+            $filterCriteria[] = [
+                "column" => "work_schedule_snapshot.employee_id",
+                "operator" => "=",
+                "value" => $employeeId
+            ];
+        }
 
         if(!empty($status)){
             $filterCriteria[] = [
@@ -69,7 +71,28 @@ try {
                 "direction" => $_POST['sort_order']
             ]
         ];
-        $result = $attendanceDao->fetchAll([], $filterCriteria, $sortCriteria, $limit, $offset);
+        $result = $attendanceDao->fetchAll(
+            ['id', 
+            'date', 
+            'check_in_time', 
+            'check_out_time', 
+            'total_break_duration_in_minutes', 
+            'total_hours_worked', 
+            'late_check_in', 
+            'early_check_out', 
+            'overtime_hours', 
+            'is_overtime_approved', 
+            'attendance_status', 
+            'created_at', 
+            'updated_at', 
+            'work_schedule_snapshot_id', 
+            'work_schedule_snapshot_start_time', 
+            'work_schedule_snapshot_end_time', 
+            'work_schedule_snapshot_minutes_can_check_in_before_shift'], 
+            $filterCriteria, 
+            $sortCriteria, 
+            $limit, 
+            $offset);
         $myBreak;
         $myAttendance;
         if ($result !== ActionResult::FAILURE) {
@@ -79,7 +102,9 @@ try {
             foreach ($myAttendance as $attendanceRecord) {
                 $uniqueAttendanceRecords[$attendanceRecord['date']][$attendanceRecord['work_schedule_snapshot_id']] = $attendanceRecord;
             }
-
+            echo "<pre>";
+            print_r($uniqueAttendanceRecords);
+            echo "</pre>";
             $employeeBreakRecords = [];
             foreach ($uniqueAttendanceRecords as $date => $uniqueRecords) {
                 foreach ($uniqueRecords as $uniqueAttendanceRecord) {
@@ -100,7 +125,14 @@ try {
                         ->modify('-' . $earlyCheckInWindow . ' minutes');
 
                     $employeeBreakRecordColumns = [
+                        'break_type_snapshot_name',
+                        'start_time',
+                        'end_time',
+                        'break_duration_in_minutes',
+                        'id'
                     ];
+
+                    
 
                     $employeeBreakRecordFilterCriteria = [
                         [
@@ -119,6 +151,10 @@ try {
                             'upper_bound' => $workScheduleEndDateTime          ->format('Y-m-d H:i:s')
                         ]
                     ];
+
+                    echo "adjustedWorkScheduleStartDateTime: " . $adjustedWorkScheduleStartDateTime->format('Y-m-d H:i:s') . "<br>";
+                    echo "workScheduleEndDateTime: " . $workScheduleEndDateTime          ->format('Y-m-d H:i:s') . "<br>";
+                    echo "workScheduleSnapshotId: " . $workScheduleSnapshotId . "<br>";
 
                     $employeeBreakRecordSortCriteria = [
                         [
@@ -139,6 +175,10 @@ try {
                 }
             }
         }
+
+        echo "<pre>";
+        print_r($employeeBreakRecords);
+        echo "</pre>";
 
         $totalAttendance = $result["total_row_count"];
         $totalPages = ceil($totalAttendance / $limit);

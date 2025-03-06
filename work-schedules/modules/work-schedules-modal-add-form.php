@@ -21,7 +21,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="startTime" class="form-label">Start Time</label>
-                            <select class="form-select" id="startTime" name="startTime" required>
+                            <select class="form-select" id="startTime" name="startTime" required onchange="calculateWorkHours();">
                                 <option value="" selected disabled>Select start time...</option>
                                 <option value="12:00AM">12:00AM</option>
                                 <option value="1:00AM">1:00AM</option>
@@ -51,7 +51,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="endTime" class="form-label">End Time</label>
-                            <select class="form-select" id="endTime" name="endTime" required>
+                            <select class="form-select" id="endTime" name="endTime" required onchange="calculateWorkHours();">
                                 <option value="" selected disabled>Select end time...</option>
                                 <option value="12:00AM">12:00AM</option>
                                 <option value="1:00AM">1:00AM</option>

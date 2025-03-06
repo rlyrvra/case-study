@@ -31,27 +31,27 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php $myBreaks = $employeeBreakRecords[$row['work_schedule_snapshot_id']]['result_set']; ?>
+                    
+                    <?php echo "<pre>"; print_r($employeeBreakRecords); echo "</pre>";$myBreaks = $employeeBreakRecords[$row['work_schedule_snapshot_id']]['result_set']; ?>
                     <?php if (!empty($myBreaks)): ?>
-                    <?php $i = ($offset + 1); foreach ($myBreaks as $rowBreak): ?>
+                    <?php $d = 1; foreach ($myBreaks as $rowBreak): ?>
                         <tr>
-                        <td><?php echo htmlspecialchars($i); $i++;?></td>
-                        <td>
-                            <?php echo htmlspecialchars($rowBreak['break_type_snapshot_name']); ?>
-                        </td>
-                        <td>
-                            <?php echo htmlspecialchars(date("F j, Y", strtotime($row['date']))); ?>
-                        </td>
-                        <td>
-                            <?php echo htmlspecialchars(date("Y-m-d h:i:s A", strtotime($rowBreak['start_time']))); ?>
-                        </td>
-                        <td>
-                            <?php echo htmlspecialchars(date("Y-m-d h:i:s A", strtotime($rowBreak['end_time']))); ?>
-                        </td>
-                        <td>
-                            <?php echo htmlspecialchars($rowBreak['break_duration_in_minutes']); ?>
-                        </td>
-                        
+                            <td><?php echo htmlspecialchars($d); $d++;?></td>
+                            <td>
+                                <?php echo htmlspecialchars($rowBreak['break_type_snapshot_name']); ?>
+                            </td>
+                            <td>
+                                <?php echo htmlspecialchars(date("F j, Y", strtotime($row['date']))); ?>
+                            </td>
+                            <td>
+                                <?php echo htmlspecialchars(date("Y-m-d h:i:s A", strtotime($rowBreak['start_time']))); ?>
+                            </td>
+                            <td>
+                                <?php echo htmlspecialchars(date("Y-m-d h:i:s A", strtotime($rowBreak['end_time']))); ?>
+                            </td>
+                            <td>
+                                <?php echo htmlspecialchars($rowBreak['break_duration_in_minutes']); ?>
+                            </td>
                         </tr>
                     <?php endforeach; ?>
                     <?php else: ?>

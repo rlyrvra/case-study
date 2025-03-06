@@ -45,11 +45,12 @@
             </ul>
         </div>  
     </div>
+    
 
     <!--Entries Per Page -->
     <div class="align mx-1 d-flex align-items-center"> 
         <label for="entries-per-page" class="mx-1">Show</label>
-        <select class="form-select" id="entries-per-page" onchange="fetchAllMyAttendance()">
+        <select class="form-select" id="entries-per-page" onchange="fetchAllAttendance()">
             <option value="10">10</option>
             <option value="25">25</option>
             <option value="50">50</option>
@@ -62,7 +63,7 @@
     <div class="dropdown filter flex-fill col-auto  mx-1">
         <div class="input-group">
             <span class="input-group-text"><i class="bx bx-category-alt fs-4 lh-0"></i></span>
-            <select class="form-select" id="status" name="status" placeholder="Filter By Status" onchange="fetchAllMyAttendance()">
+            <select class="form-select" id="status" name="status" placeholder="Filter By Status" onchange="fetchAllAttendance()">
                 <option value="" selected>All</option>
                 <option value="Present">Present</option>
                 <option value="Late">Late</option>
@@ -72,10 +73,38 @@
             </select>
         </div>
     </div>
-
+    <div class="dropdown filter flex-fill col-auto  mx-1">
+        <div class="input-group">
+            <span class="input-group-text"><i class="bx bx-filter fs-4 lh-0"></i></span>
+            <select class="form-select selectize-employee-sorter" id="selectize_employee_sorter" name="selectize-employee-sorter" placeholder="Filter Employee" onchange="fetchAllAttendance();">
+                
+            </select>
+        </div>
+    </div>
 
     
 </div>
+
+<style>
+.selectize-control.selectize-employee-sorter .selectize-input > div .description {
+  opacity: 0.8;
+}
+.selectize-control.selectize-employee-sorter .selectize-input > div .name + .description {
+  margin-left: 5px;
+}
+.selectize-control.selectize-employee-sorter .selectize-input > div .description:before {
+  content: "<";
+}
+.selectize-control.selectize-employee-sorter .selectize-input > div .description:after {
+  content: ">";
+}
+.selectize-control.selectize-employee-sorter .selectize-dropdown .caption {
+  font-size: 12px;
+  display: block;
+  color: #a0a0a0;
+}
+</style>
+
 
 
 <script>
@@ -111,9 +140,86 @@ dropdownItems.forEach(item => {
     .filter(val => val)
     .map(val => val.replace('option', 'Option '))
     .join(', ');
-    fetchAllMyAttendance();
+    fetchAllAttendance();
 
     });
+});
+</script>
+
+
+<script>
+  $(document).ready(function () {
+  const REGEX_EMAIL = "([a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@" + "(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)";
+  $("#selectize_employee_sorter").selectize({
+      persist: false,
+      maxItems: 1,
+      placeholder: 'Select an employee',
+      allowEmptyOption: true,
+      valueField: "id",
+      valueField: "id",
+      labelField: "description",
+      searchField: ["full_name", "email_address"],
+      options: employees,
+      render: {
+      item: function (item, escape) {
+          return (
+          "<div>" +
+          (item.full_name
+              ? '<span class="name">' + escape(item.full_name) + "</span>"
+              : "") +
+          (item.description
+              ? '<span class="description">' + escape(item.email_address) + "</span>"
+              : "") +
+          "</div>"
+          );
+      },
+      option: function (item, escape) {
+          var label = item.full_name || item.email_address;
+          var caption = item.full_name ? item.email_address : null;
+          return (
+          "<div>" +
+          '<span class="label">' +
+          escape(label) +
+          "</span>" +
+          (caption
+              ? '<span class="caption">' + escape(caption) + "</span>"
+              : "") +
+          "</div>"
+          );
+      },
+      },
+      createFilter: function (input) {
+      var match, regex;
+
+      // email@address.com
+      regex = new RegExp("^" + REGEX_EMAIL + "$", "i");
+      match = input.match(regex);
+      if (match) return !this.options.hasOwnProperty(match[0]);
+
+      // name <email@address.com>
+      regex = new RegExp("^([^<]*)<" + REGEX_EMAIL + ">$", "i");
+      match = input.match(regex);
+      if (match) return !this.options.hasOwnProperty(match[2]);
+
+      return false;
+      },
+      create: function (input) {
+      if (new RegExp("^" + REGEX_EMAIL + "$", "i").test(input)) {
+          return { email: input };
+      }
+      var match = input.match(
+          new RegExp("^([^<]*)<" + REGEX_EMAIL + ">$", "i")
+      );
+      if (match) {
+          return {
+          email: match[2],
+          name: $.trim(match[1]),
+          };
+      }
+      alert("Invalid email address.");
+      return false;
+      },
+  });
 });
 </script>
 

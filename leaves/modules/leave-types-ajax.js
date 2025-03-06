@@ -40,7 +40,7 @@ function fetchAllLeaveTypes(page = 1){
 
 
     if(!skeletonLoaded){
-        loadSkeletonView(7, ['Name', 'Maximum Number of Days', 'Paid', 'Encashable', 'description', 'status', 'Created At', 'Updated At'] , numberEntries, document.getElementById("skeleton-leaves-table"));
+        loadSkeletonView(7, ['Name', 'Maximum Number of Days', 'Paid', 'description', 'status', 'Created At', 'Updated At'] , numberEntries, document.getElementById("skeleton-leaves-table"));
         document.getElementById('skeleton-leaves-table').classList.remove("visually-hidden");
         document.getElementById('leave-types-table').classList.add("visually-hidden");
         skeletonLoaded = true;
@@ -82,7 +82,7 @@ function createLeaveTypes(){
     const leaveTypeName = document.getElementById('add_name').value;
     const maxNumber = document.getElementById('add_maximum_number_of_days').value;
     const isPaid = document.getElementById('add_is_paid').checked;
-    const isEncashable = document.getElementById('add_is_encashable').checked;
+    //const isEncashable = document.getElementById('add_is_encashable').checked;
     const description = document.getElementById('add_description').value;
     const status = document.getElementById('add_status').value;
 
@@ -90,7 +90,7 @@ function createLeaveTypes(){
         name: leaveTypeName,
         maximum_number_of_days: maxNumber,
         is_paid: isPaid,
-        is_encashable: isEncashable,
+        //is_encashable: isEncashable,
         description: description,
         status: status
     };
@@ -119,7 +119,7 @@ function updateLeaveType(button){
     const leaveTypeName = document.getElementById('update_name').value;
     const maxNumber = document.getElementById('update_maximum_number_of_days').value;
     const isPaid = document.getElementById('update_is_paid').checked;
-    const isEncashable = document.getElementById('update_is_encashable').checked;
+    //const isEncashable = document.getElementById('update_is_encashable').checked;
     const description = document.getElementById('update_description').value;
     const status = document.getElementById('update_status').value;
     
@@ -128,6 +128,15 @@ function updateLeaveType(button){
     //     Is Paid: ${isPaid}, 
     //     Description: ${description}, 
     //     Status: ${status}`);
+    const leave_type = {
+        name: leaveTypeName,
+        maxNumberOfDays: maxNumber,
+        isPaid: isPaid,
+        is_encashable: isEncashable,
+        description: description,
+        status: status
+    };
+    console.log(leave_type);
     $.ajax({
         url: 'leaves/modules/leave-types-api',
         type: 'POST',
@@ -138,7 +147,7 @@ function updateLeaveType(button){
                 name: leaveTypeName,
                 maxNumberOfDays: maxNumber,
                 isPaid: isPaid,
-                is_encashable: isEncashable,
+                //is_encashable: isEncashable,
                 description: description,
                 status: status
             }

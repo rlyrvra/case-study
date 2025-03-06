@@ -34,6 +34,11 @@ if(isset($_GET['aR']) && $_GET['aR'] == true){
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <!-- Sweet Alert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- Selectize CSS -->
+<link
+  rel="stylesheet"
+  href="assets/vendor/css/selectize.bootstrap5.css"
+/>
 
 <!-- Ajax -->
 <script src="attendance/attendance/modules/attendance-ajax.js?v1.2"></script>
@@ -106,7 +111,7 @@ if(isset($_GET['aR']) && $_GET['aR'] == true){
       <div class="content-wrapper">
       <div class="container-fluid pt-5 pb-5">
           <div class="container-fluid mb-3 d-flex justify-content-between flex-column flex-lg-row">
-              <h1 class="display-1">My Attendance</h1>
+              <h1 class="display-1">Attendance</h1>
           </div>
 
           <div class="container-fluid card pt-3 pb-3 mt-5 mb-5">
@@ -117,7 +122,7 @@ if(isset($_GET['aR']) && $_GET['aR'] == true){
 
           <div class="container-fluid card pt-5 pb-3 mt-5">
             <div class="card-header">
-              <h5>My Attendance</h5>
+              <h5>Attendance</h5>
             </div>
             <div class="card-body">
               <div id="skeleton-attendance-table" class="visually-hidden table-responsive text-no-wrap"></div>
@@ -139,10 +144,14 @@ if(isset($_GET['aR']) && $_GET['aR'] == true){
   <div class="layout-overlay layout-menu-toggle"></div>
 </div>
 <!-- / Layout wrapper -->
+<?php require_once __DIR__ . '/attendance/attendance/modules/attendance-fetch-employees.php' ?>
 <script>
-  $(document).ready(function (){
-    fetchAllAttendance();
-  });
+$(document).ready(function (){
+  fetchAllAttendance();
+});
+$(document).ready(function() {
+  populateSelectEmployee(document.getElementById("selectize_employee_sorter"));
+});
 </script>
 
 
@@ -167,5 +176,13 @@ if(isset($_GET['aR']) && $_GET['aR'] == true){
 
 <!-- Place this tag in your head or just before your close body tag. -->
 <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+<!-- Selectize -->
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/js/selectize.min.js"
+  integrity="sha512-IOebNkvA/HZjMM7MxL0NYeLYEalloZ8ckak+NDtOViP7oiYzG5vn6WVXyrJDiJPhl4yRdmNAG49iuLmhkUdVsQ=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+></script>
 </body>
 </html>

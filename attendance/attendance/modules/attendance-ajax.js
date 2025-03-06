@@ -16,6 +16,7 @@ function fetchAllAttendance(page = 1) {
         startDate = $("#dateStart").val();
         endDate = $("#dateEnd").val();
     }
+    var employeeId = $("#selectize_employee_sorter").val();
 
     // console.log(`
     //     Number of Entries: ${numberEntries},
@@ -70,6 +71,7 @@ function fetchAllAttendance(page = 1) {
             action: "fetchAll",
             page: pageNumber,
             numberEntries: numberEntries,
+            employee_id: employeeId,
             sort_by: sortByColumn,
             sort_order: sortOrderBy,
             filter_status: filterStatus,
