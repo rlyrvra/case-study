@@ -388,24 +388,25 @@
     <div class="container pt-3 flex-grow-1">
         <div class="row d-flex">
             <!-- Left Side: Image and Buttons -->
-            <div class="col-3 d-flex flex-column h-100">
-                <span class="display-1 text-center visually-hidden" id="rfid-label"></span>
-                
-                <div class="mb-2 d-flex justify-content-center">
+            <div class="col-lg-3 col-12 d-flex flex-column flex-grow-1">
+                <!-- Button Group right above the image with little margin -->
+                <div class="row mb-2 d-flex justify-content-center">
                     <div class="btn-group">
-                        <input class="btn-check" type="radio" name="type" id="type-attendance" value="Attendance" checked>
-                        <label class="btn btn-outline-primary" for="type-attendance">Attendance</label>
-                        <input class="btn-check" type="radio" name="type" id="type-break" value="Break">
-                        <label class="btn btn-outline-primary" for="type-break">Break</label>
+                        <input class="btn-check" type="radio" name="role" id="role-staff" value="Staff">
+                        <label class="btn btn-outline-primary" for="role-staff">Attendance</label>
+                        <input class="btn-check" type="radio" name="role" id="role-supervisor" value="Supervisor">
+                        <label class="btn btn-outline-primary" for="role-supervisor">Break</label>
                     </div>
                 </div>
 
                 <!-- Image section -->
-                <img src="img/tap.webp" alt="tap-your-rfid" class="w-100 object-fit-cover mb-2">
+                <div class="d-flex flex-grow-1 my-4 object-fit-cover">
+                    <img src="img/tap.webp" alt="tap-your-rfid" class="w-100 h-100">
+                </div>
             </div>
 
             <!-- Right Side: Tables -->
-            <div class="col-9">
+            <div class="col-lg-9 col-12">
                 <!-- Attendance Table -->
                 <div id="attendance-table"></div>
 
@@ -414,6 +415,7 @@
             </div>
         </div>
     </div>
+
 
     <!-- Footer -->
     <footer class="text-center mt-auto py-3">
