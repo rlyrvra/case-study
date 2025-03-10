@@ -147,7 +147,7 @@ class PayslipDao
 
             "employee_department_name"     => "department.name                AS department_name"       ,
 
-            "pay_frequency"                => "payroll_group.pay_frequency    AS pay_frequency"         ,
+            "payroll_frequency"            => "payroll_group.payroll_frequency AS payroll_frequency"    ,
 
             "total_basic_pay"              => "SUM(basic_pay)                 AS total_basic_pay"
         ];
@@ -202,7 +202,7 @@ class PayslipDao
             ";
         }
 
-        if (array_key_exists("pay_frequency", $selectedColumns)) {
+        if (array_key_exists("payroll_frequency", $selectedColumns)) {
             $joinClauses .= "
                 LEFT JOIN
                     payroll_groups AS payroll_group
@@ -303,7 +303,6 @@ class PayslipDao
             {$limitClause}
             {$offsetClause}
         ";
-echo $query;
         try {
             $statement = $this->pdo->prepare($query);
 

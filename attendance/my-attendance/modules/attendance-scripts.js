@@ -41,3 +41,21 @@ function getByDate(){
     var byDate = selectedOptions.by_date;
     return byDate;
 }
+
+function getByRecordsYear(){
+    var byYear;
+    if(selectedOptions.by_record === null){
+        return byYear;
+    }
+    byYear = selectedOptions.by_record.split(" ")[1];
+    return byYear;
+}
+
+function getByRecordsMonth(){
+    var byMonth;
+    if(selectedOptions.by_record === null){
+        return byMonth;
+    }
+    byMonth = selectedOptions.by_record.split(" ")[0];
+    return byMonth;
+}

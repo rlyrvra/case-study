@@ -24,6 +24,8 @@ try {
     $action = $_POST['action'] ?? '';
 
     if ($action === 'fetchAll') {
+        $month = isset($_POST['filter_month']) && $_POST['filter_month'] ? $_POST['filter_month'] : null;
+        $year = isset($_POST['filter_year']) && $_POST['filter_year'] ? $_POST['filter_year'] : null;
         $status = isset($_POST['filter_status']) && $_POST['filter_status'] ? $_POST['filter_status'] : null;
         $dateFilterColumn = isset($_POST['filter_date_column']) ? $_POST['filter_date_column'] : null;
         $dateStart = isset($_POST['filter_startDate']) && $dateFilterColumn !== "none" ? $_POST['filter_startDate'] : 0;
@@ -45,6 +47,19 @@ try {
                 "column" => "attendance.attendance_status",
                 "operator" => "=",
                 "value" => $status
+            ];
+        }
+
+        if(!empty($month) && !empty($year)){
+            $filterCriteria[] = [
+                "column" => "DATE_FORMAT(attendance.date, '%M')",
+                "operator" => "=",
+                "value" => $month
+            ];
+            $filterCriteria[] = [
+                "column" => "YEAR(attendance.date)",
+                "operator" => "=",
+                "value" => $year
             ];
         }
 

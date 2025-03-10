@@ -1,6 +1,6 @@
 <!-- Modal -->
 <div class="modal fade" id="A<?php echo htmlspecialchars($row['id']); ?>" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h2 class="modal-title" id="A<?php echo htmlspecialchars($row['id']); ?>Title">Break Records</h2>
@@ -32,6 +32,11 @@
                 </thead>
                 <tbody>
                     <?php
+                    $workScheduleStartDatetime = htmlspecialchars(date("Y-m-d H:i:s", strtotime($row['date'] . ' ' . $row['work_schedule_snapshot_start_time'] . ' -1 hour')));
+                    $workScheduleEndDateTime = htmlspecialchars(date("Y-m-d H:i:s", strtotime($row['date'] . ' ' . $row['work_schedule_snapshot_end_time'] . ' +1 hour')));
+                    if ($workScheduleEndDateTime <= $workScheduleStartDatetime) {
+                        $workScheduleEndDateTime = htmlspecialchars(date("Y-m-d H:i:s", strtotime($row['date'] . ' ' . $row['work_schedule_snapshot_end_time'] . ' +1 day')));
+                    }
                     $employeeBreakFilterCriteria = [
                         [
                             'column'   => 'employee_break.deleted_at',
@@ -45,8 +50,8 @@
                         [
                             'column'      => 'employee_break.created_at'                              ,
                             'operator'    => 'BETWEEN'                                                ,
-                            'lower_bound' => htmlspecialchars(date("Y-m-d H:i:s", strtotime($row['date'] . ' ' . $row['work_schedule_snapshot_start_time'] . ' -1 hour'))),
-                            'upper_bound' => htmlspecialchars(date("Y-m-d H:i:s", strtotime($row['date'] . ' ' . $row['work_schedule_snapshot_end_time'] . ' +1 hour'))),
+                            'lower_bound' => $workScheduleStartDatetime,
+                            'upper_bound' => $workScheduleEndDateTime
                         ]
                     ];
 
@@ -82,10 +87,10 @@
                                 <?php echo htmlspecialchars(date("F j, Y", strtotime($row['date']))); ?>
                             </td>
                             <td>
-                                <?php echo htmlspecialchars(date("h:i:s A", strtotime($rowBreak['start_time']))); ?>
+                                <?php echo !empty($row['start_time']) ? htmlspecialchars(date("h:i:s A", strtotime($row['start_time']))) : ''; ?>
                             </td>
                             <td>
-                                <?php echo htmlspecialchars(date("h:i:s A", strtotime($rowBreak['end_time']))); ?>
+                            <?php echo !empty($row['end_time']) ? htmlspecialchars(date("h:i:s A", strtotime($row['end_time']))) : ''; ?>
                             </td>
                             <td>
                                 <?php echo htmlspecialchars($rowBreak['break_duration_in_minutes']); ?>

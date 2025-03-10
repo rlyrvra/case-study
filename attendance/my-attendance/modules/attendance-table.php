@@ -36,10 +36,10 @@
             <?php echo htmlspecialchars(date("l", strtotime($row['date']))); ?>
           </td>
           <td>
-            <?php echo htmlspecialchars(date("Y-m-d h:i:s A", strtotime($row['check_in_time']))); ?>
+            <?php echo !empty($row['check_in_time']) ? htmlspecialchars(date("h:i:s A", strtotime($row['check_in_time']))) : ''; ?>
           </td>
           <td>
-            <?php echo htmlspecialchars(date("Y-m-d h:i:s A", strtotime($row['check_out_time']))); ?>
+            <?php echo !empty($row['check_out_time']) ? htmlspecialchars(date("h:i:s A", strtotime($row['check_out_time']))) : ''; ?>
           </td>
           <td>
             <button class="btn btn-info" 

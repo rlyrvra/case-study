@@ -44,6 +44,21 @@
                 </div>
             </ul>
         </div>  
+
+        <!--Filter By Records dropdown-->
+        <div class="dropdown sort mx-1">
+            <button
+                class="btn btn-primary dropdown-toggle"
+                type="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+            >
+                Filter By Records <span class="tf-icons bx bx-sort"></span>
+            </button>
+            <ul class="dropdown-menu byRecords" aria-labelledby="dropdownMenuButton" id="dropdownMenuButton">
+                <li><a class="dropdown-item selected" href="#" data-group="by_record" data-value="">None</a></li>
+            </ul>
+        </div> 
     </div>
 
     <!--Entries Per Page -->
@@ -86,35 +101,43 @@ const dropdownButton = document.getElementById('dropdownMenuButton');
 var selectedOptions = {
     sort_by: null,
     order_by: null,
-    by_date: null};
+    by_date: null,
+    by_record: null};
 
-dropdownItems.forEach(item => {
-    item.addEventListener('click', (e) => {
-    e.preventDefault();
-
-    const group = item.getAttribute('data-group');
-    const value = item.getAttribute('data-value');
-
-    // Deselect previously selected option in the same group
-    dropdownItems.forEach(option => {
-    if (option.getAttribute('data-group') === group) {
-        option.classList.remove('selected');
-        }
-    });
-    
-    // Select the clicked option
-    item.classList.add('selected');
-    selectedOptions[group] = value;
-
-    // Update dropdown button text
-    const selectedText = Object.values(selectedOptions)
-    .filter(val => val)
-    .map(val => val.replace('option', 'Option '))
-    .join(', ');
-    fetchAllMyAttendance();
-
-    });
+$(document).ready(function() {
+    addItemListener(dropdownItems);
 });
+
+function addItemListener(dropdownItems){
+        dropdownItems.forEach(item => {
+        item.addEventListener('click', (e) => {
+        e.preventDefault();
+
+        const group = item.getAttribute('data-group');
+        const value = item.getAttribute('data-value');
+
+        // Deselect previously selected option in the same group
+        dropdownItems.forEach(option => {
+        if (option.getAttribute('data-group') === group) {
+            option.classList.remove('selected');
+            }
+        });
+        
+        // Select the clicked option
+        item.classList.add('selected');
+        selectedOptions[group] = value;
+
+        // Update dropdown button text
+        const selectedText = Object.values(selectedOptions)
+        .filter(val => val)
+        .map(val => val.replace('option', 'Option '))
+        .join(', ');
+        fetchAllMyAttendance();
+
+        });
+    });
+}
+
 </script>
 
 <style>

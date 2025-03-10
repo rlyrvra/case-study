@@ -1,20 +1,12 @@
-<?php require_once __DIR__ . '/includes/security-headers.php'; ?>
-<?php require_once __DIR__ . '/includes/session.php'; ?>
-<?php require_once __DIR__ . '/includes/file-locations.php' ?>
-
-<?php
+<?php 
+require_once __DIR__ . '/includes/security-headers.php'; 
+require_once __DIR__ . '/includes/session.php'; 
+require_once __DIR__ . '/includes/file-locations.php';
 require_once __DIR__ . '/login-checker.php';
 
-if(isset($_GET['r']) && $_GET['r'] == true){
-  include_once __DIR__ . '/sweet-alert-toasts/login/login-welcome.php';
-}
 
-if(isset($_GET['s']) && $_GET['s'] == true){
-  include_once __DIR__ . '/sweet-alert-toasts/login/login-success.php';
-}
-
-if(isset($_GET['aR']) && $_GET['aR'] == true){
-  include_once __DIR__ . '/sweet-alert-toasts/login/login-access-role-insufficient.php';
+if($_SESSION['access_role'] === 'Admin'){
+  header("Location: ". $SMARTWAGE_LOCATION ."/smartWage-index.php?aR=true");
 }
 ?>
 <!DOCTYPE html>
@@ -26,7 +18,7 @@ if(isset($_GET['aR']) && $_GET['aR'] == true){
 
 </style>
 <head>
-<title> smartWage |  My Attendance </title>
+<title> My Attendance | smartWage </title>
 <link rel="icon" type="image/x-icon" href="img/logo-files/logo1.ico" />
 <!-- font-awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -37,9 +29,9 @@ if(isset($_GET['aR']) && $_GET['aR'] == true){
 
 
 <!-- Ajax -->
-<script src="attendance/my-attendance/modules/attendance-ajax.js?v1.2"></script>
+<script src="attendance/my-attendance/modules/attendance-ajax.js?v1.2.2"></script>
 <!-- Scripts -->
-<script src="attendance/my-attendance/modules/attendance-scripts.js?v1.0"></script>
+<script src="attendance/my-attendance/modules/attendance-scripts.js?v1.0.3"></script>
 
 <!---Skeletons--->
 <script src="requests/table-skeleton.js?v1.2"></script>
@@ -139,8 +131,10 @@ if(isset($_GET['aR']) && $_GET['aR'] == true){
   <div class="layout-overlay layout-menu-toggle"></div>
 </div>
 <!-- / Layout wrapper -->
+<?php require_once __DIR__ . '/attendance/my-attendance/modules/attendance-fetch-records-by-month.php' ?>
 <script>
   $(document).ready(function (){
+    populateAttendanceRecords(document.querySelector('.byRecords'));
     fetchAllMyAttendance();
   });
 </script>

@@ -167,7 +167,7 @@ dropdownItems.forEach(item => {
           (item.full_name
               ? '<span class="name">' + escape(item.full_name) + "</span>"
               : "") +
-          (item.description
+          (item.email_address
               ? '<span class="description">' + escape(item.email_address) + "</span>"
               : "") +
           "</div>"

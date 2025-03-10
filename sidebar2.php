@@ -182,12 +182,24 @@
         <div>Payroll</div>
         </a>
         <ul class="menu-sub">
-        <?php
+        <?php 
         if($_SESSION['access_role'] != 'Admin'){
         echo '
-        <li class="menu-item">
-            <a href="maintenance-login" class="menu-link">
-            <div data-i18n="Basic Inputs">My Payslips</div>
+        <li class="menu-item" id="my-payslip-menu">
+            <a href="my-payslips" class="menu-link">
+            <div>My Payslips</div>
+            </a>
+        </li>
+        ';
+        }
+        ?>
+        <?php
+        if($_SESSION['access_role'] == 'Admin' || 
+        $_SESSION['access_role'] == 'Manager'){
+        echo '
+        <li class="menu-item" id="payslip-menu">
+            <a href="payslips" class="menu-link">
+            <div>Payslips</div>
             </a>
         </li>
         ';

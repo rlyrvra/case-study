@@ -96,7 +96,8 @@ $payrollGroupDao        = new PayrollGroupDao       ($pdo                   );
 $payrollGroupRepository = new PayrollGroupRepository($payrollGroupDao       );
 $payrollGroupService    = new PayrollGroupService   ($payrollGroupRepository);
 
-$originalCurrentDateTime = new DateTime('2025-03-16');
+$originalCurrentDateTime = new DateTime('2025-01-07 00:00:00');
+echo $originalCurrentDateTime->format('l Y-m-d H:i:s A');
 
 $currentDateTime   =  clone $originalCurrentDateTime                             ;
 $currentDateTime   = (clone $currentDateTime)->modify('-1 day')                  ;
@@ -569,6 +570,10 @@ $payrollGroups = $payrollGroupService->fetchAllPayrollGroups(
     sortCriteria        : $payrollGroupSortCriteria  ,
     includeTotalRowCount: false
 );
+echo "<pre>";
+print_r($payrollGroups);
+echo $currentDayOfWeek;
+echo "</pre>";
 
 if ($payrollGroups === ActionResult::FAILURE) {
     return [

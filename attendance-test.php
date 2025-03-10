@@ -47,7 +47,8 @@ $employeeBreakService = new EmployeeBreakService(
 );
 
 // Dito mo lagay yung rfid uid ng employee, simulate lang para matest.
-$employeeRfidUid = '123456789';
+// handleRFID('0330317552', '2025-01-01 08:00:00');
+$employeeRfidUid = '0330317552';
 
 /*
     Dito mo babaguhin yung time, kailangan yung date na nasa database di dapat pababa,

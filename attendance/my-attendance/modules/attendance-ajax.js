@@ -16,7 +16,9 @@ function fetchAllMyAttendance(page = 1) {
         startDate = $("#dateStart").val();
         endDate = $("#dateEnd").val();
     }
-
+    var month = getByRecordsMonth();
+    var year =  getByRecordsYear();
+    
     // console.log(`
     //     Number of Entries: ${numberEntries},
     //     Sort By Column: ${sortByColumn},
@@ -72,6 +74,8 @@ function fetchAllMyAttendance(page = 1) {
             numberEntries: numberEntries,
             sort_by: sortByColumn,
             sort_order: sortOrderBy,
+            filter_month: month,
+            filter_year: year,
             filter_status: filterStatus,
             filter_date_column: dateColumn,
             filter_startDate: startDate,

@@ -16,6 +16,9 @@
         <?php foreach ($attendanceRecords as $row): ?>
             <tr>
                 <!-- <td></td> -->
+                <?php if(empty($row['check_in_time'])){
+                    continue;
+                }?>
                 <td><?php echo htmlspecialchars($row['employee_code']); ?></td>
                 <td>
                     <?php echo !empty($row['check_in_time']) ? htmlspecialchars(date("h:i:s A", strtotime($row['check_in_time']))) : ''; ?>
