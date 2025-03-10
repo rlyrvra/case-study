@@ -47,14 +47,13 @@ $employeeBreakService = new EmployeeBreakService(
 );
 
 // Dito mo lagay yung rfid uid ng employee, simulate lang para matest.
-//handleRFID('0330317552', '2025-01-05 07:00:00');
-$employeeRfidUid = '0330317552';
+$employeeRfidUid = '123456789';
 
 /*
     Dito mo babaguhin yung time, kailangan yung date na nasa database di dapat pababa,
     kunware 2025-01-01 nasa database kailangan 2025-01-01 onwards hindi 2024-12-31.
 */
-$currentDateTime = '2025-01-02 08:10:00';
+$currentDateTime = '2025-01-01 17:00:00';
 
 /*
     Kada tawag ng `handleRfidTap` dedetermine kung check in or check out, tingnan mo nalang
@@ -67,14 +66,13 @@ $currentDateTime = '2025-01-02 08:10:00';
 
     Ibig sabihin check out
     check_in_time !== null && check_out_time === null
-    
 */
 $attendanceResponse = $attendanceService->handleRfidTap($employeeRfidUid, $currentDateTime);
 
 print_r($attendanceResponse);
 
-// $breakResponse = $employeeBreakService->handleRfidTap($employeeRfidUid, $currentDateTime);
-// print_r($breakResponse);
+//$breakResponse = $employeeBreakService->handleRfidTap($employeeRfidUid, $currentDateTime);
+//print_r($breakResponse);
 /*
 $employeeRfidUid = '123456789';
 $currentDateTime = '2025-01-01 08:00:00';

@@ -359,7 +359,8 @@ class AttendanceDao
 
                         break;
 
-                    case "IS NULL":
+                    case "IS NULL"    :
+                    case "IS NOT NULL":
                         $whereClauses[] = "{$column} {$operator}";
 
                         break;
@@ -612,6 +613,51 @@ class AttendanceDao
             }
 
             error_log("Database Error: An error occurred while updating the attendance record. " .
+                      "Exception: {$exception->getMessage()}");
+
+            return ActionResult::FAILURE;
+        }
+    }
+
+    public function updateStatusByDate(string $status, string $date): ActionResult
+    {
+        $query = "
+            UPDATE attendance
+            SET
+                attendance_status = :attendance_status
+            WHERE
+                deleted_at IS NULL
+            AND
+                date = :date
+        ";
+
+        $isLocalTransaction = ! $this->pdo->inTransaction();
+
+        try {
+            if ($isLocalTransaction) {
+                $this->pdo->beginTransaction();
+            }
+
+            $statement = $this->pdo->prepare($query);
+
+            $statement->bindValue(":attendance_status", $status, Helper::getPdoParameterType($status));
+
+            $statement->bindValue(":date"             , $date  , Helper::getPdoParameterType($date  ));
+
+            $statement->execute();
+
+            if ($isLocalTransaction) {
+                $this->pdo->commit();
+            }
+
+            return ActionResult::SUCCESS;
+
+        } catch (PDOException $exception) {
+            if ($isLocalTransaction) {
+                $this->pdo->rollBack();
+            }
+
+            error_log("Database Error: An error occurred while updating the attendance status for all records. " .
                       "Exception: {$exception->getMessage()}");
 
             return ActionResult::FAILURE;

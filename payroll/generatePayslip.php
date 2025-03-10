@@ -1,7 +1,5 @@
 <?php
 
-echo '<pre>';
-
 require_once __DIR__ . '/../database/database.php'                  ;
 
 require_once __DIR__ . '/../work-schedules/WorkScheduleSnapshot.php';
@@ -100,16 +98,24 @@ $payrollGroupService    = new PayrollGroupService   ($payrollGroupRepository);
 
 $originalCurrentDateTime = new DateTime();
 
-$currentDateTime   =  clone $originalCurrentDateTime           ;
-$currentDateTime   = (clone $currentDateTime)->modify('-1 day');
-$currentDate       =        $currentDateTime ->format('Y-m-d' );
-$currentDayOfMonth = (int)  $currentDateTime ->format('j'     );
-$currentWeekNumber = (int)  $currentDateTime ->format('W'     );
-$currentDayOfWeek  = (int)  $currentDateTime ->format('w'     );
+$currentDateTime   =  clone $originalCurrentDateTime                             ;
+$currentDateTime   = (clone $currentDateTime)->modify('-1 day')                  ;
+$currentDate       =        $currentDateTime                   ->format('Y-m-d' );
+$previousDate      = (clone $currentDateTime)->modify('-1 day')->format('Y-m-d' );
+$currentDayOfMonth = (int)  $currentDateTime                   ->format('j'     );
+$currentWeekNumber = (int)  $currentDateTime                   ->format('W'     );
+$currentDayOfWeek  = (int)  $currentDateTime                   ->format('w'     );
 
 try {
+    if ($leaveRequestService->updateLeaveRequestStatuses($originalCurrentDateTime->format('Y-m-d')) === ActionResult::FAILURE) {
+        return [
+            'status'  => 'error',
+            'message' => 'An unexpected error occurred. Please try again later.'
+        ];
+    }
+
     $datesMarkedAsHoliday = $holidayService->getHolidayDatesForPeriod(
-        startDate: $currentDate,
+        startDate: $previousDate,
         endDate  : $currentDate
     );
 
@@ -120,21 +126,7 @@ try {
         ];
     }
 
-    $attendanceStatus = 'Absent';
-
-    if ( ! empty($datesMarkedAsHoliday[$currentDate])) {
-        $attendanceStatus = 'On Unpaid Holiday';
-
-        foreach ($datesMarkedAsHoliday[$currentDate] as $holiday) {
-            if ($holiday['is_paid']) {
-                $attendanceStatus = 'On Paid Holiday';
-
-                break;
-            }
-        }
-    }
-
-    $gracePeriod = (int) $settingRepository->fetchSettingValue(
+    $gracePeriod = $settingRepository->fetchSettingValue(
         settingKey: 'grace_period' ,
         groupName : 'work_schedule'
     );
@@ -146,7 +138,9 @@ try {
         ];
     }
 
-    $earlyCheckInWindow = (int) $settingRepository->fetchSettingValue(
+    $gracePeriod = (int) $gracePeriod;
+
+    $earlyCheckInWindow = $settingRepository->fetchSettingValue(
         settingKey: 'minutes_can_check_in_before_shift',
         groupName : 'work_schedule'
     );
@@ -157,6 +151,8 @@ try {
             'message' => 'An unexpected error occurred. Please try again later.'
         ];
     }
+
+    $earlyCheckInWindow = (int) $earlyCheckInWindow;
 
     $query = '
         SELECT
@@ -181,28 +177,11 @@ try {
             employee.deleted_at IS NULL
         AND
             employee.access_role != "Admin"
-        AND
-            NOT EXISTS (
-                SELECT
-                    1
-                FROM
-                    attendance AS attendance_record
-                JOIN
-                    work_schedule_snapshots AS work_schedule_snapshot
-                ON
-                    attendance_record.work_schedule_snapshot_id = work_schedule_snapshot.id
-                WHERE
-                    work_schedule_snapshot.work_schedule_id = work_schedule.id
-                AND
-                    attendance_record.deleted_at IS NULL
-                AND
-                    attendance_record.date = :current_date
-            )
+        ORDER BY
+            work_schedule.start_time ASC
     ';
 
     $statement = $pdo->prepare($query);
-
-    $statement->bindValue(':current_date', $currentDate);
 
     $statement->execute();
 
@@ -214,28 +193,60 @@ try {
         $employeesWorkSchedules[$workSchedule['employee_id']][] = $workSchedule;
     }
 
+    $previousTwoDaysDate = (new DateTime($previousDate))
+        ->modify('-1 day')
+        ->format('Y-m-d' );
+
     foreach ($employeesWorkSchedules as $employeeId => $workSchedules) {
-        $datesMarkedAsLeave = $leaveRequestService->getLeaveDatesForPeriod(
-            employeeId: $employeeId ,
-            startDate : $currentDate,
-            endDate   : $currentDate
-        );
+        $query = '
+            SELECT
+                attendance_record.date                  AS date            ,
+                work_schedule_snapshot.work_schedule_id AS work_schedule_id,
+                work_schedule_snapshot.start_time       AS start_time      ,
+                work_schedule_snapshot.end_time         AS end_time
+            FROM
+                attendance AS attendance_record
+            JOIN
+                work_schedule_snapshots AS work_schedule_snapshot
+            ON
+                attendance_record.work_schedule_snapshot_id = work_schedule_snapshot.id
+            WHERE
+                attendance_record.deleted_at IS NULL
+            AND
+                attendance_record.date BETWEEN :previous_two_days_date AND :current_date
+            AND
+                work_schedule_snapshot.employee_id = :employee_id
+            GROUP BY
+                attendance_record.date                 ,
+                work_schedule_snapshot.work_schedule_id
+            ORDER BY
+                attendance_record.date            ASC,
+                work_schedule_snapshot.start_time ASC
+        ';
 
-        if ($datesMarkedAsLeave === ActionResult::FAILURE) {
-            return [
-                'status'  => 'error',
-                'message' => 'An unexpected error occurred. Please try again later.'
-            ];
-        }
+        $statement = $pdo->prepare($query);
 
-        if ($datesMarkedAsLeave[$currentDate]['is_leave']) {
-            $attendanceStatus = 'On Unpaid Leave';
+        $statement->bindValue(':previous_two_days_date', $previousTwoDaysDate, Helper::getPdoParameterType($previousTwoDaysDate));
+        $statement->bindValue(':current_date'          , $currentDate        , Helper::getPdoParameterType($currentDate        ));
+        $statement->bindValue(':employee_id'           , $employeeId         , Helper::getPdoParameterType($employeeId         ));
 
-            if (   $datesMarkedAsLeave[$currentDate]['is_paid'    ] &&
-                 ! $datesMarkedAsLeave[$currentDate]['is_half_day']) {
+        $statement->execute();
 
-                $attendanceStatus = 'On Paid Leave';
-            }
+        $employeeRecordedWorkSchedules = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        $recordedWorkSchedules = [];
+
+        $recordedWorkSchedules[$previousTwoDaysDate] = [];
+        $recordedWorkSchedules[$previousDate       ] = [];
+        $recordedWorkSchedules[$currentDate        ] = [];
+
+        foreach ($employeeRecordedWorkSchedules as $recordedWorkSchedule) {
+            $date           = $recordedWorkSchedule['date'            ];
+            $workScheduleId = $recordedWorkSchedule['work_schedule_id'];
+
+            $recordedWorkSchedule['is_recorded'] = true;
+
+            $recordedWorkSchedules[$date][$workScheduleId] = $recordedWorkSchedule;
         }
 
         $currentWorkSchedules = [];
@@ -243,7 +254,7 @@ try {
         foreach ($workSchedules as $workSchedule) {
             $workScheduleDates = $workScheduleService->getRecurrenceDates(
                 $workSchedule['recurrence_rule'],
-                $currentDate                    ,
+                $previousTwoDaysDate            ,
                 $currentDate
             );
 
@@ -261,152 +272,230 @@ try {
 
         foreach ($currentWorkSchedules as $date => $workSchedules) {
             foreach ($workSchedules as $workSchedule) {
-                $workScheduleSnapshot = new WorkScheduleSnapshot(
-                    workScheduleId    : $workSchedule['id'                  ],
-                    employeeId        : $workSchedule['employee_id'         ],
-                    startTime         : $workSchedule['start_time'          ],
-                    endTime           : $workSchedule['end_time'            ],
-                    isFlextime        : $workSchedule['is_flextime'         ],
-                    totalHoursPerWeek : $workSchedule['total_hours_per_week'],
-                    totalWorkHours    : $workSchedule['total_work_hours'    ],
-                    startDate         : $workSchedule['start_date'          ],
-                    recurrenceRule    : $workSchedule['recurrence_rule'     ],
-                    gracePeriod       : $gracePeriod                         ,
-                    earlyCheckInWindow: $earlyCheckInWindow
-                );
+                $workScheduleId = $workSchedule['id'];
 
-                $workScheduleSnapshotId = $workScheduleService
-                    ->createWorkScheduleSnapshot($workScheduleSnapshot);
+                if ( ! isset($recordedWorkSchedules[$date][$workScheduleId])) {
+                    $recordedWorkSchedules[$date][$workScheduleId] = $workSchedule;
+                }
+            }
+        }
 
-                if ($workScheduleSnapshotId === ActionResult::FAILURE) {
-                    return [
-                        'status'  => 'error',
-                        'message' => 'An unexpected error occurred. Please try again later.'
-                    ];
+        foreach ($recordedWorkSchedules as &$workSchedules) {
+            usort($workSchedules, fn($workScheduleA, $workScheduleB) =>
+                $workScheduleA['start_time'] <=> $workScheduleB['start_time']
+            );
+
+            $workSchedules = array_values($workSchedules);
+        }
+
+        $previousWorkScheduleEndDateTime = null;
+
+        foreach ($recordedWorkSchedules as $date => $workSchedules) {
+            foreach ($workSchedules as $index => $workSchedule) {
+                $currentWorkScheduleStartTime = $workSchedule['start_time'];
+                $currentWorkScheduleEndTime   = $workSchedule['end_time'  ];
+
+                $currentWorkScheduleStartDateTime = new DateTime($date . ' ' . $currentWorkScheduleStartTime);
+                $currentWorkScheduleEndDateTime   = new DateTime($date . ' ' . $currentWorkScheduleEndTime  );
+
+                if ($currentWorkScheduleEndDateTime <= $currentWorkScheduleStartDateTime) {
+                    $currentWorkScheduleEndDateTime->modify('+1 day');
                 }
 
-                $emptyAttendanceRecord = new Attendance(
-                    id                         : null                   ,
-                    workScheduleSnapshotId     : $workScheduleSnapshotId,
-                    date                       : $currentDate           ,
-                    checkInTime                : null                   ,
-                    checkOutTime               : null                   ,
-                    totalBreakDurationInMinutes: 0                      ,
-                    totalHoursWorked           : 0.00                   ,
-                    lateCheckIn                : 0                      ,
-                    earlyCheckOut              : 0                      ,
-                    overtimeHours              : 0.00                   ,
-                    isOvertimeApproved         : false                  ,
-                    attendanceStatus           : $attendanceStatus      ,
-                    remarks                    : null
-                );
+                $adjustedEarlyCheckInWindow = $earlyCheckInWindow;
 
-                $createEmptyAttendanceRecordResult = $attendanceRepository
-                    ->createAttendance($emptyAttendanceRecord);
+                if ($previousWorkScheduleEndDateTime !== null) {
+                    $adjustedCurrentWorkScheduleStartDateTime = (clone $currentWorkScheduleStartDateTime)
+                        ->modify('-' . $earlyCheckInWindow . ' minutes');
 
-                if ($createEmptyAttendanceRecordResult === ActionResult::FAILURE) {
-                    return [
-                        'status'  => 'error',
-                        'message' => 'An unexpected error occurred. Please try again later.'
-                    ];
+                    if ($previousWorkScheduleEndDateTime > $adjustedCurrentWorkScheduleStartDateTime) {
+                        $gapDuration          = $previousWorkScheduleEndDateTime->diff($currentWorkScheduleStartDateTime);
+                        $gapDurationInMinutes = $gapDuration->h * 60 + $gapDuration->i;
+
+                        $adjustedEarlyCheckInWindow = max(0, $gapDurationInMinutes);
+                    }
                 }
 
-                $breakScheduleColumns = [
-                    'id'                               ,
-                    'break_type_id'                    ,
-                    'start_time'                       ,
-                    'end_time'                         ,
-
-                    'break_type_name'                  ,
-                    'break_type_duration_in_minutes'   ,
-                    'break_type_is_paid'               ,
-                    'is_require_break_in_and_break_out'
-                ];
-
-                $breakScheduleFilterCriteria = [
-                    [
-                        'column'   => 'break_schedule.deleted_at',
-                        'operator' => 'IS NULL'
-                    ],
-                    [
-                        'column'   => 'break_schedule.work_schedule_id',
-                        'operator' => '='                              ,
-                        'value'    => $workSchedule['id']
-                    ]
-                ];
-
-                $breakSchedules = $breakScheduleService->fetchAllBreakSchedules(
-                    columns             : $breakScheduleColumns       ,
-                    filterCriteria      : $breakScheduleFilterCriteria,
-                    includeTotalRowCount: false
-                );
-
-                if ($breakSchedules === ActionResult::FAILURE) {
-                    return [
-                        'status'  => 'error',
-                        'message' => 'An unexpected error occurred. Please try again later.'
-                    ];
+                if ( ! isset($workSchedule['is_recorded'])) {
+                    $recordedWorkSchedules[$date][$index]['early_check_in_window'] = $adjustedEarlyCheckInWindow;
                 }
 
-                $breakSchedules =
-                    ! empty($breakSchedules['result_set'])
-                        ? $breakSchedules['result_set']
-                        : [];
+                $previousWorkScheduleEndDateTime = clone $currentWorkScheduleEndDateTime;
+            }
+        }
 
-                foreach ($breakSchedules as $breakSchedule) {
-                    $breakTypeSnapshot = new BreakTypeSnapshot(
-                        breakTypeId              : $breakSchedule['break_type_id'                    ],
-                        name                     : $breakSchedule['break_type_name'                  ],
-                        durationInMinutes        : $breakSchedule['break_type_duration_in_minutes'   ],
-                        isPaid                   : $breakSchedule['break_type_is_paid'               ],
-                        requireBreakInAndBreakOut: $breakSchedule['is_require_break_in_and_break_out']
+        unset($recordedWorkSchedules[$previousTwoDaysDate]);
+
+        $lastWorkSchedule = end($recordedWorkSchedules[$previousDate]);
+
+        if ( ! empty($lastWorkSchedule)) {
+            if ($lastWorkSchedule['end_time'] <= $lastWorkSchedule['start_time']) {
+                $recordedWorkSchedules[$previousDate] = [$lastWorkSchedule];
+            } else {
+                unset($recordedWorkSchedules[$previousDate]);
+            }
+        }
+
+        $lastWorkSchedule = end($recordedWorkSchedules[$currentDate]);
+
+        if ( ! empty($lastWorkSchedule)) {
+            if ($lastWorkSchedule['end_time'] <= $lastWorkSchedule['start_time']) {
+                array_pop($recordedWorkSchedules[$currentDate]);
+            }
+        }
+
+        foreach ($recordedWorkSchedules as $date => $workSchedules) {
+            foreach ($workSchedules as $workSchedule) {
+                if ( ! isset($workSchedule['is_recorded'])) {
+                    $workScheduleSnapshot = new WorkScheduleSnapshot(
+                        workScheduleId    : $workSchedule['id'                   ],
+                        employeeId        : $workSchedule['employee_id'          ],
+                        startTime         : $workSchedule['start_time'           ],
+                        endTime           : $workSchedule['end_time'             ],
+                        isFlextime        : $workSchedule['is_flextime'          ],
+                        totalHoursPerWeek : $workSchedule['total_hours_per_week' ],
+                        totalWorkHours    : $workSchedule['total_work_hours'     ],
+                        startDate         : $workSchedule['start_date'           ],
+                        recurrenceRule    : $workSchedule['recurrence_rule'      ],
+                        gracePeriod       : $gracePeriod                          ,
+                        earlyCheckInWindow: $workSchedule['early_check_in_window']
                     );
 
-                    $breakTypeSnapshotId = $breakTypeService
-                        ->createBreakTypeSnapshot($breakTypeSnapshot);
+                    $workScheduleSnapshotId = $workScheduleService
+                        ->createWorkScheduleSnapshot($workScheduleSnapshot);
 
-                    if ($breakTypeSnapshotId === ActionResult::FAILURE) {
+                    if ($workScheduleSnapshotId === ActionResult::FAILURE) {
                         return [
                             'status'  => 'error',
                             'message' => 'An unexpected error occurred. Please try again later.'
                         ];
                     }
 
-                    $breakScheduleSnapshot = new BreakScheduleSnapshot(
-                        breakScheduleId       : $breakSchedule['id'        ],
-                        workScheduleSnapshotId: $workScheduleSnapshotId     ,
-                        breakTypeSnapshotId   : $breakTypeSnapshotId        ,
-                        startTime             : $breakSchedule['start_time'],
-                        endTime               : $breakSchedule['end_time'  ]
+                    $attendanceStatus = 'Absent';
+
+                    $emptyAttendanceRecord = new Attendance(
+                        id                         : null                   ,
+                        workScheduleSnapshotId     : $workScheduleSnapshotId,
+                        date                       : $currentDate           ,
+                        checkInTime                : null                   ,
+                        checkOutTime               : null                   ,
+                        totalBreakDurationInMinutes: 0                      ,
+                        totalHoursWorked           : 0.00                   ,
+                        lateCheckIn                : 0                      ,
+                        earlyCheckOut              : 0                      ,
+                        overtimeHours              : 0.00                   ,
+                        isOvertimeApproved         : false                  ,
+                        attendanceStatus           : $attendanceStatus      ,
+                        remarks                    : null
                     );
 
-                    $breakScheduleSnapshotId = $breakScheduleService
-                        ->createBreakScheduleSnapshot($breakScheduleSnapshot);
+                    $createEmptyAttendanceRecordResult = $attendanceRepository
+                        ->createAttendance($emptyAttendanceRecord);
 
-                    if ($breakScheduleSnapshotId === ActionResult::FAILURE) {
+                    if ($createEmptyAttendanceRecordResult === ActionResult::FAILURE) {
                         return [
                             'status'  => 'error',
                             'message' => 'An unexpected error occurred. Please try again later.'
                         ];
                     }
 
-                    $emptyBreakRecord = new EmployeeBreak(
-                        id                     : null                                           ,
-                        breakScheduleSnapshotId: $breakScheduleSnapshotId                       ,
-                        startTime              : null                                           ,
-                        endTime                : null                                           ,
-                        breakDurationInMinutes : 0                                              ,
-                        createdAt              : $originalCurrentDateTime->format('Y-m-d H:i:s')
+                    $breakScheduleColumns = [
+                        'id'                               ,
+                        'break_type_id'                    ,
+                        'start_time'                       ,
+                        'end_time'                         ,
+
+                        'break_type_name'                  ,
+                        'break_type_duration_in_minutes'   ,
+                        'break_type_is_paid'               ,
+                        'is_require_break_in_and_break_out'
+                    ];
+
+                    $breakScheduleFilterCriteria = [
+                        [
+                            'column'   => 'break_schedule.deleted_at',
+                            'operator' => 'IS NULL'
+                        ],
+                        [
+                            'column'   => 'break_schedule.work_schedule_id',
+                            'operator' => '='                              ,
+                            'value'    => $workSchedule['id']
+                        ]
+                    ];
+
+                    $breakSchedules = $breakScheduleService->fetchAllBreakSchedules(
+                        columns             : $breakScheduleColumns       ,
+                        filterCriteria      : $breakScheduleFilterCriteria,
+                        includeTotalRowCount: false
                     );
 
-                    $createEmptyBreakRecordResult = $employeeBreakRepository
-                        ->createEmployeeBreak($emptyBreakRecord);
-
-                    if ($createEmptyBreakRecordResult === ActionResult::FAILURE) {
+                    if ($breakSchedules === ActionResult::FAILURE) {
                         return [
                             'status'  => 'error',
-                            'message' => 'An unexpected error occurred while checking in. Please try again later.'
+                            'message' => 'An unexpected error occurred. Please try again later.'
                         ];
+                    }
+
+                    $breakSchedules =
+                        ! empty($breakSchedules['result_set'])
+                            ? $breakSchedules['result_set']
+                            : [];
+
+                    foreach ($breakSchedules as $breakSchedule) {
+                        $breakTypeSnapshot = new BreakTypeSnapshot(
+                            breakTypeId              : $breakSchedule['break_type_id'                    ],
+                            name                     : $breakSchedule['break_type_name'                  ],
+                            durationInMinutes        : $breakSchedule['break_type_duration_in_minutes'   ],
+                            isPaid                   : $breakSchedule['break_type_is_paid'               ],
+                            requireBreakInAndBreakOut: $breakSchedule['is_require_break_in_and_break_out']
+                        );
+
+                        $breakTypeSnapshotId = $breakTypeService
+                            ->createBreakTypeSnapshot($breakTypeSnapshot);
+
+                        if ($breakTypeSnapshotId === ActionResult::FAILURE) {
+                            return [
+                                'status'  => 'error',
+                                'message' => 'An unexpected error occurred. Please try again later.'
+                            ];
+                        }
+
+                        $breakScheduleSnapshot = new BreakScheduleSnapshot(
+                            breakScheduleId       : $breakSchedule['id'        ],
+                            workScheduleSnapshotId: $workScheduleSnapshotId     ,
+                            breakTypeSnapshotId   : $breakTypeSnapshotId        ,
+                            startTime             : $breakSchedule['start_time'],
+                            endTime               : $breakSchedule['end_time'  ]
+                        );
+
+                        $breakScheduleSnapshotId = $breakScheduleService
+                            ->createBreakScheduleSnapshot($breakScheduleSnapshot);
+
+                        if ($breakScheduleSnapshotId === ActionResult::FAILURE) {
+                            return [
+                                'status'  => 'error',
+                                'message' => 'An unexpected error occurred. Please try again later.'
+                            ];
+                        }
+
+                        $emptyBreakRecord = new EmployeeBreak(
+                            id                     : null                                           ,
+                            breakScheduleSnapshotId: $breakScheduleSnapshotId                       ,
+                            startTime              : null                                           ,
+                            endTime                : null                                           ,
+                            breakDurationInMinutes : 0                                              ,
+                            createdAt              : $originalCurrentDateTime->format('Y-m-d H:i:s')
+                        );
+
+                        $createEmptyBreakRecordResult = $employeeBreakRepository
+                            ->createEmployeeBreak($emptyBreakRecord);
+
+                        if ($createEmptyBreakRecordResult === ActionResult::FAILURE) {
+                            return [
+                                'status'  => 'error',
+                                'message' => 'An unexpected error occurred while checking in. Please try again later.'
+                            ];
+                        }
                     }
                 }
             }
@@ -593,7 +682,6 @@ if ( ! empty($payrollGroups)) {
                 }
             }
 
-            /*
             $generatePayslipResult = $payslipService->generatePayslip(
                 payrollGroup         : $newPayrollGroup                       ,
                 cutoffPeriodStartDate: $cutoffPeriodStartDate->format('Y-m-d'),
@@ -607,79 +695,6 @@ if ( ! empty($payrollGroups)) {
                     'message' => 'An unexpected error occurred. Please try again later.'
                 ];
             }
-            */
         }
     }
-}
-
-function getCurrentWorkSchedule(
-    array  $assignedWorkSchedules,
-    string $currentDateTime
-): array {
-
-    $currentDateTime = new DateTime($currentDateTime);
-
-    $nextWorkSchedule = [];
-
-    foreach ($assignedWorkSchedules as $workDate => $workSchedules) {
-        foreach ($workSchedules as $workSchedule) {
-            $workStartTime = $workSchedule['start_time'];
-            $workEndTime   = $workSchedule['end_time'  ];
-
-            $workStartDateTime = new DateTime($workDate . ' ' . $workStartTime);
-            $workEndDateTime   = new DateTime($workDate . ' ' . $workEndTime  );
-
-            if ($workEndDateTime <= $workStartDateTime) {
-                $workEndDateTime->modify('+1 day');
-            }
-
-            $workSchedule['start_time'] = $workStartDateTime->format('Y-m-d H:i:s');
-            $workSchedule['end_time'  ] = $workEndDateTime  ->format('Y-m-d H:i:s');
-
-            if ($currentDateTime >= $workStartDateTime && $currentDateTime < $workEndDateTime) {
-                return $workSchedule;
-            }
-
-            if ($currentDateTime < $workStartDateTime && empty($nextWorkSchedule)) {
-                $nextWorkSchedule = $workSchedule;
-            }
-        }
-    }
-
-    return $nextWorkSchedule;
-}
-
-function getPreviousWorkSchedule(
-    array $assignedWorkSchedules,
-    array $currentWorkSchedule
-): array {
-
-    $currentWorkStartDateTime = new DateTime($currentWorkSchedule['start_time']);
-
-    $previousWorkSchedule = [];
-
-    foreach ($assignedWorkSchedules as $workDate => $workSchedules) {
-        foreach ($workSchedules as $workSchedule) {
-            $workStartTime = $workSchedule['start_time'];
-            $workEndTime   = $workSchedule['end_time'  ];
-
-            $workStartDateTime = new DateTime($workDate . ' ' . $workStartTime);
-            $workEndDateTime   = new DateTime($workDate . ' ' . $workEndTime  );
-
-            if ($workEndDateTime <= $workStartDateTime) {
-                $workEndDateTime->modify('+1 day');
-            }
-
-            $workSchedule['start_time'] = $workStartDateTime->format('Y-m-d H:i:s');
-            $workSchedule['end_time'  ] = $workEndDateTime  ->format('Y-m-d H:i:s');
-
-            if ($currentWorkStartDateTime <= $workStartDateTime) {
-                return $previousWorkSchedule;
-            }
-
-            $previousWorkSchedule = $workSchedule;
-        }
-    }
-
-    return $previousWorkSchedule;
 }

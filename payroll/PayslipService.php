@@ -952,7 +952,11 @@ class PayslipService
                             if ( ! $isFlextime && ! empty($mergedBreakRecords)) {
                                 $breakRecords = [];
 
+                                $previousBreakRecordEndDateTime = null;
+
                                 foreach ($employeeBreakRecords as $breakRecord) {
+                                    $isPaid = $breakRecord['break_type_snapshot_is_paid'];
+
                                     $breakScheduleStartTime = $breakRecord['break_schedule_snapshot_start_time'];
                                     $breakScheduleEndTime   = $breakRecord['break_schedule_snapshot_end_time'  ];
 
@@ -973,6 +977,8 @@ class PayslipService
 
                                     if ($checkInDateTime > $breakScheduleStartDateTime) {
                                         $breakScheduleStartDateTime = clone $checkInDateTime;
+                                    } elseif ( ! $isPaid && $previousBreakRecordEndDateTime !== null && $previousBreakRecordEndDateTime > $breakScheduleStartDateTime) {
+                                        $breakScheduleStartDateTime = clone $previousBreakRecordEndDateTime;
                                     }
 
                                     if ($checkOutDateTime >= $breakScheduleStartDateTime) {
@@ -986,18 +992,30 @@ class PayslipService
 
                                             $breakScheduleEndDateTime = $breakRecordEndDateTime;
 
+                                            $previousBreakRecordEndDateTime = clone $breakScheduleEndDateTime;
+
                                         } else {
                                             $breakScheduleEndDateTime =
                                                 $checkOutDateTime >= $breakScheduleEndDateTime
                                                     ? $breakScheduleEndDateTime
                                                     : $checkOutDateTime;
+
+                                            if ($breakScheduleStartDateTime > $breakScheduleEndDateTime) {
+                                                $breakScheduleStartDateTime = clone $breakScheduleEndDateTime;
+
+                                                $previousBreakRecordEndDateTime = clone $breakScheduleEndDateTime;
+                                            }
                                         }
 
                                         $breakRecords[] = [
                                             'start_time' => $breakScheduleStartDateTime->format('Y-m-d H:i:s'),
                                             'end_time'   => $breakScheduleEndDateTime  ->format('Y-m-d H:i:s'),
-                                            'is_paid'    => $breakRecord['break_type_snapshot_is_paid']
+                                            'is_paid'    => $isPaid
                                         ];
+                                    }
+
+                                    if ($previousBreakRecordEndDateTime === null) {
+                                        $previousBreakRecordEndDateTime = $breakScheduleEndDateTime;
                                     }
                                 }
 
