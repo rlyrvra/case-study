@@ -11,7 +11,7 @@
                 Sort By <span class="tf-icons bx bx-sort"></span>
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="dropdownMenuButton">
-                <li><a class="dropdown-item" href="#" data-group="sort_by" data-value="name">Name</a></li>
+                <li><a class="dropdown-item" href="#" data-group="sort_by" data-value="id">Name</a></li>
                 <li><a class="dropdown-item selected" href="#" data-group="sort_by" data-value="created_at">Date Created</a></li>
                 <li><a class="dropdown-item" href="#" data-group="sort_by" data-value="updated_at">Date Modified</a></li>
                 <li><hr/></li>
