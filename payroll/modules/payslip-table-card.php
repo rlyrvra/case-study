@@ -73,7 +73,7 @@
               </div>
             </div>
             <div class="card-footer bg-light text-center">
-              <small class="text-muted">Payroll Frequency: <?php echo htmlspecialchars($row['payroll_frequency']); ?></small>
+              <small class="text-muted">Payroll Frequency: <?php echo htmlspecialchars($row['pay_frequency']); ?></small>
               <!-- Actions Button -->
               <div class="dropdown mt-2">
                 <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">

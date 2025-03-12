@@ -138,6 +138,8 @@ class PayslipDao
             "employee_marital_status"      => "employee.marital_status        AS marital_status"        ,
             "employee_code"                => "employee.employee_code         AS employee_code"         ,
             "employee_employment_type"     => "employee.employment_type       AS employment_type"       ,
+            "employee_email_address"       => "employee.email_address         AS email_address"         ,
+            "employee_access_role"         => "employee.access_role           AS access_role"           ,
             "employee_date_of_hire"        => "employee.date_of_hire          AS date_of_hire"          ,
             "employee_basic_salary"        => "employee.basic_salary          AS basic_salary"          ,
             "tin_number"                   => "employee.tin_number            AS tin_number"            ,
@@ -356,7 +358,7 @@ class PayslipDao
         } catch (PDOException $exception) {
             error_log("Database Error: An error occurred while fetching the payslips. " .
                       "Exception: {$exception->getMessage()}");
-
+            echo $exception->getMessage();
             return ActionResult::FAILURE;
         }
     }

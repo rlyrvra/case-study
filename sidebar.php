@@ -24,105 +24,96 @@
         <li class="menu-item" id="dashboard-menu">
             <a href="smartWage-index" class="menu-link">
             <i class="menu-icon tf-icons bx bx-home-circle"></i>
-            <div>Dashboard</div>
+                <div>Dashboard</div>
             </a>
         </li>
 
         <!-- Departments -->
-        <?php
-        if($_SESSION['access_role'] == 'Admin'){
-            echo '
+        <?php if($_SESSION['access_role'] == 'Admin'): ?>
         <li class="menu-item" id="departments-menu">
-        <a href="department" class="menu-link ">
-        <i class="menu-icon tf-icons bx bx-layout"></i>
-        <div data-i18n="Layouts">Departments</div>
-        </a>
-
+            <a href="department" class="menu-link ">
+            <i class="menu-icon tf-icons bx bx-layout"></i>
+                <div>Departments</div>
+            </a>
         </li>
-            ';
-        }
-        ?>
+        <?php endif ?>
+
 
         <!-- Job Title -->
-        <?php
-        if($_SESSION['access_role'] == 'Admin'){
-            echo '
+        <?php if($_SESSION['access_role'] == 'Admin'):?>
         <li class="menu-item" id="job-titles-menu">
-        <a href="job-title" class="menu-link">
-        <i class="menu-icon tf-icons bx bx-vector"></i>
-            <div>Job Title </div>
-        
-        </a>
-            
+            <a href="job-title" class="menu-link">
+            <i class="menu-icon tf-icons bx bx-vector"></i>
+                <div>Job Titles </div>
+            </a>
         </li>
-        ';
-        }
-        ?>
+        <?php endif ?>
 
         <!-- Employees -->
-        <?php
-        if($_SESSION['access_role'] == 'Admin' || $_SESSION['access_role'] == 'Manager'){
-            echo '
+        <?php if($_SESSION['access_role'] == 'Admin' || $_SESSION['access_role'] == 'Manager'): ?>
         <li class="menu-item" id="employees-menu">
-
             <a href="javascript:void(0);" class="menu-link menu-toggle">
             <i class="menu-icon tf-icons bx bx-user"></i>
-            <div>Employees</div>
+                <div>Employees</div>
             </a>
-            
+
             <ul class="menu-sub">
-            <li class="menu-item" id="add-employees-menu">
-                <a href="add-employee" class="menu-link">
-                <div>Add Employee</div>
-                </a>
-            </li>
-            <li class="menu-item" id="manage-employees-menu">
-                <a href="manage-employee" class="menu-link">
-                <div>Manage Employee</div>
-                </a>
-            </li>
-            
+                <li class="menu-item" id="add-employees-menu">
+                    <a href="add-employee" class="menu-link">
+                        <div>Add Employee</div>
+                    </a>
+                </li>
+                <li class="menu-item" id="manage-employees-menu">
+                    <a href="manage-employee" class="menu-link">
+                        <div>Manage Employee</div>
+                    </a>
+                </li>
+
             </ul>
-        </li>';
-        }
-        ?>
+        </li>
+        <?php endif ?>
 
         <!-- Attendance -->
         <li class="menu-item" id="attendance-menu">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
             <i class="menu-icon tf-icons bx bx-calendar"></i>
-            <div>Attendance</div>
+                <div>Attendance</div>
             </a>
             <ul class="menu-sub">
-            <li class="menu-item" id="my-attendance-menu">
-                <a href="my-attendance" class="menu-link">
-                <div>My Attendance</div>
-                </a>
-            </li>
-            <li class="menu-item" id="attendances-menu">
-                <a href="attendances" class="menu-link">
-                <div data-i18n="Under Maintenance">Attendance</div>
-                </a>
-            </li>
-            
-            <li class="menu-item" id="work-schedules-menu">
-                <a href="work-schedule.php" class="menu-link">
-                <div data-i18n="Under Maintenance">Work Schedules</div>
-                </a>
-            </li>
+                <?php if($_SESSION['access_role'] != 'Admin'): ?>
+                <li class="menu-item" id="my-attendance-menu">
+                    <a href="my-attendance" class="menu-link">
+                        <div>My Attendance</div>
+                    </a>
+                </li>
+                <?php endif ?>
 
-            <li class="menu-item" id="overtime-rate-menu">
-                <a href="overtime-rate.php" class="menu-link">
-                <div data-i18n="Under Maintenance">Overtime Rates</div>
-                </a>
-            </li>
+                <?php if($_SESSION['access_role'] == 'Admin' || $_SESSION['access_role'] == 'Manager'): ?>
+                <li class="menu-item" id="attendances-menu">
+                    <a href="attendances" class="menu-link">
+                    <div>Attendance</div>
+                    </a>
+                </li>
 
-            <li class="menu-item" id="holiday-menu">
-                <a href="holiday" class="menu-link">
-                <div>Holidays</div>
-                </a>
-            </li>
+                <li class="menu-item" id="work-schedules-menu">
+                    <a href="work-schedule.php" class="menu-link">
+                    <div>Work Schedules</div>
+                    </a>
+                </li>
 
+                <li class="menu-item" id="overtime-rate-menu">
+                    <a href="overtime-rate.php" class="menu-link">
+                    <div>Overtime Rates</div>
+                    </a>
+                </li>
+
+                <li class="menu-item" id="holiday-menu">
+                    <a href="holiday" class="menu-link">
+                    <div>Holidays</div>
+                    </a>
+                </li>
+
+                <?php endif ?>
             </ul>
         </li>
 
@@ -136,28 +127,26 @@
             <div data-i18n="User interface">Leaves</div>
             </a>
             <ul class="menu-sub">
-            <?php
-            if($_SESSION['access_role'] == 'Admin' || $_SESSION['access_role'] == 'Manager'){
-            echo '
-            <li class="menu-item" id="leave-types-menu">
-                <a href="leave-types" class="menu-link">
-                <div data-i18n="Accordion">Leave Types</div>
-                </a>
-            </li>
-            ';
-            }
-            ?>
-            <li class="menu-item" id="apply-leave-menu">
-                <a href="apply-leave" class="menu-link">
-                <div data-i18n="Alerts">Apply Leave</div>
-                </a>
-            </li>
-            <li class="menu-item" id="leave-requests-menu">
-                <a href="leave-requests" class="menu-link">
-                <div data-i18n="Buttons">Leave Requests</div>
-                </a>
-            
-            </li>
+                <?php if($_SESSION['access_role'] == 'Admin'): ?>
+                <li class="menu-item" id="leave-types-menu">
+                    <a href="leave-types" class="menu-link">
+                        <div">Leave Types</div>
+                    </a>
+                </li>
+                <?php endif ?>
+                <?php if($_SESSION['access_role'] != 'Admin'): ?>
+                <li class="menu-item" id="apply-leave-menu">
+                    <a href="apply-leave" class="menu-link">
+                        <div>Apply Leave</div>
+                    </a>
+                </li>
+                <li class="menu-item" id="leave-requests-menu">
+                    <a href="leave-requests" class="menu-link">
+                        <div>Leave Requests</div>
+                    </a>
+                
+                </li>
+                <?php endif ?>
             </ul>
         </li>
 
@@ -169,38 +158,38 @@
             <div>Payroll</div>
             </a>
             <ul class="menu-sub">
-            <li class="menu-item" id="my-payslip-menu">
-                <a href="my-payslips" class="menu-link">
-                <div>My Payslips</div>
-                </a>
-            </li>
-            <li class="menu-item" id="payslip-menu">
-                <a href="payslips" class="menu-link">
-                <div>Payslips</div>
-                </a>
-            </li>
-            <?php
-            if($_SESSION['access_role'] == 'Admin' || $_SESSION['access_role'] == 'Manager'){
-            echo '
-            <li class="menu-item" id="payrollGroup-menu">
-                <a href="payroll-group" class="menu-link">
-                <div>Payroll Groups</div>
-                </a>
-            </li>
-            <li class="menu-item" id="allowances-menu">
-                <a href="allowance" class="menu-link">
-                <div>Allowances</div>
-                </a>
-            </li>
+                <?php if($_SESSION['access_role'] != 'Admin'): ?>
+                <li class="menu-item" id="my-payslip-menu">
+                    <a href="my-payslips" class="menu-link">
+                    <div>My Payslips</div>
+                    </a>
+                </li>
+                <?php endif ?>
+                <?php if($_SESSION['access_role'] == 'Admin' || $_SESSION['access_role'] == 'Manager'): ?>
+                <li class="menu-item" id="payslip-menu">
+                    <a href="payslips" class="menu-link">
+                    <div>Payslips</div>
+                    </a>
+                </li>
+                
+                <li class="menu-item" id="payrollGroup-menu">
+                    <a href="payroll-group" class="menu-link">
+                    <div>Payroll Groups</div>
+                    </a>
+                </li>
+                
+                <li class="menu-item" id="allowances-menu">
+                    <a href="allowance" class="menu-link">
+                    <div>Allowances</div>
+                    </a>
+                </li>
 
-            <li class="menu-item" id="deductions-menu">
-                <a href="deduction" class="menu-link">
-                <div data-i18n="Input groups">Deductions</div>
-                </a>
-            </li>
-            ';
-            }
-            ?>
+                <li class="menu-item" id="deductions-menu">
+                    <a href="deduction" class="menu-link">
+                    <div data-i18n="Input groups">Deductions</div>
+                    </a>
+                </li>
+                <?php endif ?>
             </ul>
         </li>
 

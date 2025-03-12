@@ -21,6 +21,10 @@ function getEmployees(){
     $selectedColumns = ["id", "full_name", "email_address"];
     $filterCriteria = [];
 
+    if($_SESSION['payslip_mode'] === 'viewOnly'){
+        return;
+    }
+
     if($_SESSION['access_role'] === 'Admin'){
         //do nothing
     }

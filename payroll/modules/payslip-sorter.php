@@ -59,7 +59,7 @@
         <label for="entries-per-page" class="mx-1">Entries</label>  
     </div>
 
-
+    <?php if($_SESSION['payslip_mode'] !== 'viewOnly'): ?>
     <div class="dropdown filter flex-fill col-auto  mx-1">
         <div class="input-group">
             <span class="input-group-text"><i class="bx bx-filter fs-4 lh-0"></i></span>
@@ -68,10 +68,11 @@
             </select>
         </div>
     </div>
-
+    <?php endif ?>
     
 </div>
 
+<?php if($_SESSION['payslip_mode'] !== 'viewOnly'): ?>
 <style>
 .selectize-control.selectize-employee-sorter .selectize-input > div .description {
   opacity: 0.8;
@@ -91,6 +92,7 @@
   color: #a0a0a0;
 }
 </style>
+<?php endif ?>
 
 
 
@@ -133,7 +135,7 @@ dropdownItems.forEach(item => {
 });
 </script>
 
-
+<?php if($_SESSION['payslip_mode'] !== 'viewOnly'): ?>
 <script>
   $(document).ready(function () {
   const REGEX_EMAIL = "([a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@" + "(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)";
@@ -209,6 +211,7 @@ dropdownItems.forEach(item => {
   });
 });
 </script>
+<?php endif ?>
 
 <style>
 .dropdown-item.selected {

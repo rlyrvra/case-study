@@ -114,3 +114,20 @@ function downloadPDF(token){
         },
     });
 }
+
+// function downloadPDF(token){
+//     $.ajax({
+//         url: "payroll/modules/payslip-api",
+//         type: "POST",
+//         data: {
+//             action: "downloadPDF",
+//             token: token
+//         },
+//         success: function (response) {
+//             $("#response-test").html(response);
+//         },
+//         error: function (jqXHR, textStatus, errorThrown) {
+//             console.log("AJAX Error: " + textStatus + ": " + errorThrown);
+//         },
+//     });
+// }

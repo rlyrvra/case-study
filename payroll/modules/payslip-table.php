@@ -44,7 +44,7 @@
             <td><?php echo htmlspecialchars($row['bank_name']); ?></td>
             <td class="text-center"><?php echo substr($row['bank_account_number'], 0, 2) . str_repeat('*', strlen($row['bank_account_number']) - 4) . substr($row['bank_account_number'], -2); ?></td>
             <td class="text-center"><?php echo htmlspecialchars($row['bank_account_type']); ?></td>
-            <td class="text-center"><?php echo htmlspecialchars($row['payroll_frequency']); ?></td>
+            <td class="text-center"><?php echo htmlspecialchars($row['pay_frequency']); ?></td>
             <td class="text-center"><?php echo date("M j, Y", strtotime($row['pay_date'])); ?></td>
             <td class="text-center"><?php echo date("M j, Y", strtotime($row['pay_period_end_date'])); ?></td>
             <td class="text-end"><?php echo number_format($row['sss_deduction'], 2); ?></td>

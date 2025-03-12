@@ -8,6 +8,7 @@ require_once __DIR__ . '/login-checker.php';
 if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager'){
   header("Location: ". $SMARTWAGE_LOCATION ."/smartWage-index.php?aR=true");
 }
+$_SESSION['payslip_mode'] = "";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -33,7 +34,7 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
 />
 
 <!-- Ajax -->
-<script src="payroll/modules/payslip-ajax.js?v1.0.0"></script>
+<script src="payroll/modules/payslip-ajax.js?v1.0.1"></script>
 <!-- Scripts -->
 <script src="payroll/modules/payslip-scripts.js?v1.0.0"></script>
 

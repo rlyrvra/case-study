@@ -1,9 +1,14 @@
-<?php require_once __DIR__ . '/includes/security-headers.php'; ?>
-<?php require_once __DIR__ . '/includes/session.php'; ?>
-<?php require_once __DIR__ . '/includes/file-locations.php' ?>
-
-<?php
+<?php 
+require_once __DIR__ . '/includes/security-headers.php'; 
+require_once __DIR__ . '/includes/session.php'; 
+require_once __DIR__ . '/includes/file-locations.php';
 require_once __DIR__ . '/login-checker.php';
+
+
+if($_SESSION['access_role'] === 'Admin'){
+  header("Location: ". $SMARTWAGE_LOCATION ."/smartWage-index.php?aR=true");
+}
+$_SESSION['payslip_mode'] = "viewOnly";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -14,7 +19,7 @@ require_once __DIR__ . '/login-checker.php';
 
 </style>
 <head>
-<title> smartWage | Company Profile </title>
+<title> My Payslips | smartWage </title>
 <link rel="icon" type="image/x-icon" href="img/logo-files/logo1.ico" />
 <!-- font-awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -22,6 +27,25 @@ require_once __DIR__ . '/login-checker.php';
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <!-- Sweet Alert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- Selectize CSS -->
+<link
+  rel="stylesheet"
+  href="assets/vendor/css/selectize.bootstrap5.css"
+/>
+
+<!-- Ajax -->
+<script src="payroll/modules/payslip-ajax.js?v1.0.1"></script>
+<!-- Scripts -->
+<script src="payroll/modules/payslip-scripts.js?v1.0.0"></script>
+
+<!---Skeletons--->
+<script src="requests/table-skeleton.js?v1.2"></script>
+<!---Skeletons CSS-->
+<link rel="stylesheet" href="requests/table-skeleton.css?v1.1" />
+
+
+
+
 <!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -70,8 +94,8 @@ require_once __DIR__ . '/login-checker.php';
     
     <?php require_once __DIR__ . '/sidebar.php' ?>
     <script>
-      document.getElementById("settings-menu").classList.add("open");
-      document.getElementById("company-profile-menu").classList.add("active");
+      document.getElementById("payroll-menu").classList.add("open");
+      document.getElementById("my-payslip-menu").classList.add("active");
     </script>
 
     <!-- Layout container -->
@@ -80,15 +104,32 @@ require_once __DIR__ . '/login-checker.php';
 
       <!-- / Navbar -->
       <div class="content-wrapper">
-        <div class="container-fluid px-5">
-            <?php
-            if($_SESSION['access_role'] === "Admin"){
-              include_once __DIR__ . "/company-profile/modules/company-profile-update.php";
-            }else{
-              include_once __DIR__ . "/company-profile/modules/company-profile-view.php";
-            }
-            ?>
-        </div>
+        <div class="container-fluid pt-5 pb-5">
+            <div id="response-test"></div>
+            <div class="container-fluid mb-3 d-flex justify-content-between flex-column flex-lg-row">
+                <h1 class="display-1">My Payslips</h1>
+            </div>
+
+            <div class="container-fluid card pt-3 pb-3 mt-5 mb-5">
+                <?php require_once __DIR__ . '/payroll/modules/payslip-sorter.php' ?>
+                <div class="spinner-border spinner-border-lg text-primary text-center w-px-25 h-px-25" role="status" id="loadingSpinner"></div>
+            </div>
+
+
+            <div class="container-fluid card pt-5 pb-3 mt-5">
+              <div class="card-header">
+                <h5>Payslips</h5>
+              </div>
+              <div class="card-body">
+                <div id="skeleton-payslip-table" class="visually-hidden table-responsive text-no-wrap"></div>
+                <div id="payslip-table" class="table-responsive text-no-wrap">
+                  <div class="visually-hidden container-fluid spinner-border spinner-border-lg d-flex align-items-center justify-content-center w-px-700 h-px-700" role="status"></div>
+                </div>
+              </div>
+            </div>
+
+
+          </div>
       </div>
       <?php require_once __DIR__ . '/footer.php' ?>
       <div class="content-backdrop fade"></div>
@@ -99,9 +140,11 @@ require_once __DIR__ . '/login-checker.php';
   <div class="layout-overlay layout-menu-toggle"></div>
 </div>
 <!-- / Layout wrapper -->
-
-
-
+<script>
+$(document).ready(function (){
+  fetchAllPayslips();
+});
+</script>
 <!-- Core JS -->
 <!-- build:js assets/vendor/js/core.js -->
 <script src="assets/vendor/libs/jquery/jquery.js"></script>
@@ -123,5 +166,12 @@ require_once __DIR__ . '/login-checker.php';
 
 <!-- Place this tag in your head or just before your close body tag. -->
 <script async defer src="https://buttons.github.io/buttons.js"></script>
+<!-- Selectize -->
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/js/selectize.min.js"
+  integrity="sha512-IOebNkvA/HZjMM7MxL0NYeLYEalloZ8ckak+NDtOViP7oiYzG5vn6WVXyrJDiJPhl4yRdmNAG49iuLmhkUdVsQ=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+></script>
 </body>
 </html>

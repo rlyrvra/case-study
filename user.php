@@ -11,18 +11,18 @@
 }
 .search-results {
     position: absolute;
-    top: 100%;
-    left: 0;
+    top: 88%;
+    left: 1px;
     background: white;
     width: 100%;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 5px rgba(0, 0, 0, 0.2);
     z-index: 1000;
 }
 </style>
 <!-- Navbar -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
 <script src="requests/header/header-clock.js?v1.1.0"></script>
-<div class="container-fluid green pb-3">
+<div class="container-fluid green pb-3 sticky-top">
     <nav
     class="layout-navbar navbar navbar-expand-xl align-items-center bg-navbar-theme transparent no-shadow"
     >
@@ -41,10 +41,11 @@
                     <input
                         id="searchInput"
                         type="text"
-                        class="form-control border-0 shadow-none text-center"
+                        class="form-control border-0 shadow-none text-start"
                         onkeyup="searchNav()"
                         placeholder="Search..."
                         aria-label="Search..."
+                        style="border-radius: 0 0.375rem 0.375rem 0 !important;"
                     />
                 <ul class="list-group search-results mt-1" id="searchResults" style="display: none;"></ul>
                 </div>
