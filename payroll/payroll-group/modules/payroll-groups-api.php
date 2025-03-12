@@ -47,7 +47,7 @@ try {
 
             ];
             $filterCriteria[] = [
-                "column" => "payroll_group.pay_frequency", 
+                "column" => "payroll_group.payroll_frequency", 
                 "operator" => "LIKE",
                 "value" => "%$searchFilter%", 
                 'boolean' => 'OR'

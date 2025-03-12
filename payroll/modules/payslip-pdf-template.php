@@ -51,7 +51,7 @@
 
     <table class='table'>
         <tr><td class='text-muted'>Employee Code:</td><td class='fw-bold'><?php echo htmlspecialchars($row['employee_code']); ?></td></tr>
-        <tr><td class='text-muted'>Pay Frequency:</td><td class='fw-bold'><?php echo htmlspecialchars($row['pay_frequency']); ?></td></tr>
+        <tr><td class='text-muted'>Pay Frequency:</td><td class='fw-bold'><?php echo htmlspecialchars($row['payroll_frequency']); ?></td></tr>
         <tr><td class='text-muted'>Employment Type:</td><td class='fw-bold'><?php echo htmlspecialchars($row['employment_type']); ?></td></tr>
         <tr><td class='text-muted'>Basic Salary:</td><td class='text-success'>P<?php echo number_format($row['basic_salary'], 2); ?></td></tr>
     </table>

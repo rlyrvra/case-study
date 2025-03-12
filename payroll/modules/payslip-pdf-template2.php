@@ -238,7 +238,7 @@ body {
 				</div>
 				<div class="entry">
 					<div class="label">Payroll Cycle</div>
-					<div class="value"><?php echo htmlspecialchars($row['pay_frequency']); ?></div>
+					<div class="value"><?php echo htmlspecialchars($row['payroll_frequency']); ?></div>
 				</div>
 				<div class="entry">
 					<div class="label">TIN</div>
