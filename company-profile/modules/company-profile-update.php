@@ -106,7 +106,6 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
 <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
 <div id="company-profile-section" class="container my-5 p-5 card">
-  <h1 class="display-1">Company Profile</h1>
   <!-- Header Section -->
   <div class="row align-items-center header">
     <div class="col-md-6">

@@ -198,6 +198,13 @@
             <div>Settings</div>
             </a>
             <ul class="menu-sub">
+                <?php if($_SESSION['access_role'] == 'Admin'): ?>
+                <li class="menu-item" id="company-settings-menu">
+                    <a href="company-settings" class="menu-link">
+                    <div>Company Settings</div>
+                    </a>
+                </li>
+                <?php endif ?>
                 <li class="menu-item" id="company-profile-menu">
                     <a href="companyprofile" class="menu-link">
                     <div>Company Profile</div>

@@ -80,14 +80,17 @@ require_once __DIR__ . '/login-checker.php';
 
       <!-- / Navbar -->
       <div class="content-wrapper">
-        <div class="container-fluid px-5">
-            <?php
-            if($_SESSION['access_role'] === "Admin"){
-              include_once __DIR__ . "/company-profile/modules/company-profile-update.php";
-            }else{
-              include_once __DIR__ . "/company-profile/modules/company-profile-view.php";
-            }
-            ?>
+        <div class="container-fluid py-5">
+          <div class="container-fluid">
+              <h1 class="display-1">Company Profile</h1>
+          </div>
+          <?php
+          if($_SESSION['access_role'] === "Admin"){
+            include_once __DIR__ . "/company-profile/modules/company-profile-update.php";
+          }else{
+            include_once __DIR__ . "/company-profile/modules/company-profile-view.php";
+          }
+          ?>
         </div>
       </div>
       <?php require_once __DIR__ . '/footer.php' ?>

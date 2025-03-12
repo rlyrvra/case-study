@@ -1,8 +1,7 @@
 <?php
 require_once __DIR__ . '/../includes/Helper.php';
 require_once __DIR__ . '/../includes/enums/ActionResult.php';
-require_once __DIR__ . '/../includes/enums/ErrorCode.php' ;
-require_once __DIR__ . '/aggregates/CompanyInformation.php';
+require_once __DIR__ . 'CompanyInformation.php';
 
 class CompanyProfile
 {
@@ -43,12 +42,8 @@ class CompanyProfile
         } catch (PDOException $exception) {
             $this->pdo->rollBack();
 
-            error_log('Database Error: An error occurred while updating the department. ' .
+            error_log('Database Error: An error occurred while updating company profile. ' .
                       'Exception: ' . $exception->getMessage());
-
-            if ( (int) $exception->getCode() === ErrorCode::DUPLICATE_ENTRY->value) {
-                return ActionResult::DUPLICATE_ENTRY_ERROR;
-            }
 
             return ActionResult::FAILURE;
         }
@@ -77,7 +72,7 @@ class CompanyProfile
 
         } catch (PDOException $exception) 
         {
-            error_log("Database Error: An error occurred while fetching the department records. " .
+            error_log("Database Error: An error occurred while fetching the company profile records. " .
             "Exception: {$exception->getMessage()}");
 
             return ActionResult::FAILURE;

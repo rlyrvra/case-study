@@ -106,31 +106,14 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
 <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
 <div id="company-profile-section" class="container my-5 p-5 card">
-  <h1 class="display-1">Company Profile</h1>
   <!-- Header Section -->
-  <div class="row align-items-center header">
+  <div class="row align-items-center header mb-5">
     <div class="col-md-6">
-      <input class="form-control" list="datalistOptions" id="companyName" placeholder="Enter Company Name..." style="min-height: 75px; font-size: 2.0rem;" />
-      <datalist id="datalistOptions">
-        <option value="San Francisco"></option>
-        <option value="New York"></option>
-        <option value="Seattle"></option>
-        <option value="Los Angeles"></option>
-        <option value="Chicago"></option>
-      </datalist>
-      <input class="form-control form-control-sm mt-2" type="text" placeholder="October 19, 2000" />
+      <h1 id="companyName">DDDD</h1>
+      <h5 id="date">October 19, 2000</h5>
     </div>
     <div class="col-md-6 text-center">
       <img src="img/logo-files/logo.png" class="w-px-100 h-auto rounded-circle">
-      <div class="text-box mx-auto" style="max-height: 100px; max-width: 300px;">
-        <input type="file" class="form-control" />
-      </div>
-    </div>
-  </div>
-  <!-- Search Button -->
-  <div class="row mb-4">
-    <div class="col text-start">
-      <button type="button" class="btn btn-success">Update</button>
     </div>
   </div>
 
@@ -146,136 +129,72 @@
       <!-- Tab Content -->
       <div class="tab-content">
         <div class="tab-pane fade show active" id="companyHistory">
-          <textarea id="historyEditor" placeholder="History"></textarea>
-          <p id="historyCharCount">0/200 characters</p>
-
-          <!-- SimpleMDE JavaScript -->
-          <script>
-              const historyMaxChars = 200;
-
-              // Initialize SimpleMDE for History Editor
-              var historySimpleMde = new SimpleMDE({ 
-                  element: document.getElementById("historyEditor"),
-                  toolbar: [
-                      "bold", "italic", "|",
-                      "quote", 
-                      {
-                          name: "clear",
-                          action: function customFunction(editor){
-                              editor.value(""); // Clear the editor content
-                          },
-                          className: "fa fa-eraser", // Icon for the button
-                          title: "Clear Editor",
-                      }, "|",
-                      "preview", "side-by-side", "fullscreen"
-                  ]
-              });
-
-              // Update character count and enforce limit
-              historySimpleMde.codemirror.on("change", function() {
-                  let historyContent = historySimpleMde.value();
-                  let historyCharCount = historyContent.length;
-
-                  // Check if the character limit is exceeded
-                  if (historyCharCount > historyMaxChars) {
-                      // Trim content to maxChars if limit exceeded
-                      historySimpleMde.value(historyContent.substring(0, historyMaxChars));
-                      historyCharCount = historyMaxChars;
-                  }
-
-                  // Update character count display
-                  document.getElementById("historyCharCount").innerText = `${historyCharCount}/${historyMaxChars} characters`;
-              });
-          </script>
+          <div class="p-4 animated-card align-items-center justify-content-center h-100 w-100 flex-grow-1">
+            <h3 class="text-center mb-3">Our History</h3>
+            <p class="text-center">Smart Wage Management System was established with the vision of simplifying payroll processing for businesses of all sizes. From our humble beginnings as a small startup, we’ve grown into a trusted platform that serves organizations across multiple industries. Our journey is fueled by our commitment to innovation, precision, and customer satisfaction.</p>
+          </div>
         </div>
-        <div class="tab-pane fade" id="companyDetails">
-          <div class="input-group">
-            <span class="input-group-text d-flex align-items-center">
-              <i class='bx bx-briefcase'></i>
-            </span>
-            <input type="text" class="form-control" placeholder="Enter Industry" />
-          </div>
+        <div class="tab-pane fade d-flex align-items-center justify-content-center h-100" id="companyDetails">
+          <div class="p-4 row text-center w-100 flex-grow-1 d-flex align-items-center">
+            <div class="col-md-3 mb-3">
+              <i class="bx bx-briefcase fa-2x mb-2" style="color: #2d6a4f;"></i>
+              <h5>Industry</h5>
+              <p>Information Technology</p>
+            </div>
 
-          <div class="input-group mt-2">
-            <span class="input-group-text d-flex align-items-center">
-              <i class='bx bx-building'></i>
-            </span>
-            <input type="text" class="form-control" placeholder="Enter Business Type" />
-          </div>
+            <div class="col-md-3 mb-3">
+              <i class="bx bx-building fa-2x mb-2" style="color: #2d6a4f;"></i>
+              <h5>Business Type</h5>
+              <p>Corporation</p>
+            </div>
 
-          <div class="input-group mt-2">
-            <span class="input-group-text d-flex align-items-center">
-              <i class='bx bx-expand'></i>
-            </span>
-            <input type="text" class="form-control" placeholder="Size Of Company" />
-          </div>
+            <div class="col-md-3 mb-3">
+              <i class="bx bx-expand fa-2x mb-2" style="color: #2d6a4f;"></i>
+              <h5>Size of Company</h5>
+              <p>Small Business</p>
+            </div>
 
-          <div class="input-group mt-2">
-            <span class="input-group-text d-flex align-items-center">
-              <i class='bx bx-group'></i>
-            </span>
-            <input type="text" class="form-control" placeholder="Enter Employee Count" />
+            <div class="col-md-3 mb-3">
+              <i class="bx bx-group fa-2x mb-2" style="color: #2d6a4f;"></i>
+              <h5>Employee Count</h5>
+              <p>100+ Employees</p>
+            </div>
           </div>
         </div>
       </div>
     </div>
     <div class="card-footer text-center">
-      <button type="button" class="btn btn-success">Update</button>
     </div>
   </div>
 
   <!-- Contact Information Card -->
   <div class="card">
     <div class="card-header display-6">Contact Information</div>
-    <!-- Tab Navigation for Contact Information -->
-    <ul class="nav nav-tabs d-flex w-100" id="contactTabs">
-        <li class="nav-item flex-grow-1">
-            <button class="nav-link active w-100 text-center" data-bs-toggle="tab" data-bs-target="#address" type="button">Address</button>
-        </li>
-        <li class="nav-item flex-grow-1">
-            <button class="nav-link w-100 text-center" data-bs-toggle="tab" data-bs-target="#phone" type="button">Phone Number</button>
-        </li>
-        <li class="nav-item flex-grow-1">
-            <button class="nav-link w-100 text-center" data-bs-toggle="tab" data-bs-target="#email" type="button">Email</button>
-        </li>
-        <li class="nav-item flex-grow-1">
-            <button class="nav-link w-100 text-center" data-bs-toggle="tab" data-bs-target="#website" type="button">Website</button>
-        </li>
-    </ul>
-    <div class="card-body">
-      <!-- Tab Content -->
-      <div class="tab-content">
-        <div class="tab-pane fade show active" id="address">
-          <div class="input-group">
-            <span class="input-group-text"><i class='bx bx-map'></i></span>
-            <input type="text" class="form-control" placeholder="Address" />
+      <div class="card-body">
+        <div class="p-4 row text-center">
+          <div class="col-md-3 mb-3">
+              <i class="bx bx-map fa-2x mb-2" style="color: #2d6a4f;"></i>
+              <h5>Location</h5>
+              <p>Manila, Philippines</p>
           </div>
-        </div>
-
-        <div class="tab-pane fade" id="phone">
-          <div class="input-group">
-            <span class="input-group-text"><i class='bx bx-phone'></i></span>
-            <input type="number" class="form-control" placeholder="Phone Number" />
+          <div class="col-md-3 mb-3">
+              <i class="bx bx-phone fa-2x mb-2" style="color: #2d6a4f;"></i>
+              <h5>Phone Number</h5>
+              <p>+639231813</p>
           </div>
-        </div>
-
-        <div class="tab-pane fade" id="email">
-          <div class="input-group">
-            <span class="input-group-text"><i class='bx bx-envelope'></i></span>
-            <input type="email" class="form-control" placeholder="Enter your email..." aria-describedby="emailHelp" />
+          <div class="col-md-3 mb-3">
+              <i class="bx bx-envelope fa-2x mb-2" style="color: #2d6a4f;"></i>
+              <h5>Email</h5>
+              <p>example@example.com</p>
           </div>
-        </div>
-
-        <div class="tab-pane fade" id="website">
-          <div class="input-group">
-            <span class="input-group-text"><i class='bx bx-globe'></i></span>
-            <input type="text" class="form-control" placeholder="Website" />
-          </div>
+          <div class="col-md-3 mb-3">
+              <i class="bx bx-globe fa-2x mb-2" style="color: #2d6a4f;"></i>
+              <h5>Website</h5>
+              <p>www.example.com</p>
+          </div>  
         </div>
       </div>
-    </div>
     <div class="card-footer text-center">
-      <button type="button" class="btn btn-success">Update</button>
     </div>
   </div>
 
@@ -293,146 +212,28 @@
       <div class="tab-content">
         <!-- Mission Tab -->
         <div class="tab-pane fade show active" id="mission">
-          <div class="header-inputs">
-            <textarea id="missionEditor" placeholder="Mission"></textarea>
-            <p id="missionCharCount">0/200 characters</p>
-            <!-- SimpleMDE JavaScript -->
-            <script>
-                const missionMaxChars = 200;
-
-                // Initialize SimpleMDE
-                var missionSimplemde = new SimpleMDE({ 
-                    element: document.getElementById("missionEditor"),
-                    toolbar: [
-                        "bold", "italic", "|",
-                        "quote", 
-                        {
-                            name: "clear",
-                            action: function customFunction(editor){
-                                editor.value(""); // Clear the editor content
-                            },
-                            className: "fa fa-eraser", // Icon for the button
-                            title: "Clear Editor",
-                        }, "|",
-                        "preview", "side-by-side", "fullscreen"
-                    ]
-                });
-
-                // Update character count and enforce limit
-                missionSimplemde.codemirror.on("change", function() {
-                    let missionContent = missionSimplemde.value();
-                    let missionCharCount = missionContent.length;
-
-                    // Check if the character limit is exceeded
-                    if (missionCharCount > missionMaxChars) {
-                        // Trim content to maxChars if limit exceeded
-                        missionSimplemde.value(missionContent.substring(0, missionMaxChars));
-                        missionCharCount = missionMaxChars;
-                    }
-
-                    // Update character count display
-                    document.getElementById("missionCharCount").innerText = `${missionCharCount}/${missionMaxChars} characters`;
-                });
-            </script>
+          <div class="p-4 animated-card align-items-center justify-content-center h-100 w-100 flex-grow-1">
+            <h3 class="text-center mb-3">Our Mission</h3>
+            <p class="text-center">Smart Wage Management System was established with the vision of simplifying payroll processing for businesses of all sizes. From our humble beginnings as a small startup, we’ve grown into a trusted platform that serves organizations across multiple industries. Our journey is fueled by our commitment to innovation, precision, and customer satisfaction.</p>
           </div>
         </div>
         <!-- Vision Tab -->
         <div class="tab-pane fade" id="vision">
-          <div class="header-inputs">
-            <textarea id="visionEditor" placeholder="Vision"></textarea>
-            <p id="visionCharCount">0/200 characters</p>
-
-            <!-- SimpleMDE JavaScript -->
-            <script>
-                const visionMaxChars = 200;
-
-                // Initialize SimpleMDE for Vision Editor
-                var visionSimpleMde = new SimpleMDE({ 
-                    element: document.getElementById("visionEditor"),
-                    toolbar: [
-                        "bold", "italic", "|",
-                        "quote", 
-                        {
-                            name: "clear",
-                            action: function customFunction(editor){
-                                editor.value(""); // Clear the editor content
-                            },
-                            className: "fa fa-eraser", // Icon for the button
-                            title: "Clear Editor",
-                        }, "|",
-                        "preview", "side-by-side", "fullscreen"
-                    ]
-                });
-
-                // Update character count and enforce limit
-                visionSimpleMde.codemirror.on("change", function() {
-                    let visionContent = visionSimpleMde.value();
-                    let visionCharCount = visionContent.length;
-
-                    // Check if the character limit is exceeded
-                    if (visionCharCount > visionMaxChars) {
-                        // Trim content to maxChars if limit exceeded
-                        visionSimpleMde.value(visionContent.substring(0, visionMaxChars));
-                        visionCharCount = visionMaxChars;
-                    }
-
-                    // Update character count display
-                    document.getElementById("visionCharCount").innerText = `${visionCharCount}/${visionMaxChars} characters`;
-                });
-            </script>
+          <div class="p-4 animated-card align-items-center justify-content-center h-100 w-100 flex-grow-1">
+            <h3 class="text-center mb-3">Our Vision</h3>
+            <p class="text-center">Smart Wage Management System was established with the vision of simplifying payroll processing for businesses of all sizes. From our humble beginnings as a small startup, we’ve grown into a trusted platform that serves organizations across multiple industries. Our journey is fueled by our commitment to innovation, precision, and customer satisfaction.</p>
           </div>
         </div>
         <!-- Values Tab -->
         <div class="tab-pane fade" id="values">
-          <div class="header-inputs">
-            <textarea id="valuesEditor" placeholder="Values"></textarea>
-            <p id="valuesCharCount">0/200 characters</p>
-
-            <!-- SimpleMDE JavaScript -->
-            <script>
-                const valuesMaxChars = 200;
-
-                // Initialize SimpleMDE for Values Editor
-                var valuesSimpleMde = new SimpleMDE({ 
-                    element: document.getElementById("valuesEditor"),
-                    toolbar: [
-                        "bold", "italic", "|",
-                        "quote", 
-                        {
-                            name: "clear",
-                            action: function customFunction(editor){
-                                editor.value(""); // Clear the editor content
-                            },
-                            className: "fa fa-eraser", // Icon for the button
-                            title: "Clear Editor",
-                        }, "|",
-                        "preview", "side-by-side", "fullscreen"
-                    ]
-                });
-
-                // Update character count and enforce limit
-                valuesSimpleMde.codemirror.on("change", function() {
-                    let valuesContent = valuesSimpleMde.value();
-                    let valuesCharCount = valuesContent.length;
-
-                    // Check if the character limit is exceeded
-                    if (valuesCharCount > valuesMaxChars) {
-                        // Trim content to maxChars if limit exceeded
-                        valuesSimpleMde.value(valuesContent.substring(0, valuesMaxChars));
-                        valuesCharCount = valuesMaxChars;
-                    }
-
-                    // Update character count display
-                    document.getElementById("valuesCharCount").innerText = `${valuesCharCount}/${valuesMaxChars} characters`;
-                });
-            </script>
+          <div class="p-4 animated-card align-items-center justify-content-center h-100 w-100 flex-grow-1">
+            <h3 class="text-center mb-3">Our Values</h3>
+            <p class="text-center">Smart Wage Management System was established with the vision of simplifying payroll processing for businesses of all sizes. From our humble beginnings as a small startup, we’ve grown into a trusted platform that serves organizations across multiple industries. Our journey is fueled by our commitment to innovation, precision, and customer satisfaction.</p>
           </div>
-          <button type="button" class="btn btn-secondary btn-add-header d-block mx-auto" data-placeholder="Values">Add Header</button>
         </div>
       </div>
     </div>
     <div class="card-footer text-center">
-      <button type="button" class="btn btn-success">Update</button>
     </div>
   </div>
 
@@ -448,166 +249,28 @@
     <div class="card-body">
       <!-- Tab Content -->
       <div class="tab-content">
+        <!-- Compliance Tab -->
         <div class="tab-pane fade show active" id="complianceHistory">
-          <div class="header-inputs">
-            <textarea id="policiesEditor" placeholder="Policies"></textarea>
-            <p id="policiesCharCount">0/200 characters</p>
-
-            <!-- SimpleMDE JavaScript -->
-            <script>
-                const policiesMaxChars = 200;
-
-                // Initialize SimpleMDE for Policies Editor
-                var policiesSimpleMde = new SimpleMDE({ 
-                    element: document.getElementById("policiesEditor"),
-                    toolbar: [
-                        "bold", "italic", "|",
-                        "quote", 
-                        {
-                            name: "clear",
-                            action: function customFunction(editor){
-                                editor.value(""); // Clear the editor content
-                            },
-                            className: "fa fa-eraser", // Icon for the button
-                            title: "Clear Editor",
-                        }, "|",
-                        "preview", "side-by-side", "fullscreen"
-                    ]
-                });
-
-                // Update character count and enforce limit
-                policiesSimpleMde.codemirror.on("change", function() {
-                    let policiesContent = policiesSimpleMde.value();
-                    let policiesCharCount = policiesContent.length;
-
-                    // Check if the character limit is exceeded
-                    if (policiesCharCount > policiesMaxChars) {
-                        // Trim content to maxChars if limit exceeded
-                        policiesSimpleMde.value(policiesContent.substring(0, policiesMaxChars));
-                        policiesCharCount = policiesMaxChars;
-                    }
-
-                    // Update character count display
-                    document.getElementById("policiesCharCount").innerText = `${policiesCharCount}/${policiesMaxChars} characters`;
-                });
-            </script>
+          <div class="p-4 animated-card align-items-center justify-content-center h-100 w-100 flex-grow-1">
+            <h3 class="text-center mb-3">HR Policies</h3>
+            <p class="text-center">Smart Wage Management System was established with the vision of simplifying payroll processing for businesses of all sizes. From our humble beginnings as a small startup, we’ve grown into a trusted platform that serves organizations across multiple industries. Our journey is fueled by our commitment to innovation, precision, and customer satisfaction.</p>
           </div>
         </div>
         <div class="tab-pane fade" id="complianceDetails">
-          <div class="header-inputs">
-            <textarea id="complianceEditor" placeholder="Compliance"></textarea>
-            <p id="complianceCharCount">0/200 characters</p>
-
-            <!-- SimpleMDE JavaScript -->
-            <script>
-                const complianceMaxChars = 200;
-
-                // Initialize SimpleMDE for Compliance Editor
-                var complianceSimpleMde = new SimpleMDE({ 
-                    element: document.getElementById("complianceEditor"),
-                    toolbar: [
-                        "bold", "italic", "|",
-                        "quote", 
-                        {
-                            name: "clear",
-                            action: function customFunction(editor){
-                                editor.value(""); // Clear the editor content
-                            },
-                            className: "fa fa-eraser", // Icon for the button
-                            title: "Clear Editor",
-                        }, "|",
-                        "preview", "side-by-side", "fullscreen"
-                    ]
-                });
-
-                // Update character count and enforce limit
-                complianceSimpleMde.codemirror.on("change", function() {
-                    let complianceContent = complianceSimpleMde.value();
-                    let complianceCharCount = complianceContent.length;
-
-                    // Check if the character limit is exceeded
-                    if (complianceCharCount > complianceMaxChars) {
-                        // Trim content to maxChars if limit exceeded
-                        complianceSimpleMde.value(complianceContent.substring(0, complianceMaxChars));
-                        complianceCharCount = complianceMaxChars;
-                    }
-
-                    // Update character count display
-                    document.getElementById("complianceCharCount").innerText = `${complianceCharCount}/${complianceMaxChars} characters`;
-                });
-            </script>
+          <div class="p-4 animated-card align-items-center justify-content-center h-100 w-100 flex-grow-1">
+            <h3 class="text-center mb-3">Compliance and Legal</h3>
+            <p class="text-center">Smart Wage Management System was established with the vision of simplifying payroll processing for businesses of all sizes. From our humble beginnings as a small startup, we’ve grown into a trusted platform that serves organizations across multiple industries. Our journey is fueled by our commitment to innovation, precision, and customer satisfaction.</p>
           </div>
         </div>
         <div class="tab-pane fade" id="complianceNotes">
-          <div class="header-inputs">
-            <textarea id="importantNotesEditor" placeholder="Important Notes"></textarea>
-            <p id="importantNotesCharCount">0/200 characters</p>
-
-            <!-- SimpleMDE JavaScript -->
-            <script>
-                const importantNotesMaxChars = 200;
-
-                // Initialize SimpleMDE for Important Notes Editor
-                var importantNotesSimpleMde = new SimpleMDE({ 
-                    element: document.getElementById("importantNotesEditor"),
-                    toolbar: [
-                        "bold", "italic", "|",
-                        "quote", 
-                        {
-                            name: "clear",
-                            action: function customFunction(editor){
-                                editor.value(""); // Clear the editor content
-                            },
-                            className: "fa fa-eraser", // Icon for the button
-                            title: "Clear Editor",
-                        }, "|",
-                        "preview", "side-by-side", "fullscreen"
-                    ]
-                });
-
-                // Update character count and enforce limit
-                importantNotesSimpleMde.codemirror.on("change", function() {
-                    let importantNotesContent = importantNotesSimpleMde.value();
-                    let importantNotesCharCount = importantNotesContent.length;
-
-                    // Check if the character limit is exceeded
-                    if (importantNotesCharCount > importantNotesMaxChars) {
-                        // Trim content to maxChars if limit exceeded
-                        importantNotesSimpleMde.value(importantNotesContent.substring(0, importantNotesMaxChars));
-                        importantNotesCharCount = importantNotesMaxChars;
-                    }
-
-                    // Update character count display
-                    document.getElementById("importantNotesCharCount").innerText = `${importantNotesCharCount}/${importantNotesMaxChars} characters`;
-                });
-            </script>
+          <div class="p-4 animated-card align-items-center justify-content-center h-100 w-100 flex-grow-1">
+            <h3 class="text-center mb-3">Important Notes</h3>
+            <p class="text-center">Smart Wage Management System was established with the vision of simplifying payroll processing for businesses of all sizes. From our humble beginnings as a small startup, we’ve grown into a trusted platform that serves organizations across multiple industries. Our journey is fueled by our commitment to innovation, precision, and customer satisfaction.</p>
           </div>
         </div>
       </div>
     </div>
     <div class="card-footer text-center">
-      <button type="button" class="btn btn-success">Update</button>
     </div>
   </div>
 </div>
-
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    document.querySelectorAll("#company-profile-section .btn-add-header").forEach(function (btn) {
-      btn.addEventListener("click", function () {
-        var placeholder = btn.getAttribute("data-placeholder") || "Enter text";
-        var input = document.createElement("input");
-        input.type = "text";
-        input.className = "form-control mb-2";
-        input.placeholder = placeholder;
-        var container = btn.parentElement.querySelector(".header-inputs");
-        if (!container) {
-          container = document.createElement("div");
-          container.className = "header-inputs";
-          btn.parentElement.insertBefore(container, btn);
-        }
-        container.appendChild(input);
-      });
-    });
-  });
-</script>
