@@ -135,9 +135,15 @@ class PayslipDao
             "deleted_at"                   => "payslip.deleted_at             AS deleted_at"            ,
 
             "employee_full_name"           => "employee.full_name             AS full_name"             ,
+            "employee_marital_status"      => "employee.marital_status        AS marital_status"        ,
             "employee_code"                => "employee.employee_code         AS employee_code"         ,
             "employee_employment_type"     => "employee.employment_type       AS employment_type"       ,
+            "employee_date_of_hire"        => "employee.date_of_hire          AS date_of_hire"          ,
             "employee_basic_salary"        => "employee.basic_salary          AS basic_salary"          ,
+            "tin_number"                   => "employee.tin_number            AS tin_number"            ,
+            "sss_number"                   => "employee.sss_number            AS sss_number"            ,
+            "philhealth_number"            => "employee.philhealth_number     AS philhealth_number"     ,
+            "pagibig_fund_number"          => "employee.pagibig_fund_number   AS pagibig_fund_number"   ,
             "employee_bank_name"           => "employee.bank_name             AS bank_name"             ,
             "employee_bank_branch_name"    => "employee.bank_branch_name      AS bank_branch_name"      ,
             "employee_bank_account_number" => "employee.bank_account_number   AS bank_account_number"   ,
@@ -147,7 +153,7 @@ class PayslipDao
 
             "employee_department_name"     => "department.name                AS department_name"       ,
 
-            "payroll_frequency"            => "payroll_group.payroll_frequency AS payroll_frequency"    ,
+            "pay_frequency"                => "payroll_group.pay_frequency    AS pay_frequency"         ,
 
             "total_basic_pay"              => "SUM(basic_pay)                 AS total_basic_pay"
         ];
@@ -202,7 +208,7 @@ class PayslipDao
             ";
         }
 
-        if (array_key_exists("payroll_frequency", $selectedColumns)) {
+        if (array_key_exists("pay_frequency", $selectedColumns)) {
             $joinClauses .= "
                 LEFT JOIN
                     payroll_groups AS payroll_group
@@ -303,6 +309,7 @@ class PayslipDao
             {$limitClause}
             {$offsetClause}
         ";
+
         try {
             $statement = $this->pdo->prepare($query);
 
@@ -349,7 +356,7 @@ class PayslipDao
         } catch (PDOException $exception) {
             error_log("Database Error: An error occurred while fetching the payslips. " .
                       "Exception: {$exception->getMessage()}");
-echo $exception->getMessage();
+
             return ActionResult::FAILURE;
         }
     }
