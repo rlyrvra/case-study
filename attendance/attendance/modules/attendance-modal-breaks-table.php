@@ -90,7 +90,7 @@
                                 <?php echo !empty($rowBreak['start_time']) ? htmlspecialchars(date("h:i:s A", strtotime($rowBreak['start_time']))) : ''; ?>
                             </td>
                             <td>
-                            <?php echo !empty($rowBreak['end_time']) ? htmlspecialchars(date("h:i:s A", strtotime($rowBreak['end_time']))) : ''; ?>
+                                <?php echo !empty($rowBreak['end_time']) ? htmlspecialchars(date("h:i:s A", strtotime($rowBreak['end_time']))) : ''; ?>
                             </td>
                             <td>
                                 <?php echo htmlspecialchars($rowBreak['break_duration_in_minutes']); ?>
