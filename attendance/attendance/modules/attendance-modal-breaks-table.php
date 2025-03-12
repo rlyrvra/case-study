@@ -87,10 +87,10 @@
                                 <?php echo htmlspecialchars(date("F j, Y", strtotime($row['date']))); ?>
                             </td>
                             <td>
-                                <?php echo !empty($row['start_time']) ? htmlspecialchars(date("h:i:s A", strtotime($row['start_time']))) : ''; ?>
+                                <?php echo !empty($rowBreak['start_time']) ? htmlspecialchars(date("h:i:s A", strtotime($rowBreak['start_time']))) : ''; ?>
                             </td>
                             <td>
-                            <?php echo !empty($row['end_time']) ? htmlspecialchars(date("h:i:s A", strtotime($row['end_time']))) : ''; ?>
+                            <?php echo !empty($rowBreak['end_time']) ? htmlspecialchars(date("h:i:s A", strtotime($rowBreak['end_time']))) : ''; ?>
                             </td>
                             <td>
                                 <?php echo htmlspecialchars($rowBreak['break_duration_in_minutes']); ?>
