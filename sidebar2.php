@@ -122,13 +122,13 @@
         <li class="menu-item" id="leaves-menu">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
             <i class="menu-icon tf-icons bx bx-briefcase-alt-2"></i>
-            <div data-i18n="User interface">Leaves</div>
+                <div data-i18n="User interface">Leaves</div>
             </a>
             <ul class="menu-sub">
                 <?php if($_SESSION['access_role'] == 'Admin'): ?>
                 <li class="menu-item" id="leave-types-menu">
                     <a href="leave-types" class="menu-link">
-                        <div">Leave Types</div>
+                        <div>Leave Types</div>
                     </a>
                 </li>
                 <?php endif ?>
@@ -142,7 +142,6 @@
                     <a href="leave-requests" class="menu-link">
                         <div>Leave Requests</div>
                     </a>
-                
                 </li>
                 <?php endif ?>
             </ul>
