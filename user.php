@@ -9,8 +9,19 @@
     background-color: transparent !important;
     backdrop-filter: none !important;
 }
+.search-results {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: white;
+    width: 100%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+}
 </style>
 <!-- Navbar -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+<script src="requests/header/header-clock.js?v1.1.0"></script>
 <div class="container-fluid green pb-3">
     <nav
     class="layout-navbar navbar navbar-expand-xl align-items-center bg-navbar-theme transparent no-shadow"
@@ -22,21 +33,33 @@
         </div>
 
         <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+
             <!-- Search -->
-            <!-- <div class="navbar-nav align-items-center w-100">
-                <div class="input-group nav-item d-flex align-items-center w-100">
-                <span class="input-group-text"><i class="bx bx-search fs-4 lh-0"></i></span>
-                <input
-                    type="text"
-                    class="form-control border-0 shadow-none text-center"
-                    placeholder="Search..."
-                    aria-label="Search..."
-                />
+            <div class="navbar-nav align-items-center w-100 mt-3 position-relative">
+                <div class="input-group nav-item align-items-center w-100">
+                    <span class="input-group-text"><i class="bx bx-search fs-4 lh-0"></i></span>
+                    <input
+                        id="searchInput"
+                        type="text"
+                        class="form-control border-0 shadow-none text-center"
+                        onkeyup="searchNav()"
+                        placeholder="Search..."
+                        aria-label="Search..."
+                    />
+                <ul class="list-group search-results mt-1" id="searchResults" style="display: none;"></ul>
                 </div>
-            </div> -->
+            </div>
+            
             <!-- /Search -->
+
+            <!-- Time -->
+            <div class="container p-3 mt-3 text-white text-end">
+                <span id="time" class="display-6"></span><br>
+                <span id="date"></span>
+            </div>
+            <!-- /Time -->
              
-            <ul class="navbar-nav flex-row align-items-center ms-auto">
+            <ul class="navbar-nav flex-row align-items-center ms-auto mt-3">
                 
 
                 <!-- User -->
