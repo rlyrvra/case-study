@@ -14,6 +14,8 @@ require_once __DIR__ . '/../../../breaks/EmployeeBreakDao.php';
 require_once __DIR__ . '/../../../breaks/EmployeeBreakRepository.php';
 require_once __DIR__ . '/../../../breaks/EmployeeBreakService.php';
 
+require_once __DIR__ . '/../../../company-profile/CompanyProfileDao.php';
+
 require_once __DIR__ . '/../../../includes/Helper.php';
 require_once __DIR__ . '/../../../database/database.php';
 require_once __DIR__ . '/../../../includes/session.php';
@@ -21,6 +23,7 @@ require_once __DIR__ . '/../../../includes/session.php';
 try {
     $attendanceDao = new AttendanceDao($pdo);
     $employeeBreakDao = new EmployeeBreakDao($pdo);
+    $companyProfileDao = new CompanyProfileDao($pdo);
     $action = $_POST['action'] ?? '';
 
     if ($action === 'fetchAll') {
@@ -159,6 +162,114 @@ try {
         $totalPages = ceil($totalAttendance / $limit);
 
         include __DIR__ . '/attendance-table.php';
+        return;
+    }
+
+    if ($action === 'downloadDTR'){
+        $filterCriteria = [
+            [
+                "column" => "attendance.deleted_at",
+                "operator" => "IS NULL"
+            ],
+            [
+                'column'      => 'attendance.date'                              ,
+                'operator'    => 'BETWEEN'                                                ,
+                'lower_bound' => $_POST['pay_period_start_date'],
+                'upper_bound' => $_POST['pay_period_end_date']
+            ],
+            [
+                "column" => "work_schedule_snapshot.employee_id",
+                "operator" => "=",
+                "value" => $_SESSION['id']
+            ]
+        ];
+        $result = $attendanceDao->fetchAll(
+        [
+            "date",
+            "check_in_time",
+            "check_out_time",
+            "total_break_duration_in_minutes",
+            "total_hours_worked",
+            "late_check_in",
+            "early_check_out",
+            "overtime_hours",
+            "is_overtime_approved",
+            "attendance_status",
+            "remarks",
+            "work_schedule_snapshot_employee_id"
+        ], $filterCriteria);
+        $myAttendance;
+        if ($result !== ActionResult::FAILURE) {
+            $myAttendance = $result['result_set'];
+        }
+        //print_r($myAttendance);
+
+        $totalAttendance = $result["total_row_count"];
+
+        $employeeBreakFilterCriteria = [
+            [
+                'column'   => 'employee_break.deleted_at',
+                'operator' => 'IS NULL'
+            ],
+            [
+                'column'   => 'work_schedule_snapshot.employee_id'               ,
+                'operator' => '='                                                ,
+                'value'    => $_SESSION['id']
+            ],
+            [
+                'column'      => 'employee_break.created_at'                              ,
+                'operator'    => 'BETWEEN'                                                ,
+                'lower_bound' => $_POST['pay_period_start_date'],
+                'upper_bound' => $_POST['pay_period_end_date']
+            ]
+        ];
+
+        $result = $employeeBreakDao->fetchAll(
+        [
+            'break_type_snapshot_name',
+            'start_time',
+            'end_time',
+            'break_duration_in_minutes',
+            "work_schedule_snapshot_employee_id"
+        ], 
+        $employeeBreakFilterCriteria);
+        $myBreaks;
+        if ($result !== ActionResult::FAILURE) {
+            $myBreaks = $result['result_set'];
+        }
+
+        //print_r($myBreaks);
+
+        $totalBreaks = $result["total_row_count"];
+
+        $selectedCompanyInfo = new CompanyInformation();
+        $selectedCompanyInfo->setId(1);
+        $selectedCompanyInfo->name = "s";
+        $selectedCompanyInfo->date_established = "s";
+        $selectedCompanyInfo->img_location = "s";
+        $selectedCompanyInfo->business_type = "s";
+        $selectedCompanyInfo->industry = "s";
+        $selectedCompanyInfo->address = "s";
+        $selectedCompanyInfo->phone = "s";
+        $selectedCompanyInfo->email = "s";
+        $selectedCompanyInfo->website = "s";
+        $companyProfileFilterCriteria = [
+            [
+                "column" => "id", 
+                "operator" => "=", 
+                "value" => $selectedCompanyInfo->getId()
+            ]
+        ];
+        $companyProfileData = $companyProfileDao->fetchCompanyInformation($selectedCompanyInfo, $companyProfileFilterCriteria);
+        if ($companyProfileData === ActionResult::FAILURE){
+            echo "Fail to fetch Company Information";
+            return;
+        }
+        //print_r($companyProfileData);
+        //print_r($myAttendance);
+        //print_r($myBreaks);
+
+        include __DIR__ . '/attendance-pdf.php';
         return;
     }
 

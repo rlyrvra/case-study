@@ -67,9 +67,19 @@
                 <div class="col-6 text-danger">₱<?php echo number_format($row['withholding_tax'], 2); ?></div>
               </div>
               <hr>
-              <div class="row">
+              <div class="row mb-2">
                 <div class="col-6 text-muted">Gross Pay:</div>
                 <div class="col-6 fw-bold text-success h5">₱<?php echo number_format($row['gross_pay'], 2); ?></div>
+              </div>
+              <div class="row">
+                <div class="col-6 d-flex w-100 align-items-center justify-content-center">
+                  <button class="btn btn-info" 
+                  title="See Work Hours..." 
+                  data-bs-toggle="modal" 
+                  data-bs-target="#WKR<?php echo htmlspecialchars($row['id']); ?>"> 
+                      <i class="bx bx-lg bx-timer"></i></button>
+                  <?php include __DIR__ . '/payslip-modal-work-hrs-table.php'; ?>
+                </div>
               </div>
             </div>
             <div class="card-footer bg-light text-center">

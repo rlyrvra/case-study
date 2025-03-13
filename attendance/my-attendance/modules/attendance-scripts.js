@@ -59,3 +59,7 @@ function getByRecordsMonth(){
     byMonth = selectedOptions.by_record.split(" ")[0];
     return byMonth;
 }
+
+function getPayPeriodById(id) {
+    return payPeriodsRecords.find(record => record.id == id);
+}

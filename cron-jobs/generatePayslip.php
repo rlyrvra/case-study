@@ -318,6 +318,9 @@ try {
                 }
 
                 if ( ! isset($workSchedule['is_recorded'])) {
+                    $recordedWorkSchedules[$date][$index]['start_time'] = $currentWorkScheduleStartDateTime->format('Y-m-d H:i:s');
+                    $recordedWorkSchedules[$date][$index]['end_time'  ] = $currentWorkScheduleEndDateTime  ->format('Y-m-d H:i:s');
+
                     $recordedWorkSchedules[$date][$index]['early_check_in_window'] = $adjustedEarlyCheckInWindow;
                 }
 
@@ -480,12 +483,12 @@ try {
                         }
 
                         $emptyBreakRecord = new EmployeeBreak(
-                            id                     : null                                           ,
-                            breakScheduleSnapshotId: $breakScheduleSnapshotId                       ,
-                            startTime              : null                                           ,
-                            endTime                : null                                           ,
-                            breakDurationInMinutes : 0                                              ,
-                            createdAt              : $originalCurrentDateTime->format('Y-m-d H:i:s')
+                            id                     : null                       ,
+                            breakScheduleSnapshotId: $breakScheduleSnapshotId   ,
+                            startTime              : null                       ,
+                            endTime                : null                       ,
+                            breakDurationInMinutes : 0                          ,
+                            createdAt              : $workSchedule['start_time']
                         );
 
                         $createEmptyBreakRecordResult = $employeeBreakRepository

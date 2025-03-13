@@ -96,3 +96,60 @@ function fetchAllMyAttendance(page = 1) {
         },
     });
 }
+
+function downloadDTR(){
+    const payPeriodForm = document.getElementById("pay-period-form"); 
+    if(!payPeriodForm.checkValidity()){
+        return;
+    }
+    var selectedId = $("#pay_period").val();
+    var selectedPayPeriod = getPayPeriodById(selectedId);
+    $.ajax({
+        url: "attendance/my-attendance/modules/attendance-api",
+        type: "POST",
+        xhrFields: { responseType: 'blob' }, // Expect binary data
+        data: {
+            action: "downloadDTR",
+            pay_date: selectedPayPeriod.pay_date,
+            pay_period_start_date: selectedPayPeriod.pay_period_start_date,
+            pay_period_end_date: selectedPayPeriod.pay_period_end_date
+        },
+        success: function (response) {
+            var blob = new Blob([response], { type: "application/pdf" });
+            var link = document.createElement("a");
+            link.href = window.URL.createObjectURL(blob);
+            link.download = `Attendance_${selectedPayPeriod.pay_period_start_date}_to_${selectedPayPeriod.pay_period_end_date}.pdf`;
+            link.click();
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log("AJAX Error: " + textStatus + ": " + errorThrown);
+        },
+    });
+}
+
+
+// function downloadDTR(){
+//     const payPeriodForm = document.getElementById("pay-period-form"); 
+//     if(!payPeriodForm.checkValidity()){
+//         return;
+//     }
+//     var selectedId = $("#pay_period").val();
+//     var selectedPayPeriod = getPayPeriodById(selectedId);
+//     $.ajax({
+//         url: "attendance/my-attendance/modules/attendance-api",
+//         type: "POST",
+//         data: {
+//             action: "downloadDTR",
+//             pay_date: selectedPayPeriod.pay_date,
+//             pay_period_start_date: selectedPayPeriod.pay_period_start_date,
+//             pay_period_end_date: selectedPayPeriod.pay_period_end_date
+//         },
+//         success: function (response) {
+//             $("#response-test").html(response);
+//         },
+//         error: function (jqXHR, textStatus, errorThrown) {
+//             console.log("AJAX Error: " + textStatus + ": " + errorThrown);
+//         },
+//     });
+// }
+

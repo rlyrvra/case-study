@@ -481,7 +481,7 @@ class AttendanceDao
         } catch (PDOException $exception) {
             error_log("Database Error: An error occurred while fetching the attendance records. " .
                       "Exception: {$exception->getMessage()}");
-            //echo $exception->getMessage();
+            echo $exception->getMessage();
             return ActionResult::FAILURE;
         }
     }

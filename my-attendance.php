@@ -26,12 +26,17 @@ if($_SESSION['access_role'] === 'Admin'){
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <!-- Sweet Alert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- Selectize CSS -->
+<link
+  rel="stylesheet"
+  href="assets/vendor/css/selectize.bootstrap5.css"
+/>
 
 
 <!-- Ajax -->
-<script src="attendance/my-attendance/modules/attendance-ajax.js?v1.2.2"></script>
+<script src="attendance/my-attendance/modules/attendance-ajax.js?v1.2.3"></script>
 <!-- Scripts -->
-<script src="attendance/my-attendance/modules/attendance-scripts.js?v1.0.3"></script>
+<script src="attendance/my-attendance/modules/attendance-scripts.js?v1.0.4"></script>
 
 <!---Skeletons--->
 <script src="requests/table-skeleton.js?v1.2"></script>
@@ -89,7 +94,7 @@ if($_SESSION['access_role'] === 'Admin'){
       document.getElementById("attendance-menu").classList.add("open");
       document.getElementById("my-attendance-menu").classList.add("active");
     </script>
-
+    <?php require_once __DIR__ . '/attendance/my-attendance/modules/attendance-modal-pay-period-picker.php' ?>
     <!-- Layout container -->
     <div class="layout-page">
     <?php require_once __DIR__ . '/user.php' ?>
@@ -97,8 +102,12 @@ if($_SESSION['access_role'] === 'Admin'){
       <!-- / Navbar -->
       <div class="content-wrapper">
         <div class="container-fluid pt-5 pb-5">
+          <div id="response-test"></div>
           <div class="container-fluid mb-3 d-flex justify-content-between flex-column flex-lg-row">
               <h1 class="display-1">My Attendance</h1>
+              <button type="button" class="btn btn-success btn-xl" data-bs-toggle="modal" data-bs-target="#pay-period-modal">
+                <i class="bx bx-export bx-lg"></i>Print DTR PDF
+              </button>
           </div>
 
           <div class="container-fluid card pt-3 pb-3 mt-5 mb-5">
@@ -132,6 +141,7 @@ if($_SESSION['access_role'] === 'Admin'){
 </div>
 <!-- / Layout wrapper -->
 <?php require_once __DIR__ . '/attendance/my-attendance/modules/attendance-fetch-records-by-month.php' ?>
+<?php require_once __DIR__ . '/attendance/my-attendance/modules/attendance-fetch-pay-periods.php' ?>
 <script>
   $(document).ready(function (){
     populateAttendanceRecords(document.querySelector('.byRecords'));
@@ -161,5 +171,12 @@ if($_SESSION['access_role'] === 'Admin'){
 
 <!-- Place this tag in your head or just before your close body tag. -->
 <script async defer src="https://buttons.github.io/buttons.js"></script>
+<!-- Selectize -->
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/js/selectize.min.js"
+  integrity="sha512-IOebNkvA/HZjMM7MxL0NYeLYEalloZ8ckak+NDtOViP7oiYzG5vn6WVXyrJDiJPhl4yRdmNAG49iuLmhkUdVsQ=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+></script>
 </body>
 </html>
