@@ -148,8 +148,10 @@ try {
             if(!$hosted) $documentRoot = 'C:\\xampp\\htdocs\\case-study\\';  
             if($hosted) $documentRoot = '\\home\\u227551606\\domains\\cs-devops.com\\public_html\\smartWage\\'; 
             $relativePath = str_replace($documentRoot, '', $absolutePath); // Convert to relative path
+            $imageData = base64_encode(file_get_contents($absolutePath));
+		        $src = 'data:image/jpg;base64,' . $imageData;
         ?>
-      <img src="<?php echo htmlspecialchars($relativePath); ?>" class="w-px-100 h-auto rounded-circle">
+      <img src="<?php echo $src; ?>" class="w-px-100 h-auto rounded-circle">
     </div>
   </div>
 

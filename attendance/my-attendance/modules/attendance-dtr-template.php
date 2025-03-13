@@ -110,7 +110,7 @@
   $absolutePath = $companyProfileData[0]['img_location'];
   $fileUrl = 'file:///' . str_replace('\\', '/', $absolutePath); // Make sure to use forward slashes for paths in DOMPDF
   //echo $fileUrl;
-  $imageData = base64_encode(file_get_contents($imagePath));
+  $imageData = base64_encode(file_get_contents($absolutePath));
   $src = 'data:image/jpg;base64,' . $imageData;
   ?>
   <div class="company-logo">
