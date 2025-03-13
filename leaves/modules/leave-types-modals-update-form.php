@@ -30,10 +30,10 @@
                                 <input type="checkbox" class="add_form-check-input" id="update_is_paid">
                                 <label class="form-check-label" for="update_is_paid">Is Paid</label>
                             </div>
-                            <div class="col-6">
+                            <!-- <div class="col-6">
                                 <input type="checkbox" class="add_form-check-input" id="update_is_encashable">
                                 <label class="form-check-label" for="update_is_encashable">Is Encashable</label>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                     

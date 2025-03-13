@@ -22,6 +22,27 @@ class EmployeeBreakService
         $this->attendanceRepository    = $attendanceRepository   ;
     }
 
+    public function fetchAllEmployeeBreaks(
+        ? array $columns              = null,
+        ? array $filterCriteria       = null,
+        ? array $sortCriteria         = null,
+        ? array $groupByColumns       = null,
+        ? int   $limit                = null,
+        ? int   $offset               = null,
+          bool  $includeTotalRowCount = true
+    ): array|ActionResult {
+
+        return $this->employeeBreakRepository->fetchAllEmployeeBreaks(
+            columns             : $columns             ,
+            filterCriteria      : $filterCriteria      ,
+            sortCriteria        : $sortCriteria        ,
+            groupByColumns      : $groupByColumns      ,
+            limit               : $limit               ,
+            offset              : $offset              ,
+            includeTotalRowCount: $includeTotalRowCount
+        );
+    }
+
     public function handleRfidTap(string $rfidUid, string $currentDateTime): array
     {
         $employeeColumns = [
@@ -172,6 +193,7 @@ class EmployeeBreakService
             }
 
             $earlyCheckInWindow = $lastAttendanceRecord['work_schedule_snapshot_minutes_can_check_in_before_shift'];
+
             $adjustedWorkScheduleStartDateTime = (clone $workScheduleStartDateTime)
                 ->modify('-' . $earlyCheckInWindow . ' minutes');
 
@@ -205,6 +227,10 @@ class EmployeeBreakService
                     'operator'    => 'BETWEEN'                                  ,
                     'lower_bound' => $formattedAdjustedWorkScheduleStartDateTime,
                     'upper_bound' => $formattedWorkScheduleEndDateTime
+                ],
+                [
+                    'column'   => 'employee_break.start_time',
+                    'operator' => 'IS NOT NULL'
                 ]
             ];
 
@@ -238,13 +264,7 @@ class EmployeeBreakService
             if (empty($lastBreakRecord)                  ||
 
                ($lastBreakRecord['start_time'] !== null  &&
-                $lastBreakRecord['end_time'  ] !== null) ||
-
-               ($lastBreakRecord['start_time'] === null  &&
-                $lastBreakRecord['end_time'  ] !== null) ||
-
-               ($lastBreakRecord['start_time'] === null  &&
-                $lastBreakRecord['end_time'  ] === null)) {
+                $lastBreakRecord['end_time'  ] !== null)) {
 
                 $isBreakIn = true;
 
@@ -257,17 +277,14 @@ class EmployeeBreakService
                 }
 
                 $employeeBreakColumns = [
-                    'id'                                         ,
-                    'break_schedule_snapshot_id'                 ,
-                    'start_time'                                 ,
-                    'end_time'                                   ,
-                    'created_at'                                 ,
+                    'id'                                     ,
+                    'break_schedule_snapshot_id'             ,
+                    'start_time'                             ,
+                    'end_time'                               ,
+                    'created_at'                             ,
 
-                    'break_schedule_snapshot_start_time'         ,
-                    'break_schedule_snapshot_end_time'           ,
-                    'break_schedule_snapshot_is_flexible'        ,
-                    'break_schedule_snapshot_earliest_start_time',
-                    'break_schedule_snapshot_latest_end_time'    ,
+                    'break_schedule_snapshot_start_time'     ,
+                    'break_schedule_snapshot_end_time'       ,
 
                     'break_type_snapshot_duration_in_minutes'
                 ];
@@ -301,6 +318,13 @@ class EmployeeBreakService
                     includeTotalRowCount: false
                 );
 
+                if ($breakSchedules === ActionResult::FAILURE) {
+                    return [
+                        'status'  => 'error',
+                        'message' => 'An unexpected error occurred. Please try again later.'
+                    ];
+                }
+
                 $breakSchedules =
                     ! empty($breakSchedules['result_set'])
                         ? $breakSchedules['result_set']
@@ -314,19 +338,16 @@ class EmployeeBreakService
                 }
 
                 $mapKeys = [
-                    'id'                                          => 'employee_break_id'             ,
-                    'break_schedule_snapshot_id'                  => 'break_schedule_snapshot_id'    ,
-                    'start_time'                                  => 'employee_break_start_time'     ,
-                    'end_time'                                    => 'employee_break_end_time'       ,
-                    'created_at'                                  => 'employee_break_created_at'     ,
+                    'id'                                      => 'employee_break_id'             ,
+                    'break_schedule_snapshot_id'              => 'break_schedule_snapshot_id'    ,
+                    'start_time'                              => 'employee_break_start_time'     ,
+                    'end_time'                                => 'employee_break_end_time'       ,
+                    'created_at'                              => 'employee_break_created_at'     ,
 
-                    'break_schedule_snapshot_start_time'          => 'start_time'                    ,
-                    'break_schedule_snapshot_end_time'            => 'end_time'                      ,
-                    'break_schedule_snapshot_is_flexible'         => 'is_flexible'                   ,
-                    'break_schedule_snapshot_earliest_start_time' => 'earliest_start_time'           ,
-                    'break_schedule_snapshot_latest_end_time'     => 'latest_end_time'               ,
+                    'break_schedule_snapshot_start_time'      => 'start_time'                    ,
+                    'break_schedule_snapshot_end_time'        => 'end_time'                      ,
 
-                    'break_type_snapshot_duration_in_minutes'     => 'break_type_duration_in_minutes'
+                    'break_type_snapshot_duration_in_minutes' => 'break_type_duration_in_minutes'
                 ];
 
                 $breakSchedules = array_map(function ($item) use ($mapKeys) {
@@ -340,8 +361,8 @@ class EmployeeBreakService
                 }, $breakSchedules);
 
                 usort($breakSchedules, function ($breakScheduleA, $breakScheduleB) use ($workScheduleDate, $workScheduleStartDateTime) {
-                    $breakScheduleStartTimeA = $breakScheduleA['start_time'] ?? $breakScheduleA['earliest_start_time'];
-                    $breakScheduleStartTimeB = $breakScheduleB['start_time'] ?? $breakScheduleB['earliest_start_time'];
+                    $breakScheduleStartTimeA = $breakScheduleA['start_time'];
+                    $breakScheduleStartTimeB = $breakScheduleB['start_time'];
 
                     if ($breakScheduleStartTimeA === null && $breakScheduleStartTimeB === null) {
                         return 0;
@@ -380,13 +401,8 @@ class EmployeeBreakService
                     ];
                 }
 
-                if ($currentBreakSchedule['is_flexible']) {
-                    $breakScheduleStartDateTime = new DateTime($currentBreakSchedule['earliest_start_time']);
-                    $breakScheduleEndDateTime   = new DateTime($currentBreakSchedule['latest_end_time'    ]);
-                } else {
-                    $breakScheduleStartDateTime = new DateTime($currentBreakSchedule['start_time']);
-                    $breakScheduleEndDateTime   = new DateTime($currentBreakSchedule['end_time'  ]);
-                }
+                $breakScheduleStartDateTime = new DateTime($currentBreakSchedule['start_time']);
+                $breakScheduleEndDateTime   = new DateTime($currentBreakSchedule['end_time'  ]);
 
                 if ($currentDateTime < $breakScheduleStartDateTime) {
                     $formattedBreakStartTime = $breakScheduleStartDateTime->format('g:i A');
@@ -478,15 +494,24 @@ class EmployeeBreakService
             }
         }
 
-        if ($isBreakIn) {
-            return [
-                'status'  => 'success',
-                'message' => 'Break-in recorded successfully.'
-            ];
+        if (isset($isBreakIn)) {
+            if ($isBreakIn) {
+                return [
+                    'status'  => 'success',
+                    'message' => 'Break-in recorded successfully.'
+                ];
+
+            } else {
+                return [
+                    'status'  => 'success',
+                    'message' => 'Break-out recorded successfully.'
+                ];
+            }
+
         } else {
             return [
-                'status'  => 'success',
-                'message' => 'Break-out recorded successfully.'
+                'status'  => 'error',
+                'message' => 'An unexpected error occurred. Please try again later.'
             ];
         }
     }
@@ -505,13 +530,8 @@ class EmployeeBreakService
         $nextBreakSchedule = [];
 
         foreach ($breakSchedules as $breakSchedule) {
-            if ($breakSchedule['is_flexible']) {
-                $breakStartTime = $breakSchedule['earliest_start_time'];
-                $breakEndTime   = $breakSchedule['latest_end_time'    ];
-            } else {
-                $breakStartTime = $breakSchedule['start_time'];
-                $breakEndTime   = $breakSchedule['end_time'  ];
-            }
+            $breakStartTime = $breakSchedule['start_time'];
+            $breakEndTime   = $breakSchedule['end_time'  ];
 
             $breakStartDateTime = new DateTime($workScheduleStartDate . ' ' . $breakStartTime);
             $breakEndDateTime   = new DateTime($workScheduleStartDate . ' ' . $breakEndTime  );
@@ -528,16 +548,8 @@ class EmployeeBreakService
                 $breakEndDateTime->modify('+1 day');
             }
 
-            $formattedBreakStartDateTime = $breakStartDateTime->format('Y-m-d H:i:s');
-            $formattedBreakEndDateTime   = $breakEndDateTime  ->format('Y-m-d H:i:s');
-
-            if ($breakSchedule['is_flexible']) {
-                $breakSchedule['earliest_start_time'] = $formattedBreakStartDateTime;
-                $breakSchedule['latest_end_time'    ] = $formattedBreakEndDateTime  ;
-            } else {
-                $breakSchedule['start_time'] = $formattedBreakStartDateTime;
-                $breakSchedule['end_time'  ] = $formattedBreakEndDateTime  ;
-            }
+            $breakSchedule['start_time'] = $breakStartDateTime->format('Y-m-d H:i:s');
+            $breakSchedule['end_time'  ] = $breakEndDateTime  ->format('Y-m-d H:i:s');
 
             if ($currentDateTime >= $breakStartDateTime && $currentDateTime < $breakEndDateTime) {
                 return $breakSchedule;

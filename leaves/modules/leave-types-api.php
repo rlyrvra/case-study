@@ -106,7 +106,7 @@ try {
         $name = isset($leaveTypesData['name']) ? validateInput($leaveTypesData['name'], 'Name') : '';
         $maximumNumberOfDays = isset($leaveTypesData['maximum_number_of_days']) ? validateNumericIdentifier($leaveTypesData['maximum_number_of_days'], 1, 30, 'Maximum Number of Days') : null;
         $isPaid = isset($leaveTypesData['is_paid']) && validateInput($leaveTypesData['is_paid'], 'Is Paid') == 'true' ? true : false;
-        $isEnchashable = isset($leaveTypesData['is_enchashable']) && validateInput($leaveTypesData['is_enchashable'], 'Is Enchashable') == 'true' ? true : false;
+        $isEnchashable = false;
         $description = isset($leaveTypesData['description']) ? validateInput($leaveTypesData['description'], 'Description') : '';
         $status = isset($leaveTypesData['status']) ? validateInput($leaveTypesData['status'], 'Status') : '';
 
@@ -115,8 +115,8 @@ try {
             id: null,
             name: $name,
             maximumNumberOfDays: $maximumNumberOfDays,
-            isPaid: (bool) $isPaid,
-            isEncashable: (bool) $isEnchashable,
+            isPaid: $isPaid,
+            isEncashable: $isEnchashable,
             description: $description,
             status: $status
         );
@@ -130,11 +130,6 @@ try {
             echo "
             <script> 
                 showSuccessCreate(); 
-            </script>";
-        } else if ($result === ActionResult::DUPLICATE_ENTRY_ERROR) {
-            echo "
-            <script> 
-                showDuplicateError(); 
             </script>";
         } else {
             echo "
@@ -176,19 +171,17 @@ try {
         $hashed_id = isset($_POST['md5_id']) ? (int) validateNumericIdentifier($_POST['md5_id'], 1, 30) : null;
         $name = $leaveTypeData['name'] ?? '';
         $maxNumberOfDays = $leaveTypeData['maxNumberOfDays'] ?? null;
-        $isPaid = isset($leaveTypesData['isPaid']) && validateInput($leaveTypesData['isPaid'], 'Is Paid') == 'true' ? true : false;
-        $isEnchashable = isset($leaveTypesData['is_enchashable']) && validateInput($leaveTypesData['is_enchashable'], 'Is Enchashable') == 'true' ? true : false;
+        $isPaid = isset($leaveTypeData['isPaid']) && validateInput($leaveTypeData['isPaid'], 'Is Paid') == 'true' ? true : false;
+        $isEnchashable = false;
         $description = $leaveTypeData['description'] ?? null;
         $status = $leaveTypeData['status'] ?? null;
-
-        print_r($leaveTypeData);
 
         $updatedLeaveType = new LeaveType(
             id: $hashed_id,
             name: $name,
             maximumNumberOfDays: $maxNumberOfDays,
-            isPaid: (bool) $isPaid,
-            isEncashable: (bool) $isEnchashable,
+            isPaid: $isPaid,
+            isEncashable: $isEnchashable,
             description: $description,
             status: $status
         );
@@ -203,12 +196,7 @@ try {
             <script> 
                 showSuccessUpdate(); 
             </script>";
-        } else if ($updateResult === ActionResult::DUPLICATE_ENTRY_ERROR) {
-            echo "
-            <script> 
-                showDuplicateError(); 
-            </script>";
-        }else {
+        } else {
             echo "
             <script> 
                 showError(); 

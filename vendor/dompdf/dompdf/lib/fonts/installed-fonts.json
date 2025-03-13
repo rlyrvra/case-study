@@ -1,0 +1,9 @@
+{
+    "roboto": {
+        "200": "C:\\xampp\\htdocs\\case-study\\vendor\\dompdf\\dompdf\/lib\/fonts\/roboto_200_272faad8b3e2dee7bcf6a6c4342ff29d",
+        "300": "C:\\xampp\\htdocs\\case-study\\vendor\\dompdf\\dompdf\/lib\/fonts\/roboto_300_373f816e49d8622890f07d83ec8d9dab",
+        "normal": "C:\\xampp\\htdocs\\case-study\\vendor\\dompdf\\dompdf\/lib\/fonts\/roboto_normal_19250a3c7a2346a578e91836ef344bb1",
+        "600": "C:\\xampp\\htdocs\\case-study\\vendor\\dompdf\\dompdf\/lib\/fonts\/roboto_600_c48e456c1e05f358e9ca2d3b0e0147ac",
+        "bold": "roboto_bold_7add27c6330be31e8750ec1816378b48"
+    }
+}

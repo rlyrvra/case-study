@@ -1,16 +1,12 @@
-<?php require_once __DIR__ . '/includes/security-headers.php'; ?>
-<?php require_once __DIR__ . '/includes/session.php'; ?>
-<?php require_once __DIR__ . '/includes/file-locations.php' ?>
-
-<?php
+<?php 
+require_once __DIR__ . '/includes/security-headers.php'; 
+require_once __DIR__ . '/includes/session.php'; 
+require_once __DIR__ . '/includes/file-locations.php';
 require_once __DIR__ . '/login-checker.php';
 
-if(isset($_GET['s']) && $_GET['s'] == true){
-  include_once __DIR__ . '/sweet-alert-toasts/login/login-success.php';
-}
 
-if(isset($_GET['aR']) && $_GET['aR'] == true){
-  include_once __DIR__ . '/sweet-alert-toasts/login/login-access-role-insufficient.php';
+if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager' && $_SESSION['access_role'] !== 'Supervisor'){
+  header("Location: ". $SMARTWAGE_LOCATION ."/smartWage-index.php?aR=true");
 }
 ?>
 <!DOCTYPE html>

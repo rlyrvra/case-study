@@ -13,7 +13,6 @@
       <th>Name</th>
       <th>Maximum Number of Days</th>
       <th>Paid</th>
-      <th>Encashable</th>
       <th>description</th>
       <th>status</th>
       <th>Date Created</th>
@@ -45,14 +44,6 @@
           ?>"><?php 
           if($row['is_paid'] == 0) echo "No";
           if($row['is_paid'] == 1) echo "Yes";
-          ?></span></td>
-          <td><span class="badge badge center 
-          <?php 
-          if($row['is_encashable'] == 0) echo "bg-danger";
-          if($row['is_encashable'] == 1) echo "bg-success";
-          ?>"><?php 
-          if($row['is_encashable'] == 0) echo "No";
-          if($row['is_encashable'] == 1) echo "Yes";
           ?></span></td>
           <td><?php echo htmlspecialchars($row['description']); ?></td>
           <td><span class="badge 
@@ -95,7 +86,6 @@
       <th>Name</th>
       <th>Maximum Number of Days</th>
       <th>Paid</th>
-      <th>Encashable</th>
       <th>description</th>
       <th>status</th>
       <th>Date Created</th>

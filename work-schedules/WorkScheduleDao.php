@@ -148,7 +148,7 @@ class WorkScheduleDao
 
             error_log("Database Error: An error occurred while creating the work schedule snapshot. " .
                       "Exception: {$exception->getMessage()}");
-
+                      
             return ActionResult::FAILURE;
         }
     }
@@ -242,8 +242,8 @@ class WorkScheduleDao
 
         } else {
             foreach ($filterCriteria as $filterCriterion) {
-                $column   = $filterCriterion["column"  ];
-                $operator = $filterCriterion["operator"];
+                $column   = $filterCriterion["column"  ] ?? null;
+                $operator = $filterCriterion["operator"] ?? null;
 
                 switch ($operator) {
                     case "="   :
@@ -269,6 +269,13 @@ class WorkScheduleDao
 
                         $filterParameters[] = $filterCriterion["lower_bound"];
                         $filterParameters[] = $filterCriterion["upper_bound"];
+
+                        break;
+
+                    case "NOT EXISTS":
+                        $subquery = $filterCriterion["subquery"];
+
+                        $whereClauses[] = "NOT EXISTS ({$subquery})";
 
                         break;
                 }
@@ -380,7 +387,16 @@ class WorkScheduleDao
     {
         $query = "
             SELECT
-                *
+                id                               ,
+                start_time                       ,
+                end_time                         ,
+                is_flextime                      ,
+                total_hours_per_week             ,
+                total_work_hours                 ,
+                start_date                       ,
+                recurrence_rule                  ,
+                grace_period                     ,
+                minutes_can_check_in_before_shift
             FROM
                 work_schedule_snapshots
             WHERE
@@ -503,10 +519,10 @@ class WorkScheduleDao
             WHERE
         ";
 
-        if ( ! ctype_digit( (string) $workSchedule->getId())) {
-            $query .= " SHA2(id, 256) = :work_schedule_id";
+        if (preg_match("/^[1-9]\d*$/", $workSchedule->getId())) {
+            $query .= "id = :work_schedule_id";
         } else {
-            $query .= " id = :work_schedule_id";
+            $query .= "SHA2(id, 256) = :work_schedule_id";
         }
 
         $isLocalTransaction = ! $this->pdo->inTransaction();
@@ -562,10 +578,10 @@ class WorkScheduleDao
             WHERE
         ";
 
-        if ( ! ctype_digit( (string) $workScheduleId)) {
-            $query .= " SHA2(id, 256) = :work_schedule_id";
+        if (preg_match("/^[1-9]\d*$/", $workScheduleId)) {
+            $query .= "id = :work_schedule_id";
         } else {
-            $query .= " id = :work_schedule_id";
+            $query .= "SHA2(id, 256) = :work_schedule_id";
         }
 
         $isLocalTransaction = ! $this->pdo->inTransaction();

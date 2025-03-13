@@ -14,6 +14,9 @@ require_once __DIR__ . '/../../LeaveRequestAttachment.php';
 require_once __DIR__ . '/../../LeaveRequestAttachmentDao.php';
 require_once __DIR__ . '/../../LeaveRequestAttachmentRepository.php';
 
+require_once __DIR__ . '/../../../departments/DepartmentService.php';
+require_once __DIR__ . '/../../../employees/EmployeeService.php';
+
 
 require_once __DIR__ . '/../../../includes/Helper.php';
 require_once __DIR__ . '/../../../includes/enums/ActionResult.php';
@@ -30,6 +33,13 @@ try {
     $leaveRequestDao = new LeaveRequestDao($pdo);
     $leaveRequestAttachmentDao = new LeaveRequestAttachmentDao($pdo);
     $leaveEntitlementDao = new LeaveEntitlementDao($pdo);
+    $departmentDao = new DepartmentDao($pdo);
+    $departmentRepo = new DepartmentRepository($departmentDao);
+    $departmentService = new DepartmentService($departmentRepo);
+    $employeeDao = new EmployeeDao($pdo);
+    $employeeRepo = new EmployeeRepository($employeeDao);
+    $employeeService = new EmployeeService($employeeRepo);
+
     $action = $_POST['action'] ?? '';
 
     if($action === 'fetchAll'){
@@ -52,6 +62,41 @@ try {
                 "value" => $status
             ];
         }
+
+        // if($_SESSION['access_role'] === 'Admin'){
+        //     //do nothing
+        // }
+    
+        // if($_SESSION['access_role'] === 'Manager'){
+        //     if(!$departmentService->isEmployeeDepartmentHead($_SESSION['id'])){
+        //         return;
+        //     }
+        //     $departmentId = $employeeService->fetchAllEmployees(
+        //         ['department_id'],
+        //         [
+        //             [
+        //                 "column" => "employee.id",
+        //                 "operator" => "=",
+        //                 "value" => $_SESSION['id']
+        //             ]
+        //         ],
+        //         [],
+        //         1
+        //     )['result_set'][0]['department_id'];
+        //     $filterCriteria[] = [
+        //         "column" => "employee.department_id",
+        //         "operator" => "=",
+        //         "value" => $departmentId
+        //     ];
+        // }
+    
+        // if($_SESSION['access_role'] === 'Supervisor'){
+        //     $filterCriteria[] = [
+        //         "column" => "employee.supervisor_id",
+        //         "operator" => "=",
+        //         "value" => $_SESSION['id']
+        //     ];
+        // }
 
         if(empty($searchAt) && !empty($searchFilter)){
             $filterCriteria[] = [

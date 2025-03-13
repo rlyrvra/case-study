@@ -285,7 +285,11 @@ class BreakTypeDao
     {
         $query = "
             SELECT
-                *
+                id                               ,
+                name                             ,
+                duration_in_minutes              ,
+                is_paid                          ,
+                is_require_break_in_and_break_out
             FROM
                 break_type_snapshots
             WHERE
@@ -324,10 +328,10 @@ class BreakTypeDao
             WHERE
         ";
 
-        if ( ! ctype_digit( (string) $breakType->getId())) {
-            $query .= " SHA2(id, 256) = :break_type_id";
+        if (preg_match("/^[1-9]\d*$/", $breakType->getId())) {
+            $query .= "id = :break_type_id";
         } else {
-            $query .= " id = :break_type_id";
+            $query .= "SHA2(id, 256) = :break_type_id";
         }
 
         $isLocalTransaction = ! $this->pdo->inTransaction();
@@ -380,10 +384,10 @@ class BreakTypeDao
             WHERE
         ";
 
-        if ( ! ctype_digit( (string) $breakTypeId)) {
-            $query .= " SHA2(id, 256) = :break_type_id";
+        if (preg_match("/^[1-9]\d*$/", $breakTypeId)) {
+            $query .= "id = :break_type_id";
         } else {
-            $query .= " id = :break_type_id";
+            $query .= "SHA2(id, 256) = :break_type_id";
         }
 
         $isLocalTransaction = ! $this->pdo->inTransaction();

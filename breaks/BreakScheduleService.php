@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . "/BreakScheduleRepository.php";
+require_once __DIR__ . '/BreakScheduleRepository.php';
 
 class BreakScheduleService
 {
@@ -14,6 +14,11 @@ class BreakScheduleService
     public function createBreakSchedule(BreakSchedule $breakSchedule): ActionResult
     {
         return $this->breakScheduleRepository->createBreakSchedule($breakSchedule);
+    }
+
+    public function createBreakScheduleSnapshot(BreakScheduleSnapshot $breakScheduleSnapshot): int|ActionResult
+    {
+        return $this->breakScheduleRepository->createBreakScheduleSnapshot($breakScheduleSnapshot);
     }
 
     public function fetchAllBreakSchedules(

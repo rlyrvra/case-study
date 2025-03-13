@@ -2,68 +2,154 @@ function fetchAllMyAttendance(page = 1) {
     var numberEntries = $("#entries-per-page").val();
     var pageNumber = getPage(page);
     var sortByColumn = getSortByColumn();
-    if(sortByColumn == null){
+    if (sortByColumn == null) {
         sortByColumn = "created_at";
-    };
+    }
     var filterStatus = $("#status").val();
     var sortOrderBy = getOrderBy();
-    if(sortOrderBy == null) {
+    if (sortOrderBy == null) {
         sortOrderBy = "DESC";
-    };
+    }
     var dateColumn = getByDate();
     var startDate, endDate;
-    if(dateColumn){
+    if (dateColumn) {
         startDate = $("#dateStart").val();
         endDate = $("#dateEnd").val();
     }
-
+    var month = getByRecordsMonth();
+    var year =  getByRecordsYear();
     
     // console.log(`
-    //     Number of Entries: ${numberEntries}, 
-    //     Sort By Column: ${sortByColumn}, 
-    //     Page Number: ${pageNumber}, 
-    //     Sort Order By: ${sortOrderBy}, 
-    //     Date Column: ${dateColumn}, 
-    //     Start Date: ${startDate}, 
+    //     Number of Entries: ${numberEntries},
+    //     Sort By Column: ${sortByColumn},
+    //     Page Number: ${pageNumber},
+    //     Sort Order By: ${sortOrderBy},
+    //     Date Column: ${dateColumn},
+    //     Start Date: ${startDate},
     //     End Date: ${endDate}`);
 
     var loadingSpinner = document.getElementById("loadingSpinner");
     loadingSpinner.classList.remove("visually-hidden");
 
-
-    if(!skeletonLoaded){
-        loadSkeletonView(7, ['Date', 'Check In Time', 'Check Out Time', 'Break Duration (in min)', 'Total Hours Worked', 'Late Check In', 'Overtime Hours', 'Overtime Approval', 'Status', 'Remarks'] , numberEntries, document.getElementById("skeleton-attendance-table"));
-        document.getElementById('skeleton-attendance-table').classList.remove("visually-hidden");
-        document.getElementById('my-attendance-table').classList.add("visually-hidden");
+    if (!skeletonLoaded) {
+        loadSkeletonView(
+            7,
+            [
+                "Date",
+                "Check In Time",
+                "Check Out Time",
+                "Break Duration (in min)",
+                "Total Hours Worked",
+                "Late Check In",
+                "Overtime Hours",
+                "Overtime Approval",
+                "Status",
+                "Remarks",
+            ],
+            numberEntries,
+            document.getElementById("skeleton-attendance-table")
+        );
+        document
+            .getElementById("skeleton-attendance-table")
+            .classList.remove("visually-hidden");
+        document
+            .getElementById("my-attendance-table")
+            .classList.add("visually-hidden");
         skeletonLoaded = true;
-    }else{
-        document.getElementById('skeleton-attendance-table').classList.remove("visually-hidden");
-        document.getElementById('my-attendance-table').classList.add("visually-hidden");
+    } else {
+        document
+            .getElementById("skeleton-attendance-table")
+            .classList.remove("visually-hidden");
+        document
+            .getElementById("my-attendance-table")
+            .classList.add("visually-hidden");
     }
 
-    
     $.ajax({
-        url: 'attendance/my-attendance/modules/attendance-api',
-        type: 'POST',
+        url: "attendance/my-attendance/modules/attendance-api",
+        type: "POST",
         data: {
-            action: 'fetchAll',
+            action: "fetchAll",
             page: pageNumber,
             numberEntries: numberEntries,
             sort_by: sortByColumn,
             sort_order: sortOrderBy,
+            filter_month: month,
+            filter_year: year,
             filter_status: filterStatus,
             filter_date_column: dateColumn,
             filter_startDate: startDate,
-            filter_endDate: endDate
+            filter_endDate: endDate,
         },
-        success: function(response) {
+        success: function (response) {
             loadingSpinner.classList.add("visually-hidden");
-            document.getElementById('skeleton-attendance-table').classList.add("visually-hidden");
-            document.getElementById('my-attendance-table').classList.remove("visually-hidden");
-            $('#my-attendance-table').html(response);
+            document
+                .getElementById("skeleton-attendance-table")
+                .classList.add("visually-hidden");
+            document
+                .getElementById("my-attendance-table")
+                .classList.remove("visually-hidden");
+            $("#my-attendance-table").html(response);
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
             console.log("AJAX Error: " + textStatus + ": " + errorThrown);
-        }
+        },
     });
 }
+
+function downloadDTR(){
+    const payPeriodForm = document.getElementById("pay-period-form"); 
+    if(!payPeriodForm.checkValidity()){
+        return;
+    }
+    var selectedId = $("#pay_period").val();
+    var selectedPayPeriod = getPayPeriodById(selectedId);
+    $.ajax({
+        url: "attendance/my-attendance/modules/attendance-api",
+        type: "POST",
+        xhrFields: { responseType: 'blob' }, // Expect binary data
+        data: {
+            action: "downloadDTR",
+            pay_date: selectedPayPeriod.pay_date,
+            pay_period_start_date: selectedPayPeriod.pay_period_start_date,
+            pay_period_end_date: selectedPayPeriod.pay_period_end_date
+        },
+        success: function (response) {
+            var blob = new Blob([response], { type: "application/pdf" });
+            var link = document.createElement("a");
+            link.href = window.URL.createObjectURL(blob);
+            link.download = `Attendance_${selectedPayPeriod.pay_period_start_date}_to_${selectedPayPeriod.pay_period_end_date}.pdf`;
+            link.click();
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log("AJAX Error: " + textStatus + ": " + errorThrown);
+        },
+    });
+}
+
+
+// function downloadDTR(){
+//     const payPeriodForm = document.getElementById("pay-period-form"); 
+//     if(!payPeriodForm.checkValidity()){
+//         return;
+//     }
+//     var selectedId = $("#pay_period").val();
+//     var selectedPayPeriod = getPayPeriodById(selectedId);
+//     $.ajax({
+//         url: "attendance/my-attendance/modules/attendance-api",
+//         type: "POST",
+//         data: {
+//             action: "downloadDTR",
+//             pay_date: selectedPayPeriod.pay_date,
+//             pay_period_start_date: selectedPayPeriod.pay_period_start_date,
+//             pay_period_end_date: selectedPayPeriod.pay_period_end_date
+//         },
+//         success: function (response) {
+//             $("#response-test").html(response);
+//         },
+//         error: function (jqXHR, textStatus, errorThrown) {
+//             console.log("AJAX Error: " + textStatus + ": " + errorThrown);
+//         },
+//     });
+// }
+

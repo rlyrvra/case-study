@@ -1,20 +1,12 @@
-<?php require_once __DIR__ . '/includes/security-headers.php'; ?>
-<?php require_once __DIR__ . '/includes/session.php'; ?>
-<?php require_once __DIR__ . '/includes/file-locations.php' ?>
-
-<?php
+<?php 
+require_once __DIR__ . '/includes/security-headers.php'; 
+require_once __DIR__ . '/includes/session.php'; 
+require_once __DIR__ . '/includes/file-locations.php';
 require_once __DIR__ . '/login-checker.php';
 
-if(isset($_GET['r']) && $_GET['r'] == true){
-  include_once __DIR__ . '/sweet-alert-toasts/login/login-welcome.php';
-}
 
-if(isset($_GET['s']) && $_GET['s'] == true){
-  include_once __DIR__ . '/sweet-alert-toasts/login/login-success.php';
-}
-
-if(isset($_GET['aR']) && $_GET['aR'] == true){
-  include_once __DIR__ . '/sweet-alert-toasts/login/login-access-role-insufficient.php';
+if($_SESSION['access_role'] === 'Admin'){
+  header("Location: ". $SMARTWAGE_LOCATION ."/smartWage-index.php?aR=true");
 }
 ?>
 <!DOCTYPE html>
@@ -26,7 +18,7 @@ if(isset($_GET['aR']) && $_GET['aR'] == true){
 
 </style>
 <head>
-<title> smartWage |  My Attendance </title>
+<title> My Attendance | smartWage </title>
 <link rel="icon" type="image/x-icon" href="img/logo-files/logo1.ico" />
 <!-- font-awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -34,12 +26,17 @@ if(isset($_GET['aR']) && $_GET['aR'] == true){
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <!-- Sweet Alert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- Selectize CSS -->
+<link
+  rel="stylesheet"
+  href="assets/vendor/css/selectize.bootstrap5.css"
+/>
 
 
 <!-- Ajax -->
-<script src="attendance/my-attendance/modules/attendance-ajax.js?v1.2"></script>
+<script src="attendance/my-attendance/modules/attendance-ajax.js?v1.2.3"></script>
 <!-- Scripts -->
-<script src="attendance/my-attendance/modules/attendance-scripts.js?v1.0"></script>
+<script src="attendance/my-attendance/modules/attendance-scripts.js?v1.0.4"></script>
 
 <!---Skeletons--->
 <script src="requests/table-skeleton.js?v1.2"></script>
@@ -97,7 +94,7 @@ if(isset($_GET['aR']) && $_GET['aR'] == true){
       document.getElementById("attendance-menu").classList.add("open");
       document.getElementById("my-attendance-menu").classList.add("active");
     </script>
-
+    <?php require_once __DIR__ . '/attendance/my-attendance/modules/attendance-modal-pay-period-picker.php' ?>
     <!-- Layout container -->
     <div class="layout-page">
     <?php require_once __DIR__ . '/user.php' ?>
@@ -105,8 +102,12 @@ if(isset($_GET['aR']) && $_GET['aR'] == true){
       <!-- / Navbar -->
       <div class="content-wrapper">
         <div class="container-fluid pt-5 pb-5">
+          <div id="response-test"></div>
           <div class="container-fluid mb-3 d-flex justify-content-between flex-column flex-lg-row">
               <h1 class="display-1">My Attendance</h1>
+              <button type="button" class="btn btn-success btn-xl" data-bs-toggle="modal" data-bs-target="#pay-period-modal">
+                <i class="bx bx-export bx-lg"></i>Print DTR PDF
+              </button>
           </div>
 
           <div class="container-fluid card pt-3 pb-3 mt-5 mb-5">
@@ -139,8 +140,11 @@ if(isset($_GET['aR']) && $_GET['aR'] == true){
   <div class="layout-overlay layout-menu-toggle"></div>
 </div>
 <!-- / Layout wrapper -->
+<?php require_once __DIR__ . '/attendance/my-attendance/modules/attendance-fetch-records-by-month.php' ?>
+<?php require_once __DIR__ . '/attendance/my-attendance/modules/attendance-fetch-pay-periods.php' ?>
 <script>
   $(document).ready(function (){
+    populateAttendanceRecords(document.querySelector('.byRecords'));
     fetchAllMyAttendance();
   });
 </script>
@@ -167,5 +171,12 @@ if(isset($_GET['aR']) && $_GET['aR'] == true){
 
 <!-- Place this tag in your head or just before your close body tag. -->
 <script async defer src="https://buttons.github.io/buttons.js"></script>
+<!-- Selectize -->
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/js/selectize.min.js"
+  integrity="sha512-IOebNkvA/HZjMM7MxL0NYeLYEalloZ8ckak+NDtOViP7oiYzG5vn6WVXyrJDiJPhl4yRdmNAG49iuLmhkUdVsQ=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+></script>
 </body>
 </html>

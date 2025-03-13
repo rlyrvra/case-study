@@ -238,6 +238,7 @@ class AttendanceDao
             "work_schedule_snapshot_active_at"                         => "work_schedule_snapshot.active_at                         AS work_schedule_snapshot_active_at"                        ,
 
             "employee_full_name"                                       => "employee.full_name                                       AS employee_full_name"                                      ,
+            "employee_profile_picture"                                 => "employee.profile_picture                                 AS employee_profile_picture"                                ,
             "employee_code"                                            => "employee.employee_code                                   AS employee_code"                                           ,
             "employee_job_title_id"                                    => "employee.job_title_id                                    AS employee_job_title_id"                                   ,
             "employee_department_id"                                   => "employee.department_id                                   AS employee_department_id"                                  ,
@@ -273,6 +274,7 @@ class AttendanceDao
             array_key_exists("work_schedule_snapshot_active_at"                        , $selectedColumns) ||
 
             array_key_exists("employee_full_name"                                      , $selectedColumns) ||
+            array_key_exists("employee_profile_picture"                                , $selectedColumns) ||
             array_key_exists("employee_code"                                           , $selectedColumns) ||
             array_key_exists("employee_job_title_id"                                   , $selectedColumns) ||
             array_key_exists("employee_department_id"                                  , $selectedColumns) ||
@@ -291,16 +293,17 @@ class AttendanceDao
             ";
         }
 
-        if (array_key_exists("employee_full_name"    , $selectedColumns) ||
-            array_key_exists("employee_code"         , $selectedColumns) ||
-            array_key_exists("employee_job_title_id" , $selectedColumns) ||
-            array_key_exists("employee_department_id", $selectedColumns) ||
-            array_key_exists("employee_supervisor_id", $selectedColumns) ||
-            array_key_exists("employee_deleted_at"   , $selectedColumns) ||
+        if (array_key_exists("employee_full_name"      , $selectedColumns) ||
+            array_key_exists("employee_profile_picture", $selectedColumns) ||
+            array_key_exists("employee_code"           , $selectedColumns) ||
+            array_key_exists("employee_job_title_id"   , $selectedColumns) ||
+            array_key_exists("employee_department_id"  , $selectedColumns) ||
+            array_key_exists("employee_supervisor_id"  , $selectedColumns) ||
+            array_key_exists("employee_deleted_at"     , $selectedColumns) ||
 
-            array_key_exists("job_title"             , $selectedColumns) ||
+            array_key_exists("job_title"               , $selectedColumns) ||
 
-            array_key_exists("department_name"       , $selectedColumns)) {
+            array_key_exists("department_name"         , $selectedColumns)) {
 
             $joinClauses .= "
                 LEFT JOIN
@@ -356,7 +359,8 @@ class AttendanceDao
 
                         break;
 
-                    case "IS NULL":
+                    case "IS NULL"    :
+                    case "IS NOT NULL":
                         $whereClauses[] = "{$column} {$operator}";
 
                         break;
@@ -477,7 +481,7 @@ class AttendanceDao
         } catch (PDOException $exception) {
             error_log("Database Error: An error occurred while fetching the attendance records. " .
                       "Exception: {$exception->getMessage()}");
-            //echo $exception->getMessage();
+            echo $exception->getMessage();
             return ActionResult::FAILURE;
         }
     }
@@ -567,10 +571,10 @@ class AttendanceDao
             WHERE
         ";
 
-        if ( ! ctype_digit( (string) $attendance->getId())) {
-            $query .= " SHA2(id, 256) = :attendance_id";
+        if (preg_match("/^[1-9]\d*$/", $attendance->getId())) {
+            $query .= "id = :attendance_id";
         } else {
-            $query .= " id = :attendance_id";
+            $query .= "SHA2(id, 256) = :attendance_id";
         }
 
         $isLocalTransaction = ! $this->pdo->inTransaction();
@@ -615,6 +619,51 @@ class AttendanceDao
         }
     }
 
+    public function updateStatusByDate(string $status, string $date): ActionResult
+    {
+        $query = "
+            UPDATE attendance
+            SET
+                attendance_status = :attendance_status
+            WHERE
+                deleted_at IS NULL
+            AND
+                date = :date
+        ";
+
+        $isLocalTransaction = ! $this->pdo->inTransaction();
+
+        try {
+            if ($isLocalTransaction) {
+                $this->pdo->beginTransaction();
+            }
+
+            $statement = $this->pdo->prepare($query);
+
+            $statement->bindValue(":attendance_status", $status, Helper::getPdoParameterType($status));
+
+            $statement->bindValue(":date"             , $date  , Helper::getPdoParameterType($date  ));
+
+            $statement->execute();
+
+            if ($isLocalTransaction) {
+                $this->pdo->commit();
+            }
+
+            return ActionResult::SUCCESS;
+
+        } catch (PDOException $exception) {
+            if ($isLocalTransaction) {
+                $this->pdo->rollBack();
+            }
+
+            error_log("Database Error: An error occurred while updating the attendance status for all records. " .
+                      "Exception: {$exception->getMessage()}");
+
+            return ActionResult::FAILURE;
+        }
+    }
+
     public function approveOvertime(int|string $attendanceId): ActionResult
     {
         $query = "
@@ -624,10 +673,10 @@ class AttendanceDao
             WHERE
         ";
 
-        if ( ! ctype_digit( (string) $attendanceId)) {
-            $query .= " SHA2(id, 256) = :attendance_id";
+        if (preg_match("/^[1-9]\d*$/", $attendanceId)) {
+            $query .= "id = :attendance_id";
         } else {
-            $query .= " id = :attendance_id";
+            $query .= "SHA2(id, 256) = :attendance_id";
         }
 
         $isLocalTransaction = ! $this->pdo->inTransaction();
@@ -716,10 +765,10 @@ class AttendanceDao
             WHERE
         ";
 
-        if ( ! ctype_digit( (string) $attendanceId)) {
-            $query .= " SHA2(id, 256) = :attendance_id";
+        if (preg_match("/^[1-9]\d*$/", $attendanceId)) {
+            $query .= "id = :attendance_id";
         } else {
-            $query .= " id = :attendance_id";
+            $query .= "SHA2(id, 256) = :attendance_id";
         }
 
         $isLocalTransaction = ! $this->pdo->inTransaction();

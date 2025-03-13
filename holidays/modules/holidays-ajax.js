@@ -112,7 +112,7 @@ function createHolidays(){
         },
         success: function(response) {
             $('#holiday-table').html(response);
-            fetchAllAllowances();
+            fetchAllHolidays();
             document.getElementById('add_holidays_form').reset();
             //showSuccessCreate();
         },
