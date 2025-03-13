@@ -2,37 +2,43 @@
 
 class CompanyInformation
 {
+    private ?int $id = null;              
+    public string $name = '';            
+    public string $date_established = '';
+    public string $img_location = '';     
+    public string $history = '';          
+    public string $industry = '';         
+    public string $business_type = '';    
+    public string $size = '';             
+    public ?int $employee_count = null;      
+    public string $address = '';          
+    public string $phone = '';            
+    public string $email = '';            
+    public string $website = '';
+    public string $mission = '';          
+    public string $vision = '';           
+    public string $company_values = '';   
+    public string $policies = '';         
+    public string $compliance = '';       
+    public string $notes = '';           
     public function __construct(
-        private readonly string $location         ,
-        private readonly string $industry         ,
-        private readonly string $businessType     ,
-        private readonly int $size                ,
-        private readonly string $history
+        
     ) {
         
     }
-
-    public function getLocation(): string
-    {
-        return $this->location;
+    
+    public static function getTableName(): string {
+        return 'company_profile'; 
     }
 
-    public function getIndustry(): string
-    {
-        return $this->industry;
+
+    public function getId(): ?int {
+        return $this->id;
     }
 
-    public function getBusinessType(): string
-    {
-        return $this->businessType;
-    }
 
-    public function getSize(): int
-    {
-        return $this->size;
-    }
-    public function getHistory(): string
-    {
-        return $this->history;
+    public function setId(?int $id): void {
+        $this->id = $id;
     }
 }
+

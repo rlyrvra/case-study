@@ -1,3 +1,33 @@
+<?php
+
+require_once __DIR__ . '/../CompanyProfileDao.php';
+
+require_once __DIR__ . '/../../includes/Helper.php';
+require_once __DIR__ . '/../../database/database.php';
+
+try {
+  $companyProfileDao = new CompanyProfileDao($pdo);
+  $selectedCompanyInformation = new CompanyInformation();
+  $selectedCompanyInformation->setId(1);
+  $filterCriteria = [
+    [
+      "column" => "id",
+      "operator" => "=",
+      "value" => $selectedCompanyInformation->getId()
+    ]
+  ];
+  $companyProfile = $companyProfileDao->fetchCompanyInformation([], $filterCriteria);
+  if ($companyProfile === ActionResult::FAILURE) {
+    die("Failed retrieving data.");
+    return;
+  }
+} catch (Exception $e) {
+  echo "Error: " . $e->getMessage();
+  die();
+}
+
+
+?>
 <!-- Scoped CSS for the company profile section -->
 <style>
   /* Company Profile Section Styles */
@@ -109,11 +139,17 @@
   <!-- Header Section -->
   <div class="row align-items-center header mb-5">
     <div class="col-md-6">
-      <h1 id="companyName">DDDD</h1>
-      <h5 id="date">October 19, 2000</h5>
+      <h1 id="companyName"><?php echo htmlspecialchars($companyProfile[0]['name']); ?></h1>
+      <h5 id="date"><?php echo htmlspecialchars($companyProfile[0]['date_established']); ?></h5>
     </div>
     <div class="col-md-6 text-center">
-      <img src="img/logo-files/logo.png" class="w-px-100 h-auto rounded-circle">
+      <?php 
+            $absolutePath = $companyProfile[0]['img_location'];
+            if(!$hosted) $documentRoot = 'C:\\xampp\\htdocs\\case-study\\';  
+            if($hosted) $documentRoot = '\\home\\u227551606\\domains\\cs-devops.com\\public_html\\smartWage\\'; 
+            $relativePath = str_replace($documentRoot, '', $absolutePath); // Convert to relative path
+        ?>
+      <img src="<?php echo htmlspecialchars($relativePath); ?>" class="w-px-100 h-auto rounded-circle">
     </div>
   </div>
 
@@ -131,7 +167,16 @@
         <div class="tab-pane fade show active" id="companyHistory">
           <div class="p-4 animated-card align-items-center justify-content-center h-100 w-100 flex-grow-1">
             <h3 class="text-center mb-3">Our History</h3>
-            <p class="text-center">Smart Wage Management System was established with the vision of simplifying payroll processing for businesses of all sizes. From our humble beginnings as a small startup, we’ve grown into a trusted platform that serves organizations across multiple industries. Our journey is fueled by our commitment to innovation, precision, and customer satisfaction.</p>
+            <textarea id="historyInput" style="visibility:hidden; height: 0; width: 0; display: none;"><?php echo htmlspecialchars($companyProfile[0]['history']); ?></textarea>
+            <div id="historyValue"></div>
+            <script>
+              $(document).ready(function(){
+                var simplemde = new SimpleMDE();
+                simplemde.toTextArea();
+                simplemde.value(document.getElementById("historyInput").value);
+                document.getElementById("historyValue").innerHTML = simplemde.markdown(simplemde.value());
+              });
+            </script>
           </div>
         </div>
         <div class="tab-pane fade d-flex align-items-center justify-content-center h-100" id="companyDetails">
@@ -139,25 +184,25 @@
             <div class="col-md-3 mb-3">
               <i class="bx bx-briefcase fa-2x mb-2" style="color: #2d6a4f;"></i>
               <h5>Industry</h5>
-              <p>Information Technology</p>
+              <p><?php echo htmlspecialchars($companyProfile[0]['industry']); ?></p>
             </div>
 
             <div class="col-md-3 mb-3">
               <i class="bx bx-building fa-2x mb-2" style="color: #2d6a4f;"></i>
               <h5>Business Type</h5>
-              <p>Corporation</p>
+              <p><?php echo htmlspecialchars($companyProfile[0]['business_type']); ?></p>
             </div>
 
             <div class="col-md-3 mb-3">
               <i class="bx bx-expand fa-2x mb-2" style="color: #2d6a4f;"></i>
               <h5>Size of Company</h5>
-              <p>Small Business</p>
+              <p><?php echo htmlspecialchars($companyProfile[0]['size']); ?></p>
             </div>
 
             <div class="col-md-3 mb-3">
               <i class="bx bx-group fa-2x mb-2" style="color: #2d6a4f;"></i>
               <h5>Employee Count</h5>
-              <p>100+ Employees</p>
+              <p><?php echo htmlspecialchars($companyProfile[0]['employee_count']); ?>+</p>
             </div>
           </div>
         </div>
@@ -175,22 +220,22 @@
           <div class="col-md-3 mb-3">
               <i class="bx bx-map fa-2x mb-2" style="color: #2d6a4f;"></i>
               <h5>Location</h5>
-              <p>Manila, Philippines</p>
+              <p><?php echo htmlspecialchars($companyProfile[0]['address']); ?></p>
           </div>
           <div class="col-md-3 mb-3">
               <i class="bx bx-phone fa-2x mb-2" style="color: #2d6a4f;"></i>
               <h5>Phone Number</h5>
-              <p>+639231813</p>
+              <p><?php echo htmlspecialchars($companyProfile[0]['phone']); ?></p>
           </div>
           <div class="col-md-3 mb-3">
               <i class="bx bx-envelope fa-2x mb-2" style="color: #2d6a4f;"></i>
               <h5>Email</h5>
-              <p>example@example.com</p>
+              <p><?php echo htmlspecialchars($companyProfile[0]['email']); ?></p>
           </div>
           <div class="col-md-3 mb-3">
               <i class="bx bx-globe fa-2x mb-2" style="color: #2d6a4f;"></i>
               <h5>Website</h5>
-              <p>www.example.com</p>
+              <p><?php echo htmlspecialchars($companyProfile[0]['website']); ?></p>
           </div>  
         </div>
       </div>
@@ -214,21 +259,48 @@
         <div class="tab-pane fade show active" id="mission">
           <div class="p-4 animated-card align-items-center justify-content-center h-100 w-100 flex-grow-1">
             <h3 class="text-center mb-3">Our Mission</h3>
-            <p class="text-center">Smart Wage Management System was established with the vision of simplifying payroll processing for businesses of all sizes. From our humble beginnings as a small startup, we’ve grown into a trusted platform that serves organizations across multiple industries. Our journey is fueled by our commitment to innovation, precision, and customer satisfaction.</p>
+            <textarea id="missionInput" style="visibility:hidden; height: 0; width: 0; display: none;"><?php echo htmlspecialchars($companyProfile[0]['mission']); ?></textarea>
+            <div id="missionValue"></div>
+            <script>
+              $(document).ready(function(){
+                var simplemde = new SimpleMDE();
+                simplemde.toTextArea();
+                simplemde.value(document.getElementById("missionInput").value);
+                document.getElementById("missionValue").innerHTML = simplemde.markdown(simplemde.value());
+              });
+            </script>
           </div>
         </div>
         <!-- Vision Tab -->
         <div class="tab-pane fade" id="vision">
           <div class="p-4 animated-card align-items-center justify-content-center h-100 w-100 flex-grow-1">
             <h3 class="text-center mb-3">Our Vision</h3>
-            <p class="text-center">Smart Wage Management System was established with the vision of simplifying payroll processing for businesses of all sizes. From our humble beginnings as a small startup, we’ve grown into a trusted platform that serves organizations across multiple industries. Our journey is fueled by our commitment to innovation, precision, and customer satisfaction.</p>
+            <textarea id="visionInput" style="visibility:hidden; height: 0; width: 0; display: none;"><?php echo htmlspecialchars($companyProfile[0]['vision']); ?></textarea>
+            <div id="visionValue"></div>
+            <script>
+              $(document).ready(function(){
+                var simplemde = new SimpleMDE();
+                simplemde.toTextArea();
+                simplemde.value(document.getElementById("visionInput").value);
+                document.getElementById("visionValue").innerHTML = simplemde.markdown(simplemde.value());
+              });
+            </script>
           </div>
         </div>
         <!-- Values Tab -->
         <div class="tab-pane fade" id="values">
           <div class="p-4 animated-card align-items-center justify-content-center h-100 w-100 flex-grow-1">
             <h3 class="text-center mb-3">Our Values</h3>
-            <p class="text-center">Smart Wage Management System was established with the vision of simplifying payroll processing for businesses of all sizes. From our humble beginnings as a small startup, we’ve grown into a trusted platform that serves organizations across multiple industries. Our journey is fueled by our commitment to innovation, precision, and customer satisfaction.</p>
+            <textarea id="valuesInput" style="visibility:hidden; height: 0; width: 0; display: none;"><?php echo htmlspecialchars($companyProfile[0]['company_values']); ?></textarea>
+            <div id="valuesValue"></div>
+            <script>
+              $(document).ready(function(){
+                var simplemde = new SimpleMDE();
+                simplemde.toTextArea();
+                simplemde.value(document.getElementById("valuesInput").value);
+                document.getElementById("valuesValue").innerHTML = simplemde.markdown(simplemde.value());
+              });
+            </script>
           </div>
         </div>
       </div>
@@ -253,19 +325,46 @@
         <div class="tab-pane fade show active" id="complianceHistory">
           <div class="p-4 animated-card align-items-center justify-content-center h-100 w-100 flex-grow-1">
             <h3 class="text-center mb-3">HR Policies</h3>
-            <p class="text-center">Smart Wage Management System was established with the vision of simplifying payroll processing for businesses of all sizes. From our humble beginnings as a small startup, we’ve grown into a trusted platform that serves organizations across multiple industries. Our journey is fueled by our commitment to innovation, precision, and customer satisfaction.</p>
+            <textarea id="policiesInput" style="visibility:hidden; height: 0; width: 0; display: none;"><?php echo htmlspecialchars($companyProfile[0]['policies']); ?></textarea>
+            <div id="policiesValue"></div>
+            <script>
+              $(document).ready(function(){
+                var simplemde = new SimpleMDE();
+                simplemde.toTextArea();
+                simplemde.value(document.getElementById("policiesInput").value);
+                document.getElementById("policiesValue").innerHTML = simplemde.markdown(simplemde.value());
+              });
+            </script>
           </div>
         </div>
         <div class="tab-pane fade" id="complianceDetails">
           <div class="p-4 animated-card align-items-center justify-content-center h-100 w-100 flex-grow-1">
             <h3 class="text-center mb-3">Compliance and Legal</h3>
-            <p class="text-center">Smart Wage Management System was established with the vision of simplifying payroll processing for businesses of all sizes. From our humble beginnings as a small startup, we’ve grown into a trusted platform that serves organizations across multiple industries. Our journey is fueled by our commitment to innovation, precision, and customer satisfaction.</p>
+            <textarea id="complianceInput" style="visibility:hidden; height: 0; width: 0; display: none;"><?php echo htmlspecialchars($companyProfile[0]['compliance']); ?></textarea>
+            <div id="complianceValue"></div>
+            <script>
+              $(document).ready(function(){
+                var simplemde = new SimpleMDE();
+                simplemde.toTextArea();
+                simplemde.value(document.getElementById("complianceInput").value);
+                document.getElementById("complianceValue").innerHTML = simplemde.markdown(simplemde.value());
+              });
+            </script>
           </div>
         </div>
         <div class="tab-pane fade" id="complianceNotes">
           <div class="p-4 animated-card align-items-center justify-content-center h-100 w-100 flex-grow-1">
             <h3 class="text-center mb-3">Important Notes</h3>
-            <p class="text-center">Smart Wage Management System was established with the vision of simplifying payroll processing for businesses of all sizes. From our humble beginnings as a small startup, we’ve grown into a trusted platform that serves organizations across multiple industries. Our journey is fueled by our commitment to innovation, precision, and customer satisfaction.</p>
+            <textarea id="notesInput" style="visibility:hidden; height: 0; width: 0; display: none;"><?php echo htmlspecialchars($companyProfile[0]['notes']); ?></textarea>
+            <div id="notesValue"></div>
+            <script>
+              $(document).ready(function(){
+                var simplemde = new SimpleMDE();
+                simplemde.toTextArea();
+                simplemde.value(document.getElementById("notesInput").value);
+                document.getElementById("notesValue").innerHTML = simplemde.markdown(simplemde.value());
+              });
+            </script>
           </div>
         </div>
       </div>
