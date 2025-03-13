@@ -22,7 +22,7 @@ body {
     border: 1px solid #ccc;
     margin: auto;
     position: absolute;
-    top: 45%;
+    top: 47.5%;
     left: 47.5%;
     transform: translate(-50%, -47.5%);
 }
@@ -173,6 +173,59 @@ body {
     color: #6c757d;
 }
 
+/* General Styling for the Header */
+.company-header {
+    font-family: Arial, sans-serif;
+    margin: 20px 0;
+    padding: 10px;
+    border-bottom: 2px solid #000;
+}
+
+.company-logo {
+    display: inline-block;
+    vertical-align: top;
+    margin-right: 20px;
+}
+
+.logo-img {
+    width: 100px; /* Adjust size as needed */
+    height: auto;
+    border-radius: 50%; /* Circular image */
+}
+
+.company-info {
+    display: inline-block;
+    vertical-align: top;
+    max-width: 500px; /* Adjust width if necessary */
+}
+
+.company-name {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.industry-info {
+    font-size: 14px;
+    color: #555;
+    margin-top: 5px;
+}
+
+.address {
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+.contact-info {
+    font-size: 12px;
+    color: #555;
+    margin-top: 5px;
+}
+
+.contact-info a {
+    color: #1a73e8;
+    text-decoration: none;
+}
+
 /* To prevent collapsing due to float */
 .content::after {
     content: "";
@@ -183,8 +236,43 @@ body {
 <body>
 <!-- Header -->
 <div class='pdf-header'>
-    <strong>Company Name</strong><br>
+    <strong><?php echo htmlspecialchars($companyProfileData[0]['name']); ?></strong><br>
     Payslip Report | <?php echo date("F Y", strtotime($row['pay_date'])); ?>
+</div>
+
+<!-- Company Info Header -->
+<div class="company-header">
+    <?php 
+		$imagePath = 'C:/xampp/htdocs/case-study/uploads/company_logo.jpg';
+		$encodedPath = urlencode($imagePath);
+        $absolutePath = $companyProfileData[0]['img_location'];
+    	$fileUrl = 'file:///' . str_replace('\\', '/', $absolutePath); // Make sure to use forward slashes for paths in DOMPDF
+		//echo $fileUrl;
+		$imageData = base64_encode(file_get_contents($imagePath));
+		$src = 'data:image/jpg;base64,' . $imageData;
+    ?>
+    <div class="company-logo">
+		<img src="<?php echo $src; ?>" class="logo-img">
+	</div>
+    <div class="company-info">
+        <div class="company-name">
+            <strong><?php echo htmlspecialchars($companyProfileData[0]['name']); ?></strong>, 
+            <?php echo htmlspecialchars($companyProfileData[0]['business_type']); ?>
+        </div>
+        <div class="industry-info">
+            <?php echo htmlspecialchars($companyProfileData[0]['industry']); ?> | 
+            <?php echo date("Y", strtotime($companyProfileData[0]['date_established'])); ?> - 
+            <?php echo date("Y", strtotime($row['pay_date'])); ?>
+        </div>
+        <div class="address">
+            <?php echo htmlspecialchars($companyProfileData[0]['address']); ?>
+        </div>
+        <div class="contact-info">
+            <?php echo htmlspecialchars($companyProfileData[0]['phone']); ?> | 
+            <?php echo htmlspecialchars($companyProfileData[0]['email']); ?> | 
+            <?php echo htmlspecialchars($companyProfileData[0]['website']); ?>
+        </div>
+    </div>
 </div>
 <div id="payslip">
 	<div id="scope">
@@ -218,7 +306,7 @@ body {
 				</div>
 				<div class="entry">
 					<div class="label">Company Name</div>
-					<div class="value">Not a Shady One</div>
+					<div class="value"><?php echo htmlspecialchars($companyProfileData[0]['name']); ?></div>
 				</div>
 				<div class="entry">
 					<div class="label">Date Hired</div>
@@ -340,6 +428,10 @@ body {
 </div>
 <!-- Footer -->
 <div class='pdf-footer'>
+	<hr>
+	<p class="footer-text">This is a system-generated payslip. No signature is required.</p>
+    <p class="footer-text">For inquiries, contact HR at <strong><?php echo htmlspecialchars($companyProfileData[0]['email']); ?></strong> or call <strong><?php echo htmlspecialchars($companyProfileData[0]['phone']); ?></strong>.</p>
+    <p class="footer-company">© <?php echo date('Y'); ?> <?php echo htmlspecialchars($companyProfileData[0]['name']); ?> | Confidential</p>
     <small>Page 1 of 1</small> <br>
     <small>Payslip generated at <?php echo date('l, F j, Y, g:i A'); ?> using smartWage</small>
 </div>

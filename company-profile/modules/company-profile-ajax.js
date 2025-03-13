@@ -18,7 +18,7 @@ function fetchAllInfo() {
 function updateInfo(){
     const fileInput = document.getElementById("company_picture_file");
     if (!fileInput || fileInput.files.length === 0) {
-        console.log("No file selected.");
+        showImageError("No File Selected");
         return;
     }
 
@@ -69,8 +69,9 @@ function updateInfo(){
 
     const formData = new FormData();
     formData.append("action", "update"); // Action
-    formData.append("company_profile", companyProfile); // Company_profile
+    formData.append("company_profile", JSON.stringify(companyProfile)); // Company_profile
     formData.append("company_logo", fileInput.files[0]); // File
+
 
     $.ajax({
         url: "company-profile/modules/company-profile-api",

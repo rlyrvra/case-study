@@ -7,6 +7,7 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
 require_once __DIR__ . '/../../payroll/PayslipService.php';
 require_once __DIR__ . '/../../departments/DepartmentService.php';
 require_once __DIR__ . '/../../employees/EmployeeService.php';
+require_once __DIR__ . '/../../company-profile/CompanyProfileDao.php';
 
 require_once __DIR__ . '/../../includes/Helper.php';
 require_once __DIR__ . '/../../includes/session.php';
@@ -21,6 +22,7 @@ try {
     $departmentDao = new DepartmentDao($pdo);
     $departmentRepo = new DepartmentRepository($departmentDao);
     $departmentService = new DepartmentService($departmentRepo);
+    $companyProfileDao = new CompanyProfileDao($pdo);
     $action = $_POST['action'] ?? '';
 
     if ($action === 'fetchAll'){
@@ -192,12 +194,37 @@ try {
                 "value" => $token
             ]
         ];
+
         $result = $payslipDao->fetchAll($selectedColumns, $filterCriteria, [], 1);
         $payslipData;
         if ($result !== ActionResult::FAILURE){
             $payslipData = $result['result_set'];
         }
         $totalPayslips = $result["total_row_count"];
+
+        $selectedCompanyInfo = new CompanyInformation();
+        $selectedCompanyInfo->setId(1);
+        $selectedCompanyInfo->name = "s";
+        $selectedCompanyInfo->date_established = "s";
+        $selectedCompanyInfo->img_location = "s";
+        $selectedCompanyInfo->business_type = "s";
+        $selectedCompanyInfo->industry = "s";
+        $selectedCompanyInfo->address = "s";
+        $selectedCompanyInfo->phone = "s";
+        $selectedCompanyInfo->email = "s";
+        $selectedCompanyInfo->website = "s";
+        $companyProfileFilterCriteria = [
+            [
+                "column" => "id", 
+                "operator" => "=", 
+                "value" => $selectedCompanyInfo->getId()
+            ]
+        ];
+        $companyProfileData = $companyProfileDao->fetchCompanyInformation($selectedCompanyInfo, $companyProfileFilterCriteria);
+        if ($companyProfileData === ActionResult::FAILURE){
+            echo "Fail to fetch Company Information";
+            return;
+        }
         include __DIR__ . '/payslip-pdf.php';
         return;
     }

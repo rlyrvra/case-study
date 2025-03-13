@@ -32,28 +32,18 @@ try {
 
     if($action === 'update'){
         $companyData = $_POST['company_profile'] ?? null;
-        // $companyData = [
-        //     'name' => 'Tech Innovators Inc.',
-        //     'date_established' => '2005-08-15',
-        //     'history' => 'Founded in 2005, Tech Innovators Inc. started as a small startup focused on AI development.',
-        //     'industry' => 'Technology',
-        //     'business_type' => 'Private',
-        //     'size' => 'Medium',
-        //     'employee_count' => 250,
-        //     'address' => '123 Innovation Drive, Silicon Valley, CA',
-        //     'phone' => '+1 (415) 555-1234',
-        //     'email' => 'info@techinnovators.com',
-        //     'website' => 'https://www.techinnovators.com',
-        //     'mission' => 'To revolutionize AI solutions for businesses worldwide.',
-        //     'vision' => 'A future where AI enhances human potential in every industry.',
-        //     'company_values' => 'Innovation, Integrity, Collaboration',
-        //     'policies' => 'Remote Work Policy, Data Privacy Policy, Ethical AI Policy',
-        //     'compliance' => 'ISO 27001, GDPR, HIPAA',
-        //     'notes' => 'Recently expanded operations to Europe and Asia.',
-        // ];
-        if ($companyData == null) {
-            echo "Invalid company data.";
+        if (!isset($_POST['company_profile'])) {
+            echo "company_profile is not set.";
             return;
+        }
+        
+        
+        $companyData = json_decode($_POST['company_profile'], true);
+        
+        if ($companyData === null && json_last_error() !== JSON_ERROR_NONE) {
+            echo "JSON Decode Error: " . json_last_error_msg();
+        } else {
+
         }
         $updatedCompanyInformation = new CompanyInformation();
         // Call function with the file array
@@ -63,19 +53,39 @@ try {
 
         switch($updatedCompanyInformation->img_location){
             case "error":
-                echo "error";
+                $errorMessage = "An error has occurred. Please try again.";
+                die("
+                <script>
+                    showImageError($errorMessage);
+                </script>
+                ");
                 return;
                 break;
             case "invalid":
-                echo "invalid";
+                $errorMessage = "File is invalid. Allowed extensions are (.jpg, .jpeg) only.";
+                die("
+                <script>
+                    showImageError($errorMessage);
+                </script>
+                ");
                 return;
                 break;
             case "size_limit":
-                echo "size_limit";
+                $errorMessage = "File is above size limit. (Up to 2MB)";
+                die("
+                <script>
+                    showImageError($errorMessage);
+                </script>
+                ");
                 return;
                 break;
             case "upload_fail":
-                echo "upload_fail";
+                $errorMessage = "Uploading failed. Please try again.";
+                die("
+                <script>
+                    showImageError($errorMessage);
+                </script>
+                ");
                 return;
                 break;
             default:
@@ -89,7 +99,7 @@ try {
         $updatedCompanyInformation->history = isset($companyData['history']) && $companyData['history'] !== '' ? $companyData['history'] : null;
         $updatedCompanyInformation->industry = isset($companyData['industry']) && $companyData['industry'] !== '' ? $companyData['industry'] : null;
         $updatedCompanyInformation->business_type = isset($companyData['business_type']) && $companyData['business_type'] !== '' ? $companyData['business_type'] : null;
-        $updatedCompanyInformation->size = isset($companyData['size']) && $companyData['size'] !== '' ? $companyData['size'] : null;
+        $updatedCompanyInformation->size = isset($companyData['company_size']) && $companyData['company_size'] !== '' ? $companyData['company_size'] : null;
         $updatedCompanyInformation->employee_count = isset($companyData['employee_count']) && $companyData['employee_count'] !== '' ? $companyData['employee_count'] : null;
         $updatedCompanyInformation->address = isset($companyData['address']) && $companyData['address'] !== '' ? $companyData['address'] : null;
         $updatedCompanyInformation->phone = isset($companyData['phone']) && $companyData['phone'] !== '' ? $companyData['phone'] : null;
@@ -116,6 +126,14 @@ try {
             die("Failed updating data.");
             return;
         }
+        if($result === ActionResult::SUCCESS){
+            die("
+            <script>
+                showSuccessUpdate();
+            </script>
+            ");
+            return;
+        }
         return;
     }
 
@@ -133,7 +151,7 @@ function uploadImgToServer(array $file): string {
     }
 
     // Allowed file extensions
-    $allowedExtensions = ['jpg', 'jpeg', 'png'];
+    $allowedExtensions = ['jpg', 'jpeg'];
     $maxFileSize = 2 * 1024 * 1024; // 2MB
 
     // Check if file is provided and valid
@@ -172,3 +190,24 @@ function uploadImgToServer(array $file): string {
 
     return "upload_fail"; // Return empty string if file upload fails
 }
+
+
+// $companyData = [
+//     'name' => 'Tech Innovators Inc.',
+//     'date_established' => '2005-08-15',
+//     'history' => 'Founded in 2005, Tech Innovators Inc. started as a small startup focused on AI development.',
+//     'industry' => 'Technology',
+//     'business_type' => 'Private',
+//     'size' => 'Medium',
+//     'employee_count' => 250,
+//     'address' => '123 Innovation Drive, Silicon Valley, CA',
+//     'phone' => '+1 (415) 555-1234',
+//     'email' => 'info@techinnovators.com',
+//     'website' => 'https://www.techinnovators.com',
+//     'mission' => 'To revolutionize AI solutions for businesses worldwide.',
+//     'vision' => 'A future where AI enhances human potential in every industry.',
+//     'company_values' => 'Innovation, Integrity, Collaboration',
+//     'policies' => 'Remote Work Policy, Data Privacy Policy, Ethical AI Policy',
+//     'compliance' => 'ISO 27001, GDPR, HIPAA',
+//     'notes' => 'Recently expanded operations to Europe and Asia.',
+// ];

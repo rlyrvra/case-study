@@ -27,9 +27,9 @@ require_once __DIR__ . '/login-checker.php';
 
 
     <!-- Ajax -->
-    <script src="company-profile/modules/company-profile-ajax.js?v1.0"></script>
+    <script src="company-profile/modules/company-profile-ajax.js?v1.0.2"></script>
     <!-- Scripts -->
-    <script src="company-profile/modules/company-profile-scripts.js?v1.0.1"></script>
+    <script src="company-profile/modules/company-profile-scripts.js?v1.0.2"></script>
 
 
 

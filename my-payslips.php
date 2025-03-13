@@ -34,7 +34,7 @@ $_SESSION['payslip_mode'] = "viewOnly";
 />
 
 <!-- Ajax -->
-<script src="payroll/modules/payslip-ajax.js?v1.0.1"></script>
+<script src="payroll/modules/payslip-ajax.js?v1.0.2"></script>
 <!-- Scripts -->
 <script src="payroll/modules/payslip-scripts.js?v1.0.0"></script>
 

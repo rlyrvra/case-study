@@ -12,10 +12,11 @@
     <link rel="icon" type="image/x-icon" href="img/logo-files/logo1.ico" />
 
     <script src="https://kit.fontawesome.com/e82c3ed260.js" crossorigin="anonymous"></script>
+    <!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <!-- SimpleMDE for text editors -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
-    <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
-    <script src="assets/vendor/libs/jquery/jquery.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css"/>
+    <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js" defer></script>
 
     <style>
         body {
@@ -310,6 +311,10 @@
             transform: translateX(0);
             opacity: 1;
         }
+
+        .CodeMirror {
+            display: none !important;
+        }
     </style>
     <?php
     require_once __DIR__ . '/company-profile/CompanyProfileDao.php';
@@ -329,8 +334,8 @@
             ]
         ];
         $companyProfile = $companyProfileDao->fetchCompanyInformation([], $filterCriteria);
-        if ($companyProfile !== ActionResult::SUCCESS) {
-            $companyProfile == null;
+        if ($companyProfile === ActionResult::FAILURE) {
+            $companyProfile = null;
         }
     } catch (Exception $e) {
         echo "Error: " . $e->getMessage();
@@ -417,18 +422,30 @@
                     <p class="text-center">
                         <?php if ($companyProfile !== null && isset($companyProfile[0]['history'])): ?>
                             <textarea id="historyInput" style="visibility:hidden; height: 0; width: 0; display: none;"><?php echo htmlspecialchars($companyProfile[0]['history']); ?></textarea>
-                            <div class="text-center" id="historyValue"></div>
-                            <script>
-                                $(document).ready(function() {
-                                    var simplemde = new SimpleMDE();
-                                    simplemde.toTextArea();
-                                    simplemde.value(document.getElementById("historyInput").value);
-                                    document.getElementById("historyValue").innerHTML = simplemde.markdown(simplemde.value());
-                                });
-                            </script>
-                        <?php else: ?>
-                            Smart Wage Management System was established with the vision of simplifying payroll processing for businesses of all sizes. From our humble beginnings as a small startup, we’ve grown into a trusted platform that serves organizations across multiple industries. Our journey is fueled by our commitment to innovation, precision, and customer satisfaction.
-                        <?php endif ?>
+                    <div class="text-center" id="historyValue"><?php echo htmlspecialchars($companyProfile[0]['history']); ?></div>
+                    <script>
+                        $(document).ready(function () {
+                        if (typeof SimpleMDE === "undefined") {
+                            console.error("SimpleMDE is not loaded.");
+                            return;
+                        }
+
+                        var simplemde = new SimpleMDE({ 
+                            element: document.getElementById("historyInput"), 
+                            toolbar: false, 
+                            status: false 
+                        });
+
+                        // Set the content and render Markdown
+                        simplemde.value('<?php echo htmlspecialchars($companyProfile[0]['history']); ?>'); 
+                        var missionText = simplemde.value();
+                        document.getElementById("historyValue").innerHTML = simplemde.markdown(missionText);
+
+                        });
+                    </script>
+                <?php else: ?>
+                    Smart Wage Management System was established with the vision of simplifying payroll processing for businesses of all sizes. From our humble beginnings as a small startup, we’ve grown into a trusted platform that serves organizations across multiple industries. Our journey is fueled by our commitment to innovation, precision, and customer satisfaction.
+                <?php endif ?>
                 </p>
                 <h3 class="text-center mb-3">Details</h3>
                 <div class="row text-center">
@@ -497,22 +514,37 @@
                 <div class="col-md-4">
                     <div class="card p-3 shadow">
                         <h4><i class="fas fa-bullseye mb-3"></i> Mission</h4>
-                        <p>
-                            <?php if ($companyProfile !== null && isset($companyProfile[0]['mission'])): ?>
-                                <textarea id="missionInput" style="visibility:hidden; height: 0; width: 0; display: none;"><?php echo htmlspecialchars($companyProfile[0]['mission']); ?></textarea>
-                                <div class="text-center" id="missionValue"></div>
-                                <script>
-                                    $(document).ready(function() {
-                                        var simplemde = new SimpleMDE();
-                                        simplemde.toTextArea();
-                                        simplemde.value(document.getElementById("missionInput").value);
-                                        document.getElementById("missionValue").innerHTML = simplemde.markdown(simplemde.value());
+
+                        <?php if ($companyProfile !== null && isset($companyProfile[0]['mission'])): ?>
+                            <textarea id="missionInput" style="visibility:hidden; height: 0; width: 0; display: none;"></textarea>
+                            <div class="text-center" id="missionValue"></div>
+
+                            <script>
+                                $(document).ready(function () {
+                                    if (typeof SimpleMDE === "undefined") {
+                                        console.error("SimpleMDE is not loaded.");
+                                        return;
+                                    }
+
+                                    var simplemde = new SimpleMDE({ 
+                                        element: document.getElementById("missionInput"), 
+                                        toolbar: false, 
+                                        status: false 
                                     });
-                                </script>
-                            <?php else: ?>
-                                To simplify payroll management through accurate, transparent, and efficient solutions. 
-                            <?php endif ?>
-                        </p>
+
+                                    // Set the content and render Markdown
+                                    simplemde.value('<?php echo htmlspecialchars($companyProfile[0]['mission']); ?>'); 
+                                    var missionText = simplemde.value();
+                                    document.getElementById("missionValue").innerHTML = simplemde.markdown(missionText);
+
+                                });
+                            </script>
+
+                        <?php else: ?>
+                            <p class="text-center">
+                                To simplify payroll management through accurate, transparent, and efficient solutions.
+                            </p>
+                        <?php endif ?>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -521,40 +553,64 @@
                         <p>
                             <?php if ($companyProfile !== null && isset($companyProfile[0]['vision'])): ?>
                                 <textarea id="visionInput" style="visibility:hidden; height: 0; width: 0; display: none;"><?php echo htmlspecialchars($companyProfile[0]['vision']); ?></textarea>
-                                <div class="text-center" id="visionValue"></div>
-                                <script>
-                                    $(document).ready(function() {
-                                        var simplemde = new SimpleMDE();
-                                        simplemde.toTextArea();
-                                        simplemde.value(document.getElementById("visionInput").value);
-                                        document.getElementById("visionValue").innerHTML = simplemde.markdown(simplemde.value());
-                                    });
-                                </script>
-                            <?php else: ?>
-                                To be the go-to platform for reliable and seamless wage management. 
-                            <?php endif ?>
-                        </p>
+                        <div class="text-center" id="visionValue"></div>
+                        <script>
+                            $(document).ready(function () {
+                                if (typeof SimpleMDE === "undefined") {
+                                    console.error("SimpleMDE is not loaded.");
+                                    return;
+                                }
+
+                                var simplemde = new SimpleMDE({ 
+                                    element: document.getElementById("visionInput"), 
+                                    toolbar: false, 
+                                    status: false 
+                                });
+
+                                // Set the content and render Markdown
+                                simplemde.value('<?php echo htmlspecialchars($companyProfile[0]['vision']); ?>'); 
+                                var missionText = simplemde.value();
+                                document.getElementById("visionValue").innerHTML = simplemde.markdown(missionText);
+
+                            });
+                        </script>
+                    <?php else: ?>
+                        To be the go-to platform for reliable and seamless wage management.
+                    <?php endif ?>
+                    </p>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="card p-3 shadow">
                         <h4><i class="fas fa-handshake mb-3"></i> Values</h4>
-                        <p> 
+                        <p>
                             <?php if ($companyProfile !== null && isset($companyProfile[0]['company_values'])): ?>
                                 <textarea id="valuesInput" style="visibility:hidden; height: 0; width: 0; display: none;"><?php echo htmlspecialchars($companyProfile[0]['company_values']); ?></textarea>
-                                <div class="text-center" id="valuesValue"></div>
-                                <script>
-                                    $(document).ready(function() {
-                                        var simplemde = new SimpleMDE();
-                                        simplemde.toTextArea();
-                                        simplemde.value(document.getElementById("valuesInput").value);
-                                        document.getElementById("valuesValue").innerHTML = simplemde.markdown(simplemde.value());
-                                    });
-                                </script>
-                            <?php else: ?>
-                                We are committed to ensuring precise payroll processing, building trust through transparency, saving time with efficient solutions, and prioritizing user-friendly experiences.
-                            <?php endif ?>
-                        </p>
+                        <div class="text-center" id="valuesValue"></div>
+                        <script>
+                            $(document).ready(function () {
+                                if (typeof SimpleMDE === "undefined") {
+                                    console.error("SimpleMDE is not loaded.");
+                                    return;
+                                }
+
+                                var simplemde = new SimpleMDE({ 
+                                    element: document.getElementById("valuesInput"), 
+                                    toolbar: false, 
+                                    status: false 
+                                });
+
+                                // Set the content and render Markdown
+                                simplemde.value('<?php echo htmlspecialchars($companyProfile[0]['company_values']); ?>'); 
+                                var missionText = simplemde.value();
+                                document.getElementById("valuesValue").innerHTML = simplemde.markdown(missionText);
+
+                            });
+                        </script>
+                    <?php else: ?>
+                        We are committed to ensuring precise payroll processing, building trust through transparency, saving time with efficient solutions, and prioritizing user-friendly experiences.
+                    <?php endif ?>
+                    </p>
                     </div>
                 </div>
             </div>
@@ -572,19 +628,31 @@
                         <p>
                             <?php if ($companyProfile !== null && isset($companyProfile[0]['policies'])): ?>
                                 <textarea id="policiesInput" style="visibility:hidden; height: 0; width: 0; display: none;"><?php echo htmlspecialchars($companyProfile[0]['policies']); ?></textarea>
-                                <div class="text-center" id="policiesValue"></div>
-                                <script>
-                                    $(document).ready(function() {
-                                        var simplemde = new SimpleMDE();
-                                        simplemde.toTextArea();
-                                        simplemde.value(document.getElementById("policiesInput").value);
-                                        document.getElementById("policiesValue").innerHTML = simplemde.markdown(simplemde.value());
-                                    });
-                                </script>
-                            <?php else: ?>
-                                We uphold fairness, transparency, confidentiality, and compliance in all HR practices.
-                            <?php endif ?>
-                        </p>
+                        <div class="text-center" id="policiesValue"></div>
+                        <script>
+                            $(document).ready(function () {
+                                if (typeof SimpleMDE === "undefined") {
+                                    console.error("SimpleMDE is not loaded.");
+                                    return;
+                                }
+
+                                var simplemde = new SimpleMDE({ 
+                                    element: document.getElementById("policiesInput"), 
+                                    toolbar: false, 
+                                    status: false 
+                                });
+
+                                // Set the content and render Markdown
+                                simplemde.value('<?php echo htmlspecialchars($companyProfile[0]['policies']); ?>'); 
+                                var missionText = simplemde.value();
+                                document.getElementById("policiesValue").innerHTML = simplemde.markdown(missionText);
+
+                            });
+                        </script>
+                    <?php else: ?>
+                        We uphold fairness, transparency, confidentiality, and compliance in all HR practices.
+                    <?php endif ?>
+                    </p>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -593,41 +661,65 @@
                         <p>
                             <?php if ($companyProfile !== null && isset($companyProfile[0]['compliance'])): ?>
                                 <textarea id="complianceInput" style="visibility:hidden; height: 0; width: 0; display: none;"><?php echo htmlspecialchars($companyProfile[0]['policies']); ?></textarea>
-                                <div class="text-center" id="complianceValue"></div>
-                                <script>
-                                    $(document).ready(function() {
-                                        var simplemde = new SimpleMDE();
-                                        simplemde.toTextArea();
-                                        simplemde.value(document.getElementById("complianceInput").value);
-                                        document.getElementById("complianceValue").innerHTML = simplemde.markdown(simplemde.value());
-                                    });
-                                </script>
-                            <?php else: ?>
-                                We ensure strict adherence to labor laws, tax regulations, and data protection standards.
-                            <?php endif ?>
-                        </p>
+                        <div class="text-center" id="complianceValue"></div>
+                        <script>
+                            $(document).ready(function () {
+                                if (typeof SimpleMDE === "undefined") {
+                                    console.error("SimpleMDE is not loaded.");
+                                    return;
+                                }
+
+                                var simplemde = new SimpleMDE({ 
+                                    element: document.getElementById("complianceInput"), 
+                                    toolbar: false, 
+                                    status: false 
+                                });
+
+                                // Set the content and render Markdown
+                                simplemde.value('<?php echo htmlspecialchars($companyProfile[0]['compliance']); ?>'); 
+                                var missionText = simplemde.value();
+                                document.getElementById("complianceValue").innerHTML = simplemde.markdown(missionText);
+
+                            });
+                        </script>
+                    <?php else: ?>
+                        We ensure strict adherence to labor laws, tax regulations, and data protection standards.
+                    <?php endif ?>
+                    </p>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="card p-3 shadow">
                         <h4><i class="fas fa-file-contract mb-3"></i>Notes</h4>
                         <p>
-                        <?php if ($companyProfile !== null && isset($companyProfile[0]['notes'])): ?>
+                            <?php if ($companyProfile !== null && isset($companyProfile[0]['notes'])): ?>
                                 <textarea id="notesInput" style="visibility:hidden; height: 0; width: 0; display: none;"><?php echo htmlspecialchars($companyProfile[0]['notes']); ?></textarea>
-                                <div class="text-center" id="notesValue"></div>
-                                <script>
-                                    $(document).ready(function() {
-                                        var simplemde = new SimpleMDE();
-                                        simplemde.toTextArea();
-                                        simplemde.value(document.getElementById("notesInput").value);
-                                        document.getElementById("notesValue").innerHTML = simplemde.markdown(simplemde.value());
-                                    });
-                                </script>
-                            <?php else: ?>
-                                We maintain fair practices, data security, and compliance with all applicable laws and regulations.
-                            <?php endif ?>
+                        <div class="text-center" id="notesValue"></div>
+                        <script>
+                            $(document).ready(function () {
+                                if (typeof SimpleMDE === "undefined") {
+                                    console.error("SimpleMDE is not loaded.");
+                                    return;
+                                }
 
-                        </p>
+                                var simplemde = new SimpleMDE({ 
+                                    element: document.getElementById("notesInput"), 
+                                    toolbar: false, 
+                                    status: false 
+                                });
+
+                                // Set the content and render Markdown
+                                simplemde.value('<?php echo htmlspecialchars($companyProfile[0]['notes']); ?>'); 
+                                var missionText = simplemde.value();
+                                document.getElementById("notesValue").innerHTML = simplemde.markdown(missionText);
+
+                            });
+                        </script>
+                    <?php else: ?>
+                        We maintain fair practices, data security, and compliance with all applicable laws and regulations.
+                    <?php endif ?>
+
+                    </p>
                     </div>
                 </div>
             </div>

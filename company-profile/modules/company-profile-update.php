@@ -203,11 +203,11 @@ try {
         <div class="tab-pane fade show active" id="companyHistory">
           <textarea id="markdownInput" style="visibility:hidden; height: 0; width: 0; display: none;"><?php echo htmlspecialchars($companyProfile[0]['history']); ?></textarea>
           <textarea id="historyEditor" placeholder="History"></textarea>
-          <p id="historyCharCount">0/200 characters</p>
+          <p id="historyCharCount">0/500 characters</p>
 
           <!-- SimpleMDE JavaScript -->
           <script>
-            const historyMaxChars = 200;
+            const historyMaxChars = 500;
 
             // Initialize SimpleMDE for History Editor
             var historySimpleMde = new SimpleMDE({
@@ -279,7 +279,7 @@ try {
       </div>
     </div>
     <div class="card-footer text-center">
-      <button type="button" class="btn btn-success">Update</button>
+      <button type="button" class="btn btn-success" onclick="updateInfo()">Update</button>
     </div>
   </div>
 
@@ -334,7 +334,7 @@ try {
       </div>
     </div>
     <div class="card-footer text-center">
-      <button type="button" class="btn btn-success">Update</button>
+      <button type="button" class="btn btn-success" onclick="updateInfo()">Update</button>
     </div>
   </div>
 
@@ -504,7 +504,7 @@ try {
       </div>
     </div>
     <div class="card-footer text-center">
-      <button type="button" class="btn btn-success">Update</button>
+      <button type="button" class="btn btn-success" onclick="updateInfo()">Update</button>
     </div>
   </div>
 
@@ -671,7 +671,7 @@ try {
       </div>
     </div>
     <div class="card-footer text-center">
-      <button type="button" class="btn btn-success">Update</button>
+      <button type="button" class="btn btn-success" onclick="updateInfo()">Update</button>
     </div>
   </div>
 </div>

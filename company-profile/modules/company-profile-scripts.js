@@ -15,3 +15,21 @@ function previewImage(event) {
         reader.readAsDataURL(file);
     }
 }
+
+function showSuccessUpdate() {
+    Swal.fire({
+        title: 'Success!',
+        text: 'Company Information has been updated successfully.',
+        icon: 'success',
+        confirmButtonText: 'OK'
+    });
+}
+
+function showImageError(errorMessage){
+    Swal.fire({
+        title: 'Error!',
+        text: errorMessage,
+        icon: 'error',
+        confirmButtonText: 'OK'
+    });
+}
