@@ -9,7 +9,11 @@
   <thead>
     <tr>
       <th style='width: 1%;'>#</th>
+      <th>Employee Code</th>
       <th>Date</th>
+      <th>Full Name</th>
+      <th>Department</th>
+      <th>Job Title</th>
       <th>Day of Week</th>
       <th>Check In Time</th>
       <th>Check Out Time</th>
@@ -30,7 +34,19 @@
         <tr>
           <td><?php echo htmlspecialchars($i); $i++;?></td>
           <td>
+            <?php echo htmlspecialchars($row['employee_code']); ?>
+          </td>
+          <td>
             <span class="badge bg-label-primary"><?php echo htmlspecialchars(date("F j, Y", strtotime($row['date']))); ?></span>
+          </td>
+          <td>
+            <?php echo htmlspecialchars($row['employee_full_name']); ?>
+          </td>
+          <td>
+            <?php echo htmlspecialchars($row['department_name']); ?>
+          </td>
+          <td>
+            <?php echo htmlspecialchars($row['job_title']); ?>
           </td>
           <td>
             <?php echo htmlspecialchars(date("l", strtotime($row['date']))); ?>
@@ -112,7 +128,11 @@
   </tbody>
   <tfoot class="table-border-bottom-0">
       <th style='width: 1%;'>#</th>
+      <th>Employee Code</th>
       <th>Date</th>
+      <th>Full Name</th>
+      <th>Department</th>
+      <th>Job Title</th>
       <th>Day of Week</th>
       <th>Check In Time</th>
       <th>Check Out Time</th>

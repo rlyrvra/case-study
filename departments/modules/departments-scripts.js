@@ -27,6 +27,31 @@ function getMaxPageValue() {
     return maxPage;
 }
 
+function fetchPage(){
+    Swal.fire({
+        title: 'Enter a Number',
+        input: 'number',
+        inputAttributes: {
+            min: 1,
+            max: getMaxPageValue(),
+            step: 1
+        },
+        showCancelButton: true,
+        confirmButtonText: 'Submit',
+        cancelButtonText: 'Cancel',
+        preConfirm: (value) => {
+            if (!value || isNaN(value)) {
+                Swal.showValidationMessage('Please enter a valid number');
+            }
+            return value;
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetchAllDepartments(result.value);
+        }
+    });
+}
+
 function getSortByColumn(){
     var sortBy = selectedOptions.sort_by;
     return sortBy;
@@ -40,37 +65,6 @@ function getOrderBy(){
 function getByDate(){
     var byDate = selectedOptions.by_date;
     return byDate;
-}
-
-function showCreatedSuccessAlert() {
-    Swal.fire({
-        title: 'Success!',
-        text: 'Department created successfully.',
-        icon: 'success',
-        timer: 2000,
-        confirmButtonText: 'OK'
-    });
-}
-
-function confirmDeleteDepartment(button) {
-    Swal.fire({
-        title: 'Are you sure?',
-        text: "Do you want to delete this department?",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
-    }).then((result) => {
-        if (result.isConfirmed) {
-        deleteDepartment(button);
-        Swal.fire(
-            'Deleted!',
-            'The department has been deleted.',
-            'success'
-        );
-        }
-    });
 }
 
 // Function to add or remove the "Deleted At" option
@@ -128,12 +122,67 @@ function updateDepartmentClick(button){
     
 }
 
-function showSuccessUpdate() {
+function confirmDeleteDepartment(button) {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "Do you want to delete this department?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+    });
+}
+
+function showSuccessCreate() {
+    const addDepartmentForm = $('#add-departments-form');
+    addDepartmentForm.modal('hide');
     Swal.fire({
         title: 'Success!',
-        text: 'This department has updated successfully.',
+        text: 'The department has been created successfully.',
         icon: 'success',
-        timer: 2000,
+        confirmButtonText: 'OK'
+    });
+}
+
+function showSuccessUpdate() {
+    const addDepartmentForm = $('#add-departments-form');
+    addDepartmentForm.modal('hide');
+    Swal.fire({
+        title: 'Success!',
+        text: 'This department has been updated successfully.',
+        icon: 'success',
+        confirmButtonText: 'OK'
+    });
+}
+
+function showError(message) {
+    Swal.fire({
+        title: 'Error!',
+        text: message,
+        icon: 'error',
+        confirmButtonText: 'OK'
+    });
+}
+
+function showFatalError(message) {
+    Swal.fire({
+        title: 'Fatal Error!',
+        html: `${message} <br> Please contact the system administrator.`,
+        icon: 'error',
+        confirmButtonText: 'OK'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            location.reload();
+        }
+    });
+}
+
+function showCouldNotFindData(){
+    Swal.fire({
+        title: 'Error!',
+        text: 'The department data does not exist.',
+        icon: 'errror',
         confirmButtonText: 'OK'
     });
 }

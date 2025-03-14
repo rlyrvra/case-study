@@ -31,9 +31,9 @@ if($_SESSION['access_role'] !== 'Admin'){
 
 
 <!-- Ajax -->
-<script src="departments/modules/departments-ajax.js?v1.6"></script>
+<script src="departments/modules/departments-ajax.js?v1.7"></script>
 <!-- Scripts -->
-<script src="departments/modules/departments-scripts.js?v1.5"></script>
+<script src="departments/modules/departments-scripts.js?v1.7"></script>
 
 <!---Skeletons--->
 <script src="requests/table-skeleton.js?v1.2"></script>
@@ -93,6 +93,7 @@ if($_SESSION['access_role'] !== 'Admin'){
       <!-- / Navbar -->
       <div class="content-wrapper">
         <div class="container-fluid pt-5 pb-5">
+            <div id="response-test"></div>
             <div class="container-fluid mb-3 d-flex justify-content-between flex-column flex-lg-row">
               <h1 class="display-1">Departments</h1>
               <button type="button" class="btn btn-success btn-xl" data-bs-toggle="modal" data-bs-target="#add-departments-modal">
@@ -101,19 +102,12 @@ if($_SESSION['access_role'] !== 'Admin'){
               
             </div>
 
-            <!-- <div class="divider text-start">
-              <div class="divider-text">
-                
-              </div>
-            </div> -->
-
        
 
             <div class="container-fluid card pt-3 pb-3 mt-5 mb-5">
               <?php require_once __DIR__ . '/departments/modules/departments-sorter.php' ?>
               <div class="spinner-border spinner-border-lg text-primary text-center w-px-25 h-px-25" role="status" id="loadingSpinner"></div>
             </div>
-
 
 
             <div class="container-fluid card pt-5 pb-3 mt-5">
