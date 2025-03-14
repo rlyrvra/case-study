@@ -134,19 +134,19 @@
     <ul class="pagination pagination-lg">
       <!-- Previous Button -->
       <li class="page-item <?= $page <= 1 ? 'disabled' : '' ?>">
-        <a class="page-link" onclick="fetchAllMyAttendance('prev')" aria-label="Previous">
+        <a class="page-link" onclick="fetchAllAttendance('prev')" aria-label="Previous">
           <span aria-hidden="true">&laquo;</span>
         </a>
       </li>
       <?php for ($i = 1; $i <= $totalPages; $i++): ?>
         <!-- Page Numbers -->
         <li class="page-item <?= $i === $page ? 'active' : '' ?>">
-          <a class="page-link" onclick="fetchAllMyAttendance(<?php echo $i ?>)" ><?= $i ?></a>
+          <a class="page-link" onclick="fetchAllAttendance(<?php echo $i ?>)" ><?= $i ?></a>
         </li>
       <?php endfor; ?>
       <!-- Next Button -->
       <li class="page-item <?= $page >= $totalPages ? 'disabled' : '' ?>">
-        <a class="page-link" onclick="fetchAllMyAttendance('next')" aria-label="Next">
+        <a class="page-link" onclick="fetchAllAttendance('next')" aria-label="Next">
           <span aria-hidden="true">&raquo;</span>
         </a>
       </li>
