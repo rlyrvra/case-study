@@ -132,7 +132,7 @@ function updateLeaveType(button){
         name: leaveTypeName,
         maxNumberOfDays: maxNumber,
         isPaid: isPaid,
-        is_encashable: isEncashable,
+        //is_encashable: isEncashable,
         description: description,
         status: status
     };

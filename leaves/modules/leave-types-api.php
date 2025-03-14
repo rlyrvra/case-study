@@ -99,7 +99,6 @@ try {
 
     if ($action === 'create') {
         $leaveTypesData = $_POST['leave_type'] ?? null;
-
         if (!$leaveTypesData) {
             return;
         } 
