@@ -72,7 +72,12 @@ try {
             ]
         ];
         $result = $attendanceDao->fetchAll(
-            ['id', 
+            [
+            'employee_code',
+            'employee_full_name',
+            'job_title',
+            'department_name',
+            'id', 
             'date', 
             'check_in_time', 
             'check_out_time', 
@@ -88,7 +93,8 @@ try {
             'work_schedule_snapshot_id', 
             'work_schedule_snapshot_start_time', 
             'work_schedule_snapshot_end_time', 
-            'work_schedule_snapshot_minutes_can_check_in_before_shift'], 
+            'work_schedule_snapshot_minutes_can_check_in_before_shift'
+            ], 
             $filterCriteria, 
             $sortCriteria, 
             $limit, 
