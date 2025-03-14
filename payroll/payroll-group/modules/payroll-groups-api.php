@@ -102,11 +102,11 @@ try {
 
         $name = isset($payrollGroupData['name']) && $payrollGroupData['name'] !== '' ? validateInput($payrollGroupData['name'], "Name") : null;
         $freq = isset($payrollGroupData['payroll_frequency']) && $payrollGroupData['payroll_frequency'] !== '' ? validateInput($payrollGroupData['payroll_frequency'], "Payroll Frequency") : null;
-        $weeklyDay = isset($payrollGroupData['day_of_weekly_cutoff']) && $payrollGroupData['day_of_weekly_cutoff'] !== '' ? validateInput($payrollGroupData['day_of_weekly_cutoff'], "Day of Weekly Cutoff") : null;
-        $biWeeklyDay = isset($payrollGroupData['day_of_biweekly_cutoff']) && $payrollGroupData['day_of_biweekly_cutoff'] !== '' ? validateInput($payrollGroupData['day_of_biweekly_cutoff'], "Day of Bi-Weekly Cutoff") : null;
-        $semiFirst = isset($payrollGroupData['semi_monthly_first_cutoff']) && $payrollGroupData['semi_monthly_first_cutoff'] !== '' ? validateInput($payrollGroupData['semi_monthly_first_cutoff'], "Semi First Cutoff") : null;
-        $semiSecond = isset($payrollGroupData['semi_monthly_second_cutoff']) && $payrollGroupData['semi_monthly_second_cutoff'] !== '' ? validateInput($payrollGroupData['semi_monthly_second_cutoff'], "Semi Second Cutoff") : null;
-        $payOffset = isset($payrollGroupData['payday_offset']) && $payrollGroupData['payday_offset'] !== '' ? validateInput($payrollGroupData['payday_offset'], "Payday Offset") : null;
+        $weeklyDay = isset($payrollGroupData['day_of_weekly_cutoff']) && $payrollGroupData['day_of_weekly_cutoff'] !== '' ? (int) validateInput($payrollGroupData['day_of_weekly_cutoff'], "Day of Weekly Cutoff") : null;
+        $biWeeklyDay = isset($payrollGroupData['day_of_biweekly_cutoff']) && $payrollGroupData['day_of_biweekly_cutoff'] !== '' ? (int) validateInput($payrollGroupData['day_of_biweekly_cutoff'], "Day of Bi-Weekly Cutoff") : null;
+        $semiFirst = isset($payrollGroupData['semi_monthly_first_cutoff']) && $payrollGroupData['semi_monthly_first_cutoff'] !== '' ? (int) validateInput($payrollGroupData['semi_monthly_first_cutoff'], "Semi First Cutoff") : null;
+        $semiSecond = isset($payrollGroupData['semi_monthly_second_cutoff']) && $payrollGroupData['semi_monthly_second_cutoff'] !== '' ? (int) validateInput($payrollGroupData['semi_monthly_second_cutoff'], "Semi Second Cutoff") : null;
+        $payOffset = isset($payrollGroupData['payday_offset']) && $payrollGroupData['payday_offset'] !== '' ? (int) validateInput($payrollGroupData['payday_offset'], "Payday Offset") : null;
         $payAdjustment = isset($payrollGroupData['payday_adjustment']) && $payrollGroupData['payday_adjustment'] !== '' ? validateInput($payrollGroupData['payday_adjustment'], "Payday Offset") : null;
         $status = isset($payrollGroupData['status']) && $payrollGroupData['status'] !== '' ? validateInput($payrollGroupData['status'], "Status") : null;
 
@@ -157,11 +157,11 @@ try {
         $token = isset($payrollGroupData['token']) && $payrollGroupData['token'] !== '' ? $payrollGroupData['token'] : null;
         $name = isset($payrollGroupData['name']) && $payrollGroupData['name'] !== '' ? validateInput($payrollGroupData['name'], "Name") : null;
         $freq = isset($payrollGroupData['payroll_frequency']) && $payrollGroupData['payroll_frequency'] !== '' ? validateInput($payrollGroupData['payroll_frequency'], "Payroll Frequency") : null;
-        $weeklyDay = isset($payrollGroupData['day_of_weekly_cutoff']) && $payrollGroupData['day_of_weekly_cutoff'] !== '' ? validateInput($payrollGroupData['day_of_weekly_cutoff'], "Day of Weekly Cutoff") : null;
-        $biWeeklyDay = isset($payrollGroupData['day_of_biweekly_cutoff']) && $payrollGroupData['day_of_biweekly_cutoff'] !== '' ? validateInput($payrollGroupData['day_of_biweekly_cutoff'], "Day of Bi-Weekly Cutoff") : null;
-        $semiFirst = isset($payrollGroupData['semi_monthly_first_cutoff']) && $payrollGroupData['semi_monthly_first_cutoff'] !== '' ? validateInput($payrollGroupData['semi_monthly_first_cutoff'], "Semi First Cutoff") : null;
-        $semiSecond = isset($payrollGroupData['semi_monthly_second_cutoff']) && $payrollGroupData['semi_monthly_second_cutoff'] !== '' ? validateInput($payrollGroupData['semi_monthly_second_cutoff'], "Semi Second Cutoff") : null;
-        $payOffset = isset($payrollGroupData['payday_offset']) && $payrollGroupData['payday_offset'] !== '' ? validateInput($payrollGroupData['payday_offset'], "Payday Offset") : null;
+        $weeklyDay = isset($payrollGroupData['day_of_weekly_cutoff']) && $payrollGroupData['day_of_weekly_cutoff'] !== '' ? (int) validateInput($payrollGroupData['day_of_weekly_cutoff'], "Day of Weekly Cutoff") : null;
+        $biWeeklyDay = isset($payrollGroupData['day_of_biweekly_cutoff']) && $payrollGroupData['day_of_biweekly_cutoff'] !== '' ? (int) validateInput($payrollGroupData['day_of_biweekly_cutoff'], "Day of Bi-Weekly Cutoff") : null;
+        $semiFirst = isset($payrollGroupData['semi_monthly_first_cutoff']) && $payrollGroupData['semi_monthly_first_cutoff'] !== '' ? (int) validateInput($payrollGroupData['semi_monthly_first_cutoff'], "Semi First Cutoff") : null;
+        $semiSecond = isset($payrollGroupData['semi_monthly_second_cutoff']) && $payrollGroupData['semi_monthly_second_cutoff'] !== '' ? (int) validateInput($payrollGroupData['semi_monthly_second_cutoff'], "Semi Second Cutoff") : null;
+        $payOffset = isset($payrollGroupData['payday_offset']) && $payrollGroupData['payday_offset'] !== '' ? (int) validateInput($payrollGroupData['payday_offset'], "Payday Offset") : null;
         $payAdjustment = isset($payrollGroupData['payday_adjustment']) && $payrollGroupData['payday_adjustment'] !== '' ? validateInput($payrollGroupData['payday_adjustment'], "Payday Offset") : null;
         $status = isset($payrollGroupData['status']) && $payrollGroupData['status'] !== '' ? validateInput($payrollGroupData['status'], "Status") : null;
 
