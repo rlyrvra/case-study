@@ -10,6 +10,7 @@ $(document).ready(function (){
     document.getElementById("employment_information_btn"),
     document.getElementById("pay_information_btn"),
     document.getElementById("government_information_btn")
+    
 ];
 });
 
@@ -30,8 +31,10 @@ function nextForm(page = 1, button){
     
     const form = document.getElementById(button.getAttribute('data-form'));
     if(!form.checkValidity()){
-        showWarningIncompleteForm();
         return;
+    }
+    if(button.getAttribute('data-form') === "login_credentials"){
+        if(!validatePassword()) return;
     }
     page = page - 1;
 
@@ -61,72 +64,113 @@ function nextForm(page = 1, button){
     
 }
 
-function showWarningIncompleteForm() {
-    Swal.fire({
-        title: 'Warning',
-        text: 'Please fill up the details in the form.',
-        icon: 'warning',
-        timer: 2000,
-        confirmButtonText: 'OK'
-    });
+function getRandomValue(datalistId) {
+    let options = document.querySelectorAll(`#${datalistId} option`);
+    if (options.length === 0) return "";  // Return empty if no options exist
+    let randomIndex = Math.floor(Math.random() * options.length);
+    return options[randomIndex].value;
+}
+
+function fillContactInfo() {
+    document.getElementById("phone").value = getRandomValue("phone-options");
+    document.getElementById("email").value = getRandomValue("email-options");
+    document.getElementById("address").value = getRandomValue("address-options");
+
+    document.getElementById("emergency-name").value = getRandomValue("emergency-name-options");
+    document.getElementById("relationship").value = getRandomValue("relationship-options");
+    document.getElementById("emergency-phone").value = getRandomValue("emergency-phone-options");
+    document.getElementById("emergency-email").value = getRandomValue("emergency-email-options");
+    document.getElementById("emergency-address").value = getRandomValue("emergency-address-options");
+}
+
+function validatePassword() {
+    var password = document.getElementById("password").value;
+    var confirmPassword = document.getElementById("confirmPassword").value;
+    var errorDiv = document.getElementById("confirmPassError");
+
+    if (password !== confirmPassword) {
+        errorDiv.style.display = "block";
+        return false;
+    } else {
+        errorDiv.style.display = "none";
+        return true;
+    }
+}
+
+function disableSupervisor(){
+    let supervisor = $('#supervisor')[0].selectize;
+    supervisor.clear(); 
+    supervisor.disable(); 
+}
+
+function enableSupervisor(){
+    let supervisor = $('#supervisor')[0].selectize;
+    supervisor.clear(); 
+    supervisor.enable(); 
+}
+
+function changeSupervisorValue(role){
+    console.log(role);
+    if(role !== "Staff"){
+        console.log("disable");
+        disableSupervisor();
+    }else{
+        console.log("enable");
+        enableSupervisor();
+    }
 }
 
 
 function calculatePayroll(basicSalary) {
-    
+    if (isNaN(basicSalary) || basicSalary <= 0) {
+        return { error: "Invalid basic salary input" };
+    }
+
+    // Convert to a number in case of string input
+    basicSalary = Number(basicSalary);
+
     // Assumptions
     const hoursPerDay = 8;
     const daysPerWeek = 6;
     const weeksPerYear = 52;
     const daysPerYear = weeksPerYear * daysPerWeek;
-    
-    // Annually (basic salary for the year)
+    const payPeriodsPerYear = 24; // Semi-Monthly payroll
+
+    // Payroll computations
     const annually = basicSalary * 12;
-    
-    // Weekly (annual salary divided by 52 weeks)
     const weekly = annually / weeksPerYear;
-    
-    // Monthly (provided directly as input)
     const monthly = basicSalary;
-    
-    // Daily (annual salary divided by total days in a year)
     const daily = annually / daysPerYear;
-    
-    // Semi-Monthly (typically 24 pay periods in a year)
-    const semiMonthly = annually / 24;
-    
-    // Hourly (annual salary divided by total hours worked in a year)
+    const semiMonthly = annually / payPeriodsPerYear;
     const hourly = annually / (hoursPerDay * daysPerYear);
-    
-    // Bi-Weekly (2 weeks of work)
     const biWeekly = weekly * 2;
-    
-    // Per-Minute (hourly divided by 60 minutes)
     const perMinute = hourly / 60;
-    
+
+    // Return rounded results
     return {
-        annually,
-        weekly,
-        monthly,
-        daily,
-        semiMonthly,
-        hourly,
-        biWeekly,
-        perMinute
+        annually: annually.toFixed(2),
+        weekly: weekly.toFixed(2),
+        monthly: monthly.toFixed(2),
+        daily: daily.toFixed(2),
+        semiMonthly: semiMonthly.toFixed(2),
+        hourly: hourly.toFixed(2),
+        biWeekly: biWeekly.toFixed(2),
+        perMinute: perMinute.toFixed(4) // More precision for per-minute rates
     };
 }
+
 
 function samplePayroll(){
     hourlyRate = document.getElementById("hourlyRate").value;
     const payrollSample = calculatePayroll(hourlyRate);
-    document.getElementById("annual").value = payrollSample.annually;
-    document.getElementById("weekly").value = payrollSample.weekly;
-    document.getElementById("monthly").value = payrollSample.monthly;
-    document.getElementById("daily").value = payrollSample.daily;
-    document.getElementById("semiMonthly").value = payrollSample.semiMonthly;
-    document.getElementById("hour").value = payrollSample.hourly;
-    document.getElementById("biWeekly").value = payrollSample.biWeekly;
-    document.getElementById("perMinute").value = payrollSample.perMinute;
+    document.getElementById("annual").value = payrollSample.annually || '';
+    document.getElementById("weekly").value = payrollSample.weekly || '';
+    document.getElementById("monthly").value = payrollSample.monthly || '';
+    document.getElementById("daily").value = payrollSample.daily || '';
+    document.getElementById("semiMonthly").value = payrollSample.semiMonthly || '';
+    document.getElementById("hour").value = payrollSample.hourly || '';
+    document.getElementById("biWeekly").value = payrollSample.biWeekly || '';
+    document.getElementById("perMinute").value = payrollSample.perMinute || '';
 }
 
 function previewImage(event) {
@@ -167,6 +211,13 @@ $(document).ready(function() {
             alert(`Please select a date between ${pastformattedDate} and ${formattedDate}.`);
             this.value = ""; // Clear invalid input
         }
+    });
+
+
+    document.querySelectorAll('#employment_information input[name="role"]').forEach((radio) => {
+        radio.addEventListener("change", function () {
+            changeSupervisorValue(this.value);
+        });
     });
 });
 
@@ -356,4 +407,13 @@ function showSuccessCreate() {
     });
 }
 
+
+function showWarningIncompleteForm() {
+    Swal.fire({
+        title: 'Warning',
+        text: 'Please fill up the details in the form.',
+        icon: 'warning',
+        confirmButtonText: 'OK'
+    });
+}
 

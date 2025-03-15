@@ -191,7 +191,6 @@ function updateEmployee(button){
             },
             success: function(response) {
                 $('#response-test').html(response);
-                //showSuccessUpdate(employeeData.token);
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 console.log("AJAX Error: " + textStatus + ": " + errorThrown);
