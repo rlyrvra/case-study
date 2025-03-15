@@ -430,6 +430,7 @@
 <script src="assets/vendor/libs/jquery/jquery.js"></script>
 <script src="requests/attendance/attendance-rfid-scripts.js?v1.2.2"></script>
 <script src="requests/attendance/attendance-rfid-ajax.js?v1.2.2"></script>
+<script src="sweet-alert-toasts/loader/loader.js?v1.0.0"></script>
 
 </body>
 </html>
