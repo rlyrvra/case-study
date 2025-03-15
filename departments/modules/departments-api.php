@@ -41,18 +41,20 @@ try {
         }
 
         if(empty($searchAt) && !empty($searchFilter)){
-            $filterCriteria[] = [
-                "column" => "department.name", 
-                "operator" => "LIKE",
-                "value" => "%$searchFilter%", 
-                'boolean' => 'OR'
-
-            ];
-            $filterCriteria[] = [
-                "column" => "department.description", 
-                "operator" => "LIKE",
-                "value" => "%$searchFilter%", 
-                'boolean' => 'OR'
+            $filterCriteria[] = 
+            [
+                [
+                    "column" => "department.description", 
+                    "operator" => "LIKE",
+                    "value" => "%$searchFilter%", 
+                    'boolean' => 'OR'
+                ],
+                [
+                    "column" => "department.name", 
+                    "operator" => "LIKE",
+                    "value" => "%$searchFilter%", 
+                    'boolean' => 'OR'
+                ]
             ];
         }
 

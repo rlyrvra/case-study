@@ -218,7 +218,10 @@ class HolidayDao
         } catch (PDOException $exception) {
             error_log("Database Error: An error occurred while fetching the holidays. " .
                       "Exception: {$exception->getMessage()}");
-
+            echo json_encode([
+                "status"  => "error" ,
+                "message" => $exception->getMessage()
+            ]);
             return ActionResult::FAILURE;
         }
     }

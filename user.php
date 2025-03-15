@@ -21,7 +21,7 @@
 </style>
 <!-- Navbar -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
-<script src="requests/header/header-clock.js?v1.1.0"></script>
+<script src="requests/header/header-clock.js?v1.1.2"></script>
 <div class="container-fluid green pb-3 sticky-top">
     <nav
     class="layout-navbar navbar navbar-expand-xl align-items-center bg-navbar-theme transparent no-shadow"
@@ -54,9 +54,12 @@
             <!-- /Search -->
 
             <!-- Time -->
-            <div class="container p-3 mt-3 text-white text-end">
-                <span id="time" class="display-6"></span><br>
-                <span id="date"></span>
+            <div class="container p-3 mt-3 text-white text-end d-flex flex-column flex-md-row justify-content-md-end align-items-md-center">
+                <div class="mx-3">
+                    <span id="date"></span> | 
+                    <span id="day-type"></span>
+                </div>
+                <span id="time" class="display-6"></span>
             </div>
             <!-- /Time -->
              

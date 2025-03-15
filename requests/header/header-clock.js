@@ -1,3 +1,53 @@
+var dayType = 'Regular Day';
+async function fetchDayType() {
+    try {
+        const response = await fetch('requests/header/header-api', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-Requested-By': 'getDayType'
+            },
+            //body: new URLSearchParams({ action: 'getDayType' }) // Modify as needed
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json(); // Parse JSON response
+        console.log(data);
+        return data; // Return the fetched JSON data
+    } catch (error) {
+        console.error('Fetch error:', error);
+        return null; // Return null in case of an error
+    }
+}
+
+// function fetchDayType() {
+//     fetch('requests/header/header-api', {
+//         method: 'POST', 
+//         headers: {
+//             'Accept': '*/*',
+//             'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+//             'X-Requested-With': 'XMLHttpRequest',
+//             'X-Requested-By': 'getDayType' // Custom header
+//         },
+//         body: new URLSearchParams({
+            
+//         })
+//     })
+//     .then(response => {
+//         if (!response.ok) {
+//             throw new Error(`HTTP error! Status: ${response.status}`);
+//         }
+//         return response.text(); // Convert response to HTML text
+//     })
+//     .then(html => {
+//         document.getElementById('response-test').innerHTML = html; // Inject HTML into the element
+//     })
+//     .catch(error => console.error("Fetch Error:", error));
+// }
+
 function updateDateTime() {
     const now = moment();
     
@@ -12,6 +62,15 @@ function getFormattedDateTime() {
 $(document).ready(function(){
     setInterval(updateDateTime, 1000);
     updateDateTime();
+    dayType = fetchDayType().then(dayType => {
+        if (dayType) {
+            const dayTypeElement = $('#day-type');
+            dayTypeElement.text(dayType.dayType);
+        } else {
+            console.log('Failed to fetch day type');
+        }
+    });
+    //fetchDayTypeAjax();
 });
 
 
