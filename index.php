@@ -352,11 +352,19 @@
             display: flex;
             justify-content: space-between;
         }
+        .start{
+            display: flex;
+        justify-content: flex-start;
+        }
+        .end{
+            display:flex;
+        justify-content: flex-end;
+        }
     </style>
     <!-- Sticky Navigation Bar -->
     <nav class="navbar navbar-expand-lg d-flex flex-fill col-auto">
         <div class="container space">
-            <div class="collapse navbar-collapse">
+            <div class="collapse navbar-collapse start">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item"><a class="nav-link" href="#smart">Smart Wage</a></li>
                     <li class="nav-item"><a class="nav-link" href="#about">About Us</a></li>
@@ -365,7 +373,7 @@
                     <li class="nav-item"><a class="nav-link" href="#contact-us">Contact</a></li>
                 </ul>
             </div>
-            <button class="login-button" onclick="window.location.href='login.php'">Log In</button>
+            <button class="login-button end" onclick="window.location.href='login.php'">Log In</button>
         </div>
         
     </nav>
