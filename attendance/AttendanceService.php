@@ -1,15 +1,5 @@
 <?php
 
-require_once __DIR__ . '/Attendance.php'                              ;
-
-require_once __DIR__ . '/../work-schedules/WorkSchedule.php'          ;
-require_once __DIR__ . '/../breaks/BreakSchedule.php'                 ;
-require_once __DIR__ . '/../breaks/EmployeeBreak.php'                 ;
-
-require_once __DIR__ . '/../work-schedules/WorkScheduleSnapshot.php'  ;
-require_once __DIR__ . '/../breaks/BreakScheduleSnapshot.php'         ;
-require_once __DIR__ . '/../breaks/BreakTypeSnapshot.php'             ;
-
 require_once __DIR__ . '/AttendanceRepository.php'                    ;
 
 require_once __DIR__ . '/../employees/EmployeeRepository.php'         ;
@@ -547,7 +537,7 @@ class AttendanceService
                     } else {
                         return [
                             'status'  => 'information',
-                            'message' => 'You don\'t have a work schedule today.'
+                            'message' => 'You do not have a work schedule today.'
                         ];
                     }
                 }
@@ -968,9 +958,8 @@ class AttendanceService
                                     if ($halfDayEndDateTime > $breakStartDateTime &&
                                         $halfDayEndDateTime < $breakEndDateTime  ) {
 
-                                        $overlapTimeInMinutes =
-                                            ($breakStartDateTime->diff($halfDayEndDateTime))->h * 60 +
-                                            ($breakStartDateTime->diff($halfDayEndDateTime))->i;
+                                        $overlapTimeDuration  = $breakStartDateTime->diff($halfDayEndDateTime)        ;
+                                        $overlapTimeInMinutes = $overlapTimeDuration->h * 60 + $overlapTimeDuration->i;
 
                                         $halfDayEndDateTime = (clone $breakEndDateTime)
                                             ->modify('+' . $overlapTimeInMinutes . ' minutes');
@@ -985,9 +974,8 @@ class AttendanceService
                                     if ($halfDayStartDateTime > $breakStartDateTime &&
                                         $halfDayStartDateTime < $breakEndDateTime  ) {
 
-                                        $overlapTimeInMinutes =
-                                            ($breakEndDateTime->diff($halfDayStartDateTime))->h * 60 +
-                                            ($breakEndDateTime->diff($halfDayStartDateTime))->i;
+                                        $overlapTimeDuration  = $breakEndDateTime->diff($halfDayStartDateTime)        ;
+                                        $overlapTimeInMinutes = $overlapTimeDuration->h * 60 + $overlapTimeDuration->i;
 
                                         $halfDayStartDateTime = (clone $breakStartDateTime)
                                             ->modify('-' . $overlapTimeInMinutes . ' minutes');
@@ -1439,14 +1427,25 @@ class AttendanceService
                         $breakScheduleStartDateTime = clone $previousBreakRecordEndDateTime;
                     }
 
-                    if ($checkOutDateTime >= $breakScheduleStartDateTime) {
+                    if ($checkOutDateTime > $breakScheduleStartDateTime) {
                         $breakRecordEndDateTime =
                             $breakRecord['end_time'] !== null
                                 ? new DateTime($breakRecord['end_time'])
                                 : null;
 
+                        if ($checkOutDateTime < $breakRecordEndDateTime) {
+                            $breakRecordEndDateTime = clone $checkOutDateTime;
+                        }
+
                         if ($breakRecordEndDateTime !== null &&
                             $breakRecordEndDateTime >   $breakScheduleEndDateTime) {
+
+                            if ($breakScheduleStartDateTime > $breakScheduleEndDateTime) {
+                                $breakScheduleEndDateTime = clone $breakScheduleStartDateTime;
+                            }
+
+                            $breakScheduleDuration          = $breakScheduleStartDateTime->diff($breakScheduleEndDateTime);
+                            $breakScheduleDurationInMinutes = $breakScheduleDuration->h * 60 + $breakScheduleDuration->i  ;
 
                             $breakDuration          = $breakScheduleStartDateTime->diff($breakRecordEndDateTime);
                             $breakDurationInMinutes = $breakDuration->h * 60 + $breakDuration->i                ;
@@ -1455,15 +1454,14 @@ class AttendanceService
                             $overtimeBreakDurationInMinutes = $overtimeBreakDuration->h * 60 + $overtimeBreakDuration->i;
 
                             if ($isPaid) {
-                                $paidBreakInMinutes   += $breakRecord['break_type_snapshot_duration_in_minutes'];
+                                $paidBreakInMinutes   += $breakScheduleDurationInMinutes        ;
                                 $unpaidBreakInMinutes += max(0, $overtimeBreakDurationInMinutes);
 
                             } else {
                                 $unpaidBreakInMinutes += max(0, $breakDurationInMinutes);
                             }
 
-                            $breakScheduleEndDateTime = clone $breakRecordEndDateTime;
-
+                            $breakScheduleEndDateTime       = clone $breakRecordEndDateTime  ;
                             $previousBreakRecordEndDateTime = clone $breakScheduleEndDateTime;
 
                         } else {
@@ -1474,8 +1472,6 @@ class AttendanceService
 
                             if ($breakScheduleStartDateTime > $breakScheduleEndDateTime) {
                                 $breakScheduleStartDateTime = clone $breakScheduleEndDateTime;
-
-                                $previousBreakRecordEndDateTime = clone $breakScheduleEndDateTime;
                             }
 
                             $breakDuration          = $breakScheduleStartDateTime->diff($breakScheduleEndDateTime);
@@ -1722,6 +1718,7 @@ class AttendanceService
             'is_overtime_approved'                                    ,
             'remarks'                                                 ,
 
+            'work_schedule_snapshot_work_schedule_id'                 ,
             'work_schedule_snapshot_employee_id'                      ,
             'work_schedule_snapshot_start_time'                       ,
             'work_schedule_snapshot_end_time'                         ,
@@ -1771,7 +1768,63 @@ class AttendanceService
 
         $workScheduleDate = $attendanceRecord['date'];
 
-        $employeeId = $attendanceRecord['work_schedule_snapshot_employee_id'];
+        $workScheduleStartTime = $attendanceRecord['work_schedule_snapshot_start_time'];
+        $workScheduleEndTime   = $attendanceRecord['work_schedule_snapshot_end_time'  ];
+
+        $workScheduleStartDateTime = new DateTime($workScheduleDate . ' ' . $workScheduleStartTime);
+        $workScheduleEndDateTime   = new DateTime($workScheduleDate . ' ' . $workScheduleEndTime  );
+
+        if ($workScheduleEndDateTime <= $workScheduleStartDateTime) {
+            $workScheduleEndDateTime->modify('+1 day');
+        }
+
+        $earlyCheckInWindow = $attendanceRecord['work_schedule_snapshot_minutes_can_check_in_before_shift'];
+
+        $adjustedWorkScheduleStartDateTime = (clone $workScheduleStartDateTime)
+            ->modify('-' . $earlyCheckInWindow . ' minutes');
+
+        if (empty($checkInDateTime) || empty($checkOutDateTime)) {
+            return [
+                'status'  => 'invalid_input',
+                'message' => 'Check-in and check-out times must not be empty.'
+            ];
+        }
+
+        if ($checkOutDateTime < $checkInDateTime) {
+            return [
+                'status'  => 'invalid_input',
+                'message' => 'Check-out time cannot be earlier than check-in time.'
+            ];
+        }
+
+        if ($checkInDateTime < $adjustedWorkScheduleStartDateTime) {
+            return [
+                'status'  => 'invalid_input',
+                'message' => 'Check-in time is earlier than the allowed start time of the work schedule.'
+            ];
+        }
+
+        if ($checkInDateTime >= $workScheduleEndDateTime) {
+            return [
+                'status'  => 'invalid_input',
+                'message' => 'Check-in time is later than or equal to the end of the work schedule.'
+            ];
+        }
+
+        $now = new DateTime();
+        if ($checkInDateTime > $now || $checkOutDateTime > $now) {
+            return [
+                'status'  => 'invalid_input',
+                'message' => 'Check-in or check-out time cannot be in the future.'
+            ];
+        }
+
+        if ($checkOutDateTime > (clone $workScheduleEndDateTime)->modify('+1 day')) {
+            return [
+                'status'  => 'invalid_input',
+                'message' => 'The check-out date cannot be more than one day after the work schedule end date.'
+            ];
+        }
 
         $holidayColumns = [
             'is_paid'
@@ -1813,9 +1866,11 @@ class AttendanceService
                 ? $isPaidHoliday['result_set'][0]['is_paid']
                 : [];
 
+        $employeeId = $attendanceRecord['work_schedule_snapshot_employee_id'];
+
         $isOnLeave = [];
 
-        if ($isPaidHoliday) {
+        if ( ! $isPaidHoliday) {
             $leaveRequestColumns = [
                 'is_half_day'  ,
                 'half_day_part'
@@ -1877,54 +1932,387 @@ class AttendanceService
             }
         }
 
-        $workScheduleStartTime = $attendanceRecord['work_schedule_snapshot_start_time'];
-        $workScheduleEndTime   = $attendanceRecord['work_schedule_snapshot_end_time'  ];
+        $attendanceRecordColumns = [
+            'id'
+        ];
 
-        $workScheduleStartDateTime = new DateTime($workScheduleDate . ' ' . $workScheduleStartTime);
-        $workScheduleEndDateTime   = new DateTime($workScheduleDate . ' ' . $workScheduleEndTime  );
+        $attendanceRecordFilterCriteria = [
+            [
+                'column'   => 'attendance.deleted_at',
+                'operator' => 'IS NULL'
+            ],
+            [
+                'column'   => 'attendance.date',
+                'operator' => '!='             ,
+                'value'    => $workScheduleDate
+            ],
+            [
+                'column'   => 'attendance.work_schedule_snapshot_id'        ,
+                'operator' => '!='                                          ,
+                'value'    => $attendanceRecord['work_schedule_snapshot_id']
+            ],
+            [
+                'column'   => 'attendance.check_in_time',
+                'operator' => '<'                       ,
+                'value'    => $formattedCheckOutDateTime
+            ],
+            [
+                'column'   => 'attendance.check_out_time',
+                'operator' => '>'                        ,
+                'value'    => $formattedCheckInDateTime
+            ]
+        ];
 
-        if ($workScheduleEndDateTime <= $workScheduleStartDateTime) {
-            $workScheduleEndDateTime->modify('+1 day');
-        }
+        $isOverlapped = $this->attendanceRepository->fetchAllAttendance(
+            columns             : $attendanceRecordColumns       ,
+            filterCriteria      : $attendanceRecordFilterCriteria,
+            limit               : 1                              ,
+            includeTotalRowCount: false
+        );
 
-        $earlyCheckInWindow = $attendanceRecord['work_schedule_snapshot_minutes_can_check_in_before_shift'];
-
-        $adjustedWorkScheduleStartDateTime = (clone $workScheduleStartDateTime)
-            ->modify('-' . $earlyCheckInWindow . ' minutes');
-
-        if (empty($checkInDateTime) || empty($checkOutDateTime)) {
+        if ($isOverlapped === ActionResult::FAILURE) {
             return [
-                'status'  => 'invalid',
-                'message' => ''
+                'status'  => 'error',
+                'message' => 'An unexpected error occurred. Please try again later.'
             ];
         }
 
-        if ($checkOutDateTime < $checkInDateTime) {
+        $isOverlapped = ! empty($isOverlapped['result_set']);
+
+        if ($isOverlapped) {
             return [
-                'status'  => 'invalid',
-                'message' => ''
+                'status'  => 'invalid_input',
+                'message' => 'Time overlap detected. Please verify your check-in and check-out times ' .
+                             'and ensure they do not conflict with existing records.'
             ];
         }
 
-        if ($checkInDateTime < $adjustedWorkScheduleStartDateTime) {
+        $attendanceRecordColumns = [
+            'id'            ,
+            'check_in_time' ,
+            'check_out_time'
+        ];
+
+        $attendanceRecordFilterCriteria = [
+            [
+                'column'   => 'attendance.deleted_at',
+                'operator' => 'IS NULL'
+            ],
+            [
+                'column'   => 'attendance.date',
+                'operator' => '='              ,
+                'value'    => $workScheduleDate
+            ],
+            [
+                'column'   => 'attendance.work_schedule_snapshot_id'        ,
+                'operator' => '='                                           ,
+                'value'    => $attendanceRecord['work_schedule_snapshot_id']
+            ],
+            [
+                'column'   => 'attendance.id',
+                'operator' => '!='           ,
+                'value'    => $attendanceId
+            ],
+        ];
+
+        $attendanceRecordSortCriteria = [
+            [
+                'column'    => 'attendance.check_in_time',
+                'direction' => 'ASC'
+            ]
+        ];
+
+        $attendanceRecords = $this->attendanceRepository->fetchAllAttendance(
+            columns             : $attendanceRecordColumns       ,
+            filterCriteria      : $attendanceRecordFilterCriteria,
+            sortCriteria        : $attendanceRecordSortCriteria  ,
+            includeTotalRowCount: false
+        );
+
+        if ($attendanceRecords === ActionResult::FAILURE) {
             return [
-                'status'  => 'invalid',
-                'message' => ''
+                'status'  => 'error',
+                'message' => 'An unexpected error occurred. Please try again later.'
             ];
         }
 
-        if ($checkInDateTime >= $workScheduleEndDateTime) {
+        $attendanceRecords =
+            ! empty($attendanceRecords['result_set'])
+                ? $attendanceRecords['result_set']
+                : [];
+
+        $employeeBreakRecordColumns = [
+            'id'                                     ,
+            'break_schedule_snapshot_id'             ,
+            'start_time'                             ,
+            'end_time'                               ,
+
+            'break_schedule_snapshot_start_time'     ,
+            'break_schedule_snapshot_end_time'       ,
+
+            'break_type_snapshot_duration_in_minutes',
+            'break_type_snapshot_is_paid'
+        ];
+
+        $employeeBreakRecordFilterCriteria = [
+            [
+                'column'   => 'employee_break.deleted_at',
+                'operator' => 'IS NULL'
+            ],
+            [
+                'column'   => 'break_schedule_snapshot.work_schedule_snapshot_id',
+                'operator' => '='                                                ,
+                'value'    => $attendanceRecord['work_schedule_snapshot_id']
+            ],
+            [
+                'column'      => 'employee_break.created_at'                              ,
+                'operator'    => 'BETWEEN'                                                ,
+                'lower_bound' => $adjustedWorkScheduleStartDateTime->format('Y-m-d H:i:s'),
+                'upper_bound' => $workScheduleEndDateTime          ->format('Y-m-d H:i:s')
+            ]
+        ];
+
+        $employeeBreakRecords = $this->employeeBreakRepository->fetchAllEmployeeBreaks(
+            columns             : $employeeBreakRecordColumns       ,
+            filterCriteria      : $employeeBreakRecordFilterCriteria,
+            includeTotalRowCount: false
+        );
+
+        if ($employeeBreakRecords === ActionResult::FAILURE) {
             return [
-                'status'  => 'invalid',
-                'message' => ''
+                'status'  => 'error',
+                'message' => 'An unexpected error occurred while checking in. Please try again later.'
             ];
         }
 
-        $now = new DateTime();
-        if ($checkInDateTime > $now || $checkOutDateTime > $now) {
+        $employeeBreakRecords =
+            ! empty($employeeBreakRecords['result_set'])
+                ? $employeeBreakRecords['result_set']
+                : [];
+
+        usort($employeeBreakRecords, function ($employeeBreakRecordA, $employeeBreakRecordB) use ($workScheduleDate, $workScheduleStartDateTime) {
+            $breakStartTimeA = $employeeBreakRecordA['start_time'] ?? $employeeBreakRecordA['break_snapshot_start_time'];
+            $breakStartTimeB = $employeeBreakRecordB['start_time'] ?? $employeeBreakRecordB['break_snapshot_start_time'];
+
+            if ($breakStartTimeA === null && $breakStartTimeB === null) {
+                return 0;
+            }
+            if ($breakStartTimeA === null) {
+                return 1;
+            }
+            if ($breakStartTimeB === null) {
+                return -1;
+            }
+
+            $breakStartDateTimeA = new DateTime($workScheduleDate . ' ' . $breakStartTimeA);
+            $breakStartDateTimeB = new DateTime($workScheduleDate . ' ' . $breakStartTimeB);
+
+            if ($breakStartDateTimeA < $workScheduleStartDateTime) {
+                $breakStartDateTimeA->modify('+1 day');
+            }
+
+            if ($breakStartDateTimeB < $workScheduleStartDateTime) {
+                $breakStartDateTimeB->modify('+1 day');
+            }
+
+            return $breakStartDateTimeA <=> $breakStartDateTimeB;
+        });
+
+        $breakSchedules = [];
+
+        foreach ($employeeBreakRecords as $breakRecord) {
+            $breakScheduleSnapshotId = $breakRecord['break_schedule_snapshot_id'];
+
+            if ( ! isset($breakSchedules[$breakScheduleSnapshotId])) {
+                $breakSchedules[$breakScheduleSnapshotId] = [];
+            }
+
+            $breakSchedules[$breakScheduleSnapshotId] = [
+                'start_time'                     => $breakRecord['break_schedule_snapshot_start_time'     ],
+                'end_time'                       => $breakRecord['break_schedule_snapshot_end_time'       ],
+                'break_type_duration_in_minutes' => $breakRecord['break_type_snapshot_duration_in_minutes'],
+                'break_type_is_paid'             => $breakRecord['break_type_snapshot_is_paid'            ]
+            ];
+        }
+
+        if ( ! empty($isOnLeave)               &&
+                     $isOnLeave['is_half_day']) {
+
+            $halfDayPart = $isOnLeave['half_day_part'];
+
+            $halfDayDurationInMinutes =
+                ($attendanceRecord['work_schedule_snapshot_total_work_hours'] / 2) * 60;
+
+            if ($halfDayPart === 'first_half') {
+                $halfDayStartDateTime = clone $workScheduleStartDateTime;
+                $halfDayEndDateTime   = clone $workScheduleStartDateTime;
+
+                $halfDayEndDateTime->modify(
+                    '+' . $halfDayDurationInMinutes . ' minutes'
+                );
+
+            } elseif ($halfDayPart === 'second_half') {
+                $halfDayStartDateTime = clone $workScheduleEndDateTime;
+                $halfDayEndDateTime   = clone $workScheduleEndDateTime;
+
+                $halfDayStartDateTime->modify(
+                    '-' . $halfDayDurationInMinutes . ' minutes'
+                );
+            }
+
+            if (isset($halfDayStartDateTime, $halfDayEndDateTime)) {
+                if ( ! empty($breakSchedules)) {
+                    $assignedBreakSchedules = $breakSchedules;
+
+                    if ($halfDayPart === 'second_half') {
+                        $assignedBreakSchedules = array_reverse($assignedBreakSchedules);
+                    }
+
+                    foreach ($assignedBreakSchedules as $breakSchedule) {
+                        if ( ! $breakSchedule['break_type_is_paid']) {
+                            $breakStartTime = $breakSchedule['start_time'];
+                            $breakEndTime   = $breakSchedule['end_time'  ];
+
+                            $breakStartDateTime = new DateTime($workScheduleDate . ' ' . $breakStartTime);
+                            $breakEndDateTime   = new DateTime($workScheduleDate . ' ' . $breakEndTime  );
+
+                            if ($breakStartDateTime < $workScheduleStartDateTime) {
+                                $breakStartDateTime->modify('+1 day');
+                            }
+
+                            if ($breakEndDateTime < $workScheduleStartDateTime) {
+                                $breakEndDateTime->modify('+1 day');
+                            }
+
+                            if ($breakEndDateTime < $breakStartDateTime) {
+                                $breakEndDateTime->modify('+1 day');
+                            }
+
+                            $breakDurationInMinutes = $breakSchedule['break_type_duration_in_minutes'];
+
+                            if ($halfDayPart === 'first_half') {
+                                if ($halfDayEndDateTime > $breakStartDateTime &&
+                                    $halfDayEndDateTime < $breakEndDateTime  ) {
+
+                                    $overlapTimeDuration  = $breakStartDateTime->diff($halfDayEndDateTime)        ;
+                                    $overlapTimeInMinutes = $overlapTimeDuration->h * 60 + $overlapTimeDuration->i;
+
+                                    $halfDayEndDateTime = (clone $breakEndDateTime)
+                                        ->modify('+' . $overlapTimeInMinutes . ' minutes');
+
+                                } elseif ($breakStartDateTime >= $halfDayStartDateTime &&
+                                        $breakEndDateTime   <= $halfDayEndDateTime  ) {
+
+                                    $halfDayEndDateTime->modify('+' . $breakDurationInMinutes . ' minutes');
+                                }
+
+                            } elseif ($halfDayPart === 'second_half') {
+                                if ($halfDayStartDateTime > $breakStartDateTime &&
+                                    $halfDayStartDateTime < $breakEndDateTime  ) {
+
+                                    $overlapTimeDuration  = $breakEndDateTime->diff($halfDayStartDateTime)        ;
+                                    $overlapTimeInMinutes = $overlapTimeDuration->h * 60 + $overlapTimeDuration->i;
+
+                                    $halfDayStartDateTime = (clone $breakStartDateTime)
+                                        ->modify('-' . $overlapTimeInMinutes . ' minutes');
+
+                                } elseif ($breakStartDateTime >= $halfDayStartDateTime &&
+                                        $breakEndDateTime   <= $halfDayEndDateTime  ) {
+
+                                    $halfDayStartDateTime->modify('-' . $breakDurationInMinutes . ' minutes');
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if ($checkInDateTime >= $halfDayStartDateTime &&
+                    $checkInDateTime <= $halfDayEndDateTime  ) {
+
+                    $formattedHalfDayStartTime = $halfDayStartDateTime->format('h:i A');
+                    $formattedHalfDayEndTime   = $halfDayEndDateTime  ->format('h:i A');
+
+                    return [
+                        'status'  => 'error',
+                        'message' => 'Unable to update check-in time: The selected time is within your ' .
+                                     'half-day leave period. Please pick a time outside of ' .
+                                     $formattedHalfDayStartTime . ' to ' . $formattedHalfDayEndTime . '.'
+                    ];
+                }
+            }
+        }
+
+        $earliestCheckInDateTime = $checkInDateTime ;
+        $latestCheckOutDateTime  = $checkOutDateTime;
+
+        try {
+            $this->pdo->beginTransaction();
+
+            foreach ($attendanceRecords as $record) {
+                $existingCheckInDateTime  = new DateTime($record['check_in_time' ]);
+                $existingCheckOutDateTime = new DateTime($record['check_out_time']);
+
+                if ($checkInDateTime  < $existingCheckOutDateTime &&
+                    $checkOutDateTime > $existingCheckInDateTime) {
+
+                    $earliestCheckInDateTime = clone (min($existingCheckInDateTime , $checkInDateTime ));
+                    $latestCheckOutDateTime  = clone (max($existingCheckOutDateTime, $checkOutDateTime));
+
+                    $deleteAttendanceRecordResult = $this->attendanceRepository
+                        ->deleteAttendance($record['id']);
+
+                    if ($deleteAttendanceRecordResult === ActionResult::FAILURE) {
+                        $this->pdo->rollback();
+
+                        return [
+                            'status'  => 'error',
+                            'message' => 'An unexpected error occurred while checking in. Please try again later.'
+                        ];
+                    }
+                }
+            }
+
+            foreach ($employeeBreakRecords as $breakRecord) {
+                $breakRecordStartDateTime =
+                    $breakRecord['start_time'] !== null
+                        ? new DateTime($breakRecord['start_time'])
+                        : null;
+
+                $breakRecordEndDateTime =
+                    $breakRecord['end_time'] !== null
+                        ? new DateTime($breakRecord['end_time'])
+                        : null;
+
+                $adjustedBreakRecordStartDateTime = null;
+                $adjustedBreakRecordEndDateTime   = null;
+
+                if ($breakRecordStartDateTime !== null &&
+                    $breakRecordStartDateTime < $earliestCheckInDateTime) {
+
+                    $breakRecordStartDateTime = clone $earliestCheckInDateTime;
+                }
+
+                if ($breakRecordEndDateTime !== null &&
+                    $breakRecordEndDateTime > $latestCheckOutDateTime) {
+
+                    $breakRecordEndDateTime = clone $latestCheckOutDateTime;
+                }
+
+                if ($adjustedBreakRecordStartDateTime !== $breakRecordStartDateTime ||
+                    $adjustedBreakRecordEndDateTime   !== $breakRecordEndDateTime  ) {
+
+                    $updateBreakRecordResult = '';
+                }
+            }
+
+            $this->pdo->commit();
+
+        } catch (PDOException $exception) {
+            $this->pdo->rollback();
+
             return [
-                'status'  => 'invalid',
-                'message' => ''
+                'status'  => 'error',
+                'message' => 'An unexpected error occurred while checking in. Please try again later.'
             ];
         }
 
