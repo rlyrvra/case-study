@@ -373,9 +373,8 @@
                     <li class="nav-item"><a class="nav-link" href="#contact-us">Contact</a></li>
                 </ul>
             </div>
-            <button class="login-button end" onclick="window.location.href='login.php'">Log In</button>
         </div>
-        
+        <button class="login-button end" onclick="window.location.href='login.php'">Log In</button>
     </nav>
 
 
