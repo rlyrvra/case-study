@@ -79,7 +79,8 @@ if(isset($_GET['m']) && $_GET['m'] === 'u'){
 <script src="employees/modules/add-employee-ajax.js?v1.5"></script>
 <!-- Scripts -->
 <script src="employees/modules/add-employee-scripts.js?v1.10"></script>
-
+<!-- Loader -->
+<script src="sweet-alert-toasts/loader/loader.js?v1.0.0"></script>
 
 
 <meta name="viewport" content="width=device-width, initial-scale=1">

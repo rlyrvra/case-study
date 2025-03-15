@@ -22,19 +22,40 @@
                 <form onsubmit="event.preventDefault();" id="add-departments-form">
                     <div class="mb-3">
                         <label for="create_department_name" class="form-label">Department Name<span class="label-danger">(*)</span>:</label>
-                        <input type="text" class="form-control" id="create_department_name" name="create_department_name" required placeholder="Warehouse and Management" min=1 max=50>
+                        <input 
+                        type="text" 
+                        class="form-control" 
+                        id="create_department_name" 
+                        name="create_department_name" 
+                        required 
+                        placeholder="Warehouse and Management" 
+                        minlength="1" 
+                        maxlength="50">
                     </div>
                     <div class="mb-3">
                         <label for="create_department_head" class="form-label">Department Head:</label>
-                        <select class="form-select" id="create_department_head" name="create_department_head" placeholder="Enter Department"></select>
+                        <select 
+                        class="form-select" 
+                        id="create_department_head" 
+                        name="create_department_head" 
+                        placeholder="Enter Department"></select>
                     </div>
                     <div class="mb-3">
                         <label for="create_department_description" class="form-label">Department Description:</label>
-                        <textarea class="form-control" id="create_department_description" name="create_department_description" placeholder="Sample Description" min=0 max=255></textarea>
+                        <textarea 
+                        class="form-control" 
+                        id="create_department_description" 
+                        name="create_department_description" 
+                        placeholder="Sample Description" 
+                        maxlength="50"></textarea>
                     </div>
                     <div class="mb-3">
                         <label for="create_department_status" class="form-label">Department Status<span class="label-danger">(*)</span>:</label>
-                        <select class="form-select" id="create_department_status" name="create_department_status" value="" required>
+                        <select class="form-select" 
+                        id="create_department_status" 
+                        name="create_department_status" 
+                        value=""
+                        required>
                             <option value="Active">Active</option>
                             <option value="Inactive">Inactive</option>
                         </select>

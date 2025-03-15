@@ -4,13 +4,7 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
     exit('This resource is only accessible via AJAX requests.');
 }
 
-require_once __DIR__ . '/../DepartmentDao.php';
 require_once __DIR__ . '/../DepartmentService.php';
-require_once __DIR__ . '/../DepartmentRepository.php';
-require_once __DIR__ . '/../Department.php';
-
-require_once __DIR__ . '/../../job-titles/JobTitle.php';
-require_once __DIR__ . '/../../job-titles/JobTitleDao.php';
 
 require_once __DIR__ . '/../../includes/Helper.php';
 require_once __DIR__ . '/../../database/database.php';
@@ -106,6 +100,7 @@ try {
     if ($action === 'create') {
 
         $departmentData = $_POST['department'] ?? null;
+
         if ($departmentData == null) {
             die('
             <script>
@@ -155,7 +150,7 @@ try {
         if ($deleteResult === ActionResult::SUCCESS) {
             die('
             <script>
-            showSuccessCreate();
+            showSuccessDelete();
             </script>');
         }else if($deleteResult === ActionResult::FAILURE){
             $message = 'Failed to delete department. Please try again.';
@@ -213,7 +208,12 @@ try {
         return;
     }
 
-    echo "Invalid action specified.";
+    $message = "Invalid action specified.";
+    die('
+    <script>
+    showFatalError(' . json_encode($message) 
+    . ');
+    </script>');
 } catch (Throwable  $e) {
     $message = "Fatal error: " . $e->getMessage();
     die('

@@ -97,7 +97,6 @@ function createDepartment() {
         success: function(response) {
             $('#response-test').html(response);
             fetchAllDepartments();
-            document.getElementById('add-departments-form').reset();
         },
         error(xhr, status, error) {
             console.error("Error creating department:", error);
@@ -132,7 +131,7 @@ function deleteDepartment(button){
 }
 
 function updateDepartment(button){
-    const updateDepartmentForm = document.getElementById('update_departments_modal');
+    const updateDepartmentForm = document.getElementById('update_departments_form');
     if(updateDepartmentForm.checkValidity() === false){
         return;
     };

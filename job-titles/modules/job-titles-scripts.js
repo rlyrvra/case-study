@@ -42,37 +42,6 @@ function getByDate(){
     return byDate;
 }
 
-function showCreatedSuccessAlert() {
-    Swal.fire({
-        title: 'Success!',
-        text: 'Job title created successfully.',
-        icon: 'success',
-        timer: 2000,
-        confirmButtonText: 'OK'
-    });
-}
-
-function confirmDeleteDepartment(button) {
-    Swal.fire({
-        title: 'Are you sure?',
-        text: "Do you want to delete this job title?",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
-    }).then((result) => {
-        if (result.isConfirmed) {
-        deleteDepartment(button);
-        Swal.fire(
-            'Deleted!',
-            'The job title has been deleted.',
-            'success'
-        );
-        }
-    });
-}
-
 // Function to add or remove the "Deleted At" option
 function toggleDeletedAtOption() {
     const statusSelect = document.getElementById('status');
@@ -124,16 +93,6 @@ function updateJobTitleClick(button){
     
 }
 
-function showSuccessUpdateAlert() {
-    Swal.fire({
-        title: 'Success!',
-        text: 'Job Title updated successfully.',
-        icon: 'success',
-        timer: 2000,
-        confirmButtonText: 'OK'
-    });
-}
-
 function confirmDeleteJobTitle(button) {
     Swal.fire({
         title: 'Are you sure?',
@@ -152,5 +111,99 @@ function confirmDeleteJobTitle(button) {
             'success'
         );
         }
+    });
+}
+
+
+function confirmDeleteDepartment(button) {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "Do you want to delete this job title?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+    })
+}
+
+
+function showSuccessCreate() {
+    const modal = $('#add_job_titles_modal');
+    modal.modal('hide');
+    const form = $('#create_job_title_form');
+    Swal.fire({
+        title: 'Created!',
+        text: 'The job title has been CREATED successfully.',
+        icon: 'success',
+        confirmButtonText: 'OK'
+    });
+    form.get(0).reset();
+}
+
+function showSuccessUpdate() {
+    const modal = $('#update_job_titles_modal');
+    modal.modal('hide');
+    const form = $('#update_job_title_form');
+    form.modal('hide');
+    Swal.fire({
+        title: 'Updated!',
+        text: 'This job title has been UPDATED successfully.',
+        icon: 'success',
+        confirmButtonText: 'OK'
+    });
+    form.get(0).reset();
+}
+
+function showSuccessDelete() {
+    Swal.fire({
+        title: 'Deleted!',
+        text: 'This job title has been DELETED successfully.',
+        icon: 'success',
+        confirmButtonText: 'OK'
+    });
+}
+
+function showFatalError(message) {
+    const modal = $('#add_job_titles_modal');
+    modal.modal('hide');
+    const modal2 = $('#update_job_titles_modal');
+    modal2.modal('hide');
+    Swal.fire({
+        title: 'Fatal Error!',
+        html: `${message} <br> Please contact the system administrator.`,
+        icon: 'error',
+        confirmButtonText: 'OK'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            location.reload();
+        }
+    });
+}
+
+
+function showError(message) {
+    const modal = $('#add_job_titles_modal');
+    modal.modal('hide');
+    const modal2 = $('#update_job_titles_modal');
+    modal2.modal('hide');
+    Swal.fire({
+        title: 'Error!',
+        text: message,
+        icon: 'error',
+        confirmButtonText: 'OK'
+    });
+}
+
+function showCouldNotFindData(){
+    const modal = $('#add_job_titles_modal');
+    modal.modal('hide');
+    const modal2 = $('#update_job_titles_modal');
+    modal2.modal('hide');
+    Swal.fire({
+        title: 'Error!',
+        text: 'The job title data does not exist.',
+        icon: 'errror',
+        confirmButtonText: 'OK'
     });
 }

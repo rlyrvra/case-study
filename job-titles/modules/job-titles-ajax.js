@@ -73,12 +73,17 @@ function fetchAllJobTitles(page = 1) {
             $('#job-titles-table').html(response);
         },
         error: function(jqXHR, textStatus, errorThrown) {
-            console.log("AJAX Error: " + textStatus + ": " + errorThrown);
+            console.error("Error fetching job titles:", error);
+            showFatalError("AJAX Error: " + textStatus + ": " + errorThrown);
         }
     });
 }
 
 function createJobTitle() {
+    const form = document.getElementById('create_job_title_form');
+    if(form.checkValidity() === false){
+        return;
+    };
     const jobTitleName = document.getElementById('create_jobtitle_title').value;
     const jobTitleDepartmentName = document.getElementById('create_jobtitle_department_name').value;
     const jobTitleDescription = document.getElementById('create_jobtitle_description').value;
@@ -104,28 +109,28 @@ function createJobTitle() {
             job_title: jobTitleData
         },
         success: function(response) {
+            $('#response-test').html(response);
             fetchAllJobTitles();
-            showCreatedSuccessAlert();
             document.getElementById('create_job_title_form').reset();
         },
         error(xhr, status, error) {
             console.error("Error creating job titles:", error);
+            showFatalError("AJAX Error: " + textStatus + ": " + errorThrown);
         }
     });
 }
 
 function updateJobTitle(button){
+    const form = document.getElementById('update_job_title_form');
+    if(form.checkValidity() === false){
+        return;
+    };
+
     var token = button.getAttribute('data-token');;
     const jobTitleName = document.getElementById('update_jobtitle_title').value;
     const jobTitleDepartmentName = document.getElementById('update_jobtitle_department_name').value;
     const jobTitleDescription = document.getElementById('update_jobtitle_description').value;
     const jobTitleStatus = document.getElementById('update_jobtitle_status').value;
-
-    console.log(`MD5 ID: ${token}, 
-        Job Title Name: ${jobTitleName}, 
-        Job Title Department Name: ${jobTitleDepartmentName}, 
-        Job Title Description: ${jobTitleDescription}, 
-        Job Title Status: ${jobTitleStatus}`);
 
     $.ajax({
         url: 'job-titles/modules/job-titles-api',
@@ -141,13 +146,13 @@ function updateJobTitle(button){
             }
         },
         success: function(response) {
-            //$('#job-titles-table').html(response);
-            showSuccessUpdateAlert();
+            $('#response-test').html(response);
             fetchAllJobTitles();
             
         },
         error: function(jqXHR, textStatus, errorThrown) {
-            console.log("AJAX Error: " + textStatus + ": " + errorThrown);
+            console.error("Error updating job titles:", error);
+            showFatalError("AJAX Error: " + textStatus + ": " + errorThrown);
         }
     });
     
@@ -167,11 +172,12 @@ function deleteJobTitle(button){
             md5_id: jobTitleData.token
         },
         success: function(response) {
-            //('#job-titles-table').html(response);
+            $('#response-test').html(response);
             fetchAllJobTitles();
         },
         error: function(jqXHR, textStatus, errorThrown) {
-            console.log("AJAX Error: " + textStatus + ": " + errorThrown);
+            console.error("Error deleting job titles:", error);
+            showFatalError("AJAX Error: " + textStatus + ": " + errorThrown);
         }
     });
     

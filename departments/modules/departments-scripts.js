@@ -135,22 +135,36 @@ function confirmDeleteDepartment(button) {
 }
 
 function showSuccessCreate() {
-    const addDepartmentForm = $('#add-departments-form');
-    addDepartmentForm.modal('hide');
+    const modal = $('#add-departments-modal');
+    modal.modal('hide');
+    const form = $('#add-departments-form');
+    modal.modal('hide');
     Swal.fire({
-        title: 'Success!',
-        text: 'The department has been created successfully.',
+        title: 'Created!',
+        text: 'The department has been CREATED successfully.',
         icon: 'success',
         confirmButtonText: 'OK'
     });
+    form.get(0).reset();
 }
 
 function showSuccessUpdate() {
-    const addDepartmentForm = $('#add-departments-form');
-    addDepartmentForm.modal('hide');
+    const modal = $('#update_departments_modal');
+    modal.modal('hide');
+    const form = $('#update_departments_form');
     Swal.fire({
-        title: 'Success!',
-        text: 'This department has been updated successfully.',
+        title: 'Updated!',
+        text: 'This department has been UPDATED successfully.',
+        icon: 'success',
+        confirmButtonText: 'OK'
+    });
+    form.get(0).reset();
+}
+
+function showSuccessDelete() {
+    Swal.fire({
+        title: 'Deleted!',
+        text: 'The department has been DELETED successfully.',
         icon: 'success',
         confirmButtonText: 'OK'
     });

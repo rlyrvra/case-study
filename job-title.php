@@ -34,9 +34,9 @@ if($_SESSION['access_role'] !== 'Admin'){
 
 
 <!-- Ajax -->
-<script src="job-titles/modules/job-titles-ajax.js?v1.3"></script>
+<script src="job-titles/modules/job-titles-ajax.js?v1.5"></script>
 <!-- Scripts -->
-<script src="job-titles/modules/job-titles-scripts.js?v1.3"></script>
+<script src="job-titles/modules/job-titles-scripts.js?v1.5"></script>
 <!---Skeletons--->
 <script src="requests/table-skeleton.js?v1.2"></script>
 <!---Skeletons CSS-->
@@ -92,6 +92,7 @@ if($_SESSION['access_role'] !== 'Admin'){
       <!-- / Navbar -->
       <div class="content-wrapper">
         <div class="container-fluid pt-5 pb-5">
+          <div id="response-test"></div>
           <div class="container-fluid mb-3 d-flex align-items-center">
               <h1 class="display-1">Job Titles</h1>
               <button type="button" class="btn btn-success btn-xl ms-auto" data-bs-toggle="modal" data-bs-target="#add_job_titles_modal">

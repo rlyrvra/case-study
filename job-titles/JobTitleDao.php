@@ -60,7 +60,7 @@ class JobTitleDao
 
             error_log("Database Error: An error occurred while creating the job title. " .
                       "Exception: {$exception->getMessage()}");
-
+                      
             return ActionResult::FAILURE;
         }
     }

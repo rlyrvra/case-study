@@ -9,7 +9,7 @@ function handleRFID(rfid, date){
         rfid: rfid,
         date: date
     }
-
+    showSpinnerLoader();
     $.ajax({
         url: 'requests/attendance/attendance-rfid-api',
         type: 'POST',
@@ -20,6 +20,7 @@ function handleRFID(rfid, date){
             date: date
         },
         success: function(response) {
+            closeSpinnerLoader();
             $('#response-test').html(response);
             fetchAllAttendance();
             fetchAllBreaks();
