@@ -1,26 +1,53 @@
+<!-- Personal Information Form -->
 <div class="tab-pane fade show active" id="navs-pills-personal-information" role="tabpanel">
-    <!-- Form -->
     <div class="form-container p-4">
         <h3 class="form-title">Personal Information: (1/6)</h3>
         <form onsubmit="event.preventDefault()" id="personal_information">
             <div class="row mb-3">
                 <div class="col-md-4">
                     <label for="firstName" class="form-label">First Name<span class="label-danger">(*)</span>:</label>
-                    <input type="text" class="form-control" id="firstName" placeholder="John" required minlength="1" maxlength="30">
+                    <input type="text" 
+                    class="form-control" 
+                    id="firstName" 
+                    placeholder="John" 
+                    required 
+                    minlength="1" 
+                    maxlength="30"
+                    pattern="^[A-Za-z\s]+$" 
+                    oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')"
+                    title="Only letters and spaces allowed">
                 </div>
                 <div class="col-md-4">
                     <label for="middleName" class="form-label">Middle Name</label>
-                    <input type="text" class="form-control" id="middleName" placeholder="Smith" minlength="1" maxlength="30">
+                    <input type="text" 
+                    class="form-control" 
+                    id="middleName" 
+                    placeholder="Smith"
+                    minlength="1"
+                    maxlength="30"
+                    pattern="^[A-Za-z\s]+$" 
+                    oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')"
+                    title="Only letters and spaces allowed">
                 </div>
                 <div class="col-md-4">
                     <label for="lastName" class="form-label">Last Name<span class="label-danger">(*)</span>:</label>
-                    <input type="text" class="form-control" id="lastName" placeholder="Doe" required minlength="1" maxlength="30">
+                    <input type="text" 
+                    class="form-control" 
+                    id="lastName" 
+                    placeholder="Doe" 
+                    required 
+                    minlength="1" 
+                    maxlength="30"
+                    pattern="^[A-Za-z\s]+$" 
+                    oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')"
+                    title="Only letters and spaces allowed">
                 </div>
             </div>
             <div class="row mb-3">
                 <div class="col-md-4">
                     <label for="dob" class="form-label">Date of Birth<span class="label-danger">(*)</span>:</label>
-                    <input type="date" class="form-control" id="dob" required>
+                    <input type="date" class="form-control" id="dob" required 
+                    oninput="this.setAttribute('max', new Date().toISOString().split('T')[0])">
                 </div>
                 <div class="col-md-4">
                     <label for="gender" class="form-label">Gender*</label>
@@ -45,199 +72,46 @@
             <div class="row mb-3">
                 <div class="col-md-6">
                     <label for="nationality" class="form-label">Nationality<span class="label-danger">(*)</span>:</label>
-                    <input type="text" class="form-control" list="nationalityList" id="nationality" placeholder="Nationality" required>
+                    <input type="text" 
+                    class="form-control" 
+                    list="nationalityList" 
+                    id="nationality" 
+                    placeholder="Nationality" 
+                    required
+                    pattern="^[A-Za-z\s]+$" 
+                    oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')"
+                    title="Only letters and spaces allowed">
                     <datalist id="nationalityList">
-                        <option value="Afghan"></option>
-                        <option value="Albanian"></option>
-                        <option value="Algerian"></option>
                         <option value="American"></option>
-                        <option value="Andorran"></option>
-                        <option value="Angolan"></option>
-                        <option value="Antiguan and Barbudan"></option>
-                        <option value="Argentine"></option>
-                        <option value="Armenian"></option>
-                        <option value="Australian"></option>
-                        <option value="Austrian"></option>
-                        <option value="Azerbaijani"></option>
-                        <option value="Bahamian"></option>
-                        <option value="Bahraini"></option>
-                        <option value="Bangladeshi"></option>
-                        <option value="Barbadian"></option>
-                        <option value="Belarusian"></option>
-                        <option value="Belgian"></option>
-                        <option value="Belizean"></option>
-                        <option value="Beninese"></option>
-                        <option value="Bhutanese"></option>
-                        <option value="Bolivian"></option>
-                        <option value="Bosnian"></option>
-                        <option value="Botswanan"></option>
-                        <option value="Brazilian"></option>
                         <option value="British"></option>
-                        <option value="Bruneian"></option>
-                        <option value="Bulgarian"></option>
-                        <option value="Burkinabé"></option>
-                        <option value="Burmese"></option>
-                        <option value="Burundian"></option>
-                        <option value="Cambodian"></option>
-                        <option value="Cameroonian"></option>
                         <option value="Canadian"></option>
-                        <option value="Cape Verdean"></option>
-                        <option value="Central African"></option>
-                        <option value="Chadian"></option>
-                        <option value="Chilean"></option>
-                        <option value="Chinese"></option>
-                        <option value="Colombian"></option>
-                        <option value="Comorian"></option>
-                        <option value="Congolese"></option>
-                        <option value="Costa Rican"></option>
-                        <option value="Croatian"></option>
-                        <option value="Cuban"></option>
-                        <option value="Cypriot"></option>
-                        <option value="Czech"></option>
-                        <option value="Danish"></option>
-                        <option value="Djiboutian"></option>
-                        <option value="Dominican"></option>
-                        <option value="Dutch"></option>
-                        <option value="Ecuadorian"></option>
-                        <option value="Egyptian"></option>
-                        <option value="Emirati"></option>
-                        <option value="Equatorial Guinean"></option>
-                        <option value="Eritrean"></option>
-                        <option value="Estonian"></option>
-                        <option value="Eswatini"></option>
-                        <option value="Ethiopian"></option>
-                        <option value="Fijian"></option>
                         <option value="Filipino"></option>
-                        <option value="Finnish"></option>
-                        <option value="French"></option>
-                        <option value="Gabonese"></option>
-                        <option value="Gambian"></option>
-                        <option value="Georgian"></option>
-                        <option value="German"></option>
-                        <option value="Ghanaian"></option>
-                        <option value="Greek"></option>
-                        <option value="Grenadian"></option>
-                        <option value="Guatemalan"></option>
-                        <option value="Guinean"></option>
-                        <option value="Guyanese"></option>
-                        <option value="Haitian"></option>
-                        <option value="Honduran"></option>
-                        <option value="Hungarian"></option>
-                        <option value="Icelander"></option>
                         <option value="Indian"></option>
-                        <option value="Indonesian"></option>
-                        <option value="Iranian"></option>
-                        <option value="Iraqi"></option>
-                        <option value="Irish"></option>
-                        <option value="Israeli"></option>
-                        <option value="Italian"></option>
-                        <option value="Ivorian"></option>
-                        <option value="Jamaican"></option>
                         <option value="Japanese"></option>
-                        <option value="Jordanian"></option>
-                        <option value="Kazakh"></option>
-                        <option value="Kenyan"></option>
-                        <option value="Kiribati"></option>
-                        <option value="Kuwaiti"></option>
-                        <option value="Kyrgyz"></option>
-                        <option value="Lao"></option>
-                        <option value="Latvian"></option>
-                        <option value="Lebanese"></option>
-                        <option value="Liberian"></option>
-                        <option value="Libyan"></option>
-                        <option value="Liechtensteiner"></option>
-                        <option value="Lithuanian"></option>
-                        <option value="Luxembourger"></option>
-                        <option value="Malagasy"></option>
-                        <option value="Malawian"></option>
-                        <option value="Malaysian"></option>
-                        <option value="Maldivian"></option>
-                        <option value="Malian"></option>
-                        <option value="Maltese"></option>
-                        <option value="Marshallese"></option>
-                        <option value="Mauritanian"></option>
-                        <option value="Mauritian"></option>
                         <option value="Mexican"></option>
-                        <option value="Micronesian"></option>
-                        <option value="Moldovan"></option>
-                        <option value="Monacan"></option>
-                        <option value="Mongolian"></option>
-                        <option value="Montenegrin"></option>
-                        <option value="Moroccan"></option>
-                        <option value="Mozambican"></option>
-                        <option value="Namibian"></option>
-                        <option value="Nauruan"></option>
-                        <option value="Nepalese"></option>
-                        <option value="New Zealander"></option>
-                        <option value="Nicaraguan"></option>
-                        <option value="Nigerian"></option>
-                        <option value="North Korean"></option>
-                        <option value="Norwegian"></option>
-                        <option value="Omani"></option>
-                        <option value="Pakistani"></option>
-                        <option value="Palauan"></option>
-                        <option value="Panamanian"></option>
-                        <option value="Papua New Guinean"></option>
-                        <option value="Paraguayan"></option>
-                        <option value="Peruvian"></option>
-                        <option value="Polish"></option>
-                        <option value="Portuguese"></option>
-                        <option value="Qatari"></option>
-                        <option value="Romanian"></option>
                         <option value="Russian"></option>
-                        <option value="Rwandan"></option>
-                        <option value="Samoan"></option>
-                        <option value="Saudi"></option>
-                        <option value="Senegalese"></option>
-                        <option value="Serbian"></option>
-                        <option value="Seychellois"></option>
-                        <option value="Singaporean"></option>
-                        <option value="Slovak"></option>
-                        <option value="Slovenian"></option>
-                        <option value="Somali"></option>
-                        <option value="South African"></option>
-                        <option value="South Korean"></option>
                         <option value="Spanish"></option>
-                        <option value="Sri Lankan"></option>
-                        <option value="Sudanese"></option>
-                        <option value="Swedish"></option>
-                        <option value="Swiss"></option>
-                        <option value="Syrian"></option>
-                        <option value="Tajik"></option>
-                        <option value="Tanzanian"></option>
-                        <option value="Thai"></option>
-                        <option value="Tunisian"></option>
-                        <option value="Turkish"></option>
-                        <option value="Ugandan"></option>
-                        <option value="Ukrainian"></option>
-                        <option value="Uruguayan"></option>
-                        <option value="Uzbek"></option>
-                        <option value="Venezuelan"></option>
-                        <option value="Vietnamese"></option>
-                        <option value="Zambian"></option>
-                        <option value="Zimbabwean"></option>
+                        <option value="Other"></option>
                     </datalist>
                 </div>
                 <div class="col-md-6">
                     <label for="religion" class="form-label">Religion</label>
-                    <input type="text" class="form-control" list="religionList" id="religion" placeholder="Religion">
+                    <input type="text" 
+                    class="form-control" 
+                    list="religionList" 
+                    id="religion" 
+                    placeholder="Religion"
+                    pattern="^[A-Za-z\s]+$" 
+                    oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')"
+                    title="Only letters and spaces allowed">
                     <datalist id="religionList">
-                        <option value="Buddhism"></option>
                         <option value="Christianity"></option>
-                        <option value="Hinduism"></option>
                         <option value="Islam"></option>
+                        <option value="Hinduism"></option>
+                        <option value="Buddhism"></option>
                         <option value="Judaism"></option>
-                        <option value="Sikhism"></option>
-                        <option value="Bahá'í Faith"></option>
-                        <option value="Jainism"></option>
-                        <option value="Shinto"></option>
-                        <option value="Taoism"></option>
-                        <option value="Zoroastrianism"></option>
-                        <option value="Confucianism"></option>
-                        <option value="Animism"></option>
-                        <option value="Agnosticism"></option>
                         <option value="Atheism"></option>
-                        <option value="Catholicism"></option>
+                        <option value="Other"></option>
                     </datalist>
                 </div>
             </div>
@@ -255,21 +129,59 @@
         </form>
     </div>
 </div>
+<!-- /Personal Information Form -->
+<!-- Login Credentials Form -->
 <div class="tab-pane fade" id="navs-pills-login-credentials" role="tabpanel">
     <div class="form-container p-4">
         <h3 class="form-title">Login Credentials: (2/6)</h3>
         <form onsubmit="event.preventDefault()" id="login_credentials">
             <div class="mb-3">
                 <label for="username" class="form-label">Username<span class="label-danger">(*)</span>:</label>
-                <input type="text" class="form-control" id="username" placeholder="Enter your username" required minlength="1" maxlength="50">
+                <input 
+                    type="text" 
+                    class="form-control" 
+                    id="username" 
+                    placeholder="Enter your username" 
+                    required 
+                    title="Username must be 3-50 characters"
+                    oninput="setCustomValidity('')"
+                    oninvalid="setCustomValidity('Invalid username. Must be 3-50 characters, no consecutive special characters, and cannot start or end with . _ -')"
+                />
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">Password<span class="label-danger">(*)</span>:</label>
-                <input type="password" class="form-control" id="password" placeholder="Enter your password" required minlength="1" maxlength="255">
+                <div class="input-group">
+                    <input 
+                        type="password" 
+                        class="form-control" 
+                        id="password" 
+                        placeholder="Enter your password" 
+                        required 
+                        pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,255}$"
+                        title="Password must be at least 8 characters, with at least one letter and one number."
+                        oninput="setCustomValidity('')"
+                        oninvalid="setCustomValidity('Password must be at least 8 characters, including one letter and one number.')"
+                    >
+                    <button class="btn btn-outline-secondary" type="button" onclick="togglePassword('password')">
+                        <i class="bx bx-show"></i>
+                    </button>
+                </div>
             </div>
             <div class="mb-3">
                 <label for="confirmPassword" class="form-label">Confirm Password<span class="label-danger">(*)</span>:</label>
-                <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm your password" required minlength="1" maxlength="255">
+                <div class="input-group">
+                    <input 
+                        type="password" 
+                        class="form-control" 
+                        id="confirmPassword" 
+                        placeholder="Confirm your password" 
+                        required 
+                        oninput="validateConfirmPassword()"
+                    >
+                    <button class="btn btn-outline-secondary" type="button" onclick="togglePassword('confirmPassword')">
+                        <i class="bx bx-show"></i>
+                    </button>
+                </div>
                 <div id="confirmPassError" class="text-danger mt-1" style="display: none;">Passwords do not match.</div>
             </div>
             <div class="row mb-3">
@@ -280,6 +192,8 @@
         </form>
     </div>
 </div>
+<!-- /Login Credentials Form -->
+<!-- Contact Information Form -->
 <div class="tab-pane fade" id="navs-pills-contact-information" role="tabpanel">
     <div class="form-container p-4">
         <h3 class="form-title">Contact Information: (3/6)</h3>
@@ -287,7 +201,15 @@
             <div class="row mb-3">
                 <div class="col-md-6">
                     <label for="phone" class="form-label">Phone Number<span class="label-danger">(*)</span>:</label>
-                    <input type="text" class="form-control" id="phone" placeholder="+63 958 999 3454" list="phone-options" required minlength="1" maxlength="15">
+                    <input type="text" 
+                    class="form-control" 
+                    id="phone" 
+                    placeholder="+63 958 999 3454" 
+                    list="phone-options" 
+                    required 
+                    title="Enter a valid phone number..."
+                    minlength="1"
+                    maxlength="15">
                     <datalist id="phone-options">
                         <option value="123-456-7890">
                         <option value="(555) 987-6543">
@@ -296,7 +218,15 @@
                 </div>
                 <div class="col-md-6">
                     <label for="email" class="form-label">Email Address<span class="label-danger">(*)</span>:</label>
-                    <input type="email" class="form-control" id="email" placeholder="john.doe@example.com" list="email-options" required minlength="1" maxlength="255">
+                    <input 
+                    type="email" 
+                    class="form-control" 
+                    id="email" 
+                    placeholder="john.doe@example.com" 
+                    list="email-options" 
+                    required 
+                    minlength="1" 
+                    maxlength="255">
                     <datalist id="email-options">
                         <option value="example@email.com">
                         <option value="user123@mailservice.com">
@@ -306,7 +236,14 @@
             </div>
             <div class="mb-3">
                 <label for="address" class="form-label">Address<span class="label-danger">(*)</span>:</label>
-                <textarea class="form-control" id="address" placeholder="123 Main St, Springfield, IL 62704" list="address-options" required minlength="1" maxlength="255"></textarea>
+                <textarea 
+                class="form-control" 
+                id="address" 
+                placeholder="123 Main St, Springfield, IL 62704" 
+                list="address-options" 
+                required 
+                minlength="1" 
+                maxlength="255"></textarea>
                 <datalist id="address-options">
                     <option value="123 Main St, Springfield, IL 62704">
                     <option value="456 Elm Avenue, Apt 2B, Los Angeles, CA 90001">
@@ -318,7 +255,14 @@
             <div class="row mb-3">
                 <div class="col-md-6">
                     <label for="emergency-name" class="form-label">Name<span class="label-danger">(*)</span>:</label>
-                    <input type="text" class="form-control" id="emergency-name" placeholder="Jane Doe" list="emergency-name-options" required minlength="1" maxlength="90">
+                    <input type="text" 
+                    class="form-control" 
+                    id="emergency-name" 
+                    placeholder="Jane Doe" 
+                    list="emergency-name-options" 
+                    required 
+                    minlength="1" 
+                    maxlength="90">
                     <datalist id="emergency-name-options">
                         <option value="Jane Doe">
                         <option value="Michael Smith">
@@ -327,7 +271,15 @@
                 </div>
                 <div class="col-md-6">
                     <label for="relationship" class="form-label">Relationship<span class="label-danger">(*)</span>:</label>
-                    <input type="text" class="form-control" id="relationship" placeholder="Mother" list="relationship-options" required minlength="1" maxlength="30">
+                    <input 
+                    type="text" 
+                    class="form-control" 
+                    id="relationship" 
+                    placeholder="Mother" 
+                    list="relationship-options" 
+                    required 
+                    minlength="1" 
+                    maxlength="30">
                     <datalist id="relationship-options">
                         <option value="Mother">
                         <option value="Brother">
@@ -338,7 +290,14 @@
             <div class="row mb-3">
                 <div class="col-md-6">
                     <label for="emergency-phone" class="form-label">Phone Number<span class="label-danger">(*)</span>:</label>
-                    <input type="text" class="form-control" id="emergency-phone" placeholder="321-654-0987" list="emergency-phone-options" required minlength="1" maxlength="15">
+                    <input type="text" 
+                    class="form-control" 
+                    id="emergency-phone" 
+                    placeholder="321-654-0987" 
+                    list="emergency-phone-options" 
+                    required 
+                    minlength="1" 
+                    maxlength="15">
                     <datalist id="emergency-phone-options">
                         <option value="321-654-0987">
                         <option value="(777) 222-3344">
@@ -347,7 +306,13 @@
                 </div>
                 <div class="col-md-6">
                     <label for="emergency-email" class="form-label">Email Address</label>
-                    <input type="email" class="form-control" id="emergency-email" placeholder="jane.doe@email.com" list="emergency-email-options" minlength="1" maxlength="255">
+                    <input type="email" 
+                    class="form-control" 
+                    id="emergency-email" 
+                    placeholder="jane.doe@email.com" 
+                    list="emergency-email-options" 
+                    minlength="1" 
+                    maxlength="255">
                     <datalist id="emergency-email-options">
                         <option value="jane.doe@email.com">
                         <option value="michael.smith@mailprovider.net">
@@ -357,7 +322,14 @@
             </div>
             <div class="mb-3">
                 <label for="emergency-address" class="form-label">Address</label>
-                <textarea class="form-control" id="emergency-address" placeholder="123 Main St, Springfield, IL 62704" list="emergency-address-options" required minlength="1" maxlength="255"></textarea>
+                <textarea 
+                class="form-control" 
+                id="emergency-address" 
+                placeholder="123 Main St, Springfield, IL 62704" 
+                list="emergency-address-options" 
+                required 
+                minlength="1" 
+                maxlength="255"></textarea>
                 <datalist id="emergency-address-options">
                     <option value="456 Oak Street, Chicago, IL 60616">
                     <option value="789 Birch Blvd, San Diego, CA 92101">
@@ -373,6 +345,8 @@
         </form>
     </div>
 </div>
+<!-- /Contact Information Form -->
+<!-- Employment Information Form -->
 <div class="tab-pane fade" id="navs-pills-employment-information" role="tabpanel">
     <div class="form-container p-4">
         <h3 class="form-title">Employment Information: (4/6)</h3>
@@ -382,7 +356,13 @@
                     <label for="rfid" class="form-label">RFID Tag<span class="label-danger">(*)</span>:</label>
                     <div class="input-group" name="rfid">
                         <button type="button" class="input-group-text button btn-primary" data-bs-toggle="modal" data-bs-target="#rfid_modal" onclick="turnOnScanning();"><i class="bx bx-card fs-4 lh-0"></i></button>
-                        <input type="text" class="form-control" id="rfid" placeholder="Scan your RFID tag" required readonly>
+                        <input 
+                        type="text" 
+                        class="form-control" 
+                        id="rfid" 
+                        placeholder="Scan your RFID tag" 
+                        required 
+                        readonly>
                     </div>
                 </div>
                 <!-- RFID Modal -->
@@ -410,23 +390,38 @@
                 </div>
                 <div class="col-md-6">
                     <label for="employee-code" class="form-label">Employee Code<span class="label-danger">(*)</span>:</label>
-                    <input type="text" class="form-control" id="employee-code" placeholder="Enter Employee Code" readonly value="Auto-generated">
+                    <input 
+                    type="text" 
+                    class="form-control" 
+                    id="employee-code" 
+                    placeholder="Enter Employee Code" 
+                    readonly 
+                    value="Auto-generated">
                 </div>
             </div>
             <div class="row mb-3">
                 <div class="col-md-4">
                     <label for="job-title" class="form-label">Job Title<span class="label-danger">(*)</span>:</label>
-                    <select class="form-select selectize_job_title" id="job-title" name="job-title">
+                    <select 
+                    class="form-select selectize_job_title" 
+                    id="job-title" 
+                    name="job-title">
                     </select>
                 </div>
                 <div class="col-md-4">
                     <label for="department" class="form-label">Department<span class="label-danger">(*)</span>:</label>
-                    <select class="form-select selectize_department" id="department" name="departments">
+                    <select 
+                    class="form-select selectize_department" 
+                    id="department" 
+                    name="departments">
                     </select>
                 </div>
                 <div class="col-md-4">
                     <label for="employment-type" class="form-label">Employment Type<span class="label-danger">(*)</span>:</label>
-                    <select class="form-select" id="employment-type" required>
+                    <select 
+                    class="form-select" 
+                    id="employment-type" 
+                    required>
                         <option value="" selected disabled>Select Type</option>
                         <option value="Regular">Regular</option>
                         <option value="Regular Permanent">Regular Permanent</option>
@@ -452,11 +447,17 @@
             <div class="row mb-3">
                 <div class="col-md-6">
                     <label for="date-of-hire" class="form-label">Date of Hire<span class="label-danger">(*)</span>:</label>
-                    <input type="date" class="form-control" id="date-of-hire" required>
+                    <input 
+                    type="date" 
+                    class="form-control" 
+                    id="date-of-hire" 
+                    required>
                 </div>
                 <div class="col-md-6">
                     <label for="supervisor" class="form-label">Supervisor</label>
-                    <select class="form-select selectize_supervisors" id="supervisor">
+                    <select 
+                    class="form-select selectize_supervisors" 
+                    id="supervisor">
                     </select>
                 </div>
             </div>
@@ -481,6 +482,8 @@
         </form>
     </div>
 </div>
+<!-- /Employment Information Form -->
+<!-- Pay Information Form -->
 <div class="tab-pane fade" id="navs-pills-pay-information" role="tabpanel">
     <div class="form-container p-4">
         <h3 class="form-title">Pay Information: (5/6)</h3>
@@ -494,7 +497,15 @@
                 </div>
                 <div class="col-md-4">
                     <label for="hourlyRate" class="form-label">Basic Salary (per month)<span class="label-danger">(*)</span>:</label>
-                    <input type="number" id="hourlyRate" list="wageOptions2025" class="form-control no-spinners" placeholder="Enter hourly wage" required onchange="samplePayroll()" min="1">
+                    <input 
+                    type="number" 
+                    id="hourlyRate" 
+                    list="wageOptions2025" 
+                    class="form-control no-spinners" 
+                    placeholder="Enter hourly wage" 
+                    required 
+                    onchange="samplePayroll()" 
+                    min="1">
                     <datalist id="wageOptions2025">
                         <option value="14190">National Capital Region (₱14,190)</option>
                         <option value="10201">Cordillera Administrative Region (₱10,201)</option>
@@ -578,11 +589,25 @@
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <label for="bankName" class="form-label">Bank Name<span class="label-danger">(*)</span>:</label>
-                        <input type="text" id="bankName" class="form-control" placeholder="Bank of the Philippine Islands (BPI)" required minlength="1" maxlength="50">
+                        <input 
+                        type="text" 
+                        id="bankName" 
+                        class="form-control" 
+                        placeholder="Bank of the Philippine Islands (BPI)" 
+                        required 
+                        minlength="1" 
+                        maxlength="50">
                     </div>
                     <div class="col-md-6">
                         <label for="branchName" class="form-label">Branch Name<span class="label-danger">(*)</span>:</label>
-                        <input type="text" id="branchName" class="form-control" placeholder="Makati Main Branch" required  minlength="1" maxlength="50">
+                        <input 
+                        type="text" 
+                        id="branchName" 
+                        class="form-control" 
+                        placeholder="Makati Main Branch" 
+                        required  
+                        minlength="1" 
+                        maxlength="50">
                     </div>
                 </div>
                 <div class="row mb-3">
@@ -619,6 +644,8 @@
         </form>
     </div>
 </div>
+<!-- /Pay Information Form -->
+<!-- Government Information Form -->
 <div class="tab-pane fade" id="navs-pills-government-information" role="tabpanel">
     <div class="form-container p-4">
         <h3 class="form-title">Government Information: (6/6)</h3>
@@ -700,3 +727,4 @@
         }
     </style>
 </div>
+<!-- /Government Information Form -->

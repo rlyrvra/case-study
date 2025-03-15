@@ -97,6 +97,34 @@ function validatePassword() {
     }
 }
 
+function togglePassword(fieldId) {
+    let field = document.getElementById(fieldId);
+    let button = field.nextElementSibling.querySelector("i");
+    if (field.type === "password") {
+        field.type = "text";
+        button.classList.remove("bx-show");
+        button.classList.add("bx-hide");
+    } else {
+        field.type = "password";
+        button.classList.remove("bx-hide");
+        button.classList.add("bx-show");
+    }
+}
+
+function validateConfirmPassword() {
+    let password = document.getElementById("password").value;
+    let confirmPassword = document.getElementById("confirmPassword").value;
+    let errorDiv = document.getElementById("confirmPassError");
+
+    if (confirmPassword !== password) {
+        errorDiv.style.display = "block";
+        document.getElementById("confirmPassword").setCustomValidity("Passwords do not match.");
+    } else {
+        errorDiv.style.display = "none";
+        document.getElementById("confirmPassword").setCustomValidity("");
+    }
+}
+
 function disableSupervisor(){
     let supervisor = $('#supervisor')[0].selectize;
     supervisor.clear(); 
@@ -225,6 +253,7 @@ $(document).ready(function() {
     // Maximum file size in bytes (2 MB = 2 * 1024 * 1024 = 2097152 bytes)
     const MAX_FILE_SIZE = 2 * 1024 * 1024;  // 2 MB
     const fileInput = document.getElementById('profilePicture');
+    if(!fileInput) return;
     fileInput.addEventListener('change', function(event) {
         
 
