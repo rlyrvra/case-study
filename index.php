@@ -734,7 +734,7 @@
         </div>
 
         <div style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
-            <form action="#" method="POST" style="max-width: 600px; width: 100%; background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+            <form onsubmit="event.preventDefault();" style="max-width: 600px; width: 100%; background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
                 <div style="margin-bottom: 20px;">
                     <label for="name" style="color: #2d6a4f; font-weight: bold;">Your Name</label>
                     <input type="text" id="name" name="name" placeholder="Enter your name" required style="width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 5px;" />
