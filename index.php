@@ -347,9 +347,15 @@
 </head>
 
 <body>
+    <style>
+        .space{
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
     <!-- Sticky Navigation Bar -->
-    <nav class="navbar navbar-expand-lg">
-        <div class="container">
+    <nav class="navbar navbar-expand-lg d-flex flex-fill col-auto">
+        <div class="container space">
             <div class="collapse navbar-collapse">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item"><a class="nav-link" href="#smart">Smart Wage</a></li>
@@ -358,8 +364,8 @@
                     <li class="nav-item"><a class="nav-link" href="#compliance">Compliance</a></li>
                     <li class="nav-item"><a class="nav-link" href="#contact-us">Contact</a></li>
                 </ul>
-                <button class="login-button" onclick="window.location.href='login.php'">Log In</button>
             </div>
+            <button class="login-button" onclick="window.location.href='login.php'">Log In</button>
         </div>
         
     </nav>
