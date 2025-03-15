@@ -17,7 +17,7 @@
                     <form onsubmit="event.preventDefault()" id="work_schedules_update_form">
                         <div class="mb-3">
                             <label for="update_startTime" class="form-label">Start Time</label>
-                            <select class="form-select" id="update_startTime" name="update_startTime" required onchange="updateCalculateWorkHrs()">
+                            <select class="form-select" id="update_startTime" name="update_startTime" required onchange="updateResetBreakHours()">
                                 <option value="" selected disabled>Select start time...</option>
                                 <option value="12:00AM">12:00AM</option>
                                 <option value="1:00AM">1:00AM</option>
@@ -47,7 +47,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="update_endTime" class="form-label">End Time</label>
-                            <select class="form-select" id="update_endTime" name="update_endTime" required onchange="updateCalculateWorkHrs()">
+                            <select class="form-select" id="update_endTime" name="update_endTime" required onchange="updateResetBreakHours()">
                                 <option value="" selected disabled>Select end time...</option>
                                 <option value="12:00AM">12:00AM</option>
                                 <option value="1:00AM">1:00AM</option>

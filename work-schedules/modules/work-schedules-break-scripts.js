@@ -12,7 +12,16 @@ function addBreakRowCreate() {
 
     const breakTypeHTML = `
     <td>
-        <input type="text" class="form-control" id="create_break_name">
+        <input 
+        type="text" 
+        class="form-control" 
+        id="create_break_name" 
+        name="break_name" 
+        required 
+        minlength="2" 
+        maxlength="50" 
+        pattern="[A-Za-z\s]+" 
+        title="Please enter a valid break name (letters and spaces only)">
     </td>
     <td>
         <select class="form-select" id="create_paid">

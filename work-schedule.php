@@ -35,11 +35,11 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
 <!-- Ajax -->
 <script src="work-schedules/modules/work-schedules-ajax.js?v1.15"></script>
 <!-- Scripts -->
-<script src="work-schedules/modules/work-schedules-scripts.js?v1.16"></script>
+<script src="work-schedules/modules/work-schedules-scripts.js?v1.17"></script>
 <!-- Ajax -->
 <script src="work-schedules/modules/work-schedules-break-ajax.js?v1.1"></script>
 <!-- Scripts -->
-<script src="work-schedules/modules/work-schedules-break-scripts.js?v1.1"></script>
+<script src="work-schedules/modules/work-schedules-break-scripts.js?v1.2"></script>
 
 <!---Skeletons--->
 <script src="requests/table-skeleton.js?v1.2"></script>
