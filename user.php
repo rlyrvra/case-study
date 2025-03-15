@@ -73,12 +73,12 @@
                     <?php 
                         if(!isset($_SESSION['profile_picture'])){
                             echo "<img src='https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&s=200' alt='Profile Picture' class='w-px-35 h-auto rounded-circle' />";
-                            return;
-                        }
-                        // Render the image
-                        $imageData = $_SESSION['profile_picture'];
+                        }else{
+                            // Render the image
+                            $imageData = $_SESSION['profile_picture'];
 
-                        echo "<img src='data:image/jpg;base64,$imageData' alt='Profile Picture' class='w-px-35 h-auto rounded-circle' />";
+                            echo "<img src='data:image/jpg;base64,$imageData' alt='Profile Picture' class='w-px-35 h-auto rounded-circle' />";
+                        }
                     ?>
                     </div>
                     </a>
@@ -90,7 +90,6 @@
                             <?php 
                                 if(!isset($_SESSION['profile_picture'])){
                                     echo "<img src='https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&s=200' alt='Profile Picture' class='w-px-35 h-auto rounded-circle' />";
-                                    return;
                                 }
                                 // Render the image
                                 $imageData = $_SESSION['profile_picture'];
