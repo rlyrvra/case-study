@@ -358,9 +358,10 @@
                     <li class="nav-item"><a class="nav-link" href="#compliance">Compliance</a></li>
                     <li class="nav-item"><a class="nav-link" href="#contact-us">Contact</a></li>
                 </ul>
+                <button class="login-button" onclick="window.location.href='login.php'">Log In</button>
             </div>
         </div>
-        <button class="login-button" onclick="window.location.href='login.php'">Log In</button>
+        
     </nav>
 
 

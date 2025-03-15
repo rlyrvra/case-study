@@ -407,7 +407,7 @@
             </div>
 
             <!-- Right Side: Tables -->
-            <div class="col-lg-9 col-12">
+            <div class="d-flex space-around col-lg-9 col-12">
                 <!-- Attendance Table -->
                 <div id="attendance-table"></div>
 
