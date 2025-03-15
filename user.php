@@ -89,13 +89,14 @@
                             <div class="flex-shrink-0 me-3">
                             <div class="avatar avatar-online">
                             <?php 
-                                if(!isset($_SESSION['profile_picture'])){
+                                if(!isset($_SESSION['profile_picture']) && empty($_SESSION['profile_picture'])){
                                     echo "<img src='https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&s=200' alt='Profile Picture' class='w-px-35 h-auto rounded-circle' />";
+                                }else{
+                                    // Render the image
+                                    $imageData = $_SESSION['profile_picture'];
+        
+                                    echo "<img src='data:image/jpg;base64,$imageData' alt='Profile Picture' class='w-px-35 h-auto rounded-circle' />";
                                 }
-                                // Render the image
-                                $imageData = $_SESSION['profile_picture'];
-
-                                echo "<img src='data:image/jpg;base64,$imageData' alt='Profile Picture' class='w-px-35 h-auto rounded-circle' />";
                             ?>
                             </div>
                             </div>
