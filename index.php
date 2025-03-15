@@ -350,7 +350,9 @@
     <style>
         .space{
             display: flex;
-            justify-content: space-between;
+            justify-content:space-between;
+            width: 100%;
+            margin-left: 0 !important;
         }
         .start{
             display: flex;
@@ -363,9 +365,9 @@
     </style>
     <!-- Sticky Navigation Bar -->
     <nav class="navbar navbar-expand-lg d-flex flex-fill col-auto">
-        <div class="container space">
+        <div class="container">
             <div class="collapse navbar-collapse start">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <ul class="space navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item"><a class="nav-link" href="#smart">Smart Wage</a></li>
                     <li class="nav-item"><a class="nav-link" href="#about">About Us</a></li>
                     <li class="nav-item"><a class="nav-link" href="#principles">Principles</a></li>
