@@ -49,7 +49,7 @@ if($resultSet["total_row_count"] <= 0){
 <div class="profile-header col-auto">
     <?php 
     if(!isset($employees[0]['profile_picture']) && empty($employees[0]['profile_picture'])){
-        echo "<img src='https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&s=200' alt='Profile Picture' class='w-px-35 h-auto rounded-circle' />";
+        echo "<img src='https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&s=200' alt='Profile Picture' class='w-px-35 h-auto rounded-circle' id='profileImage' />";
     }else{
         // Render the image
         $imageData = $employees[0]['profile_picture'];
