@@ -8,7 +8,7 @@
         <div class="d-flex align-items-center">
             <div class="placeholder-img">
                 <?php
-                if(!isset($row['profile_picture']) && !empty($row['profile_picture'])){
+                if(!isset($row['profile_picture']) && empty($row['profile_picture'])){
                     echo "<img src='https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&s=200' alt='Profile Picture' class='w-px-100 h-auto rounded-circle' />";
                 }else{
                     // Render the image

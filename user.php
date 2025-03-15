@@ -71,7 +71,7 @@
                     <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
                     <div class="avatar avatar-online">
                     <?php 
-                        if(!isset($_SESSION['profile_picture'])){
+                        if(!isset($_SESSION['profile_picture']) && empty($_SESSION['profile_picture'])){
                             echo "<img src='https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&s=200' alt='Profile Picture' class='w-px-35 h-auto rounded-circle' />";
                         }else{
                             // Render the image
@@ -79,6 +79,7 @@
 
                             echo "<img src='data:image/jpg;base64,$imageData' alt='Profile Picture' class='w-px-35 h-auto rounded-circle' />";
                         }
+
                     ?>
                     </div>
                     </a>
