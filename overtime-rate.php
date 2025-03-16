@@ -166,9 +166,6 @@ $(document).ready(function() {
           (item.full_name
               ? '<span class="name">' + escape(item.full_name) + "</span>"
               : "") +
-          (item.description
-              ? '<span class="description">' + escape(item.email_address) + "</span>"
-              : "") +
           "</div>"
           );
       },
@@ -246,9 +243,6 @@ $(document).ready(function () {
           (item.title
               ? '<span class="name">' + escape(item.title) + "</span>"
               : "") +
-          (item.description
-              ? '<span class="description">' + escape(item.description) + "</span>"
-              : "") +
           "</div>"
           );
       },
@@ -320,9 +314,6 @@ $(document).ready(function () {
           "<div>" +
           (item.name
               ? '<span class="name">' + escape(item.name) + "</span>"
-              : "") +
-          (item.description
-              ? '<span class="description">' + escape(item.description) + "</span>"
               : "") +
           "</div>"
           );
