@@ -410,9 +410,15 @@ function generateBreakOptions(startDate, endDate) {
 
 let rowAddedUpdate = false;
 function updateWorkSchedulesBreakCreate(){
+    const form = document.getElementById("work_schedules_update_form");
+    if(!form.checkValidity()){
+        showFormIncomplete();
+        return;
+    }
     if(rowAddedUpdate){
         return;
     }
+
     const tableBody = document.getElementById('update_break_assignment_table_body'); // Ensure we target tbody
     if(tableBody.rows.length >= 5){
         return;
