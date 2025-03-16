@@ -171,7 +171,8 @@ let rowAddedWork = false;
 function addWorkSchedulesBreakCreate() {
     const form = document.getElementById("work_schedules_add_form");
     if(!form.checkValidity()){
-        showFormIncomplete();
+        const modal = $('#add_work_schedules');
+        showFormIncomplete(modal);
         return;
     }
 
@@ -410,6 +411,12 @@ function generateBreakOptions(startDate, endDate) {
 
 let rowAddedUpdate = false;
 function updateWorkSchedulesBreakCreate(){
+    const form = document.getElementById("work_schedules_update_form");
+    if(!form.checkValidity()){
+        const modal = $('#update_work_schedules')
+        showFormIncomplete(modal);
+        return;
+    }
     if(rowAddedUpdate){
         return;
     }
@@ -587,8 +594,8 @@ function findDifferences(currentBreakSchedules, updatedBreakSchedules) {
 
 
 
-function showFormIncomplete(){
-    $('#add_work_schedules').modal('hide');
+function showFormIncomplete(modal){
+    modal.modal('hide');
     Swal.fire({
         title: 'Warning!',
         text: 'Please fill up the create form.',
@@ -597,7 +604,7 @@ function showFormIncomplete(){
         confirmButtonText: 'OK'
     }).then((result) => {
         if (result.isConfirmed) {
-            $('#add_work_schedules').modal('show');
+            modal.modal('show');
         }
     });
     
