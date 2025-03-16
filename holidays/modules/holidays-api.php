@@ -83,6 +83,13 @@ try {
         $holidays;
         if ($result !== ActionResult::FAILURE) {
             $holidays = $result['result_set'];
+        }else if($result === ActionResult::FAILURE){
+            $message = 'Failed to fetch holidays. Please try again.';
+            die('
+            <script>
+            showError(' . json_encode($message) 
+            . ');
+            </script>');
         }
 
         $totalHolidays = $result["total_row_count"];
@@ -126,14 +133,19 @@ try {
         $holidayService = new HolidayService($holidayRepository);
         $result = $holidayService->createHoliday($newHoliday);
         
-        if ($result !== ActionResult::FAILURE) {
+        if ($result === ActionResult::SUCCESS) {
             die("
             <script>
                 showSuccessCreate();
             </script>
             ");
-        } else {
-            echo "Failed to create holidays. Please try again.";
+        }else if($result === ActionResult::FAILURE){
+            $message = 'Failed to create holiday. Please try again.';
+            die('
+            <script>
+            showError(' . json_encode($message) 
+            . ');
+            </script>');
         }
         return;
     }
@@ -179,23 +191,28 @@ try {
             status: $status
         );
 
-        var_dump($updatedHoliday);
+        // var_dump($updatedHoliday);
 
-        echo "<br>" . $updatedHoliday->getIsPaid() . " ";
-        echo $updatedHoliday->getIsRecurringAnnually() . "<br>";
+        // echo "<br>" . $updatedHoliday->getIsPaid() . " ";
+        // echo $updatedHoliday->getIsRecurringAnnually() . "<br>";
 
         $holidayRepository = new HolidayRepository($holidayDao);
         $holidayService = new HolidayService($holidayRepository);
         $result = $holidayService->updateHoliday($updatedHoliday);
         
-        if ($result !== ActionResult::FAILURE) {
+        if ($result === ActionResult::SUCCESS) {
             die("
             <script>
                 showSuccessUpdate();
             </script>
             ");
-        } else {
-            echo "Failed to update holidays. Please try again.";
+        } else if ($result === ActionResult::FAILURE){
+            $message = "Failed to update holidays. Please try again.";
+            die('
+            <script>
+            showError(' . json_encode($message) 
+            . ');
+            </script>');
         }
         return;
     }
@@ -211,14 +228,19 @@ try {
         $holidayService = new HolidayService($holidayRepository);
         $result = $holidayService->deleteHoliday($hashed_id);
         
-        if ($result !== ActionResult::FAILURE) {
+        if ($result === ActionResult::SUCCESS) {
             die("
             <script>
                 showSuccessDelete();
             </script>
             ");
-        } else {
-            echo "Failed to delete holidays. Please try again.";
+        } else if ($result === ActionResult::FAILURE) {
+            $message ="Failed to delete holidays. Please try again.";
+            die('
+            <script>
+            showError(' . json_encode($message) 
+            . ');
+            </script>');
         }
         return;
     }
@@ -227,9 +249,19 @@ try {
 
 
 
-    echo "Invalid action specified.";
+    $message = "Invalid action specified.";
+    die('
+    <script>
+    showFatalError(' . json_encode($message) 
+    . ');
+    </script>');
 } catch (Exception $e) {
-    echo "Error: " . $e->getMessage();
+    $message = "Fatal error: " . $e->getMessage();
+    die('
+    <script>
+    showFatalError(' . json_encode($message) 
+    . ');
+    </script>');
 }
 
 // Function to validate and sanitize input
