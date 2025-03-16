@@ -33,7 +33,7 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
 />
 
 <!-- Ajax -->
-<script src="overtime-rates/modules/overtime-rates-ajax.js?v1.1"></script>
+<script src="overtime-rates/modules/overtime-rates-ajax.js?v1.2"></script>
 <!-- Scripts -->
 <script src="overtime-rates/modules/overtime-rates-scripts.js?v1.2"></script>
 

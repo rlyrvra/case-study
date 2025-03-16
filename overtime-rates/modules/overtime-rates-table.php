@@ -11,6 +11,7 @@
     </thead>
     <tbody id="overtime_rates_table_body" data-token="<?php echo htmlspecialchars($overtimeRates[0]['overtime_rate_assignment_id']); ?>">
         <?php if (!empty($overtimeRates)): ?>
+        <form id="overtime-rates-form" onsubmit=event.preventDefault();>
             <?php foreach ($overtimeRates as $row): ?>
                 <tr>
                     <td>
@@ -20,19 +21,44 @@
                         <?php echo htmlspecialchars($row['holiday_type']); ?>
                     </td>
                     <td>
-                        <input type="number" step="0.001" value="<?php echo htmlspecialchars($row['regular_time_rate']); ?>">
+                        <input 
+                        type="number" 
+                        step="0.001" 
+                        min="0" 
+                        max="10" 
+                        required
+                        value="<?php echo htmlspecialchars($row['regular_time_rate']); ?>">
                     </td>
                     <td>
-                        <input type="number" step="0.001" value="<?php echo htmlspecialchars($row['overtime_rate']); ?>">
+                        <input 
+                        type="number" 
+                        step="0.001" 
+                        min="0" 
+                        max="10" 
+                        required
+                        value="<?php echo htmlspecialchars($row['overtime_rate']); ?>">
                     </td>
                     <td>
-                        <input type="number" step="0.001" value="<?php echo htmlspecialchars($row['night_differential_rate']); ?>">
+                        <input 
+                        type="number" 
+                        step="0.001" 
+                        min="0" 
+                        max="10"
+                        required
+                        value="<?php echo htmlspecialchars($row['night_differential_rate']); ?>">
                     </td>
                     <td>
-                        <input type="number" step="0.001" value="<?php echo htmlspecialchars($row['night_differential_and_overtime_rate']); ?>">
+                        <input 
+                        type="number" 
+                        step="0.001" 
+                        min="0" 
+                        max="10" 
+                        required
+                        value="<?php echo htmlspecialchars($row['night_differential_and_overtime_rate']); ?>">
                     </td>
                 </tr>
             <?php endforeach; ?>
+        </form>
         <?php else: ?>
             <tr>
                 <td>Regular</td>
