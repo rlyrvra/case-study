@@ -15,7 +15,6 @@ async function fetchDayType() {
         }
 
         const data = await response.json(); // Parse JSON response
-        console.log(data);
         return data; // Return the fetched JSON data
     } catch (error) {
         console.error('Fetch error:', error);
