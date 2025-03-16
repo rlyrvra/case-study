@@ -1,22 +1,15 @@
 <?php
 
-require_once __DIR__ . '/../database/database.php'                  ;
+require_once __DIR__ . '/../database/database.php'                 ;
 
-require_once __DIR__ . '/../work-schedules/WorkScheduleSnapshot.php';
-require_once __DIR__ . '/../attendance/Attendance.php'              ;
-require_once __DIR__ . '/../breaks/BreakScheduleSnapshot.php'       ;
-require_once __DIR__ . '/../breaks/BreakTypeSnapshot.php'           ;
-require_once __DIR__ . '/../breaks/EmployeeBreak.php'               ;
-require_once __DIR__ . '/../payroll/PayrollGroup.php'               ;
-
-require_once __DIR__ . '/../payroll/PayslipService.php'             ;
-require_once __DIR__ . '/../holidays/HolidayService.php'            ;
-require_once __DIR__ . '/../settings/SettingService.php'            ;
-require_once __DIR__ . '/../leaves/LeaveRequestService.php'         ;
-require_once __DIR__ . '/../work-schedules/WorkScheduleService.php' ;
-require_once __DIR__ . '/../breaks/BreakScheduleService.php'        ;
-require_once __DIR__ . '/../breaks/BreakTypeService.php'            ;
-require_once __DIR__ . '/../payroll/PayrollGroupService.php'        ;
+require_once __DIR__ . '/../payroll/PayslipService.php'            ;
+require_once __DIR__ . '/../holidays/HolidayService.php'           ;
+require_once __DIR__ . '/../settings/SettingService.php'           ;
+require_once __DIR__ . '/../leaves/LeaveRequestService.php'        ;
+require_once __DIR__ . '/../work-schedules/WorkScheduleService.php';
+require_once __DIR__ . '/../breaks/BreakScheduleService.php'       ;
+require_once __DIR__ . '/../breaks/BreakTypeService.php'           ;
+require_once __DIR__ . '/../payroll/PayrollGroupService.php'       ;
 
 $payslipDao                = new PayslipDao               ($pdo);
 $employeeDao               = new EmployeeDao              ($pdo);
@@ -96,7 +89,8 @@ $payrollGroupDao        = new PayrollGroupDao       ($pdo                   );
 $payrollGroupRepository = new PayrollGroupRepository($payrollGroupDao       );
 $payrollGroupService    = new PayrollGroupService   ($payrollGroupRepository);
 
-$originalCurrentDateTime = new DateTime();
+$originalCurrentDateTime = new DateTime('2025-01-07 00:00:00');
+echo $originalCurrentDateTime->format('l Y-m-d H:i:s A');
 
 $currentDateTime   =  clone $originalCurrentDateTime                             ;
 $currentDateTime   = (clone $currentDateTime)->modify('-1 day')                  ;

@@ -19,14 +19,15 @@
         <tr>
             <td>
             <?php 
-                if(!isset($row['employee_profile_picture'])){
-                    echo "<img src='https://via.placeholder.com/50' alt='Profile Picture' class='w-px-50 h-auto rounded-circle' />";
-                    return;
-                }
-                // Render the image
-                $imageData = $row['employee_profile_picture'];
+                if(!isset($row['employee_profile_picture']) && empty($row['employee_profile_picture'])){
+                  echo "<img src='https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&s=200' alt='Profile Picture' class='w-px-50 h-auto rounded-circle' />";
+                }else{
+                    // Render the image
+                    $imageData = $row['employee_profile_picture'];
 
-                echo "<img src='data:image/jpg;base64,$imageData' alt='Profile Picture' class='w-px-50 h-auto rounded-circle' />";
+                    echo "<img src='data:image/jpg;base64,$imageData' alt='Profile Picture' class='w-px-50 h-auto rounded-circle' />";
+                }
+
             ?>
             </td>
             <td>

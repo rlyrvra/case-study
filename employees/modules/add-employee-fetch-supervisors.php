@@ -18,6 +18,10 @@ function getSupervisors(){
             "operator" => "=",
             "value" => "Supervisor"
         ],
+        [
+            "column" => "employee.deleted_at",
+            "operator" => "IS NULL",
+        ]
     ];
 
     $data = $employeeDao->fetchAll($selectedColumns, $filterCriteria);

@@ -22,19 +22,6 @@ function fetchAllDepartments(page = 1) {
     }
     var search = $("#searchText").val();
 
-    
-    // console.log(`
-    //     Number of Entries: ${numberEntries}, 
-    //     Sort By Column: ${sortByColumn}, 
-    //     Page Number: ${pageNumber}, 
-    //     Sort Order By: ${sortOrderBy}, 
-    //     Filter Status: ${filterStatus}, 
-    //     Search At Column: ${searchColumn}, 
-    //     Date Column: ${dateColumn}, 
-    //     Start Date: ${startDate}, 
-    //     End Date: ${endDate}, 
-    //     Search Text: ${search}`);
-
 
     var loadingSpinner = document.getElementById("loadingSpinner");
     loadingSpinner.classList.remove("visually-hidden");
@@ -76,12 +63,17 @@ function fetchAllDepartments(page = 1) {
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log("AJAX Error: " + textStatus + ": " + errorThrown);
+            showFatalError("AJAX Error: " + textStatus + ": " + errorThrown);
         }
     });
 }
 
 
 function createDepartment() {
+    const addDepartmentForm = document.getElementById('add-departments-form');
+    if(addDepartmentForm.checkValidity() === false){
+        return;
+    };
     const departmentName = document.getElementById('create_department_name').value;
     const departmentHeadId = document.getElementById('create_department_head').value;
     const departmentDescription = document.getElementById('create_department_description').value;
@@ -94,6 +86,7 @@ function createDepartment() {
         status: departmentStatus
     };
 
+
     $.ajax({
         url: 'departments/modules/departments-api',
         method: 'POST',
@@ -102,13 +95,12 @@ function createDepartment() {
             department: departmentData
         },
         success: function(response) {
-            $('#departments-table').html(response);
+            $('#response-test').html(response);
             fetchAllDepartments();
-            document.getElementById('add-departments-form').reset();
-            showCreatedSuccessAlert();
         },
         error(xhr, status, error) {
             console.error("Error creating department:", error);
+            showFatalError("AJAX Error: " + textStatus + ": " + errorThrown);
         }
     });
 }
@@ -127,28 +119,27 @@ function deleteDepartment(button){
             md5_id: departmentData.token
         },
         success: function(response) {
-            $('#departments').html(response);
+            $('#response-test').html(response);
             fetchAllDepartments();
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log("AJAX Error: " + textStatus + ": " + errorThrown);
+            showFatalError("AJAX Error: " + textStatus + ": " + errorThrown);
         }
     });
     
 }
 
 function updateDepartment(button){
+    const updateDepartmentForm = document.getElementById('update_departments_form');
+    if(updateDepartmentForm.checkValidity() === false){
+        return;
+    };
     var md5_id = button.getAttribute('data-token');
     var departmentName = document.getElementById('update_department_name').value;
     var departmentHeadId = document.getElementById('update_department_head').value;
     var departmentDescription = document.getElementById('update_department_description').value;
     var departmentStatus = document.getElementById('update_department_status').value;
-
-    // console.log(`MD5 ID: ${md5_id}, 
-    //     Department Name: ${departmentName}, 
-    //     Department Head ID: ${departmentHeadId}, 
-    //     Department Description: ${departmentDescription}, 
-    //     Department Status: ${departmentStatus}`);
 
     $.ajax({
         url: 'departments/modules/departments-api',
@@ -164,13 +155,12 @@ function updateDepartment(button){
             }
         },
         success: function(response) {
-            $('#responseTest').html(response);
-            showSuccessUpdate();
+            $('#response-test').html(response);
             fetchAllDepartments();
-            
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log("AJAX Error: " + textStatus + ": " + errorThrown);
+            showFatalError("AJAX Error: " + textStatus + ": " + errorThrown);
         }
     });
     

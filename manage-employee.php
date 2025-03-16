@@ -41,7 +41,7 @@ if(isset($_GET['e']) && $_GET['e'] === '404'){
 <script src="employees/modules/manage-employee-ajax.js?v1.4"></script>
 <!-- Scripts -->
 <script src="employees/modules/manage-employee-skeleton.js?v1.2"></script>
-<script src="employees/modules/manage-employee-scripts.js?v1.3"></script>
+<script src="employees/modules/manage-employee-scripts.js?v1.4"></script>
 
 <link
   rel="stylesheet"
@@ -212,9 +212,6 @@ $(document).ready(function () {
           "<div>" +
           (item.name
               ? '<span class="name">' + escape(item.name) + "</span>"
-              : "") +
-          (item.description
-              ? '<span class="description">' + escape(item.description) + "</span>"
               : "") +
           "</div>"
           );

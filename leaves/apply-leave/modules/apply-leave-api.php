@@ -119,28 +119,28 @@ try {
         }
 
         $fetchLastCreated = new LeaveRequestService($leaveRequestRepo, $leaveRequestAttachmentRepo);
-        $lastCreatedLeaveRequest = $fetchLastCreated->fetchAllLeaveRequests(
-            ["id"], [
-            [
-                "column" => "leave_request.employee_id",
-                "operator" => "=",
-                "value" => $employeeId
-            ],
-            [
-                "column" => "leave_request.deleted_at",
-                "operator" => "IS NOT NULL"
-            ]
-        ], [
-            [
-                "column" => "leave_request.created_at",
-                "direction" => "DESC"
-            ]
-        ], 1
+        // $lastCreatedLeaveRequest = $fetchLastCreated->fetchAllLeaveRequests(
+        //     ["id"], [
+        //     [
+        //         "column" => "leave_request.employee_id",
+        //         "operator" => "=",
+        //         "value" => $employeeId
+        //     ],
+        //     [
+        //         "column" => "leave_request.deleted_at",
+        //         "operator" => "IS NOT NULL"
+        //     ]
+        // ], [
+        //     [
+        //         "column" => "leave_request.created_at",
+        //         "direction" => "DESC"
+        //     ]
+        // ], 1, 0
 
-        );
+        // );
+        // print_r($lastCreatedLeaveRequest);
 
-
-        $leaveRequestId = (int) $lastCreatedLeaveRequest['result_set'][0]['id'];
+        $leaveRequestId = getLastInsertIdBySql($pdo, $employeeId);
 
         // Save file attachments
         $attachments = [];
@@ -155,7 +155,7 @@ try {
 
         if (isset($_FILES['attachments'])) {
             $success = true;
-
+            $message = '';
             foreach ($_FILES['attachments']['tmp_name'] as $key => $tmpName) {
                 $originalFileName = basename($_FILES['attachments']['name'][$key]);
                 $uniqueFileName = uniqid() . '-' . $originalFileName; // Generate a unique name
@@ -168,12 +168,14 @@ try {
                 if ($_FILES['attachments']['size'][$key] > $maxFileSize) {
                     $success = false;
                     error_log("File size exceeds limit: $originalFileName");
+                    $message = "File size exceeds limit: $originalFileName";
                     continue;
                 }
 
                 if (!in_array($_FILES['attachments']['type'][$key], $allowedTypes)) {
                     $success = false;
                     error_log("Invalid file type: $originalFileName");
+                    $message = "Invalid file type: $originalFileName";
                     continue;
                 }
 
@@ -192,10 +194,12 @@ try {
                     if ($attachmentResult !== ActionResult::SUCCESS) {
                         $success = false;
                         error_log("Failed to save attachment to database: $filePath");
+                        $message = "Failed to save attachment to database: $filePath";
                     }
                 } else {
                     $success = false;
                     error_log("Failed to move uploaded file: $originalFileName");
+                    $message = "Failed to move uploaded file: $originalFileName";
                 }
             }
 
@@ -204,6 +208,7 @@ try {
                 echo "All attachments uploaded successfully.";
             } else {
                 echo "Some attachments failed to upload. Check logs for details.";
+                echo $message;
             }
         }
         return;
@@ -281,4 +286,15 @@ function validateInput($input, $fieldName) {
     // Additional validation can go here (e.g., regex for specific formats)
     
     return htmlspecialchars($input); // Sanitize to prevent XSS
+}
+
+function getLastInsertIdBySql($pdo, $employeeId): int {
+    try {
+        $stmt = $pdo->query("SELECT id FROM leave_requests WHERE employee_id = $employeeId ORDER BY id DESC LIMIT 1");
+        $lastLeaveRequestId = $stmt->fetchColumn();
+        return $lastLeaveRequestId !== false ? (int) $lastLeaveRequestId : 0;
+    } catch (PDOException $e) {
+        error_log("Database error: " . $e->getMessage());
+        return 0; // Return 0 as a fallback
+    }
 }

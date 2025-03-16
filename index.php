@@ -13,7 +13,7 @@
 
     <script src="https://kit.fontawesome.com/e82c3ed260.js" crossorigin="anonymous"></script>
     <!-- jQuery -->
-<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <!-- SimpleMDE for text editors -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css"/>
     <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js" defer></script>
@@ -351,7 +351,7 @@
     <nav class="navbar navbar-expand-lg">
         <div class="container">
             <div class="collapse navbar-collapse">
-                <ul class="space navbar-nav me-auto mb-2 mb-lg-0">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item"><a class="nav-link" href="#smart">Smart Wage</a></li>
                     <li class="nav-item"><a class="nav-link" href="#about">About Us</a></li>
                     <li class="nav-item"><a class="nav-link" href="#principles">Principles</a></li>
@@ -734,7 +734,7 @@
         </div>
 
         <div style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
-            <form action="#" method="POST" style="max-width: 600px; width: 100%; background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+            <form onsubmit="event.preventDefault();" style="max-width: 600px; width: 100%; background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
                 <div style="margin-bottom: 20px;">
                     <label for="name" style="color: #2d6a4f; font-weight: bold;">Your Name</label>
                     <input type="text" id="name" name="name" placeholder="Enter your name" required style="width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 5px;" />

@@ -68,7 +68,13 @@ $currentDateTime = '2025-01-01 17:00:00';
     Ibig sabihin check out
     check_in_time !== null && check_out_time === null
 */
-$attendanceResponse = $attendanceService->handleRfidTap($employeeRfidUid, $currentDateTime);
+//$attendanceResponse = $attendanceService->handleRfidTap($employeeRfidUid, $currentDateTime);
+
+$attendanceResponse = $attendanceService->updateAttendance(
+    attendanceId    : 9                    ,
+    checkInDateTime : '2025-03-12 08:00:00',
+    checkOutDateTime: '2025-03-12 17:00:00'
+);
 
 print_r($attendanceResponse);
 

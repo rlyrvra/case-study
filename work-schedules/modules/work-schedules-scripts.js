@@ -27,6 +27,31 @@ function getMaxPageValue() {
     return maxPage;
 }
 
+function fetchPage(){
+    Swal.fire({
+        title: 'Enter a Number',
+        input: 'number',
+        inputAttributes: {
+            min: 1,
+            max: getMaxPageValue(),
+            step: 1
+        },
+        showCancelButton: true,
+        confirmButtonText: 'Submit',
+        cancelButtonText: 'Cancel',
+        preConfirm: (value) => {
+            if (!value || isNaN(value)) {
+                Swal.showValidationMessage('Please enter a valid number');
+            }
+            return value;
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetchAllWorkSchedules(result.value);
+        }
+    });
+}
+
 function getSortByColumn(){
     var sortBy = selectedOptions.sort_by;
     return sortBy;
@@ -62,7 +87,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const startTimeSelect = document.getElementById("startTime");
     const endTimeSelect = document.getElementById("endTime");
     
-    endTimeSelect.addEventListener("change", createCalculateWorkHrs);
+    endTimeSelect.addEventListener("change", resetBreakHours);
+    startTimeSelect.addEventListener("change", resetBreakHours);
 });
 
 function calculateWorkHours(rows, startTime, endTime, selectedBreaks, totalWorkHrs) {
@@ -86,18 +112,38 @@ function calculateWorkHours(rows, startTime, endTime, selectedBreaks, totalWorkH
             return total;
         }, 0);
 
-        let diff = (((endDate - startDate) / (1000 * 60 * 60)) - (totalBreakMinutes / 60)).toFixed(2); // Difference in hours
-
-        // Adjust for cases where end time is on the next day
-        if (diff < 0) {
-            diff += 24;
+        // Handle overnight shift (endTime is technically the next day)
+        if (endDate < startDate) {
+            endDate.setDate(endDate.getDate() + 1); 
         }
 
-        totalWorkHrs.value = diff;
+        let diff = ((endDate - startDate) / (1000 * 60 * 60)) - (totalBreakMinutes / 60);
+
+        totalWorkHrs.value = diff.toFixed(2);
     }
     
     
 }
+
+function resetBreakHours(){
+    const rows = document.getElementById('create_break_assignment_table_body').getElementsByTagName('tr');
+    const startTime = document.getElementById("startTime").value;
+    const endTime = document.getElementById("endTime").value;
+    const startDate = new Date(`1970-01-01T${convertTo24Hour(startTime)}`);
+    const endDate = new Date(`1970-01-01T${convertTo24Hour(endTime)}`);
+    const selectedBreaks = getCreateBreaksValues(rows);
+    for (let i = 0; i < rows.length; i++) {
+        let row = rows[i];
+        row.cells[2].children[0].innerHTML = "";
+        row.cells[2].children[0].innerHTML = generateBreakOptions(startDate, endDate);
+        row.cells[2].children[0].value = "";
+        row.cells[3].children[0].value = "";
+    }
+    const totalWorkHrs = document.getElementById("totalWorkHours");
+    calculateWorkHours(rows, startTime, endTime, selectedBreaks, totalWorkHrs);
+}
+
+
 
 function createCalculateWorkHrs(){
     const rows = document.getElementById('create_break_assignment_table_body').getElementsByTagName('tr');
@@ -341,16 +387,23 @@ function addHours(date, hours) {
     return newDate;
 }
 
-function generateBreakOptions(startDate, endDate){
-    let breaksAddHTML;
-    let currentDate = startDate;
-    while (currentDate <= endDate){
-        //console.log(currentDate);
+function generateBreakOptions(startDate, endDate) {
+    let breaksAddHTML = ''; // Initialize the variable properly
+
+    // Handle overnight shifts (endDate is technically the next day)
+    if (endDate < startDate) {
+        endDate.setDate(endDate.getDate() + 1);
+    }
+
+    let currentDate = new Date(startDate); // Ensure we don't mutate the original startDate
+
+    while (currentDate <= endDate) {
+        let formattedTime = currentDate.toLocaleTimeString('en-US', { timeStyle: 'short', hour12: true }).replace(/\s/g, '');
+
         breaksAddHTML += `
-        <option value="${currentDate.toLocaleTimeString('en-US', { timeStyle: 'short', hour12: true }).replace(/\s/g, '')}">
-        ${currentDate.toLocaleTimeString('en-US', { timeStyle: 'short', hour12: true }).replace(/\s/g, '')}
-        </option>`;
-        currentDate = addHours(currentDate, 1);
+        <option value="${formattedTime}">${formattedTime}</option>`;
+
+        currentDate = addHours(currentDate, 1); // Increment by 1 hour
     }
     return breaksAddHTML;
 }
@@ -426,6 +479,24 @@ function updatePaidStatusUpdateForm(select, time_start = '', time_end = ''){
     }
     startTime.value = time_start;
     endTime.value = time_end;
+}
+
+function updateResetBreakHours(){
+    const rows = document.getElementById('update_break_assignment_table_body').getElementsByTagName('tr');
+    const startTime = document.getElementById("update_startTime").value;
+    const endTime = document.getElementById("update_endTime").value;
+    const startDate = new Date(`1970-01-01T${convertTo24Hour(startTime)}`);
+    const endDate = new Date(`1970-01-01T${convertTo24Hour(endTime)}`);
+    const selectedBreaks = getCreateBreaksValues(rows);
+    for (let i = 0; i < rows.length; i++) {
+        let row = rows[i];
+        row.cells[2].children[0].innerHTML = "";
+        row.cells[2].children[0].innerHTML = generateBreakOptions(startDate, endDate);
+        row.cells[2].children[0].value = "";
+        row.cells[3].children[0].value = "";
+    }
+    const totalWorkHrs = document.getElementById("update_totalWorkHours");
+    calculateWorkHours(rows, startTime, endTime, selectedBreaks, totalWorkHrs);
 }
 
 function updateCalculateWorkHrs(){

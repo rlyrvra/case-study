@@ -4,13 +4,7 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
     exit('This resource is only accessible via AJAX requests.');
 }
 
-require_once __DIR__ . '/../DepartmentDao.php';
 require_once __DIR__ . '/../DepartmentService.php';
-require_once __DIR__ . '/../DepartmentRepository.php';
-require_once __DIR__ . '/../Department.php';
-
-require_once __DIR__ . '/../../job-titles/JobTitle.php';
-require_once __DIR__ . '/../../job-titles/JobTitleDao.php';
 
 require_once __DIR__ . '/../../includes/Helper.php';
 require_once __DIR__ . '/../../database/database.php';
@@ -41,18 +35,20 @@ try {
         }
 
         if(empty($searchAt) && !empty($searchFilter)){
-            $filterCriteria[] = [
-                "column" => "department.name", 
-                "operator" => "LIKE",
-                "value" => "%$searchFilter%", 
-                'boolean' => 'OR'
-
-            ];
-            $filterCriteria[] = [
-                "column" => "department.description", 
-                "operator" => "LIKE",
-                "value" => "%$searchFilter%", 
-                'boolean' => 'OR'
+            $filterCriteria[] = 
+            [
+                [
+                    "column" => "department.description", 
+                    "operator" => "LIKE",
+                    "value" => "%$searchFilter%", 
+                    'boolean' => 'OR'
+                ],
+                [
+                    "column" => "department.name", 
+                    "operator" => "LIKE",
+                    "value" => "%$searchFilter%", 
+                    'boolean' => 'OR'
+                ]
             ];
         }
 
@@ -86,18 +82,30 @@ try {
         $departments;
         if ($result !== ActionResult::FAILURE) {
             $departments = $result['result_set'];
+            $totalDepartments = $result["total_row_count"];
+            $totalPages = ceil($totalDepartments / $limit);
+        }else if($result === ActionResult::FAILURE){
+            $message = 'Failed to fetch departments. Please try again.';
+            die('
+            <script>
+            showError(' . json_encode($message) 
+            . ');
+            </script>');
         }
 
-        $totalDepartments = $result["total_row_count"];
-        $totalPages = ceil($totalDepartments / $limit);
         include __DIR__ . '/departments-table.php';
         return;
     }
 
     if ($action === 'create') {
+
         $departmentData = $_POST['department'] ?? null;
+
         if ($departmentData == null) {
-            echo "Invalid department data.";
+            die('
+            <script>
+            showCouldNotFindData();
+            </script>');
             return;
         }
         $name = isset($departmentData['name']) && $departmentData['name'] !== '' ? $departmentData['name'] : null;
@@ -116,24 +124,41 @@ try {
         $departmentService = new DepartmentService($departmentRepository);
         $result = $departmentService->createDepartment($newDepartment);
         
-        if ($result !== ActionResult::FAILURE) {
-            echo "Department created successfully!";
-        } else {
-            echo "Failed to create department. Please try again.";
+        if ($result === ActionResult::SUCCESS) {
+            die('
+            <script>
+            showSuccessCreate();
+            </script>');
+        }else if($result === ActionResult::FAILURE){
+            $message = 'Failed to create department. Please try again.';
+            die('
+            <script>
+            showError(' . json_encode($message) 
+            . ');
+            </script>');
         }
         return;
     }
 
     if($action == 'delete'){
+
         $hashed_id = $_POST['md5_id'] ?? null;
         $departmentRepository = new DepartmentRepository($departmentDao);
         $departmentService = new DepartmentService($departmentRepository);
         $deleteResult = $departmentService->deleteDepartment($hashed_id);
 
-        if ($deleteResult) {
-            echo "Department deleted successfully!";
-        } else {
-            echo "Failed to delete department. Please try again.";
+        if ($deleteResult === ActionResult::SUCCESS) {
+            die('
+            <script>
+            showSuccessDelete();
+            </script>');
+        }else if($deleteResult === ActionResult::FAILURE){
+            $message = 'Failed to delete department. Please try again.';
+            die('
+            <script>
+            showError(' . json_encode($message) 
+            . ');
+            </script>');
         }
         return;
     }
@@ -141,38 +166,59 @@ try {
 
     if($action == 'update'){
         $departmentData = $_POST['department'] ?? null;
-        if ($departmentData) {
-            $name = $departmentData['name'] ?? '';
-            $departmentHeadId = $departmentData['departmentHeadId'] !== '' && $departmentData['departmentHeadId'] !== 'None'  ? (int) $departmentData['departmentHeadId'] : null;
-            $departmentDescription = $departmentData['departmentDescription'] ?? null;
-            $departmentStatus = $departmentData['departmentStatus'] ?? null;
-            $hashed_id = $departmentData['md5_id'] ?? null;
-
-
-            $updatedDepartment = new Department(
-                id: $hashed_id,
-                name: $name,
-                departmentHeadId: $departmentHeadId,
-                description: $departmentDescription,
-                status: $departmentStatus
-            );
-            $departmentRepository = new DepartmentRepository($departmentDao);
-            $departmentService = new DepartmentService($departmentRepository);
-            $updateResult = $departmentService->updateDepartment($updatedDepartment);
-
-            if ($updateResult) {
-                echo "Department updated successfully!";
-            } else {
-                echo "Failed to update department. Please try again.";
-            }
-        } else {
-            echo "Invalid department data.";
+        if (!$departmentData) {
+            die('
+            <script>
+            showCouldNotFindData();
+            </script>');
+            return;
         }
         
+        $name = $departmentData['name'] ?? '';
+        $departmentHeadId = $departmentData['departmentHeadId'] !== '' && $departmentData['departmentHeadId'] !== 'None'  ? (int) $departmentData['departmentHeadId'] : null;
+        $departmentDescription = $departmentData['departmentDescription'] ?? null;
+        $departmentStatus = $departmentData['departmentStatus'] ?? null;
+        $hashed_id = $departmentData['md5_id'] ?? null;
+
+
+        $updatedDepartment = new Department(
+            id: $hashed_id,
+            name: $name,
+            departmentHeadId: $departmentHeadId,
+            description: $departmentDescription,
+            status: $departmentStatus
+        );
+        $departmentRepository = new DepartmentRepository($departmentDao);
+        $departmentService = new DepartmentService($departmentRepository);
+        $updateResult = $departmentService->updateDepartment($updatedDepartment);
+
+        if ($updateResult === ActionResult::SUCCESS) {
+            die('
+            <script>
+            showSuccessUpdate();
+            </script>');
+        }else if($updateResult === ActionResult::FAILURE){
+            $message = 'Failed to update department. Please try again.';
+            die('
+            <script>
+            showError(' . json_encode($message) 
+            . ');
+            </script>');
+        }
         return;
     }
 
-    echo "Invalid action specified.";
-} catch (Exception $e) {
-    echo "Error: " . $e->getMessage();
+    $message = "Invalid action specified.";
+    die('
+    <script>
+    showFatalError(' . json_encode($message) 
+    . ');
+    </script>');
+} catch (Throwable  $e) {
+    $message = "Fatal error: " . $e->getMessage();
+    die('
+    <script>
+    showFatalError(' . json_encode($message) 
+    . ');
+    </script>');
 }

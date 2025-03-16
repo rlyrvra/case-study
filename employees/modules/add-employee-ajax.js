@@ -1,4 +1,5 @@
 function updateEmployee(button){
+    showSpinnerLoader();
     let employeeData = {};
     //form 1
     const row = button;  // Get the closest row
@@ -191,7 +192,6 @@ function updateEmployee(button){
             },
             success: function(response) {
                 $('#response-test').html(response);
-                //showSuccessUpdate(employeeData.token);
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 console.log("AJAX Error: " + textStatus + ": " + errorThrown);
@@ -206,6 +206,7 @@ function updateEmployee(button){
 }
 
 function createEmployee(){
+    showSpinnerLoader();
     let employeeData = {};
     //form 1
     const firstName = document.getElementById("firstName").value;
@@ -273,6 +274,7 @@ function createEmployee(){
     const SSSNumber = document.getElementById("SSSNumber").value;
     const PhilHealthNumber = document.getElementById("PhilHealthNumber").value;
     const PagIBIGNumber = document.getElementById("PagIBIGNumber").value;
+    
 
     async function handleData() {
         let imageData;
@@ -393,7 +395,6 @@ function createEmployee(){
             },
             success: function(response) {
                 $('#response-test').html(response);
-                //showSuccessUpdate(employeeData.token);
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 console.log("AJAX Error: " + textStatus + ": " + errorThrown);

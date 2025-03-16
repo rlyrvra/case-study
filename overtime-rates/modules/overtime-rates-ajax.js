@@ -63,8 +63,8 @@ function assignRates(){
     const department = document.getElementById("selectize_department_sorter").value;
     const jobTitle = document.getElementById("selectize_jobTitle_sorter").value;
     const employee = document.getElementById("selectize_employee_sorter").value;
-    let overElement = document.getElementById("overtime_rates_table");
-    let overId = overElement ? overElement.getAttribute('data-token') : null;
+    let overElement = document.getElementById("overtime_rates_table_body");
+    let overId = overElement ? parseInt(overElement.getAttribute('data-token'), 10) : null;
     const rows = document.getElementById('overtime_rates_table_body')?.getElementsByTagName('tr') || [];
     const rates = getRatesValues(rows);
     console.log(`${overId} ,${department}, ${jobTitle}, ${employee}`);
@@ -85,6 +85,7 @@ function assignRates(){
             // document.getElementById('skeleton-departments-table').classList.add("visually-hidden");
             // document.getElementById('departments-table').classList.remove("visually-hidden");
             $('#response-test').html(response);
+            fetchAllOvertimeRates();
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log("AJAX Error: " + textStatus + ": " + errorThrown);

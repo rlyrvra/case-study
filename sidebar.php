@@ -139,6 +139,8 @@
                         <div>Apply Leave</div>
                     </a>
                 </li>
+                <?php endif ?>
+                <?php if($_SESSION['access_role'] != 'Staff'): ?>
                 <li class="menu-item" id="leave-requests-menu">
                     <a href="leave-requests" class="menu-link">
                         <div>Leave Requests</div>

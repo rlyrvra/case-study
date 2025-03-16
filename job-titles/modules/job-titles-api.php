@@ -4,10 +4,7 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
     exit('This resource is only accessible via AJAX requests.');
 }
 
-require_once __DIR__ . '/../JobTitleDao.php';
 require_once __DIR__ . '/../JobTitleService.php';
-require_once __DIR__ . '/../JobTitleRepository.php';
-require_once __DIR__ . '/../JobTitle.php';
 
 require_once __DIR__ . '/../../includes/Helper.php';
 require_once __DIR__ . '/../../database/database.php';
@@ -81,12 +78,20 @@ try {
         $jobTitleService = new JobTitleService($jobTitleRepository);
         $result = $jobTitleService->fetchAllJobTitles([], $filterCriteria, $sortCriteria, $limit, $offset);
         $jobTitles;
-        if ($result !== ActionResult::FAILURE) {
+        $totalJobTitles = 0;
+        if ($result !== ActionResult::FAILURE){
             $jobTitles = $result['result_set'];
+        }else if($result === ActionResult::FAILURE){
+            $message = 'Failed to fetch job titles. Please try again.';
+            die('
+            <script>
+            showError(' . json_encode($message) 
+            . ');
+            </script>');
         }
 
-        $totalDepartments = $result["total_row_count"];
-        $totalPages = ceil($totalDepartments / $limit);
+        $totalJobTitles = $result["total_row_count"];
+        $totalPages = ceil($totalJobTitles / $limit);
         include __DIR__ . '/job-titles-table.php';
         return;
 
@@ -96,11 +101,13 @@ try {
     if ($action === 'create') {
         $jobTitleData = $_POST['job_title'] ?? null;
 
-        if (!$jobTitleData) {
-            echo "Invalid JT data.";
+        if ($jobTitleData == null) {
+            die('
+            <script>
+            showCouldNotFindData();
+            </script>');
             return;
-            
-        } 
+        }
 
         $jobTitleTitle = $jobTitleData['title'] ?? '';
         $jobTitleDepartmentId = $jobTitleData['department_id'] ?? null;
@@ -119,10 +126,18 @@ try {
         $jobTitleService = new JobTitleService($jobTitleRepository);
         $result = $jobTitleService->createJobTitle($newJobTitle);
 
-        if ($result) {
-            echo "Job Title created successfully!";
-        } else {
-            echo "Failed to JT. Please try again.";
+        if ($result === ActionResult::SUCCESS) {
+            die('
+            <script>
+            showSuccessCreate();
+            </script>');
+        }else if($result === ActionResult::FAILURE){
+            $message = 'Failed to create job title. Please try again.';
+            die('
+            <script>
+            showError(' . json_encode($message) 
+            . ');
+            </script>');
         }
 
         return;
@@ -132,7 +147,10 @@ try {
         
         $jobTitleData = $_POST['job_title'] ?? null;
         if (!$jobTitleData) {
-            echo "Invalid job title data.";
+            die('
+            <script>
+            showCouldNotFindData();
+            </script>');
             return;
         }
 
@@ -155,12 +173,20 @@ try {
 
         $jobTitleRepository = new JobTitleRepository($jobTitleDao);
         $jobTitleService = new JobTitleService($jobTitleRepository);
-        $result = $jobTitleService->updateJobTitle($updateJobTitle);
+        $updateResult = $jobTitleService->updateJobTitle($updateJobTitle);
 
-        if ($result) {
-            echo "Job Title updated successfully!";
-        } else {
-            echo "Failed to JT. Please try again.";
+        if ($updateResult === ActionResult::SUCCESS) {
+            die('
+            <script>
+            showSuccessUpdate();
+            </script>');
+        }else if($updateResult === ActionResult::FAILURE){
+            $message = 'Failed to update job title. Please try again.';
+            die('
+            <script>
+            showError(' . json_encode($message) 
+            . ');
+            </script>');
         }
         
         return;
@@ -170,12 +196,20 @@ try {
         $hashed_id = $_POST['md5_id'] ?? null;
         $jobTitleRepository = new JobTitleRepository($jobTitleDao);
         $jobTitleService = new JobTitleService($jobTitleRepository);
-        $result = $jobTitleService->deleteJobTitle($hashed_id);
+        $deleteResult = $jobTitleService->deleteJobTitle($hashed_id);
 
-        if ($result) {
-            echo "JT deleted successfully!";
-        } else {
-            echo "Failed to JT. Please try again.";
+        if ($deleteResult === ActionResult::SUCCESS) {
+            die('
+            <script>
+            showSuccessDelete();
+            </script>');
+        }else if($deleteResult === ActionResult::FAILURE){
+            $message = 'Failed to delete job title. Please try again.';
+            die('
+            <script>
+            showError(' . json_encode($message) 
+            . ');
+            </script>');
         }
         return;
     }
@@ -183,7 +217,17 @@ try {
 
 
 
-    echo "Invalid action specified.";
+    $message = "Invalid action specified.";
+    die('
+    <script>
+    showFatalError(' . json_encode($message) 
+    . ');
+    </script>');
 } catch (Exception $e) {
-    echo "Error: " . $e->getMessage();
+    $message = "Fatal error: " . $e->getMessage();
+    die('
+    <script>
+    showFatalError(' . json_encode($message) 
+    . ');
+    </script>');
 }

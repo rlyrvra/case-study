@@ -31,13 +31,13 @@
           <td>
             <?php 
             $startTime = $row['start_time']; // Assuming $row['start_time'] contains '1970-01-01 08:00:00'
-            echo htmlspecialchars(date('g:iA', strtotime($startTime))); // Outputs: 8:00AM 
+            echo $row['is_flextime'] ? "<span class='badge bg-primary'>FLEXITIME</span>" : htmlspecialchars(date('g:iA', strtotime($startTime))); // Outputs: 8:00AM 
             ?>
           </td>
           <td>
             <?php 
             $endTime = $row['end_time']; // Assuming $row['start_time'] contains '1970-01-01 08:00:00'
-            echo htmlspecialchars(date('g:iA', strtotime($endTime))); // Outputs: 8:00AM 
+            echo $row['is_flextime'] ? "<span class='badge bg-primary'>FLEXITIME</span>" : htmlspecialchars(date('g:iA', strtotime($endTime))); // Outputs: 8:00AM 
             ?>
           </td>
           <td><?php echo htmlspecialchars($row['total_work_hours']); ?></td>

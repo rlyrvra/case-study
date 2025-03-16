@@ -10,7 +10,18 @@
     <?php foreach ($breakTypes as $row): ?>
     <tr>
         <td>
-            <input type="text" class="form-control" value="<?php echo htmlspecialchars($row['name']); ?>" id="update_name">
+        <input 
+        type="text" 
+        class="form-control" 
+        value="<?php echo htmlspecialchars($row['name']); ?>" 
+        id="update_name" 
+        name="update_name" 
+        required 
+        minlength="2" 
+        maxlength="50" 
+        pattern="[A-Za-z\s]+" 
+        title="Please enter a valid name (letters and spaces only)"
+        placeholder="Enter name">
         </td>
         <td>
             <select class="form-select" id="update_paid">
