@@ -1,133 +1,124 @@
-<!-- Modal -->
+<!-- Work Schedule Add Form Modal -->
 <div class="modal fade" id="add_work_schedules" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title" id="add_work_schedulesTitle">Work Schedule Form</h2>
-                <button
-                    type="button"
-                    class="btn-close"
-                    data-bs-dismiss="modal"
-                    aria-label="Close"
-                ></button>
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content shadow-sm border-0">
+            <div class="modal-header bg-light border-bottom">
+                <h2 class="modal-title fs-5 fw-semibold text-success" id="add_work_schedulesTitle">
+                    <i class="bx bx-calendar"></i> Work Schedule Form
+                </h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             
             <div class="modal-body">
-                <div class="container mt-4">
-                    <form onsubmit="event.preventDefault()" id="work_schedules_add_form">
-                        <div class="input-group mb-3">
-                            <span class="input-group-text"><i class="bx bx-user fs-4 lh-0"></i></span>
-                            <select class="form-select selectize_employees" id="select_employee" required></select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="startTime" class="form-label">Start Time</label>
-                            <select class="form-select" id="startTime" name="startTime" required>
-                                <option value="" selected disabled>Select start time...</option>
-                                <option value="12:00AM">12:00AM</option>
-                                <option value="1:00AM">1:00AM</option>
-                                <option value="2:00AM">2:00AM</option>
-                                <option value="3:00AM">3:00AM</option>
-                                <option value="4:00AM">4:00AM</option>
-                                <option value="5:00AM">5:00AM</option>
-                                <option value="6:00AM">6:00AM</option>
-                                <option value="7:00AM">7:00AM</option>
-                                <option value="8:00AM">8:00AM</option>
-                                <option value="9:00AM">9:00AM</option>
-                                <option value="10:00AM">10:00AM</option>
-                                <option value="11:00AM">11:00AM</option>
-                                <option value="12:00PM">12:00PM</option>
-                                <option value="1:00PM">1:00PM</option>
-                                <option value="2:00PM">2:00PM</option>
-                                <option value="3:00PM">3:00PM</option>
-                                <option value="4:00PM">4:00PM</option>
-                                <option value="5:00PM">5:00PM</option>
-                                <option value="6:00PM">6:00PM</option>
-                                <option value="7:00PM">7:00PM</option>
-                                <option value="8:00PM">8:00PM</option>
-                                <option value="9:00PM">9:00PM</option>
-                                <option value="10:00PM">10:00PM</option>
-                                <option value="11:00PM">11:00PM</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="endTime" class="form-label">End Time</label>
-                            <select class="form-select" id="endTime" name="endTime" required onchange="calculateWorkHours();">
-                                <option value="" selected disabled>Select end time...</option>
-                                <option value="12:00AM">12:00AM</option>
-                                <option value="1:00AM">1:00AM</option>
-                                <option value="2:00AM">2:00AM</option>
-                                <option value="3:00AM">3:00AM</option>
-                                <option value="4:00AM">4:00AM</option>
-                                <option value="5:00AM">5:00AM</option>
-                                <option value="6:00AM">6:00AM</option>
-                                <option value="7:00AM">7:00AM</option>
-                                <option value="8:00AM">8:00AM</option>
-                                <option value="9:00AM">9:00AM</option>
-                                <option value="10:00AM">10:00AM</option>
-                                <option value="11:00AM">11:00AM</option>
-                                <option value="12:00PM">12:00PM</option>
-                                <option value="1:00PM">1:00PM</option>
-                                <option value="2:00PM">2:00PM</option>
-                                <option value="3:00PM">3:00PM</option>
-                                <option value="4:00PM">4:00PM</option>
-                                <option value="5:00PM">5:00PM</option>
-                                <option value="6:00PM">6:00PM</option>
-                                <option value="7:00PM">7:00PM</option>
-                                <option value="8:00PM">8:00PM</option>
-                                <option value="9:00PM">9:00PM</option>
-                                <option value="10:00PM">10:00PM</option>
-                                <option value="11:00PM">11:00PM</option>
-                            </select>
-                        </div>
-                        <div class="form-check mb-3">
-                            <input class="form-check-input" type="checkbox" id="isFlextime" data-bs-toggle="collapse" data-bs-target="#flextimeOptions">
-                            <label class="form-check-label" for="isFlextime">Is Flextime</label>
-                        </div>
-                        <div class="collapse" id="flextimeOptions">
-                            <div class="card card-body">
-                                <div class="mb-3">
-                                    <label for="totalHoursPerWeek" class="form-label">Total Hours Per Day</label>
-                                    <input type="number" class="form-control" id="totalHoursPerWeek" name="totalHoursPerWeek" min="0">
-                                </div>
+                <form onsubmit="event.preventDefault()" id="work_schedules_add_form">
+                    <div class="row g-3">
+                        <!-- Select Employee -->
+                        <div class="col-md-12">
+                            <label for="select_employee" class="form-label fw-semibold">Select Employee <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bx bx-user fs-5"></i></span>
+                                <select class="form-select selectize_employees shadow-sm" id="select_employee" required></select>
                             </div>
                         </div>
-                        <div class="mb-5">
-                            <label for="totalWorkHours" class="form-label">Total Work Hours</label>
-                            <input type="number" class="form-control" id="totalWorkHours" name="totalWorkHours" min="0" readonly required>
+
+                        <!-- Start Time -->
+                        <div class="col-md-6">
+                            <label for="startTime" class="form-label fw-semibold">Start Time <span class="text-danger">*</span></label>
+                            <select class="form-select shadow-sm" id="startTime" name="startTime" required>
+                                <option value="" selected disabled>Select start time...</option>
+                                <!-- Dynamic time options -->
+                                ${generateTimeOptions()}
+                            </select>
                         </div>
-                        <!-- Layout for Break Addition (work schedules) -->
-                        <div id="create_break_assignment" class="table-responsive text-no-wrap">
-                            <h6 class="text-center">Assign Breaks to this Schedule (0-5 breaks)</h6>
-                            <table class="table table-hover mt-3">
+
+                        <!-- End Time -->
+                        <div class="col-md-6">
+                            <label for="endTime" class="form-label fw-semibold">End Time <span class="text-danger">*</span></label>
+                            <select class="form-select shadow-sm" id="endTime" name="endTime" required onchange="calculateWorkHours();">
+                                <option value="" selected disabled>Select end time...</option>
+                                <!-- Dynamic time options -->
+                                ${generateTimeOptions()}
+                            </select>
+                        </div>
+
+                        <!-- Flextime Checkbox -->
+                        <div class="col-md-12 form-check">
+                            <input class="form-check-input shadow-sm" type="checkbox" id="isFlextime" data-bs-toggle="collapse" data-bs-target="#flextimeOptions">
+                            <label class="form-check-label fw-semibold" for="isFlextime">Enable Flextime</label>
+                        </div>
+
+                        <!-- Flextime Options -->
+                        <div class="collapse col-md-12" id="flextimeOptions">
+                            <div class="card card-body shadow-sm">
+                                <label for="totalHoursPerWeek" class="form-label fw-semibold">Total Hours Per Day</label>
+                                <input type="number" class="form-control shadow-sm" id="totalHoursPerWeek" name="totalHoursPerWeek" min="0">
+                            </div>
+                        </div>
+
+                        <!-- Total Work Hours -->
+                        <div class="col-md-12">
+                            <label for="totalWorkHours" class="form-label fw-semibold">Total Work Hours <span class="text-danger">*</span></label>
+                            <input type="number" class="form-control shadow-sm" id="totalWorkHours" name="totalWorkHours" min="0" readonly required>
+                        </div>
+                    </div>
+
+                    <!-- Assign Breaks Section -->
+                    <div id="create_break_assignment" class="table-responsive mt-4">
+                        <h6 class="text-center fw-semibold">Assign Breaks to this Schedule (0-5 breaks)</h6>
+                        <table class="table table-hover mt-3">
                             <thead>
                                 <tr>
-                                    <th style="width: 30% !important;">Name</th>
-                                    <th style="width: 5% !important;">Paid</th>
-                                    <th style="width: 30% !important;">Start Time</th>
-                                    <th style="width: 30% !important;">End Time</th>
-                                    <th style="width: 5% !important;">Action</th>
+                                    <th>Name</th>
+                                    <th>Paid</th>
+                                    <th>Start Time</th>
+                                    <th>End Time</th>
+                                    <th>Action</th>
                                 </tr>
-                                </thead>
-                            <tbody id="create_break_assignment_table_body">
-                            </tbody>
-                            </table>
-                            <div class="mt-3 d-flex justify-content-between">
-                                <button class="btn btn-outline-secondary" onclick="addWorkSchedulesBreakCreate()">Add break ▼</button>
-                            </div>
+                            </thead>
+                            <tbody id="create_break_assignment_table_body"></tbody>
+                        </table>
+                        <div class="d-flex justify-content-between">
+                            <button type="button" class="btn btn-outline-secondary shadow-sm" onclick="addWorkSchedulesBreakCreate()">
+                                <i class="bx bx-plus"></i> Add Break
+                            </button>
                         </div>
-                        <div class="text-end">
-                            <button type="submit" class="btn btn-primary">Check Validity</button>
-                        </div>
-                    </form>  
-                </div>
+                    </div>
+
+                    <!-- Validation Button -->
+                    <div class="text-end mt-4">
+                        <button type="submit" class="btn btn-primary shadow-sm">Check Validity</button>
+                    </div>
+                 
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                    <i class="bx bx-arrow-back bx-xs"></i>Close
+
+            <!-- Modal Footer -->
+            <div class="modal-footer border-top bg-light">
+                <button type="button" class="btn btn-outline-secondary shadow-sm" data-bs-dismiss="modal">
+                    <i class="bx bx-arrow-back"></i> Close
                 </button>
-                <button type="submit" class="btn btn-success" onclick="createWorkSchedule();"><i class="bx bx-plus bx-xs"></i>Create</button>
-            </div>   
-            
+                <button type="submit" class="btn btn-success shadow-sm" onclick="createWorkSchedule();">
+                    <i class="bx bx-plus"></i> Create
+                </button>
+            </div>
+            </form> 
         </div>
     </div>
 </div>
+
+<script>
+    // Function to generate time options dynamically
+    function generateTimeOptions() {
+        const times = [];
+        for (let i = 0; i < 24; i++) {
+            let suffix = i < 12 ? 'AM' : 'PM';
+            let hour = i % 12 || 12;
+            times.push(`<option value="${hour}:00${suffix}">${hour}:00${suffix}</option>`);
+        }
+        return times.join('');
+    }
+
+    // Populate start and end time dropdowns
+    document.getElementById('startTime').innerHTML += generateTimeOptions();
+    document.getElementById('endTime').innerHTML += generateTimeOptions();
+</script>
+<!-- /Work Schedule Add Form Modal -->

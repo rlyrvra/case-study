@@ -31,13 +31,13 @@
           <td>
             <?php 
             $startTime = $row['start_time']; // Assuming $row['start_time'] contains '1970-01-01 08:00:00'
-            echo htmlspecialchars(date('g:iA', strtotime($startTime))); // Outputs: 8:00AM 
+            echo $row['is_flextime'] ? "<span class='badge bg-primary'>FLEXITIME</span>" : htmlspecialchars(date('g:iA', strtotime($startTime))); // Outputs: 8:00AM 
             ?>
           </td>
           <td>
             <?php 
             $endTime = $row['end_time']; // Assuming $row['start_time'] contains '1970-01-01 08:00:00'
-            echo htmlspecialchars(date('g:iA', strtotime($endTime))); // Outputs: 8:00AM 
+            echo $row['is_flextime'] ? "<span class='badge bg-primary'>FLEXITIME</span>" : htmlspecialchars(date('g:iA', strtotime($endTime))); // Outputs: 8:00AM 
             ?>
           </td>
           <td><?php echo htmlspecialchars($row['total_work_hours']); ?></td>
@@ -85,44 +85,12 @@
           <span aria-hidden="true">&laquo;</span>
         </a>
       </li>
-
-      <!-- First Page -->
-      <li class="page-item <?= $page === 1 ? 'active' : '' ?>">
-        <a class="page-link" onclick="fetchAllWorkSchedules(1)">1</a>
-      </li>
-
-      <!-- Ellipsis Before Current Page -->
-      <?php if ($page > 3): ?>
-        <li class="page-item">
-          <a class="page-link" onclick="fetchPage()">...</a>
-        </li>
-      <?php endif; ?>
-
-      <!-- Dynamic Middle Pages -->
-      <?php
-      $start = max(2, $page - 1);
-      $end = min($totalPages - 1, $page + 1);
-      for ($i = $start; $i <= $end; $i++):
-      ?>
+      <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+        <!-- Page Numbers -->
         <li class="page-item <?= $i === $page ? 'active' : '' ?>">
-          <a class="page-link" onclick="fetchAllWorkSchedules(<?php echo $i ?>)"><?= $i ?></a>
+          <a class="page-link" onclick="fetchAllWorkSchedules(<?php echo $i ?>)" ><?= $i ?></a>
         </li>
       <?php endfor; ?>
-
-      <!-- Ellipsis After Current Page -->
-      <?php if ($page < $totalPages - 2): ?>
-        <li class="page-item">
-          <a class="page-link" onclick="fetchPage()">...</a>
-        </li>
-      <?php endif; ?>
-
-      <!-- Last Page -->
-      <?php if ($totalPages > 1): ?>
-        <li class="page-item <?= $page == $totalPages ? 'active' : '' ?>">
-          <a class="page-link" onclick="fetchAllWorkSchedules(<?= $totalPages ?>)"><?= $totalPages ?></a>
-        </li>
-      <?php endif; ?>
-
       <!-- Next Button -->
       <li class="page-item <?= $page >= $totalPages ? 'disabled' : '' ?>">
         <a class="page-link" onclick="fetchAllWorkSchedules('next')" aria-label="Next">

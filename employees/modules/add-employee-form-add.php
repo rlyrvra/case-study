@@ -1,11 +1,12 @@
+<style>.label-danger{color:red !important;}</style>
 <!-- Personal Information Form -->
-<div class="tab-pane fade show active" id="navs-pills-personal-information" role="tabpanel">
+<div class="card shadow-sm border-0 tab-pane fade show active" id="navs-pills-personal-information" role="tabpanel">
     <div class="form-container p-4">
-        <h3 class="form-title">Personal Information: (1/6)</h3>
+        <h3 class="form-title"><i class="bx bx-user-circle bx-lg"></i>  Personal Information: (1/6)</h3>
         <form onsubmit="event.preventDefault()" id="personal_information">
             <div class="row mb-3">
                 <div class="col-md-4">
-                    <label for="firstName" class="form-label">First Name<span class="label-danger">(*)</span>:</label>
+                    <label for="firstName" class="form-label">First Name<span class="label-danger">*</span>:</label>
                     <input type="text" 
                     class="form-control" 
                     id="firstName" 
@@ -30,7 +31,7 @@
                     title="Only letters and spaces allowed">
                 </div>
                 <div class="col-md-4">
-                    <label for="lastName" class="form-label">Last Name<span class="label-danger">(*)</span>:</label>
+                    <label for="lastName" class="form-label">Last Name<span class="label-danger">*</span>:</label>
                     <input type="text" 
                     class="form-control" 
                     id="lastName" 
@@ -45,7 +46,7 @@
             </div>
             <div class="row mb-3">
                 <div class="col-md-4">
-                    <label for="dob" class="form-label">Date of Birth<span class="label-danger">(*)</span>:</label>
+                    <label for="dob" class="form-label">Date of Birth<span class="label-danger">*</span>:</label>
                     <input type="date" class="form-control" id="dob" required 
                     oninput="this.setAttribute('max', new Date().toISOString().split('T')[0])">
                 </div>
@@ -59,7 +60,7 @@
                     </select>
                 </div>
                 <div class="col-md-4">
-                    <label for="maritalStatus" class="form-label">Marital Status<span class="label-danger">(*)</span>:</label>
+                    <label for="maritalStatus" class="form-label">Marital Status<span class="label-danger">*</span>:</label>
                     <select id="maritalStatus" class="form-select" required>
                         <option value="" selected disabled>Choose...</option>
                         <option value="Single">Single</option>
@@ -71,7 +72,7 @@
             </div>
             <div class="row mb-3">
                 <div class="col-md-6">
-                    <label for="nationality" class="form-label">Nationality<span class="label-danger">(*)</span>:</label>
+                    <label for="nationality" class="form-label">Nationality<span class="label-danger">*</span>:</label>
                     <input type="text" 
                     class="form-control" 
                     list="nationalityList" 
@@ -133,7 +134,7 @@
 <!-- Login Credentials Form -->
 <div class="tab-pane fade" id="navs-pills-login-credentials" role="tabpanel">
     <div class="form-container p-4">
-        <h3 class="form-title">Login Credentials: (2/6)</h3>
+        <h3 class="form-title"><i class="bx bx-lock-alt bx-lg"></i> Login Credentials: (2/6)</h3>
         <form onsubmit="event.preventDefault()" id="login_credentials">
             <div class="mb-3">
                 <label for="username" class="form-label">Username<span class="label-danger">(*)</span>:</label>
@@ -196,7 +197,7 @@
 <!-- Contact Information Form -->
 <div class="tab-pane fade" id="navs-pills-contact-information" role="tabpanel">
     <div class="form-container p-4">
-        <h3 class="form-title">Contact Information: (3/6)</h3>
+        <h3 class="form-title"><i class="bx bx-phone bx-lg"></i> Contact Information: (3/6)</h3>
         <form onsubmit="event.preventDefault()" id="contact_information">
             <div class="row mb-3">
                 <div class="col-md-6">
@@ -349,7 +350,7 @@
 <!-- Employment Information Form -->
 <div class="tab-pane fade" id="navs-pills-employment-information" role="tabpanel">
     <div class="form-container p-4">
-        <h3 class="form-title">Employment Information: (4/6)</h3>
+        <h3 class="form-title"><i class="bx bx-briefcase bx-lg"></i> Employment Information: (4/6)</h3>
         <form onsubmit="event.preventDefault()" id="employment_information">
             <div class="row mb-3">
                 <div class="col-md-6">
@@ -486,7 +487,7 @@
 <!-- Pay Information Form -->
 <div class="tab-pane fade" id="navs-pills-pay-information" role="tabpanel">
     <div class="form-container p-4">
-        <h3 class="form-title">Pay Information: (5/6)</h3>
+        <h3 class="form-title"><i class="bx bx-credit-card bx-lg"></i>  Pay Information: (5/6)</h3>
         <form onsubmit="event.preventDefault()" id="pay_information">
             <div class="row mb-4">
                 <div class="col-md-4">
@@ -648,7 +649,7 @@
 <!-- Government Information Form -->
 <div class="tab-pane fade" id="navs-pills-government-information" role="tabpanel">
     <div class="form-container p-4">
-        <h3 class="form-title">Government Information: (6/6)</h3>
+        <h3 class="form-title"><i class="bx bx-id-card bx-lg"></i> Government Information: (6/6)</h3>
         <form onsubmit="event.preventDefault()" id="government-information">
             <div class="row mb-3">
                 <div class="col-md-6">

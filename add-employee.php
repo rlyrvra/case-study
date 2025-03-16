@@ -42,24 +42,31 @@ if(isset($_GET['m']) && $_GET['m'] === 'u'){
   height: 50px;
   border-radius: 50%;
 }
+
+
 .form-container {
-  background-color: #eaf7ea;
-  border-radius: 0.4rem;
-  border: 2px solid #16423C;
+  border-radius: 0.5rem;
+  border: 2px solid #16423C; /* Bootstrap Primary Blue for a sharp outline */
+  padding: 1.5rem;
 }
+
 .form-container label {
   font-weight: 500;
+  color: #212529; /* Dark gray for better readability */
 }
+
 .form-title {
   font-size: 1.5rem;
   font-weight: bold;
   margin-bottom: 20px;
-  /* color: #fff; */
+  color: #0D6EFD; /* Primary Blue for emphasis */
 }
+
 .form-label {
   font-weight: bold;
-  /* color: #fff; */
+  color: #495057; /* Slightly softer black for better contrast */
 }
+
 </style>
 <head>
 <title> Add Employee | smartWage </title>
@@ -350,9 +357,6 @@ $(document).ready(function () {
           (item.name
               ? '<span class="name">' + escape(item.name) + "</span>"
               : "") +
-          (item.description
-              ? '<span class="description">' + escape(item.description) + "</span>"
-              : "") +
           "</div>"
           );
       },
@@ -446,9 +450,6 @@ $(document).ready(function () {
           "<div>" +
           (item.title
               ? '<span class="name">' + escape(item.title) + "</span>"
-              : "") +
-          (item.description
-              ? '<span class="description">' + escape(item.description) + "</span>"
               : "") +
           "</div>"
           );
@@ -564,9 +565,6 @@ $(document).ready(function () {
           "<div>" +
           (item.full_name
               ? '<span class="name">' + escape(item.full_name) + "</span>"
-              : "") +
-          (item.email_address
-              ? '<span class="description">' + escape(item.email_address) + "</span>"
               : "") +
           "</div>"
           );

@@ -1,61 +1,65 @@
-<div class="controls d-flex justify-content-between flex-column flex-lg-row"> 
-    
+<div class="controls row align-items-center">
+
     <!-- Sort By -->
-    <div class="dropdown sort mx-1 d-flex align align-items-center">
-    <button
-        class="btn btn-primary dropdown-toggle"
-        type="button"
-        data-bs-toggle="dropdown"
-        aria-expanded="false"
-    >
-        Sort By <span class="tf-icons bx bx-sort"></span>
-    </button>
-    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="dropdownMenuButton">
-        <li><a class="dropdown-item" href="#" data-group="sort_by" data-value="full_name">Name</a></li>
-        <li><a class="dropdown-item selected" href="#" data-group="sort_by" data-value="created_at">Date Created</a></li>
-        <li><a class="dropdown-item" href="#" data-group="sort_by" data-value="updated_at">Date Modified</a></li>
-        <li><hr/></li>
-        <li><a class="dropdown-item" href="#" data-group="order_by" data-value="ASC">Ascending</a></li>
-        <li><a class="dropdown-item selected" href="#" data-group="order_by" data-value="DESC">Descending</a></li>
-    </ul>
+    <div class="col-lg-auto col-md-6">
+        <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bx bx-sort-alt-2"></i> Sort By
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#" data-group="sort_by" data-value="full_name">Name</a></li>
+                <li><a class="dropdown-item selected" href="#" data-group="sort_by" data-value="created_at">Date Created</a></li>
+                <li><a class="dropdown-item" href="#" data-group="sort_by" data-value="updated_at">Date Modified</a></li>
+                <li><hr/></li>
+                <li><a class="dropdown-item" href="#" data-group="order_by" data-value="ASC">Ascending</a></li>
+                <li><a class="dropdown-item selected" href="#" data-group="order_by" data-value="DESC">Descending</a></li>
+            </ul>
+        </div>
     </div>
 
-     <!--Entries Per Page Text-->
-     <div class="col-auto align mx-1 d-flex align-items-center"> 
-        <label for="entries-per-page" class="mx-1">Show</label>
-        <select class="form-select" id="entries-per-page" onchange="fetchAllEmployees();">
+    <!-- Entries Per Page -->
+    <div class="col-lg-auto col-md-6 d-flex align-items-center">
+        <label for="entries-per-page" class="me-2">Show</label>
+        <select class="form-select w-auto" id="entries-per-page" onchange="fetchAllEmployees();">
             <option value="10">10</option>
             <option value="25">25</option>
             <option value="50">50</option>
             <option value="100">100</option>
         </select>
-        <label for="entries-per-page" class="mx-1" >Entries</label>  
-    </div> 
+        <label for="entries-per-page" class="ms-2">Entries</label>
+    </div>
 
-    <div class="dropdown filter flex-fill w-25 col-auto mx-1">
+    <!-- Filter by Department (Larger Size) -->
+    <div class="col-lg-4 col-md-6">
         <div class="input-group">
-            <span class="input-group-text"><i class="bx bx-filter fs-4 lh-0"></i></span>
+            <span class="input-group-text"><i class="bx bx-filter"></i></span>
             <select class="form-select selectize-department-sorter" id="selectize_department_sorter" name="selectize-department-sorter" placeholder="Filter Department" onchange="fetchAllEmployees();">
-                
             </select>
         </div>
-    </div>  
-    <div class="search col-auto flex-fill mx-1 d-flex align align-items-center">
+    </div>
+
+    <!-- Search (Smaller Search Dropdown, Larger Text Field) -->
+    <div class="col-lg flex-grow-1">
         <div class="input-group">
-            <span class="input-group-text"><i class="bx bx-category fs-4 lh-0"></i></span>
-            <select class="form-select" id="search_at" name="search_at" placeholder="Search At">
+            <span class="input-group-text"><i class="bx bx-search"></i></span>
+            <select class="form-select" id="search_at" name="search_at" style="width: 70px;">
                 <option value="none" selected>All</option>
                 <option value="full_name">Name</option>
                 <option value="title">Job Title</option>
                 <option value="email">Email</option>
                 <option value="employee_code">Employee Code</option>
             </select>
-            <input type="text" class="form-control" id="searchText" />
-            <button id="openModalBtn" class="btn btn-success" onclick="fetchAllEmployees()"> Search
+            <input type="text" class="form-control" id="searchText" placeholder="Enter search text" style="flex-grow: 2;">
+            <button id="openModalBtn" class="btn btn-success" onclick="fetchAllEmployees()">
+                <i class="bx bx-search"></i> Search
             </button>
         </div>
     </div>
+
 </div>
+
+
+
 
 
 <script>

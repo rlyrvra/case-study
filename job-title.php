@@ -213,10 +213,7 @@ $(document).ready(function () {
           "<div>" +
           (item.name
               ? '<span class="name">' + escape(item.name) + "</span>"
-              : "") +
-          (item.description
-              ? '<span class="description">' + escape(item.description) + "</span>"
-              : "") +
+              : "")  +
           "</div>"
           );
       },
@@ -307,9 +304,6 @@ $(document).ready(function () {
           "<div>" +
           (item.name
               ? '<span class="name">' + escape(item.name) + "</span>"
-              : "") +
-          (item.description
-              ? '<span class="description">' + escape(item.description) + "</span>"
               : "") +
           "</div>"
           );

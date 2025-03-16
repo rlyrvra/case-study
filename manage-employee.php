@@ -213,9 +213,6 @@ $(document).ready(function () {
           (item.name
               ? '<span class="name">' + escape(item.name) + "</span>"
               : "") +
-          (item.description
-              ? '<span class="description">' + escape(item.description) + "</span>"
-              : "") +
           "</div>"
           );
       },

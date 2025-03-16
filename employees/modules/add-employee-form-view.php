@@ -50,10 +50,11 @@ if ($resultSet["total_row_count"] <= 0) {
 
 
 ?>
+<style>.label-danger{color:red !important;}</style>
 <div class="tab-pane fade show active" id="navs-pills-personal-information" role="tabpanel">
     <!-- Form -->
     <div class="form-container p-4">
-        <h3 class="form-title">Personal Information: (1/6)</h3>
+        <h3 class="form-title"><i class="bx bx-user-circle bx-lg"></i>  Personal Information: (1/6)</h3>
         <form onsubmit="event.preventDefault()" id="personal_information">
             <div class="row mb-3">
                 <div class="col-md-4">
@@ -109,7 +110,7 @@ if ($resultSet["total_row_count"] <= 0) {
 </div>
 <div class="tab-pane fade" id="navs-pills-login-credentials" role="tabpanel">
     <div class="form-container p-4">
-        <h3 class="form-title">Login Credentials: (2/6)</h3>
+        <h3 class="form-title"><i class="bx bx-lock-alt bx-lg"></i> Login Credentials: (2/6)</h3>
         <form onsubmit="event.preventDefault()" id="login_credentials">
             <div class="mb-3">
                 <label for="username" class="form-label">Username*:</label>
@@ -120,7 +121,7 @@ if ($resultSet["total_row_count"] <= 0) {
 </div>
 <div class="tab-pane fade" id="navs-pills-contact-information" role="tabpanel">
     <div class="form-container p-4">
-        <h3 class="form-title">Contact Information: (3/6)</h3>
+        <h3 class="form-title"><i class="bx bx-phone bx-lg"></i> Contact Information: (3/6)</h3>
         <form onsubmit="event.preventDefault()" id="contact_information">
             <div class="row mb-3">
                 <div class="col-md-6">
@@ -167,7 +168,7 @@ if ($resultSet["total_row_count"] <= 0) {
 </div>
 <div class="tab-pane fade" id="navs-pills-employment-information" role="tabpanel">
     <div class="form-container p-4">
-        <h3 class="form-title">Employment Information: (4/6)</h3>
+        <h3 class="form-title"><i class="bx bx-briefcase bx-lg"></i> Employment Information: (4/6)</h3>
         <form onsubmit="event.preventDefault()" id="employment_information">
             <div class="row mb-3">
                 <div class="col-md-6">
@@ -245,7 +246,7 @@ if ($resultSet["total_row_count"] <= 0) {
 </div>
 <div class="tab-pane fade" id="navs-pills-pay-information" role="tabpanel">
     <div class="form-container p-4">
-        <h3 class="form-title">Pay Information: (5/6)</h3>
+        <h3 class="form-title"><i class="bx bx-credit-card bx-lg"></i>  Pay Information: (5/6)</h3>
         <form onsubmit="event.preventDefault()" id="pay_information">
             <div class="row mb-4">
                 <div class="col-md-4">
@@ -342,7 +343,7 @@ if ($resultSet["total_row_count"] <= 0) {
 </div>
 <div class="tab-pane fade" id="navs-pills-government-information" role="tabpanel">
     <div class="form-container p-4">
-        <h3 class="form-title">Government Information: (6/6)</h3>
+        <h3 class="form-title"><i class="bx bx-id-card bx-lg"></i> Government Information: (6/6)</h3>
         <form onsubmit="event.preventDefault()" id="government-information">
             <div class="row mb-3">
                 <div class="col-md-6">
