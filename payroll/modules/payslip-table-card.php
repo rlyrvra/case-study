@@ -109,19 +109,51 @@
     <ul class="pagination pagination-lg">
       <!-- Previous Button -->
       <li class="page-item <?= $page <= 1 ? 'disabled' : '' ?>">
-        <a class="page-link" onclick="fetchAllMyAttendance('prev')" aria-label="Previous">
+        <a class="page-link" onclick="fetchAllPayslips('prev')" aria-label="Previous">
           <span aria-hidden="true">&laquo;</span>
         </a>
       </li>
-      <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-        <!-- Page Numbers -->
+
+      <!-- First Page -->
+      <li class="page-item <?= $page === 1 ? 'active' : '' ?>">
+        <a class="page-link" onclick="fetchAllPayslips(1)">1</a>
+      </li>
+
+      <!-- Ellipsis Before Current Page -->
+      <?php if ($page > 3): ?>
+        <li class="page-item">
+          <a class="page-link" onclick="fetchPage()">...</a>
+        </li>
+      <?php endif; ?>
+
+      <!-- Dynamic Middle Pages -->
+      <?php
+      $start = max(2, $page - 1);
+      $end = min($totalPages - 1, $page + 1);
+      for ($i = $start; $i <= $end; $i++):
+      ?>
         <li class="page-item <?= $i === $page ? 'active' : '' ?>">
-          <a class="page-link" onclick="fetchAllMyAttendance(<?php echo $i ?>)" ><?= $i ?></a>
+          <a class="page-link" onclick="fetchAllPayslips(<?php echo $i ?>)"><?= $i ?></a>
         </li>
       <?php endfor; ?>
+
+      <!-- Ellipsis After Current Page -->
+      <?php if ($page < $totalPages - 2): ?>
+        <li class="page-item">
+          <a class="page-link" onclick="fetchPage()">...</a>
+        </li>
+      <?php endif; ?>
+
+      <!-- Last Page -->
+      <?php if ($totalPages > 1): ?>
+        <li class="page-item <?= $page == $totalPages ? 'active' : '' ?>">
+          <a class="page-link" onclick="fetchAllPayslips(<?= $totalPages ?>)"><?= $totalPages ?></a>
+        </li>
+      <?php endif; ?>
+
       <!-- Next Button -->
       <li class="page-item <?= $page >= $totalPages ? 'disabled' : '' ?>">
-        <a class="page-link" onclick="fetchAllMyAttendance('next')" aria-label="Next">
+        <a class="page-link" onclick="fetchAllPayslips('next')" aria-label="Next">
           <span aria-hidden="true">&raquo;</span>
         </a>
       </li>

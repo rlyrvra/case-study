@@ -35,9 +35,9 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
 />
 
 <!-- Ajax -->
-<script src="leaves/leave-approvals/modules/leave-requests-ajax.js?v1.4"></script>
+<script src="leaves/leave-approvals/modules/leave-requests-ajax.js?v1.5"></script>
 <!-- Scripts -->
-<script src="leaves/leave-approvals/modules/leave-requests-scripts.js?v1.4"></script>
+<script src="leaves/leave-approvals/modules/leave-requests-scripts.js?v1.5"></script>
 
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
