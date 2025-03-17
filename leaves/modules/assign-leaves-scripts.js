@@ -41,6 +41,10 @@ function clearSelectedLeaveTypes(){
 }
 
 function leaveTypeInputTest(){
+    const form = document.getElementById('assign_leave_types_form');
+    if(!form.checkValidity()){
+        return;
+    }
     const employment_type = document.getElementById('employment-type').value;
     if(!employment_type){
         return;

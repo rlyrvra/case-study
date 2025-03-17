@@ -207,7 +207,7 @@ try{
         if ($deleteresult === ActionResult::SUCCESS){
             echo "
             <script>
-            showSuccessDeleteLeaveEntitlement();
+                showSuccessDeleteLeaveEntitlement();
             </script>
             ";
         }

@@ -27,6 +27,31 @@ function getMaxPageValue() {
     return maxPage;
 }
 
+function fetchPage(){
+    Swal.fire({
+        title: 'Enter a Number',
+        input: 'number',
+        inputAttributes: {
+            min: 1,
+            max: getMaxPageValue(),
+            step: 1
+        },
+        showCancelButton: true,
+        confirmButtonText: 'Submit',
+        cancelButtonText: 'Cancel',
+        preConfirm: (value) => {
+            if (!value || isNaN(value)) {
+                Swal.showValidationMessage('Please enter a valid number');
+            }
+            return value;
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetchAllLeaveTypes(result.value);
+        }
+    });
+}
+
 function getSortByColumn(){
     var sortBy = selectedOptions.sort_by;
     return sortBy;
@@ -88,42 +113,49 @@ function showSuccessDelete() {
         title: 'Success!',
         text: 'This leave type has been deleted successfully.',
         icon: 'success',
-        timer: 2000,
         confirmButtonText: 'OK'
     });
 }
 
 function showSuccessCreate() {
+    const modal = $('#add_leave_types_modal');
+    modal.modal('hide');
     Swal.fire({
         title: 'Success!',
         text: 'This leave type has been created successfully.',
         icon: 'success',
-        timer: 2000,
         confirmButtonText: 'OK'
     });
 }
 
 function showSuccessUpdate() {
+    const modal = $('#update_leave_types_modal');
+    modal.modal('hide');
     Swal.fire({
         title: 'Success!',
         text: 'This leave type has been updated successfully.',
         icon: 'success',
-        timer: 2000,
         confirmButtonText: 'OK'
     });
 }
 
 function showDuplicateError() {
+    const modal = $('#add_leave_types_modal');
+    modal.modal('hide');
+    const modal2 = $('#update_leave_types_modal');
+    modal2.modal('hide');
     Swal.fire({
         title: 'Warning!',
         text: 'This leave type already exists.',
-        icon: 'warning',
-        timer: 2000,
         confirmButtonText: 'OK'
     });
 }
 
 function missingFieldValues(fieldName){
+    const modal = $('#add_leave_types_modal');
+    modal.modal.hide();
+    const modal2 = $('#update_leave_types_modal');
+    modal2.modal.hide();
     Swal.fire({
         title: 'Warning!',
         text: `The ${fieldName} is missing. Please fill it up and try again.`,
@@ -133,6 +165,10 @@ function missingFieldValues(fieldName){
 }
 
 function showError(){
+    const modal = $('#add_leave_types_modal');
+    modal.modal.hide();
+    const modal2 = $('#update_leave_types_modal');
+    modal2.modal.hide();
     Swal.fire({
         title: 'Error!',
         text: 'An error has occured. Please try again.',
