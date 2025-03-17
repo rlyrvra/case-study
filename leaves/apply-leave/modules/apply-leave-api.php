@@ -167,15 +167,14 @@ try {
 
                 if ($_FILES['attachments']['size'][$key] > $maxFileSize) {
                     $success = false;
-                    error_log("File size exceeds limit: $originalFileName");
-                    $message = "File size exceeds limit: $originalFileName";
+                    $message .= "File size exceeds limit: $originalFileName";
                     continue;
                 }
 
                 if (!in_array($_FILES['attachments']['type'][$key], $allowedTypes)) {
                     $success = false;
                     error_log("Invalid file type: $originalFileName");
-                    $message = "Invalid file type: $originalFileName";
+                    $message .= "Invalid file type: $originalFileName";
                     continue;
                 }
 
@@ -194,21 +193,20 @@ try {
                     if ($attachmentResult !== ActionResult::SUCCESS) {
                         $success = false;
                         error_log("Failed to save attachment to database: $filePath");
-                        $message = "Failed to save attachment to database: $filePath";
+                        $message .= "Failed to save attachment to database: $filePath";
                     }
                 } else {
                     $success = false;
                     error_log("Failed to move uploaded file: $originalFileName");
-                    $message = "Failed to move uploaded file: $originalFileName";
+                    $message .= "Failed to move uploaded file: $originalFileName";
                 }
             }
 
             // Finalize response based on success
             if ($success) {
-                echo "All attachments uploaded successfully.";
+                die(`<div class="my-5 alert alert-success text-center">All files have been successfully uploaded.</div>`);
             } else {
-                echo "Some attachments failed to upload. Check logs for details.";
-                echo $message;
+                die(`<div class="my-5 alert alert-danger text-center">$message</div>`);
             }
         }
         return;

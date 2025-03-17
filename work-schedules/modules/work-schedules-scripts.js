@@ -337,14 +337,15 @@ function updateWorkScheduleData(data){
     document.getElementById("update_startTime").value = normalizeTime(workSchedule.start_time);
     document.getElementById("update_endTime").value = normalizeTime(workSchedule.end_time);
     document.getElementById("update_isFlextime").checked = workSchedule.is_flextime;
-    if(workSchedule.is_flextime == 1) document.getElementById("update_flextimeOptions").classList.add('show');
+    if(workSchedule.is_flextime == 1) document.getElementById("update_flextimeOptions").classList.add('show'); 
     if(workSchedule.is_flextime == 0) document.getElementById("update_flextimeOptions").classList.remove('show');
     document.getElementById("update_totalHoursPerWeek").value = parseFloat(workSchedule.total_hours_per_week / 6);
     document.getElementById("update_totalWorkHours").value = workSchedule.total_work_hours;
+    updateFlextimeEnabled();
 }
 
 
-function populateWorkSchedulesBreak(data, token = '') {
+function populateWorkSchedulesBreak(data) {
     const tableBody = document.getElementById('update_break_assignment_table_body'); // Ensure we target tbody
     tableBody.innerHTML = "";
     if(tableBody.rows.length >= 5){
@@ -359,8 +360,6 @@ function populateWorkSchedulesBreak(data, token = '') {
     const endDate = new Date(`1970-01-01T${convertTo24Hour(endTime)}`);
     
     const currentBreaks = data[1].break_schedules_data; 
-    const updateButton = document.getElementById('update_work_schedule_button');
-    updateButton.setAttribute('data-token', token);
     currentBreaks.forEach(currentBreak => {
         const row = document.createElement('tr');
         row.setAttribute('data-token', currentBreak.id);
@@ -659,7 +658,7 @@ function createFlextimeEnabled(){
 }
 
 function updateFlextimeEnabled(){
-    const isFlextime = Boolean(document.getElementById('isFlextime').checked);
+    const isFlextime = Boolean(document.getElementById('update_isFlextime').checked);
     if(isFlextime){
         const startTime = document.getElementById('update_startTime');
         startTime.disabled = true;
@@ -690,7 +689,6 @@ function showFormIncomplete(modal){
         title: 'Warning!',
         text: 'Please fill up the create form.',
         icon: 'warning',
-        timer: 2000,
         confirmButtonText: 'OK'
     }).then((result) => {
         if (result.isConfirmed) {
@@ -738,7 +736,6 @@ function showSuccessDeletion() {
         title: 'Success!',
         text: 'This work schedule has been deleted successfully.',
         icon: 'success',
-        timer: 2000,
         confirmButtonText: 'OK'
     });
 }
@@ -748,7 +745,6 @@ function showSuccessDeletionBreakSchedule(){
         title: 'Success!',
         text: 'This break schedule has been removed from the work schedule successfully.',
         icon: 'success',
-        timer: 2000,
         confirmButtonText: 'OK'
     });
 }

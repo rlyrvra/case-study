@@ -122,10 +122,10 @@ try {
         
 
         $employee = isset($workScheduleData['employee']) ? validateInput($workScheduleData['employee'], 'Employee') : '';
-        $start_time = isset($workScheduleData['start_time']) ? 
-            date('Y-m-d H:i:s', strtotime(validateInput($workScheduleData['start_time'], 'Start Time'))) : '1970-01-01 00:00:00';
-        $end_time = isset($workScheduleData['end_time']) ? 
-            date('Y-m-d H:i:s', strtotime(validateInput($workScheduleData['end_time'], 'End Time'))) : '1970-01-01 00:00:00';
+        $start_time = isset($workScheduleData['start_time']) && $workScheduleData['start_time'] !== '' ? 
+            date('Y-m-d H:i:s', strtotime(validateInput($workScheduleData['start_time'], 'Start Time'))) : '2024-01-01 00:00:00';
+        $end_time = isset($workScheduleData['end_time']) && $workScheduleData['end_time'] !== '' ? 
+            date('Y-m-d H:i:s', strtotime(validateInput($workScheduleData['end_time'], 'End Time'))) : '2024-01-01 23:59:59';
         $is_flex_time = isset($workScheduleData['is_flex_time']) && $workScheduleData['is_flex_time'] === 'true' ? true : false;
         $core_start_time = null; $core_end_time = null; $total_hrs_per_week = null;
         if($is_flex_time === true){
@@ -236,6 +236,7 @@ try {
         $workScheduleData = $_POST['work_schedule'] ?? null;
         $breakDifferences = $_POST['break_schedules'] ?? null; 
         $workScheduleId = $_POST['token'] ?? null; 
+        // echo "workScheduleId " . $workScheduleId . "<br>";
         if (!$workScheduleData) {
             return;
         }
@@ -271,13 +272,12 @@ try {
         $workScheduleRepository = new WorkScheduleRepository($workScheduleDao);
         $workScheduleService = new WorkScheduleService($workScheduleRepository);
         $employeeId = $workScheduleService->fetchAllWorkSchedules($selectedColumns, $filterCriteria, [], 1)['result_set'][0]['employee_id'];
-
         // echo "Emp-ID: " . $employeeId . "<br>";
 
         $employee = $employeeId;
-        $start_time = isset($workScheduleData['start_time']) ? 
+        $start_time = isset($workScheduleData['start_time']) && $workScheduleData['start_time'] !== '' ? 
             date('Y-m-d H:i:s', strtotime(validateInput($workScheduleData['start_time'], 'Start Time'))) : '1970-01-01 00:00:00';
-        $end_time = isset($workScheduleData['end_time']) ? 
+        $end_time = isset($workScheduleData['end_time']) && $workScheduleData['end_time'] !== ''? 
             date('Y-m-d H:i:s', strtotime(validateInput($workScheduleData['end_time'], 'End Time'))) : '1970-01-01 00:00:00';
         $is_flex_time = isset($workScheduleData['is_flex_time']) && $workScheduleData['is_flex_time'] === 'true' ? true : false;
         $core_start_time = null; $core_end_time = null; $total_hrs_per_week = null;

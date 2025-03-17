@@ -214,6 +214,8 @@ let currentBreakSchedule;
 function fetchWorkScheduleAndBreak(button){
     const row = button.closest('tr');  // Get the closest row
     const token = row.getAttribute('data-id');
+    const updateButton = document.getElementById('update_work_schedule_button');
+    updateButton.setAttribute('data-token', token);
     $.ajax({
         url: 'work-schedules/modules/work-schedules-break-api',
         type: 'POST',
@@ -224,7 +226,7 @@ function fetchWorkScheduleAndBreak(button){
         success: function(response) {
             $('#fetch_break_schedule').html(response);
             updateWorkScheduleData(currentBreakSchedule);
-            populateWorkSchedulesBreak(currentBreakSchedule, token);
+            populateWorkSchedulesBreak(currentBreakSchedule);
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log("AJAX Error: " + textStatus + ": " + errorThrown);

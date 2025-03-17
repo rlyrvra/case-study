@@ -173,7 +173,7 @@ if(isset($_GET['s']) && $_GET['s'] == true){
                           
                           <div class="mt-3">
                               <label for="files" class="form-label fw-semibold">Attachments (jpg, png, pdf):</label>
-                              <input type="file" class="form-control shadow-sm" id="files" name="files">
+                              <input type="file" class="form-control shadow-sm" id="files" name="files" multiple>
                           </div>
 
                           <div class="mt-4 d-flex justify-content-end">
