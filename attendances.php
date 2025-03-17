@@ -33,7 +33,7 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
 <!-- Ajax -->
 <script src="attendance/attendance/modules/attendance-ajax.js?v1.2"></script>
 <!-- Scripts -->
-<script src="attendance/attendance/modules/attendance-scripts.js?v1.0"></script>
+<script src="attendance/attendance/modules/attendance-scripts.js?v1.0.2"></script>
 
 <!---Skeletons--->
 <script src="requests/table-skeleton.js?v1.2"></script>
