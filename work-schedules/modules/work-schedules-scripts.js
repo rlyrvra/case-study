@@ -212,6 +212,14 @@ function addWorkSchedulesBreakCreate() {
 
     const startTime = document.getElementById("startTime").value;
     const endTime = document.getElementById("endTime").value;
+
+    if(startTime === '' && endTime === ''){
+        showTimeNullable();
+        return;
+    }
+
+
+
     const startDate = new Date(`1970-01-01T${convertTo24Hour(startTime)}`);
     const endDate = new Date(`1970-01-01T${convertTo24Hour(endTime)}`);
     const row = document.createElement('tr');
@@ -452,6 +460,13 @@ function updateWorkSchedulesBreakCreate(){
     }
     const startTime = document.getElementById("update_startTime").value;
     const endTime = document.getElementById("update_endTime").value;
+
+    if(startTime === '' && endTime === ''){
+        showTimeNullable();
+        return;
+    }
+
+
     const startDate = new Date(`1970-01-01T${convertTo24Hour(startTime)}`);
     const endDate = new Date(`1970-01-01T${convertTo24Hour(endTime)}`);
 
@@ -702,6 +717,18 @@ function showSuccessCreate(message = 'The work schedule has been created success
         title: 'Success!',
         text: message,
         icon: indicator,
+        confirmButtonText: 'OK'
+    });
+}
+
+
+function showTimeNullable() {
+    $('#add_work_schedules').modal('hide');
+    $('#update_work_schedules').modal('hide');
+    Swal.fire({
+        title: 'Error!',
+        text: 'Flexitime cannot have assigned breaks.',
+        icon: 'warning',
         confirmButtonText: 'OK'
     });
 }
