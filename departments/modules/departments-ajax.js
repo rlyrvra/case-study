@@ -21,6 +21,7 @@ function fetchAllDepartments(page = 1) {
         endDate = $("#dateEnd").val();
     }
     var search = $("#searchText").val();
+    var viewMode = getViewMode();
 
 
     var loadingSpinner = document.getElementById("loadingSpinner");
@@ -53,7 +54,8 @@ function fetchAllDepartments(page = 1) {
             filter_search: search,
             filter_date_column: dateColumn,
             filter_startDate: startDate,
-            filter_endDate: endDate
+            filter_endDate: endDate,
+            view_mode: viewMode
         },
         success: function(response) {
             loadingSpinner.classList.add("visually-hidden");

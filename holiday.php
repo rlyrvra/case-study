@@ -34,7 +34,7 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
 <!-- Ajax -->
 <script src="holidays/modules/holidays-ajax.js?v1.5"></script>
 <!-- Scripts -->
-<script src="holidays/modules/holidays-scripts.js?v1.4"></script>
+<script src="holidays/modules/holidays-scripts.js?v1.5"></script>
 
 <!---Skeletons--->
 <script src="requests/table-skeleton.js?v1.2"></script>

@@ -13,6 +13,31 @@ function getPage(page){
     return page;
 }
 
+function fetchPage(){
+    Swal.fire({
+        title: 'Enter a Number',
+        input: 'number',
+        inputAttributes: {
+            min: 1,
+            max: getMaxPageValue(),
+            step: 1
+        },
+        showCancelButton: true,
+        confirmButtonText: 'Submit',
+        cancelButtonText: 'Cancel',
+        preConfirm: (value) => {
+            if (!value || isNaN(value)) {
+                Swal.showValidationMessage('Please enter a valid number');
+            }
+            return value;
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetchAllWorkSchedules(result.value);
+        }
+    });
+}
+
 function getMaxPageValue() {
     // Find all <a> tags inside the <ul> with id "pagination"
     let pageNumbers = $("#pagination .page-link").map(function() {
@@ -420,6 +445,7 @@ function updateWorkSchedulesBreakCreate(){
     if(rowAddedUpdate){
         return;
     }
+
     const tableBody = document.getElementById('update_break_assignment_table_body'); // Ensure we target tbody
     if(tableBody.rows.length >= 5){
         return;
@@ -591,6 +617,54 @@ function findDifferences(currentBreakSchedules, updatedBreakSchedules) {
     return differences;
 }
 
+function createFlextimeEnabled(){
+    const isFlextime = Boolean(document.getElementById('isFlextime').checked);
+    if(isFlextime){
+        const startTime = document.getElementById('startTime');
+        startTime.disabled = true;
+        startTime.required = false;
+        startTime.value = "";
+        const endTime = document.getElementById('endTime');
+        endTime.disabled = true;
+        endTime.required = false;
+        endTime.value = "";
+        const workHrs = document.getElementById('totalWorkHours');
+        workHrs.value = 0.00;
+    }else{
+        const startTime = document.getElementById('startTime');
+        startTime.disabled = false;
+        startTime.required = true;
+        const endTime = document.getElementById('endTime');
+        endTime.disabled = false;
+        endTime.required = true;
+        const workHrs = document.getElementById('update_totalWorkHours');
+        workHrs.value = 0.00;
+    }
+    
+}
+
+function updateFlextimeEnabled(){
+    const isFlextime = Boolean(document.getElementById('isFlextime').checked);
+    if(isFlextime){
+        const startTime = document.getElementById('update_startTime');
+        startTime.disabled = true;
+        startTime.required = false;
+        startTime.value = "";
+        const endTime = document.getElementById('update_endTime');
+        endTime.disabled = true;
+        endTime.required = false;
+        endTime.value = "";
+    }else{
+        const startTime = document.getElementById('update_startTime');
+        startTime.disabled = false;
+        startTime.required = true;
+        const endTime = document.getElementById('update_endTime');
+        endTime.disabled = false;
+        endTime.required = true;
+        
+    }
+    
+}
 
 
 

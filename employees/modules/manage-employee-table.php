@@ -6,67 +6,102 @@
             $roleColors = [
                 'Admin' => 'bg-danger', // Red
                 'Manager' => 'bg-warning', // Yellow
-                'Employee' => 'bg-success', // Green
-                'Intern' => 'bg-info' // Blue
+                'Supervisor' => 'bg-success', // Green
             ];
             $role = htmlspecialchars($row['access_role']);
             $roleBadge = isset($roleColors[$role]) ? $roleColors[$role] : 'bg-secondary'; // Default gray
             ?>
             <div class="col">
-                <div class="card border-0 p-3 shadow-sm transition-shadow hover-shadow-lg">
-                    <div class="d-flex align-items-center">
-                        <div class="me-3">
-                            <?php
-                            if (!isset($row['profile_picture']) || empty($row['profile_picture'])) {
-                                echo "<img src='https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&s=200' alt='Profile Picture' class='rounded-circle border' width='80' height='80'>";
-                            } else {
-                                echo "<img src='data:image/jpg;base64," . htmlspecialchars($row['profile_picture']) . "' alt='Profile Picture' class='rounded-circle border' width='80' height='80'>";
-                            }
-                            ?>
-                        </div>
-                        <div>
-                            <h5 class="mb-1"><?php echo htmlspecialchars($row['full_name']); ?></h5>
-                            <p class="text-muted mb-1"><?php echo htmlspecialchars($row['job_title_title']); ?></p>
-                            <span class="badge <?php echo $roleBadge; ?>"><?php echo $role; ?></span>
+              <div class="card border-0 p-3 shadow-sm transition-shadow hover-shadow-lg">
+                  <div class="d-flex align-items-center">
+                      <div class="me-3">
+                          <?php
+                          if (!isset($row['profile_picture']) || empty($row['profile_picture'])) {
+                              echo "<img src='https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&s=200' alt='Profile Picture' class='rounded-circle border' width='80' height='80'>";
+                          } else {
+                              echo "<img src='data:image/jpg;base64," . htmlspecialchars($row['profile_picture']) . "' alt='Profile Picture' class='rounded-circle border' width='80' height='80'>";
+                          }
+                          ?>
+                      </div>
+                      <div>
+                          <?php 
+                          $fullName = htmlspecialchars($row['full_name']);
+                          $shortFullName = (strlen($fullName) > 40) ? substr($fullName, 0, 17) . '...' : $fullName;
+
+                          $jobTitle = htmlspecialchars($row['job_title_title']);
+                          $shortJobTitle = (strlen($jobTitle) > 40) ? substr($jobTitle, 0, 17) . '...' : $jobTitle;
+                          ?>
+                          
+                          <h5 class="mb-1" title="<?php echo $fullName; ?>">
+                              <span class="text-truncate d-inline-block" style="max-width: 200px;">
+                                  <?php echo $shortFullName; ?>
+                              </span>
+                          </h5>
+                          
+                          <p class="text-muted mb-1" title="<?php echo $jobTitle; ?>">
+                              <span class="text-truncate d-inline-block" style="max-width: 200px;">
+                                  <?php echo $shortJobTitle; ?>
+                              </span>
+                          </p>
+
+                          <span class="badge <?php echo $roleBadge; ?>"><?php echo $role; ?></span>
+                      </div>
+                  </div>
+
+                  <hr class="my-3">
+
+                  <div class="row">
+                    <?php 
+                    $email = htmlspecialchars($row['email_address']);
+                    $shortEmail = (strlen($email) > 30) ? substr($email, 0, 27) . '...' : $email;
+                    $phone = htmlspecialchars($row['phone_number']);
+                    $shortPhoneNumber = (strlen($phone) > 30) ? substr($phone, 0, 27) . '...' : $phone;
+                    ?>
+                    <div class="col-12 col-md-6 mb-2">
+                        <small class="text-muted">Email</small>
+                        <div class="text-black" title="<?php echo $email; ?>">
+                            <span class="d-inline-block text-truncate w-100" style="max-width: 100%;">
+                                <?php echo $shortEmail; ?>
+                            </span>
                         </div>
                     </div>
 
-                    <hr class="my-3">
-
-                    <div class="row">
-                        <div class="col-md-6 mb-2">
-                            <small class="text-muted">Email</small>
-                            <div class="text-black"><?php echo htmlspecialchars($row['email_address']); ?></div>
-                        </div>
-                        <div class="col-md-6 mb-2">
-                            <small class="text-muted">Employee Code</small>
-                            <div class="text-black"><?php echo htmlspecialchars($row['employee_code']); ?></div>
-                        </div>
-                        <div class="col-md-6 mb-2">
-                            <small class="text-muted">Phone</small>
-                            <div class="text-black"><?php echo htmlspecialchars($row['phone_number']); ?></div>
-                        </div>
-                        <div class="col-md-6">
-                            <small class="text-muted">Hire Date</small>
-                            <div class="text-black"><?php echo htmlspecialchars($row['date_of_hire']); ?></div>
+                    <div class="col-12 col-md-6 mb-2">
+                        <small class="text-muted">Employee Code</small>
+                        <div class="text-black"><?php echo htmlspecialchars($row['employee_code']); ?></div>
+                    </div>
+                    
+                    <div class="col-12 col-md-6 mb-2">
+                        <small class="text-muted">Phone</small>
+                        <div class="text-black" title="<?php echo $phone; ?>">
+                            <span class="d-inline-block text-truncate w-100" style="max-width: 100%;">
+                                <?php echo $shortPhoneNumber; ?>
+                            </span>
                         </div>
                     </div>
-
-                    <div class="d-flex justify-content-between align-items-center mt-3">
-                        <span class="text-muted">#<?php echo ++$i; ?></span>
-                        <div class="dropdown">
-                            <button class="btn btn-sm btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Actions
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="add-employee?m=v&token=<?php echo htmlspecialchars(hash('sha256', $row['id'])); ?>"><i class="bx bx-user"></i> View</a></li>
-                                <li><a class="dropdown-item" href="add-employee?m=u&token=<?php echo htmlspecialchars(hash('sha256', $row['id'])); ?>"><i class="bx bx-edit-alt"></i> Edit</a></li>
-                                <li><a class="dropdown-item text-danger" href="#" onclick="confirmDeleteEmployee(this)" data-id="<?php echo htmlspecialchars($row['id']); ?>"><i class="bx bx-trash"></i> Delete</a></li>
-                            </ul>
-                        </div>
+                    
+                    <div class="col-12 col-md-6">
+                        <small class="text-muted">Hire Date</small>
+                        <div class="text-black"><?php echo htmlspecialchars($row['date_of_hire']); ?></div>
                     </div>
                 </div>
-            </div>
+
+
+                  <div class="d-flex justify-content-between align-items-center mt-3">
+                      <span class="text-muted">#<?php echo ++$i; ?></span>
+                      <div class="dropdown">
+                          <button class="btn btn-sm btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                              Actions
+                          </button>
+                          <ul class="dropdown-menu">
+                              <li><a class="dropdown-item" href="add-employee?m=v&token=<?php echo htmlspecialchars(hash('sha256', $row['id'])); ?>"><i class="bx bx-user"></i> View</a></li>
+                              <li><a class="dropdown-item" href="add-employee?m=u&token=<?php echo htmlspecialchars(hash('sha256', $row['id'])); ?>"><i class="bx bx-edit-alt"></i> Edit</a></li>
+                              <li><a class="dropdown-item text-danger" href="#" onclick="confirmDeleteEmployee(this)" data-id="<?php echo htmlspecialchars($row['id']); ?>"><i class="bx bx-trash"></i> Delete</a></li>
+                          </ul>
+                      </div>
+                  </div>
+              </div>
+          </div>
         <?php endforeach; ?>
     </div>
 <?php else: ?>

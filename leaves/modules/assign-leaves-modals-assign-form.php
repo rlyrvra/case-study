@@ -1,56 +1,48 @@
-<!-- Modal -->
+<!-- Assign Leaves Form Modal -->
 <div class="modal fade" id="assign_leave_types_modal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title" id="assign_leave_types_modalTitle">Assign Leave Types</h2>
-                <button
-                    type="button"
-                    class="btn-close"
-                    data-bs-dismiss="modal"
-                    aria-label="Close"
-                ></button>
+        <div class="modal-content shadow-sm border-0">
+            <div class="modal-header bg-light border-bottom">
+                <h2 class="modal-title fs-5 fw-semibold text-success" id="assign_leave_types_modalTitle">
+                    <i class="bx bx-calendar"></i> Assign Leave Types
+                </h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             
             <div class="modal-body">
                 <form id="leave_type_form" onsubmit="event.preventDefault()">
                     <div class="row mb-4">
-                        <label for="select_employee" class="form-label text-center"><strong class="display-5">Employee:</strong></label>
-                        <select class="form-select selectize_select_employee" id="select_employee" name="select_Employee" placeholder="Select Employee" required onchange="fetchEmployeeLeaves();">
+                        <label for="select_employee" class="form-label fw-semibold">Employee <span class="text-danger">*</span></label>
+                        <select class="form-select selectize_select_employee shadow-sm" id="select_employee" name="select_Employee" required onchange="fetchEmployeeLeaves();">
                         </select>
                     </div>
-
+                    
                     <hr/>
-
+                    
                     <div class="row mb-4 justify-content-center">
-                        <button type="button" class="btn-lg btn-info col-auto mx-auto" 
-                        data-bs-target="#leaveEntitlementModal"
-                        data-bs-toggle="modal" 
-                        data-bs-dismiss="modal"
-                        >
-                        <i class="bx bx-label bx-sm"></i>Assign Leaves by Employment Type</button>
-                        <button type="button" class="btn-lg btn-primary col-auto mx-auto" 
-                        onclick="fetchEmployeeLeaves()"
-                        >
-                        Fetch Employee Credits</button>
+                        <button type="button" class="btn-lg btn-info col-auto mx-auto" data-bs-target="#leaveEntitlementModal" data-bs-toggle="modal" data-bs-dismiss="modal">
+                            <i class="bx bx-label bx-sm"></i> Assign Leaves by Employment Type
+                        </button>
+                        <button type="button" class="btn-lg btn-primary col-auto mx-auto" onclick="fetchEmployeeLeaves()">
+                            Fetch Employee Credits
+                        </button>
                     </div>
+                    
                     <hr/>
+                    
                     <div class="container-fluid card pt-5 pb-3 mt-5">
-                        <h5>Leave Credits of Employee </h5>
+                        <h5>Leave Credits of Employee</h5>
                         <div id="employee-leave-credits-table" class="table-responsive text-no-wrap">
                             <?php include __DIR__ . '/assign-leaves-table.php'; ?>
                         </div>
                     </div>
-                
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-secondary" 
-                        data-bs-dismiss="modal"
-                        aria-label="Close"
-                        >
-                        <i class="bx bx-arrow-back bx-sm"></i>Close
-                        </button>
-                    </div>
                 </form>
+            </div>
+            
+            <div class="modal-footer border-top bg-light">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="bx bx-arrow-back bx-sm"></i> Close
+                </button>
             </div>
         </div>
         <?php include __DIR__ . '/assign-leaves-fetch-leave-types.php'; ?>

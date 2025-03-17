@@ -13,6 +13,31 @@ function getPage(page){
     return page;
 }
 
+function fetchPage(){
+    Swal.fire({
+        title: 'Enter a Number',
+        input: 'number',
+        inputAttributes: {
+            min: 1,
+            max: getMaxPageValue(),
+            step: 1
+        },
+        showCancelButton: true,
+        confirmButtonText: 'Submit',
+        cancelButtonText: 'Cancel',
+        preConfirm: (value) => {
+            if (!value || isNaN(value)) {
+                Swal.showValidationMessage('Please enter a valid number');
+            }
+            return value;
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetchAllHolidays(result.value);
+        }
+    });
+}
+
 function getMaxPageValue() {
     // Find all <a> tags inside the <ul> with id "pagination"
     let pageNumbers = $("#pagination .page-link").map(function() {
@@ -40,28 +65,6 @@ function getOrderBy(){
 function getByDate(){
     var byDate = selectedOptions.by_date;
     return byDate;
-}
-
-function showSuccessCreate() {
-    $('#add-holidays-modal').modal('hide');
-    Swal.fire({
-        title: 'Success!',
-        text: 'This holiday has been created successfully.',
-        icon: 'success',
-        timer: 2000,
-        confirmButtonText: 'OK'
-    });
-}
-
-function showSuccessUpdate(){
-    $('#update-holidays-modal').modal('hide');
-    Swal.fire({
-        title: 'Success!',
-        text: 'This holiday has been updated successfully.',
-        icon: 'success',
-        timer: 2000,
-        confirmButtonText: 'OK'
-    });
 }
 
 function missingFieldValues(fieldName){
@@ -183,3 +186,48 @@ document.addEventListener('DOMContentLoaded', function() {
     // Listen for window resize events and adjust the calendar view accordingly
     window.addEventListener('resize', checkScreenSize);
 });
+
+
+function showSuccessCreate() {
+    $('#add-holidays-modal').modal('hide');
+    Swal.fire({
+        title: 'Success!',
+        text: 'This holiday has been created successfully.',
+        icon: 'success',
+        timer: 2000,
+        confirmButtonText: 'OK'
+    });
+}
+
+function showSuccessUpdate(){
+    $('#update-holidays-modal').modal('hide');
+    Swal.fire({
+        title: 'Success!',
+        text: 'This holiday has been updated successfully.',
+        icon: 'success',
+        timer: 2000,
+        confirmButtonText: 'OK'
+    });
+}
+
+function showError(message) {
+    Swal.fire({
+        title: 'Error!',
+        text: message,
+        icon: 'error',
+        confirmButtonText: 'OK'
+    });
+}
+
+function showFatalError(message) {
+    Swal.fire({
+        title: 'Fatal Error!',
+        html: `${message} <br> Please contact the system administrator.`,
+        icon: 'error',
+        confirmButtonText: 'OK'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            location.reload();
+        }
+    });
+}

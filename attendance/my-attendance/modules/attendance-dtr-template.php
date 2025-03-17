@@ -157,6 +157,31 @@
   </thead>
   <tbody>
     <?php foreach ($myAttendance as $index => $attendance): ?>
+      <?php if ($index > 0 && $index % 30 === 0): ?>
+        </tbody></table>
+        <div style="page-break-after: always;"></div>
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Date</th>
+              <th>Day of Week</th>
+              <th>Check In Time</th>
+              <th>Check Out Time</th>
+              <th>Total Break Duration</th>
+              <th>Total Hours Worked</th>
+              <th>Late Check In</th>
+              <th>Early Check Out</th>
+              <th>Overtime Hours</th>
+              <th>Overtime Approval</th>
+              <th>Status</th>
+              <th>Remarks</th>
+            </tr>
+          </thead>
+          <tbody>
+      <?php endif; ?>
+
+
       <tr>
         <td><?= $index + 1 ?></td>
         <td><?= htmlspecialchars(date("F j, Y", strtotime($attendance['date']))) ?? '' ?></td>
@@ -203,6 +228,24 @@
   </thead>
   <tbody>
     <?php foreach ($myBreaks as $index => $rowBreak): ?>
+      <?php if ($index > 0 && $index % 30 === 0): ?>
+        </tbody></table>
+        <div style="page-break-after: always;"></div>
+        <table>
+          <thead>
+            <tr>
+              <th style='width: 1%;'>#</th>
+              <th>Break Type</th>
+              <th>Date</th>
+              <th>Start Time</th>
+              <th>End Time</th>
+              <th>Break Duration in Minutes</th>
+            </tr>
+          </thead>
+          <tbody>
+      <?php endif; ?>
+
+
       <tr>
         <?php if (empty($rowBreak['start_time'])) {
           continue;

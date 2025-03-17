@@ -129,6 +129,8 @@ try {
         $is_flex_time = isset($workScheduleData['is_flex_time']) && $workScheduleData['is_flex_time'] === 'true' ? true : false;
         $core_start_time = null; $core_end_time = null; $total_hrs_per_week = null;
         if($is_flex_time === true){
+            $start_time =  '2024-01-01 00:00:00';
+            $end_time = '2024-01-01 23:59:59';
             $total_hrs_per_week = isset($workScheduleData['total_hrs_per_week']) ? (float) validateInput($workScheduleData['total_hrs_per_week'], 'Total Hours Per Week') * 6 : null;
         }
         $total_work_hrs = isset($workScheduleData['total_work_hrs']) ? (float) (validateNumericIdentifier($workScheduleData['total_work_hrs'], 1, 4, 'Total Work Hours')): null;
@@ -280,6 +282,8 @@ try {
         $is_flex_time = isset($workScheduleData['is_flex_time']) && $workScheduleData['is_flex_time'] === 'true' ? true : false;
         $core_start_time = null; $core_end_time = null; $total_hrs_per_week = null;
         if($is_flex_time === true){
+            $start_time =  '2024-01-01 00:00:00';
+            $end_time = '2024-01-01 23:59:59';
             $total_hrs_per_week = isset($workScheduleData['total_hrs_per_week']) ? (float) validateInput($workScheduleData['total_hrs_per_week'], 'Total Hours Per Week') * 6 : null;
         }
         $total_work_hrs = isset($workScheduleData['total_work_hrs']) ? (float) (validateNumericIdentifier($workScheduleData['total_work_hrs'], 1, 4, 'Total Work Hours')): null;

@@ -1,9 +1,3 @@
-<?php
-// table.php
-// Expecting $data to be passed from api.php
-?>
-<style>
-</style>
 <!-- Table Rendering -->
 <table class="table table-bordered table-hover table-striped">
   <thead>

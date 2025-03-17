@@ -83,7 +83,6 @@ function fetchAllWorkSchedules(page = 1){
 function createWorkSchedule(){
     const form = document.getElementById("work_schedules_add_form");
     if(!form.checkValidity()){
-        showFormIncomplete();
         return;
     }
     const employee = document.getElementById('select_employee').value;
@@ -147,6 +146,10 @@ function deleteWorkSchedule(button){
 }
 
 function updateWorkScheduleBreak(button){
+    const form = document.getElementById("work_schedules_update_form");
+    if(!form.checkValidity()){
+        return;
+    }
     const token = parseInt(button.getAttribute('data-token'), 10);
     const start_time = document.getElementById('update_startTime').value;
     const end_time = document.getElementById('update_endTime').value;

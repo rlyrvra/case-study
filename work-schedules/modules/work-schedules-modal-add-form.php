@@ -43,7 +43,7 @@
 
                         <!-- Flextime Checkbox -->
                         <div class="col-md-12 form-check">
-                            <input class="form-check-input shadow-sm" type="checkbox" id="isFlextime" data-bs-toggle="collapse" data-bs-target="#flextimeOptions">
+                            <input class="form-check-input shadow-sm" type="checkbox" id="isFlextime" data-bs-toggle="collapse" data-bs-target="#flextimeOptions" onchange="createFlextimeEnabled();">
                             <label class="form-check-label fw-semibold" for="isFlextime">Enable Flextime</label>
                         </div>
 

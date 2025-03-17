@@ -96,63 +96,91 @@ if(isset($_GET['s']) && $_GET['s'] == true){
 
       <!-- / Navbar -->
       <div class="content-wrapper">
-        <div class="container-fluid">
-          <div class="container-xxl card p-5 mt-5">
-            <div class="container-fluid mb-3 d-flex align-items-center">
-                <h1 class="text-center mb-4 mx-auto display-1">Apply Leave</h1>
-            </div>
-
+        <div class="container-fluid pt-5 pb-5">
+          <div class="container-fluid mb-3 d-flex justify-content-between flex-column flex-lg-row">
+              <h1 class="display-1">Apply Leave</h1>
+          </div>
+          <div class="container-xxl card p-5">
             <div class="row">
               <!-- Form Section -->
               <div id="response-test"></div>
+              <style>
+                  .label-danger {
+                      color: red;
+                  }
+              </style>
               <div class="col-md-4">
-                  <div class="form-section border card p-4">
-                      <h5 id="form_indicator">Apply for Leave Form</h5>
-                      <form onsubmit="event.preventDefault()" id="apply_leave_form">
-                          <div class="mb-3">
-                              <label for="leaveType" class="form-label">Select Leave Type*</label>
-                              <select class="form-select" id="leaveType" name="leaveType" required onchange="selectEmployeeLeaves(); setStartDate();">
-                              </select>
+                  <div class="card shadow-sm border-0 p-4">
+                      <h2 class="fs-5 fw-semibold text-primary mb-3">
+                          <i class="bx bx-calendar-check"></i> Apply for Leave
+                      </h2>
+                      <form id="apply_leave_form" onsubmit="event.preventDefault(); createLeaveRequest();">
+                          <div class="row g-3">
+                              <div class="col-md-12">
+                                  <label for="leaveType" class="form-label fw-semibold">Select Leave Type <span class="text-danger">*</span></label>
+                                  <select class="form-select shadow-sm" id="leaveType" name="leaveType" required onchange="selectEmployeeLeaves(); setStartDate();">
+                                  </select>
+                              </div>
                           </div>
-                          <div class="mb-3">
-                              <label for="remainingBalance" class="form-label">Remaining Leave Balance:</label>
-                              <input type="text" class="form-control" id="remainingBalance" name="remainingBalance" readonly value="0">
+
+                          <div class="row g-3 mt-3">
+                              <div class="col-md-12">
+                                  <label for="remainingBalance" class="form-label fw-semibold">Remaining Leave Balance:</label>
+                                  <input type="text" class="form-control shadow-sm" id="remainingBalance" name="remainingBalance" readonly value="0">
+                              </div>
                           </div>
-                          <div class="mb-3">
-                              <label for="startDate" class="form-label">Start Date*</label>
-                              <input type="date" class="form-control" id="startDate" name="startDate" required onchange="setEndDateMin(this)" disabled>
+                          
+                          <div class="row g-3 mt-3">
+                              <div class="col-md-12">
+                                  <label for="startDate" class="form-label fw-semibold">Start Date <span class="text-danger">*</span></label>
+                                  <input type="date" class="form-control shadow-sm" id="startDate" name="startDate" required onchange="setEndDateMin(this)" disabled>
+                              </div>
                           </div>
-                          <div class="mb-3">
-                              <label for="endDate" class="form-label">End Date*</label>
-                              <input type="date" class="form-control" id="endDate" name="endDate" required onchange="calculateTotalNumberOfDays()" disabled>
-                          </div>
-                          <div class="form-check mb-3">
-                              <input class="form-check-input" type="checkbox" id="isHalfday" data-bs-toggle="collapse" data-bs-target="#halfdayOptions" onchange="calculateTotalNumberOfDays()">
-                              <label class="form-check-label" for="isHalfday">Is Halfday</label>
-                          </div>
-                          <div class="collapse" id="halfdayOptions">
-                            <div class="card card-body">
-                              <label for="half_day_options" class="form-label">Work Hours:</label>
-                              <select class="form-select" id="half_day_options" name="half_day_options">
-                                <option value="" disabled selected>Select a cycle...</option>
-                                <option value="First Half">First Half</option>
-                                <option value="Second Half">Second Half</option>
-                              </select>
+
+                          
+                          <div class="row g-3 mt-3">
+                            <div class="col-md-12">
+                                <label for="endDate" class="form-label fw-semibold">End Date <span class="text-danger">*</span></label>
+                                <input type="date" class="form-control shadow-sm" id="endDate" name="endDate" required onchange="calculateTotalNumberOfDays()" disabled>
                             </div>
                           </div>
-                          <div class="mb-3">
-                              <label for="totalDays" class="form-label">Total Number of Days:</label>
-                              <input type="number" class="form-control" id="totalDays" name="totalDays" readonly>
+
+                          
+                          <div class="form-check mt-3">
+                              <input class="form-check-input" type="checkbox" id="isHalfday" data-bs-toggle="collapse" data-bs-target="#halfdayOptions" onchange="calculateTotalNumberOfDays()">
+                              <label class="form-check-label fw-semibold" for="isHalfday">Is Halfday</label>
                           </div>
-                          <div class="mb-3">
-                              <label for="reason" class="form-label">Reason:</label>
-                              <textarea class="form-control" id="reason" name="reason" rows="3" required></textarea>
+                          <div class="collapse" id="halfdayOptions">
+                              <div class="card card-body shadow-sm mt-2">
+                                  <label for="half_day_options" class="form-label fw-semibold">Work Hours:</label>
+                                  <select class="form-select shadow-sm" id="half_day_options" name="half_day_options">
+                                      <option value="" disabled selected>Select a cycle...</option>
+                                      <option value="First Half">First Half</option>
+                                      <option value="Second Half">Second Half</option>
+                                  </select>
+                              </div>
                           </div>
-                          <div class="mb-3">
-                              <label for="files" class="form-label">Attachments (jpg, png, pdf):</label>
-                              <input type="file" class="form-control" id="files" name="files">
+                          
+                          <div class="mt-3">
+                              <label for="totalDays" class="form-label fw-semibold">Total Number of Days:</label>
+                              <input type="number" class="form-control shadow-sm" id="totalDays" name="totalDays" readonly>
                           </div>
-                          <button type="submit" class="btn btn-primary w-100" onclick="createLeaveRequest()">Apply for Leave</button>
+                          
+                          <div class="mt-3">
+                              <label for="reason" class="form-label fw-semibold">Reason <span class="text-danger">*</span></label>
+                              <textarea class="form-control shadow-sm" id="reason" name="reason" rows="3" required></textarea>
+                          </div>
+                          
+                          <div class="mt-3">
+                              <label for="files" class="form-label fw-semibold">Attachments (jpg, png, pdf):</label>
+                              <input type="file" class="form-control shadow-sm" id="files" name="files">
+                          </div>
+
+                          <div class="mt-4 d-flex justify-content-end">
+                              <button type="submit" class="btn btn-primary">
+                                  <i class="bx bx-send"></i> Apply for Leave
+                              </button>
+                          </div>
                       </form>
                   </div>
               </div>
@@ -160,7 +188,7 @@ if(isset($_GET['s']) && $_GET['s'] == true){
               <div class="col-md-8 p-4">
                   <div class="table-section">
                       <h5>My Leaves</h5>
-                      <div class="container-fluid card pt-3 pb-3 mt-5 mb-5">
+                      <div class="container-fluid card pt-3 pb-3 mt-4 mb-5">
                           <?php require_once __DIR__ . '/leaves/apply-leave/modules/apply-leave-sorter.php' ?>
                           <div class="visually-hidden spinner-border spinner-border-lg text-primary text-center w-px-25 h-px-25" role="status" id="loadingSpinner"></div>
                       </div>

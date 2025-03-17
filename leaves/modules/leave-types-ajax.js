@@ -79,6 +79,10 @@ function fetchAllLeaveTypes(page = 1){
 }
 
 function createLeaveTypes(){
+    const form = document.getElementById('add_leave_type_form');
+    if(!form.checkValidity()){
+        return;
+    }
     const leaveTypeName = document.getElementById('add_name').value;
     const maxNumber = document.getElementById('add_maximum_number_of_days').value;
     const isPaid = document.getElementById('add_is_paid').checked;
@@ -114,6 +118,10 @@ function createLeaveTypes(){
 }
 
 function updateLeaveType(button){
+    const form = document.getElementById('update_leave_type_form');
+    if(!form.checkValidity()){
+        return;
+    }
     const token = button.getAttribute('data-token');
 
     const leaveTypeName = document.getElementById('update_name').value;
