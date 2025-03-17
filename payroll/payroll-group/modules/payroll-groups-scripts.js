@@ -54,7 +54,7 @@ function showFrequencyOptions(selectElement, form) {
         // Hide all containers first (optional)
         form.querySelectorAll('.frequency-container').forEach(function(container) {
             container.classList.add("visually-hidden");
-            container.querySelectorAll('.form-control').forEach(childTarget =>{
+            container.querySelectorAll('.form-select').forEach(childTarget =>{
                 childTarget.required = false;
                 childTarget.value = '';
             });
@@ -64,7 +64,7 @@ function showFrequencyOptions(selectElement, form) {
         var targetContainer = document.getElementById(dataTarget);
         if (targetContainer) {
             targetContainer.classList.remove("visually-hidden");
-            targetContainer.querySelectorAll('.form-control').forEach(childTarget =>{
+            targetContainer.querySelectorAll('.form-select').forEach(childTarget =>{
                 childTarget.required = true;
             });
         }

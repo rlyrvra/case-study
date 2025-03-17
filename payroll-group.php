@@ -30,7 +30,7 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
 <!-- Ajax -->
 <script src="payroll/payroll-group/modules/payroll-groups-ajax.js?v1.3"></script>
 <!-- Scripts -->
-<script src="payroll/payroll-group/modules/payroll-groups-scripts.js?v1.3"></script>
+<script src="payroll/payroll-group/modules/payroll-groups-scripts.js?v1.4"></script>
 
 
 <!-- Fonts -->
@@ -98,7 +98,7 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
               
           <div class="container-fluid mt-5 mb-3 d-flex justify-content-between flex-column flex-lg-row">
               <h1 class="display-1">Payroll Groups</h1>
-              <button type="button" class="btn btn-success btn-xl" data-bs-toggle="modal" data-bs-target="#add-payrollGroups-modal">
+              <button type="button" class="btn btn-success btn-xl" data-bs-toggle="modal" data-bs-target="#add_payrollGroups_modal">
                 <i class="bx bx-plus bx-lg"></i>Add Payroll Group
               </button>
               

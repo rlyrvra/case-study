@@ -206,7 +206,7 @@ try {
                     $messageComposed .= " and " . $breakScheduleResult['number'] . " break(s) was attached successfully";
                     break;
                 default:
-                    $messageComposed .= " and creating breaks had uncatchable error";
+                    $messageComposed .= " and creating breaks had an uncatchable error";
                     $indicator = 'warning';
                     break;
             }
