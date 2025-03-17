@@ -117,7 +117,6 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
               </div>
               <div class="card-body">
                 <div id="payroll-group-table" class="table-responsive text-no-wrap">
-                <?php require_once __DIR__ . '/payroll/payroll-group/modules/payroll-groups-table.php' ?>
                 <div class="container-fluid spinner-border spinner-border-lg d-flex align-items-center justify-content-center w-px-700 h-px-700" role="status"></div>
                 </div>
               </div>

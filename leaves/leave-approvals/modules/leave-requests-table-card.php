@@ -43,11 +43,12 @@
                                     data-bs-target="#R<?php echo htmlspecialchars($row['id']); ?>">
                                     View Reason <i class="bx bx-info-circle"></i>
                                 </button>
-                                <?php include __DIR__ . '/leave-requests-modal-reason.php'; ?>
+                                
                             <?php endif; ?>
                         </div>
                     </div>
                 </div>
+                <?php if (!in_array($row['status'], ['Approved', 'Expired', 'Completed', 'In Progress', 'Canceled']))  include __DIR__ . '/leave-requests-modal-reason.php';?>
             <?php endforeach; ?>
         <?php else: ?>
             <div class="col-12 text-center">
@@ -82,6 +83,7 @@
     </ul>
   </nav>
 </div>
+
 <style>
     #leave_requests_table .card {
         transition: all 0.3s ease-in-out;

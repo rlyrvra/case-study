@@ -304,10 +304,10 @@ function cancelBreakAssignment(button){
     rowAddedWork = false;
 }
 
-// JavaScript function to get all values in the table
 function getCreateBreaksValues(rows) {
     const workScheduleBreaks = [];
 
+    
     for (let i = 0; i < rows.length; i++) {
         const row = rows[i];
         const breakTypeId = row.cells[0].children[0].value;
@@ -315,18 +315,31 @@ function getCreateBreaksValues(rows) {
         const startTime = row.cells[2].children[0].value;
         const endTime = row.cells[3].children[0].value;
 
-        // Only add if a valid allowance was selected
         if (breakTypeId && breakTypeId !== "" && startTime !== "") {
-            workScheduleBreaks.push({
-                id: breakTypeId,
-                paid: paid,
-                start_time: convertTo24Hour(startTime),
-                end_time: convertTo24Hour(endTime)
-            });
+            const start24 = convertTo24Hour(startTime);
+            const end24 = convertTo24Hour(endTime);
+
+            // Check for overlaps with previously added breaks
+            let hasOverlap = workScheduleBreaks.some(breakItem => 
+                (start24 < breakItem.end_time && end24 > breakItem.start_time)
+            );
+
+            if (hasOverlap) {
+                // Clear overlapping row values
+                row.cells[0].children[0].value = "";
+                row.cells[2].children[0].value = "";
+                row.cells[3].children[0].value = "";
+            } else {
+                workScheduleBreaks.push({
+                    id: breakTypeId,
+                    paid: paid,
+                    start_time: start24,
+                    end_time: end24
+                });
+            }
         }
     }
 
-    //console.log(workScheduleBreaks); // Display in console or process as needed
     return workScheduleBreaks;
 }
 
