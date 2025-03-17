@@ -334,7 +334,7 @@
         border: 4px solid white;
     }
     .user-info {
-        text-align: center;
+        text-align: left;
         font-size: 18px;
         font-weight: bold;
     }

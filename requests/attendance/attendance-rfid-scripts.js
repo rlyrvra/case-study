@@ -76,21 +76,25 @@ function showRecord(record, status, message) {
     Swal.fire({
         title: '<h2 style="color: white;">User Information</h2>',
         html: `
+        <div class="swal2-popup">
             ${img}<br>
-            <div class='user-info'>
-                <p>👤 <strong>Code:</strong> ${record[0].employee_code}</p>
-                <p>🕒 <strong>Check In:</strong> ${record[0].start_time || record[0].check_in_time}</p>
-                <p>🚪 <strong>Check Out:</strong> ${record[0].end_time || record[0].check_out_time}</p>
-                <p><strong>Status:</strong> ${status} </p>
-                <p><strong>Message:</strong> ${message} </p>
+            <div class="user-info">
+                <p><i class='bx bx-id-card'></i> <strong>Code:</strong> ${record[0].employee_code}</p>
+                <p><i class='bx bx-time-five'></i> <strong>Check In:</strong> ${record[0].start_time || record[0].check_in_time}</p>
+                <p><i class='bx bx-exit'></i> <strong>Check Out:</strong> ${record[0].end_time || record[0].check_out_time}</p>
+                <p><i class='bx bx-info-circle'></i> <strong>Status:</strong> ${status}</p>
+                <p><i class='bx bx-message-rounded-dots'></i> <strong>Message:</strong> ${message}</p>
             </div>
-            <div class='countdown-container'>
+            
+            <div class="countdown-container">
                 <svg width="120" height="120">
-                    <circle cx="60" cy="60" r="55" fill="none" stroke="#ddd" stroke-width="10"></circle>
-                    <circle cx="60" cy="60" r="55" fill="none" stroke="#00ffcc" stroke-width="10" class="countdown-circle"></circle>
+                    <circle cx="60" cy="60" r="55" fill="none" stroke="#444" stroke-width="8"></circle>
+                    <circle cx="60" cy="60" r="55" fill="none" stroke="#00ffcc" stroke-width="8" class="countdown-circle"></circle>
                 </svg>
-                <div class='countdown-text' id='timer'>${countdown}</div>
+                <div class="countdown-text" id="timer">${countdown}</div>
             </div>
+        </div>
+
         `,
         showCancelButton: true,
         cancelButtonText: 'Close',
