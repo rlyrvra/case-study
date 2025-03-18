@@ -31,7 +31,7 @@ if($_SESSION['access_role'] !== 'Admin'){
 
 
 <!-- Ajax -->
-<script src="departments/modules/departments-ajax.js?v1.9"></script>
+<script src="departments/modules/departments-ajax.js?v1.10"></script>
 <!-- Scripts -->
 <script src="departments/modules/departments-scripts.js?v1.9"></script>
 

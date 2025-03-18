@@ -1,72 +1,88 @@
-<!-- Modal -->
-<div class="modal fade" id="update-allowances-modal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title" id="update-allowances-modalTitle">Allowance Form</h2>
-                <button
-                    type="button"
-                    class="btn-close"
-                    data-bs-dismiss="modal"
-                    aria-label="Close"
-                ></button>
+<!-- Allowance Update Form Modal -->
+<style>
+    .label-danger {
+        color: red;
+    }
+</style>
+
+<div class="modal fade" id="update-allowances-modal" tabindex="-1" aria-labelledby="update-allowances-modalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content shadow-sm border-0">
+            <div class="modal-header bg-light border-bottom">
+                <h2 class="modal-title fs-5 fw-semibold text-primary" id="update-allowances-modalTitle">
+                    <i class="bx bx-wallet"></i> Update Allowance
+                </h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            
+
             <div class="modal-body">
+                <form id="update_allowance_form" onsubmit="event.preventDefault(); updateAllowance(this);">
+                    <div class="row g-3">
+                        <!-- Name -->
+                        <div class="col-md-6">
+                            <label for="update_name" class="form-label fw-semibold">
+                                Name <span class="text-danger">*</span>
+                            </label>
+                            <input type="text" class="form-control shadow-sm" id="update_name" name="update_name"
+                                required minlength="3" maxlength="50" pattern="^[A-Za-z0-9 ]{3,50}$"
+                                title="Only letters, numbers, and spaces allowed (3-50 characters)"
+                                placeholder="Ex. Sample Allowance"
+                                oninput="this.value = this.value.replace(/[^A-Za-z0-9 ]/g, '')">
+                        </div>
 
-            <form onsubmit='event.preventDefault()' id="update_allowance_form">
-                <!-- Name -->
-                <div class="form-group mb-3">
-                    <label for="update_name">Name*:</label>
-                    <input type="text" class="form-control" id="update_name" name="update_name" maxlength="50" placeholder="Ex. Sample Allowance" required>
-                </div>
+                        <!-- Amount -->
+                        <div class="col-md-6">
+                            <label for="update_amount" class="form-label fw-semibold">
+                                Amount <span class="text-danger">*</span>
+                            </label>
+                            <input type="number" class="form-control shadow-sm" id="update_amount" name="update_amount"
+                                placeholder="Ex. 100" required min="1" step="1">
+                        </div>
+                    </div>
 
-                <!-- Amount -->
-                <div class="form-group mb-3">
-                    <label for="update_amount">Amount*:</label>
-                    <input type="number" class="form-control" id="update_amount" name="update_amount" placeholder="Ex. 100" step="1" required>
-                </div>
+                    <!-- Frequency -->
+                    <div class="mt-3">
+                        
+                        <label for="update_frequency" class="form-label fw-semibold">
+                            Frequency <span class="text-danger">*</span>
+                        </label>
+                        <select class="form-select shadow-sm" id="update_frequency" name="update_frequency" required>
+                            <option value="" disabled selected>Select Frequency</option>
+                            <option value="Weekly">Weekly</option>
+                            <option value="Semi-monthly">Semi-monthly</option>
+                            <option value="Monthly">Monthly</option>
+                        </select>
+                    </div>
 
-                <!-- Frequency -->
-                <div class="form-group mb-3">
-                    <label for="update_frequency">Frequency*:</label>
-                    <select class="form-control" id="update_frequency" name="update_frequency" required>
-                        <option value="" disabled selected>Select Frequency</option>
-                        <option value="Weekly">Weekly</option>
-                        <option value="Semi-monthly">Semi-monthly</option>
-                        <option value="Monthly">Monthly</option>
-                    </select>
-                </div>
+                    <!-- Status -->
+                    <div class="mt-3">
+                        <label for="update_status" class="form-label fw-semibold">
+                            Status <span class="text-danger">*</span>
+                        </label>
+                        <select class="form-select shadow-sm" id="update_status" name="update_status" required>
+                            <option value="Active">Active</option>
+                            <option value="Inactive">Inactive</option>
+                            <option value="Archived">Archived</option>
+                        </select>
+                    </div>
 
-                <!-- Description -->
-                <div class="form-group mb-3">
-                    <label for="update_description">Description:</label>
-                    <textarea class="form-control" id="update_description" name="update_description" rows="3" maxlength="255" placeholder="Ex. Any description"></textarea>
-                </div>
-
-                <!-- Status -->
-                <div class="form-group mb-3">
-                    <label for="update_status">Status*:</label>
-                    <select class="form-control" id="update_status" name="update_status" required>
-                        <option value="Active">Active</option>
-                        <option value="Inactive">Inactive</option>
-                        <option value="Archived">Archived</option>
-                    </select>
-                </div>
-
-                
+                    <!-- Description -->
+                    <div class="mt-3">
+                        <label for="update_description" class="form-label fw-semibold">Description</label>
+                        <textarea class="form-control shadow-sm" id="update_description" name="update_description"
+                            placeholder="Ex. Any description" maxlength="255" rows="3"></textarea>
+                    </div>
             </div>
-            <div class="modal-footer">
+
+            <div class="modal-footer border-top bg-light">
                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                    <i class="bx bx-arrow-back bx-xs"></i>Close
+                    <i class="bx bx-arrow-back"></i> Close
                 </button>
-                <button type="submit" class="btn btn-info" onclick="updateAllowance(this);" id="update_allowance_btn"><i class="bx bx-plus bx-xs"></i>Update</button>
+                <button type="submit" id="update_allowance_btn" class="btn btn-info" onclick="updateAllowance(this);">
+                    <i class="bx bx-edit"></i> Update
+                </button>
             </div>
-            
             </form>
-                    
-                
-            
         </div>
     </div>
 </div>

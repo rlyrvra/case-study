@@ -1,8 +1,8 @@
 <?php
 require_once __DIR__ . '/../../vendor/autoload.php';
 require_once __DIR__ . '/../../company-profile/CompanyProfileDao.php';
-require_once __DIR__ . '/../../includes/session.php';
 
+session_start();
 $companyProfileDao = new CompanyProfileDao($pdo);
 $companyProfileData;
 try {

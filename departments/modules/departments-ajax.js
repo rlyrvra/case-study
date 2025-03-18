@@ -199,6 +199,7 @@ function printFetchAll(){
         type: "POST",
         data: {
             action: "printFetch",
+            type: type,
             numberEntries: numberEntries,
             sort_by: sortByColumn,
             sort_order: sortOrderBy,
@@ -216,7 +217,7 @@ function printFetchAll(){
             link.href = window.URL.createObjectURL(blob);
             link.download = `department_record${date}${time}.pdf`;
             link.click();
-            //$('#response-test').html(response);
+            // $('#response-test').html(response);
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.log("AJAX Error: " + textStatus + ": " + errorThrown);
