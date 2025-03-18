@@ -89,7 +89,7 @@ $payrollGroupDao        = new PayrollGroupDao       ($pdo                   );
 $payrollGroupRepository = new PayrollGroupRepository($payrollGroupDao       );
 $payrollGroupService    = new PayrollGroupService   ($payrollGroupRepository);
 
-$originalCurrentDateTime = new DateTime('2025-01-07 00:00:00');
+$originalCurrentDateTime = new DateTime();
 echo $originalCurrentDateTime->format('l Y-m-d H:i:s A');
 
 $currentDateTime   =  clone $originalCurrentDateTime                             ;
