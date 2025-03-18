@@ -125,14 +125,15 @@ function updateAllowance(button){
     const allowanceFrequency = document.getElementById('update_frequency').value;
     const allowanceDesc = document.getElementById('update_description').value;
     const allowanceStatus = document.getElementById('update_status').value;
+    
 
     $.ajax({
         url: 'allowances/modules/allowance-api',
         type: 'POST',
         data: {
             action: 'update',
-            allowanceData: {
-                md5_id: md5_id,
+            allowance: {
+                id: md5_id,
                 name: allowanceName,
                 amount: allowanceAmount,
                 frequency: allowanceFrequency,
@@ -154,7 +155,7 @@ function updateAllowance(button){
 
 function deleteAllowance(button){
     const row = button.closest('tr');  // Get the closest row
-    const allowanceData = {
+    const allowance = {
         token: row.getAttribute('data-id'),
     };
     
@@ -163,7 +164,7 @@ function deleteAllowance(button){
         type: 'POST',
         data: {
             action: 'delete',
-            md5_id: allowanceData.token
+            id: allowance.token
         },
         success: function(response) {
             $('#response-test').html(response);

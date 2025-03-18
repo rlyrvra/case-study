@@ -143,11 +143,11 @@ try {
     }
 
     if($action == 'update'){
-        $allowanceData = $_POST['allowanceData'] ?? null;
+        $allowanceData = $_POST['allowance'] ?? null;
         if (!$allowanceData) {
             return;
         }
-        $hashed_id = $allowanceData['md5_id'] ?? null;
+        $hashed_id = $allowanceData['id'] ?? null;
         if (!$hashed_id) {
             return;
         }
@@ -195,7 +195,11 @@ try {
     }
         
     if($action == 'delete'){
-        $hashed_id = $_POST['md5_id'] ?? null;
+        $hashed_id = $_POST['id'] ?? null;
+        print_r($_POST);
+        if (!$hashed_id) {
+            return;
+        }
         $allowanceRepository = new AllowanceRepository($allowanceDao);
         $allowanceService = new AllowanceService($allowanceRepository);
         $result = $allowanceService->deleteAllowance($hashed_id);

@@ -126,7 +126,7 @@ function showSuccessDeleteAllowance(){
     });
 }
 
-function confirmDeleteAllowance(button){
+function confirmDeleteAssignedAllowance(button){
     $('#assign_allowances_modal').modal('hide');
     Swal.fire({
         title: 'Are you sure?',
@@ -138,7 +138,7 @@ function confirmDeleteAllowance(button){
         confirmButtonText: 'Yes, delete it!',
     }).then((result) => {
         if (result.isConfirmed) {
-            deleteAllowance(button);
+            deleteAssignedAllowance(button);
         } else {
             $('#assign_allowances_modal').modal('show');
         }
