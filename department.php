@@ -31,9 +31,9 @@ if($_SESSION['access_role'] !== 'Admin'){
 
 
 <!-- Ajax -->
-<script src="departments/modules/departments-ajax.js?v1.8"></script>
+<script src="departments/modules/departments-ajax.js?v1.9"></script>
 <!-- Scripts -->
-<script src="departments/modules/departments-scripts.js?v1.8"></script>
+<script src="departments/modules/departments-scripts.js?v1.9"></script>
 
 <!---Skeletons--->
 <script src="requests/table-skeleton.js?v1.2"></script>
@@ -86,6 +86,7 @@ if($_SESSION['access_role'] !== 'Admin'){
     </script>
     <?php require_once __DIR__ . '/departments/modules/department-modals-update-form.php' ?>
     <?php require_once __DIR__ . '/departments/modules/department-modals-add-form.php' ?>
+    <?php require_once __DIR__ . '/departments/modules/department-pdf-records-sorter.php' ?>
     <!-- Layout container -->
     <div class="layout-page">
     <?php require_once __DIR__ . '/user.php' ?>
@@ -96,9 +97,13 @@ if($_SESSION['access_role'] !== 'Admin'){
             <div id="response-test"></div>
             <div class="container-fluid mb-3 d-flex justify-content-between flex-column flex-lg-row">
               <h1 class="display-1">Departments</h1>
+              <button type="button" class="btn btn-outline-success btn-xl" data-bs-toggle="modal" data-bs-target="#print_department_records">
+                <i class="bx bx-printer bx-lg"></i>Print Invoice
+              </button>
               <button type="button" class="btn btn-success btn-xl" data-bs-toggle="modal" data-bs-target="#add-departments-modal">
                 <i class="bx bx-plus bx-lg"></i>Add Department
               </button>
+              
               
             </div>
 

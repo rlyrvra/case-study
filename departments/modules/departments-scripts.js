@@ -67,6 +67,21 @@ function getByDate(){
     return byDate;
 }
 
+function getPrintSortByColumn(){
+    var sortBy = selectedOptions.sort_by;
+    return sortBy;
+}
+
+function getPrintOrderBy(){
+    var orderBy = selectedOptions.order_by;
+    return orderBy;
+}
+
+function getPrintByDate(){
+    var byDate = selectedOptions.by_date;
+    return byDate;
+}
+
 // Function to add or remove the "Deleted At" option
 function toggleDeletedAtOption() {
     const statusSelect = document.getElementById('status');

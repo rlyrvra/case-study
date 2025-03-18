@@ -214,6 +214,99 @@ try {
         return;
     }
 
+    if ($action === 'printFetch'){
+        $status = isset($_POST['filter_status']) && $_POST['filter_status'] ? $_POST['filter_status'] : null;
+        $searchAt = isset($_POST['filter_searchAt']) && $_POST['filter_searchAt'] !== "none" ? $_POST['filter_searchAt'] : null;
+        $searchFilter = isset($_POST['filter_search']) ? $_POST['filter_search'] : null;
+        $dateFilterColumn = isset($_POST['filter_date_column']) ? $_POST['filter_date_column'] : null;
+        $dateStart = isset($_POST['filter_startDate']) && $dateFilterColumn !== "none" ? $_POST['filter_startDate'] : 0;
+        $dateEnd = isset($_POST['filter_endDate']) && $dateFilterColumn !== "none" ? $_POST['filter_endDate'] : 0;
+        $page = isset($_POST['page']) ? (int)$_POST['page'] : 1;
+        $limit = isset($_POST['numberEntries']) ? $_POST['numberEntries'] : 10;
+        $offset = ($page - 1) * $limit;
+        $viewMode = isset($_POST['view_mode']) ? $_POST['view_mode'] : 'table';
+        
+        $filterCriteria = [];
+        
+        if(!empty($status)){
+            $filterCriteria[] = [
+                "column" => "department.status",
+                "operator" => "=",
+                "value" => $status
+            ];
+        }
+
+        if(empty($searchAt) && !empty($searchFilter)){
+            $filterCriteria[] = 
+            [
+                [
+                    "column" => "department.description", 
+                    "operator" => "LIKE",
+                    "value" => "%$searchFilter%", 
+                    'boolean' => 'OR'
+                ],
+                [
+                    "column" => "department.name", 
+                    "operator" => "LIKE",
+                    "value" => "%$searchFilter%", 
+                    'boolean' => 'OR'
+                ]
+            ];
+        }
+
+        if(!empty($searchFilter) && !empty($searchAt)){
+            $filterCriteria[] = [
+                "column" => "department." . $searchAt, 
+                "operator" => "LIKE",
+                "value" => "%$searchFilter%"
+            ];
+        }
+
+        if((!empty($dateFilterColumn) && $dateFilterColumn !== "none") && !empty($dateStart) && !empty($dateEnd)){
+            $filterCriteria[] = [
+                "column" => "department." . $dateFilterColumn,
+                "operator" => "BETWEEN",
+                "lower_bound" => $dateStart,
+                "upper_bound" => $dateEnd
+            ];
+        }
+
+
+        $sortCriteria = [
+            [
+                "column" => "department." . $_POST['sort_by'],
+                "direction" => $_POST['sort_order']
+            ]
+        ];
+        $departmentRepository = new DepartmentRepository($departmentDao);
+        $departmentService = new DepartmentService($departmentRepository);
+        $result = $departmentService->fetchAllDepartments([], $filterCriteria, $sortCriteria, $limit, $offset);
+        $departments;
+        if ($result !== ActionResult::FAILURE) {
+            $departments = $result['result_set'];
+            $totalDepartments = $result["total_row_count"];
+            $totalPages = ceil($totalDepartments / $limit);
+        } else if(empty($departments)){
+            $message = 'No records found. Printing failed.';
+            die('
+            <script>
+            showError(' . json_encode($message) 
+            . ');
+            </script>');
+        } else if($result === ActionResult::FAILURE){
+            $message = 'Failed to fetch departments. Please try again.';
+            die('
+            <script>
+            showError(' . json_encode($message) 
+            . ');
+            </script>');
+        }
+
+        include __DIR__ . '/department-pdf.php';
+        return;
+    }
+
+
     $message = "Invalid action specified.";
     die('
     <script>

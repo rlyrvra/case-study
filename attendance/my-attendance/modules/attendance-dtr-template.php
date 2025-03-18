@@ -4,7 +4,7 @@
     border-collapse: collapse;
     font-size: 10px;
   }
-
+  
   th,
   td {
     border: 1px solid black;
@@ -158,7 +158,7 @@
   <tbody>
     <?php foreach ($myAttendance as $index => $attendance): ?>
       <?php if ($index > 0 && $index % 30 === 0): ?>
-        </tbody></table>
+        <!-- </tbody></table>
         <div style="page-break-after: always;"></div>
         <table>
           <thead>
@@ -178,7 +178,7 @@
               <th>Remarks</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody> -->
       <?php endif; ?>
 
 

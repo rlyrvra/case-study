@@ -159,7 +159,6 @@ h2.my-4 {
             <div class="dashboard-card">
                 <h3>Total Employees in the Department</h3>
                 <h2>
-                
                 </h2>
             </div>
             <div class="dashboard-card">

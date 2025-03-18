@@ -167,3 +167,59 @@ function updateDepartment(button){
     });
     
 }
+
+function printFetchAll(){
+    var type = $('#print_record').val();
+    var numberEntries = $("#print-entries-per-page").val();
+    var sortByColumn = getPrintSortByColumn();
+    if(sortByColumn == null){
+        sortByColumn = "created_at";
+    };
+    var sortOrderBy = getPrintOrderBy();
+    if(sortOrderBy == null) {
+        sortOrderBy = "DESC";
+    };
+    var filterStatus = $("#print-status").val();
+    var searchColumn = $("#print-search_at").val();
+    if(searchColumn == 'none'){
+        searchColumn = "";
+    };
+    var dateColumn = getPrintByDate();
+    var startDate, endDate;
+    if(dateColumn){
+        startDate = $("#print-dateStart").val();
+        endDate = $("#print-dateEnd").val();
+    }
+    var search = $("#print-searchText").val();
+    const time = $('#time').text();
+    const date = $('#date').text();
+
+    $.ajax({
+        url: 'departments/modules/departments-api',
+        type: "POST",
+        data: {
+            action: "printFetch",
+            numberEntries: numberEntries,
+            sort_by: sortByColumn,
+            sort_order: sortOrderBy,
+            filter_status: filterStatus,
+            filter_searchAt: searchColumn,
+            filter_search: search,
+            filter_date_column: dateColumn,
+            filter_startDate: startDate,
+            filter_endDate: endDate
+        },
+        xhrFields: { responseType: 'blob' }, // Expect binary data
+        success: function (response) {
+            var blob = new Blob([response], { type: "application/pdf" });
+            var link = document.createElement("a");
+            link.href = window.URL.createObjectURL(blob);
+            link.download = `department_record${date}${time}.pdf`;
+            link.click();
+            //$('#response-test').html(response);
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log("AJAX Error: " + textStatus + ": " + errorThrown);
+        },
+    });
+}
