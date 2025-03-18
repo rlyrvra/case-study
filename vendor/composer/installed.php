@@ -56,9 +56,9 @@
             'dev_requirement' => false,
         ),
         'rlanvin/php-rrule' => array(
-            'pretty_version' => 'v2.5.1',
-            'version' => '2.5.1.0',
-            'reference' => 'cb5c6f44f2208144968f7f16b3461bc4566995c9',
+            'pretty_version' => 'v2.5.2',
+            'version' => '2.5.2.0',
+            'reference' => '343c015118f869dbd7f85fb6459136dc21df981c',
             'type' => 'library',
             'install_path' => __DIR__ . '/../rlanvin/php-rrule',
             'aliases' => array(),
