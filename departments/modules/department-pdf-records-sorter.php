@@ -82,7 +82,7 @@
 
                     <!--Entries-->
                     <div class="align mx-1 d-flex align-items-center"> 
-                        <label for="print-entries-per-page" class="mx-1">Number</label>
+                        <label for="print-entries-per-page" class="mx-1">Show</label>
                         <select class="form-select" id="print-entries-per-page">
                             <option value="100">100</option>
                             <option value="200">200</option>

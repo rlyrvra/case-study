@@ -196,7 +196,6 @@ try {
         
     if($action == 'delete'){
         $hashed_id = $_POST['id'] ?? null;
-        print_r($_POST);
         if (!$hashed_id) {
             return;
         }

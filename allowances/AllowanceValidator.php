@@ -11,7 +11,6 @@ class AllowanceValidator extends BaseValidator
     public function __construct(AllowanceRepository $allowanceRepository)
     {
         $this->allowanceRepository = $allowanceRepository;
-
         if (isset($_POST['allowance'])) {
             $this->data = $_POST['allowance'];
         }

@@ -164,7 +164,9 @@ function deleteAllowance(button){
         type: 'POST',
         data: {
             action: 'delete',
-            id: allowance.token
+            allowance: {
+                id: allowance.token
+            }
         },
         success: function(response) {
             $('#response-test').html(response);

@@ -119,28 +119,28 @@ try {
         }
 
         $fetchLastCreated = new LeaveRequestService($leaveRequestRepo, $leaveRequestAttachmentRepo);
-        // $lastCreatedLeaveRequest = $fetchLastCreated->fetchAllLeaveRequests(
-        //     ["id"], [
-        //     [
-        //         "column" => "leave_request.employee_id",
-        //         "operator" => "=",
-        //         "value" => $employeeId
-        //     ],
-        //     [
-        //         "column" => "leave_request.deleted_at",
-        //         "operator" => "IS NOT NULL"
-        //     ]
-        // ], [
-        //     [
-        //         "column" => "leave_request.created_at",
-        //         "direction" => "DESC"
-        //     ]
-        // ], 1, 0
+        $lastCreatedLeaveRequest = $fetchLastCreated->fetchAllLeaveRequests(
+            ["id"], [
+            [
+                "column" => "leave_request.employee_id",
+                "operator" => "=",
+                "value" => (int) $employeeId
+            ],
+            [
+                "column" => "leave_request.deleted_at",
+                "operator" => "IS NULL"
+            ]
+        ], [
+            [
+                "column" => "leave_request.created_at",
+                "direction" => "DESC"
+            ]
+        ], 1, 0, 
 
-        // );
-        // print_r($lastCreatedLeaveRequest);
+        );
+        
 
-        $leaveRequestId = getLastInsertIdBySql($pdo, $employeeId);
+        $leaveRequestId = $lastCreatedLeaveRequest['result_set'][0]['id'];
 
         // Save file attachments
         $attachments = [];
