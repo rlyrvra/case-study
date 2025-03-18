@@ -81,7 +81,6 @@ function fetchAllAllowances(page = 1) {
 function createAllowance() {
     const createForm = document.getElementById("add_allowance_form");
     if(!createForm.checkValidity()){
-        //showWarningIncompleteForm()
         return;
     }
     const allowanceName = document.getElementById('create_name').value;
@@ -108,8 +107,8 @@ function createAllowance() {
             allowance: allowanceData
         },
         success: function(response) {
-            $('#allowance-table').html(response);
-            fetchAllAllowances();
+            $('#response-test').html(response);
+            //fetchAllAllowances();
             document.getElementById('add_allowance_form').reset();
             //showSuccessCreate();
         },

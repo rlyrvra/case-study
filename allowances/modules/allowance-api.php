@@ -95,7 +95,6 @@ try {
     if($action === 'create'){
         $allowanceData = $_POST['allowance'] ?? null;
         if ($allowanceData == null) {
-            echo "Invalid allowance data.";
             return;
         }
 
@@ -113,19 +112,33 @@ try {
             description: $description,
             status: $status
         );
+
         $allowanceRepository = new AllowanceRepository($allowanceDao);
         $allowanceService = new AllowanceService($allowanceRepository);
         $result = $allowanceService->createAllowance($newAllowance);
+
+
         
-        if ($result !== ActionResult::FAILURE) {
+        if (isset($result['status']) && $result['status'] === 'success') {
             die("
             <script>
                 showSuccessCreate();
             </script>
             ");
-        } else {
-            echo "Failed to create department. Please try again.";
+        } else if (isset($result['status']) && $result['status'] === 'error') {
+            die("
+            <script>
+                showError(" . json_encode($result) . ");
+            </script>
+            ");
+        } else if (isset($result['status']) && $result['status'] === 'invalid_input'){
+            die("
+            <script>
+                showValidationError(" . json_encode($result['errors']) . ");
+            </script>
+            ");
         }
+
         return;
     }
 
@@ -158,15 +171,26 @@ try {
         $allowanceService = new AllowanceService($allowanceRepository);
         $result = $allowanceService->updateAllowance($updatedAllowance);
         
-        if ($result !== ActionResult::FAILURE) {
+        if (isset($result['status']) && $result['status'] === 'success') {
             die("
             <script>
                 showSuccessUpdate();
             </script>
             ");
-        } else {
-            echo "Failed to create department. Please try again.";
+        } else if (isset($result['status']) && $result['status'] === 'error') {
+            die("
+            <script>
+                showError(" . json_encode($result) . ");
+            </script>
+            ");
+        } else if (isset($result['status']) && $result['status'] === 'invalid_input'){
+            die("
+            <script>
+                showValidationError(" . json_encode($result['errors']) . ");
+            </script>
+            ");
         }
+        
         return;
     }
         
@@ -176,23 +200,45 @@ try {
         $allowanceService = new AllowanceService($allowanceRepository);
         $result = $allowanceService->deleteAllowance($hashed_id);
 
-        if ($result) {
+
+
+        if (isset($result['status']) && $result['status'] === 'success') {
             die("
             <script>
                 showSuccessDeletion();
             </script>
             ");
-        } else {
-            echo "Failed to delete department. Please try again.";
+        } else if (isset($result['status']) && $result['status'] === 'error') {
+            die("
+            <script>
+                showError(" . json_encode($result) . ");
+            </script>
+            ");
+        } else if (isset($result['status']) && $result['status'] === 'invalid_input'){
+            die("
+            <script>
+                showValidationError(" . json_encode($result['errors']) . ");
+            </script>
+            ");
         }
+
         return;
     }
 
-
+    $message = "Invalid action specified.";
+    die('
+    <script>
+        showFatalError(' . json_encode($message) 
+    . ');
+    </script>');
     echo "Invalid action specified.";
-
 } catch (Exception $e) {
-    echo "Error: " . $e->getMessage();
+    $message = "Fatal error: " . $e->getMessage();
+    die('
+    <script>
+        showFatalError(' . json_encode($message) 
+    . ');
+    </script>');
 }
 
 
