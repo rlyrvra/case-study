@@ -1,5 +1,5 @@
 <?php $i = 0; if (!empty($employees)): ?>
-    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    <div class="d-flex justify-content-center row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
         <?php foreach ($employees as $row): ?>
             <?php
             // Assign colors based on role

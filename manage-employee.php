@@ -115,7 +115,7 @@ if(isset($_GET['e']) && $_GET['e'] === '404'){
 
 
 
-          <div class="card py-4 container-xxl row mx-auto text-no-wrap">
+          <div class="card py-4 row mx-auto text-no-wrap">
             <?php require_once __DIR__ . '/employees/modules/manage-employee-sorter.php' ?>
             <div class="visually-hidden spinner-border spinner-border-lg text-primary text-center w-px-25 h-px-25" role="status" id="loadingSpinner"></div>
           </div>
