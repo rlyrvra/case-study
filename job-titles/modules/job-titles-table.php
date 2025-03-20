@@ -1,7 +1,3 @@
-<?php
-// table.php
-// Expecting $data to be passed from api.php
-?>
 <style>
 #pagination .page-item:hover{
   cursor: pointer;

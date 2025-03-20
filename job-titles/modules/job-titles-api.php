@@ -23,6 +23,7 @@ try {
         $page = isset($_POST['page']) ? (int)$_POST['page'] : 1;
         $limit = isset($_POST['numberEntries']) ? $_POST['numberEntries'] : 5;
         $offset = ($page - 1) * $limit;
+        $viewMode = isset($_POST['view_mode']) ? $_POST['view_mode'] : 'table';
         
         
         $filterCriteria = [];
@@ -92,7 +93,13 @@ try {
 
         $totalJobTitles = $result["total_row_count"];
         $totalPages = ceil($totalJobTitles / $limit);
-        include __DIR__ . '/job-titles-table.php';
+        if($viewMode == 'table'){
+            include __DIR__ . '/job-titles-table.php';
+        }
+        else{
+            include __DIR__ . '/job-titles-table-card.php';
+        }
+        
         return;
 
     }
