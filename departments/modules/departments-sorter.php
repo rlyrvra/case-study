@@ -18,6 +18,7 @@
             </label>
         </div>
     </div>
+    
     <div class="col-auto d-flex align-items-center mx-1">
         <!--Sort By dropdown-->
         <div class="dropdown sort mx-1">

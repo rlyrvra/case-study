@@ -1,11 +1,10 @@
-<!-- Card Rendering -->
 <div class="container">
   <div class="row">
     <?php $i = ($offset + 1); if (!empty($departments)): ?>
       <?php foreach ($departments as $row): ?>
         <?php $i++; ?>
         <div class="col-md-6 col-lg-4">
-          <div class="card shadow-sm mb-4 transition-card">
+          <div class="card shadow-sm mb-4 transition-card border-1">
             <div class="card-body">
               <h5 class="card-title fw-bold"> <?php echo htmlspecialchars($row['name']); ?> </h5>
               <p class="text-muted mb-2"><strong>Department Head:</strong> 

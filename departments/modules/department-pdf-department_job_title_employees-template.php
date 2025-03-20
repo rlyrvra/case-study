@@ -136,7 +136,7 @@
     </div>
   </div>
 </div>
-<h2 style='text-align:center;'>Department Report - Departments + Job Titles</h2>
+<h2 style='text-align:center;'>Department Report - Departments + Job Titles + Employees</h2>
 <table>
   <thead>
     <tr>
@@ -150,6 +150,10 @@
       <?php if($status === 'Archived'):?><th>Deleted At</th><?php endif ?>
       <th>Job Title</th>
       <th>Job Title Status</th>
+      <th>Employee Code</th>
+      <th>Employee Full Name</th>
+      <th>Employee Supervisor</th>
+      <th>Employee Deleted At</th>
     </tr>
   </thead>
   <tbody>
@@ -166,8 +170,12 @@
         <td><?= date("l, F j, Y, g:i A", strtotime($department['created_at'])) ?? '' ?></td>
         <td><?= date("l, F j, Y, g:i A", strtotime($department['updated_at'])) ?? '' ?></td>
         <?php if(!empty($department['deleted_at'])):?><td><?= date("l, F j, Y, g:i A", strtotime($department['deleted_at'])) ?? '' ?></td><?php endif ?>
-        <td><?= !empty($department['job_title']) ? $department['job_title'] : 'N/A' ?></td>
-        <td><?= $department['job_title_status'] ?? 'N/A' ?></td>
+        <td><?= !empty($department['job_title']) ? $department['job_title'] : '' ?></td>
+        <td><?= $department['job_title_status'] ?? '' ?></td>
+        <td><?= $department['employee_code'] ?? '' ?></td>
+        <td><?= $department['employee_full_name'] ?? '' ?></td>
+        <td><?= $department['employee_supervisor_full_name'] ?? '' ?></td>
+        <td><?= $department['employee_deleted_at'] ?? '' ?></td>
       </tr>
     <?php endforeach; ?>
   </tbody>

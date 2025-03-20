@@ -27,8 +27,8 @@
                             <span class="input-group-text"><i class="bx bx-category-alt fs-4 lh-0"></i></span>
                             <select class="form-select" id="print_record" name="print_record" placeholder="Filter By Status">
                                 <option value="Records" selected>Records</option>
-                                <!-- <option value="Department + Job Title" selected>Department + Job Title</option>
-                                <option value="Department + Job Title + Employees" selected>Department + Job Title + Employees</option> -->
+                                <option value="Department + Job Title">Department + Job Title</option>
+                                <option value="Department + Job Title + Employees">Department + Job Title + Employees</option>
                             </select>
                         </div>
                     </div>

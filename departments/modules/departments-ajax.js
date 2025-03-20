@@ -83,7 +83,7 @@ function createDepartment() {
 
     const departmentData = {
         name: departmentName,
-        departmentHeadId: departmentHeadId,
+        department_head_id: departmentHeadId,
         description: departmentDescription,
         status: departmentStatus
     };
@@ -110,15 +110,15 @@ function createDepartment() {
 function deleteDepartment(button){
     const row = button.closest('tr');  // Get the closest row
     const departmentData = {
-        token: row.getAttribute('data-id'),
+        id: row.getAttribute('data-id'),
     };
-    
+    console.log(departmentData);
     $.ajax({
         url: 'departments/modules/departments-api',
         type: 'POST',
         data: {
             action: 'delete',
-            md5_id: departmentData.token
+            department: departmentData
         },
         success: function(response) {
             $('#response-test').html(response);
@@ -149,11 +149,11 @@ function updateDepartment(button){
         data: {
             action: 'update',
             department: {
-                md5_id: md5_id,
+                id: md5_id,
                 name: departmentName,
-                departmentHeadId: departmentHeadId,
-                departmentDescription: departmentDescription,
-                departmentStatus: departmentStatus
+                department_head_id: departmentHeadId,
+                description: departmentDescription,
+                status: departmentStatus
             }
         },
         success: function(response) {
@@ -193,7 +193,7 @@ function printFetchAll(){
     var search = $("#print-searchText").val();
     const time = $('#time').text();
     const date = $('#date').text();
-
+    showSpinnerLoader();
     $.ajax({
         url: 'departments/modules/departments-api',
         type: "POST",
@@ -217,6 +217,7 @@ function printFetchAll(){
             link.href = window.URL.createObjectURL(blob);
             link.download = `department_record${date}${time}.pdf`;
             link.click();
+            closeSpinnerLoader();
             // $('#response-test').html(response);
         },
         error: function (jqXHR, textStatus, errorThrown) {

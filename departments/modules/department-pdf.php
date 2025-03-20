@@ -44,7 +44,9 @@ $options->set('isRemoteEnabled', true);
 $dompdf = new Dompdf($options);
 
 ob_start();
-include __DIR__ . '/department-pdf-records-template.php'; 
+if(isset($type) && $type === 'Records') include __DIR__ . '/department-pdf-records-template.php';
+else if(isset($type) && $type === 'Department + Job Title')  include __DIR__ . '/department-pdf-department_job_title-template.php';
+else if(isset($type) && $type === 'Department + Job Title + Employees') include __DIR__ . '/department-pdf-department_job_title_employees-template.php';
 $html = ob_get_clean();
 
 $dompdf->loadHtml($html);

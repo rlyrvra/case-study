@@ -31,14 +31,17 @@ if($_SESSION['access_role'] !== 'Admin'){
 
 
 <!-- Ajax -->
-<script src="departments/modules/departments-ajax.js?v1.10"></script>
+<script src="departments/modules/departments-ajax.js?v1.14"></script>
 <!-- Scripts -->
-<script src="departments/modules/departments-scripts.js?v1.9"></script>
+<script src="departments/modules/departments-scripts.js?v1.14"></script>
 
 <!---Skeletons--->
 <script src="requests/table-skeleton.js?v1.2"></script>
 <!---Skeletons CSS-->
 <link rel="stylesheet" href="requests/table-skeleton.css?v1.1" />
+
+<!---Loader--->
+<script src="sweet-alert-toasts/loader/loader.js"></script>
 
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -86,7 +89,7 @@ if($_SESSION['access_role'] !== 'Admin'){
     </script>
     <?php require_once __DIR__ . '/departments/modules/department-modals-update-form.php' ?>
     <?php require_once __DIR__ . '/departments/modules/department-modals-add-form.php' ?>
-    <?php require_once __DIR__ . '/departments/modules/department-pdf-records-sorter.php' ?>
+    <?php require_once __DIR__ . '/departments/modules/department-pdf-sorter.php' ?>
     <!-- Layout container -->
     <div class="layout-page">
     <?php require_once __DIR__ . '/user.php' ?>
