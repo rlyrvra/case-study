@@ -16,7 +16,7 @@
             </div>
 
             <div class="modal-body">
-                <form id="update_allowance_form" onsubmit="event.preventDefault(); updateAllowance(this);">
+                <form id="update_allowance_form" onsubmit="event.preventDefault();">
                     <div class="row g-3">
                         <!-- Name -->
                         <div class="col-md-6">

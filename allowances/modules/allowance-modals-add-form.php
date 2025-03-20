@@ -3,7 +3,7 @@
         color: red;
     }
 </style>
-
+<!-- Allowance Add Form Modal -->
 <div class="modal fade" id="add-allowances-modal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content shadow-sm border-0">
@@ -15,7 +15,7 @@
             </div>
             
             <div class="modal-body">
-                <form id="add_allowance_form" onsubmit="event.preventDefault(); createAllowance();">
+                <form id="add_allowance_form" onsubmit="event.preventDefault();">
                     <div class="row g-3">
                         <!-- Name -->
                         <div class="col-md-6">
@@ -84,3 +84,4 @@
         </div>
     </div>
 </div>
+<!-- Allowance Add Form Modal -->

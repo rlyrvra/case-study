@@ -27,6 +27,31 @@ function getMaxPageValue() {
     return maxPage;
 }
 
+function fetchPage(){
+    Swal.fire({
+        title: 'Enter a Number',
+        input: 'number',
+        inputAttributes: {
+            min: 1,
+            max: getMaxPageValue(),
+            step: 1
+        },
+        showCancelButton: true,
+        confirmButtonText: 'Submit',
+        cancelButtonText: 'Cancel',
+        preConfirm: (value) => {
+            if (!value || isNaN(value)) {
+                Swal.showValidationMessage('Please enter a valid number');
+            }
+            return value;
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetchAllAllowances(result.value);
+        }
+    });
+}
+
 function getSortByColumn(){
     var sortBy = selectedOptions.sort_by;
     return sortBy;
@@ -76,6 +101,17 @@ function showSuccessUpdate() {
     });
 }
 
+
+
+function showSuccessDeletion() {
+    Swal.fire({
+        title: 'Success!',
+        text: 'This allowance has been deleted successfully.',
+        icon: 'success',
+        confirmButtonText: 'OK'
+    });
+}
+
 function showValidationError(errorMessages) {
     $('#update-allowances-modal').modal('hide');
     $('#add-allowances-modal').modal('hide');
@@ -94,17 +130,6 @@ function showValidationError(errorMessages) {
         title: 'Warning!',
         html:  formattedMessages,
         icon: 'warning',
-        confirmButtonText: 'OK'
-    });
-}
-
-
-
-function showSuccessDeletion() {
-    Swal.fire({
-        title: 'Success!',
-        text: 'This allowance has been deleted successfully.',
-        icon: 'success',
         confirmButtonText: 'OK'
     });
 }

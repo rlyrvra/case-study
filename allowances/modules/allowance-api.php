@@ -12,8 +12,16 @@ require_once __DIR__ . '/../AllowanceService.php';
 require_once __DIR__ . '/../../includes/Helper.php';
 require_once __DIR__ . '/../../database/database.php';
 
+
+// echo "<br>";
+// echo "[create] API FILE (allowanceData): ";
+// print_r($allowanceData);
+// echo "<br>";
+
 try {
     $allowanceDao = new AllowanceDao($pdo);
+    $allowanceRepository = new AllowanceRepository($allowanceDao);
+    $allowanceService = new AllowanceService($allowanceRepository);
     $action = $_POST['action'] ?? '';
 
     if($action === 'fetchAll'){
@@ -77,14 +85,14 @@ try {
                 "direction" => $_POST['sort_order']
             ]
         ];
-        $allowanceRepository = new AllowanceRepository($allowanceDao);
-        $allowanceService = new AllowanceService($allowanceRepository);
+
         $result = $allowanceService->fetchAllAllowances([], $filterCriteria, $sortCriteria, $limit, $offset);
         $allowances;
         if ($result !== ActionResult::FAILURE) {
             $allowances = $result['result_set'];
         }
 
+        
         $totalAllowances = $result["total_row_count"];
         $totalPages = ceil($totalAllowances / $limit);
         include __DIR__ . '/allowance-table.php';
@@ -94,31 +102,13 @@ try {
     
     if($action === 'create'){
         $allowanceData = $_POST['allowance'] ?? null;
+        
         if ($allowanceData == null) {
             return;
         }
 
-        $name = isset($allowanceData['name']) && $allowanceData['name'] !== '' ? validateInput($allowanceData['name'], "Name") : null;
-        $amount = isset($allowanceData['amount']) && $allowanceData['amount'] !== 0 ? validateNumericIdentifier((int) $allowanceData['amount'], 1, 30, "Amount") : null;
-        $frequency = isset($allowanceData['frequency']) && $allowanceData['frequency'] !== '' ? validateInput($allowanceData['frequency'], "Frequency") : null;
-        $description = isset($allowanceData['description']) ? $allowanceData['description'] : null;
-        $status = isset($allowanceData['status']) ? validateInput($allowanceData['status'], "Status") : null;
-        
-        $newAllowance = new Allowance(
-            id: null,
-            name: $name,
-            amount: $amount,
-            frequency: $frequency,
-            description: $description,
-            status: $status
-        );
+        $result = $allowanceService->createAllowance($_POST['allowance']);
 
-        $allowanceRepository = new AllowanceRepository($allowanceDao);
-        $allowanceService = new AllowanceService($allowanceRepository);
-        $result = $allowanceService->createAllowance($newAllowance);
-
-
-        
         if (isset($result['status']) && $result['status'] === 'success') {
             die("
             <script>
@@ -152,25 +142,10 @@ try {
             return;
         }
 
-        $name = isset($allowanceData['name']) && $allowanceData['name'] !== '' ? validateInput($allowanceData['name'], "Name") : null;
-        $amount = isset($allowanceData['amount']) && $allowanceData['amount'] !== 0 ? validateNumericIdentifier((int) $allowanceData['amount'], 1, 30, "Amount") : null;
-        $frequency = isset($allowanceData['frequency']) && $allowanceData['frequency'] !== '' ? validateInput($allowanceData['frequency'], "Frequency") : null;
-        $description = isset($allowanceData['description']) ? $allowanceData['description'] : null;
-        $status = isset($allowanceData['status']) ? validateInput($allowanceData['status'], "Status") : null;
+
+        $result = $allowanceService->updateAllowance($_POST['allowance']);
         
 
-        $updatedAllowance = new Allowance(
-            id: $hashed_id,
-            name: $name,
-            amount: $amount,
-            frequency: $frequency,
-            description: $description,
-            status: $status
-        );
-        $allowanceRepository = new AllowanceRepository($allowanceDao);
-        $allowanceService = new AllowanceService($allowanceRepository);
-        $result = $allowanceService->updateAllowance($updatedAllowance);
-        
         if (isset($result['status']) && $result['status'] === 'success') {
             die("
             <script>
@@ -195,15 +170,13 @@ try {
     }
         
     if($action == 'delete'){
-        $hashed_id = $_POST['id'] ?? null;
-        if (!$hashed_id) {
+        $allowance = $_POST['allowance'] ?? null;
+
+        if (!$allowance) {
             return;
         }
-        $allowanceRepository = new AllowanceRepository($allowanceDao);
-        $allowanceService = new AllowanceService($allowanceRepository);
-        $result = $allowanceService->deleteAllowance($hashed_id);
 
-
+        $result = $allowanceService->deleteAllowance($allowance['id']);
 
         if (isset($result['status']) && $result['status'] === 'success') {
             die("
@@ -234,7 +207,6 @@ try {
         showFatalError(' . json_encode($message) 
     . ');
     </script>');
-    echo "Invalid action specified.";
 } catch (Exception $e) {
     $message = "Fatal error: " . $e->getMessage();
     die('
@@ -242,57 +214,4 @@ try {
         showFatalError(' . json_encode($message) 
     . ');
     </script>');
-}
-
-
-// Function to validate and sanitize input
-function validateInput($input, $fieldName) {
-
-    // Escape the field name for security
-    $escapedFieldName = htmlspecialchars($fieldName, ENT_QUOTES, 'UTF-8');
-
-    // Trim the input to remove extra whitespaces
-    $input = trim($input);
-    
-    // Check if input is empty after trimming
-    if (empty($input)) {
-        die("
-        <script>
-            missingFieldValues('{$escapedFieldName}');
-        </script>
-        ");
-    }
-    
-    // Additional validation can go here (e.g., regex for specific formats)
-    
-    return htmlspecialchars($input); // Sanitize to prevent XSS
-}
-
-function validateNumericIdentifier($value, $minLength, $maxLength, $fieldName = null) {
-    $value = trim($value);
-
-    // Escape the field name for security
-    $escapedFieldName = htmlspecialchars($fieldName, ENT_QUOTES, 'UTF-8');
-
-    // Check if the value is strictly numeric
-    if (!ctype_digit($value)) {
-        echo "
-        <script>
-            missingFieldValues('{$escapedFieldName}');
-        </script>
-        ";
-        exit;
-    }
-
-    // Check the length range
-    if (strlen($value) < $minLength || strlen($value) > $maxLength) {
-        echo "
-        <script>
-            missingFieldValues('{$escapedFieldName}');
-        </script>
-        ";
-        exit;
-    }
-
-    return $value;
 }
