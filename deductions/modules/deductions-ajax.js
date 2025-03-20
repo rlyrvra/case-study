@@ -81,7 +81,6 @@ function fetchAllDeductions(page = 1) {
 function createDeductions(){
     const createForm = document.getElementById("add_deductions_form");
     if(!createForm.checkValidity()){
-        //showWarningIncompleteForm()
         return;
     }
     const deductionName = document.getElementById('create_name').value;
@@ -119,6 +118,10 @@ function createDeductions(){
 }
 
 function updateDeductions(button){
+    const form = document.getElementById("update_deductions_form");
+    if(!form.checkValidity()){
+        return;
+    }
     const md5_id = button.getAttribute('data-token');
     const deductionName = document.getElementById('update_name').value;
     const deductionAmount = document.getElementById('update_amount').value;
@@ -132,7 +135,7 @@ function updateDeductions(button){
         data: {
             action: 'update',
             deduction: {
-                md5_id: md5_id,
+                id: md5_id,
                 name: deductionName,
                 amount: deductionAmount,
                 frequency: deductionFrequency,
@@ -155,24 +158,73 @@ function updateDeductions(button){
 function deleteDeduction(button){
     const row = button.closest('tr');  // Get the closest row
     const deductionData = {
-        token: row.getAttribute('data-id'),
+        id: row.getAttribute('data-id'),
     };
-    
-    $.ajax({
-        url: 'deductions/modules/deductions-api',
-        type: 'POST',
-        data: {
+
+    fetch('deductions/modules/deductions-api', {
+        method: 'POST',
+        headers: {
+            'Accept': '*/*',
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: new URLSearchParams({
             action: 'delete',
-            md5_id: deductionData.token
-        },
-        success: function(response) {
-            $('#response-test').html(response);
-            fetchAllDeductions();
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            console.log("AJAX Error: " + textStatus + ": " + errorThrown);
+            deduction: JSON.stringify(deductionData)
+        })
+    })
+    .then(response => {
+        if(!response.ok){
+            showError(`[delete] Error: ${response.status}`);
         }
+        return response.text();
+    })
+    .then(htmlResponse =>{
+        $('#response-test').html(htmlResponse);
+        fetchAllDeductions();
+    })
+    .catch(error => {
+        showFatalError(`[delete] Fatal Error: ${error}`)
     });
     
 }
 
+// async function deleteDeduction(button){
+//     const response = await deleteDeductionServer(button);
+//     $('#response-test').html(response);
+// }
+
+
+// async function deleteDeduction(button){
+//     const row = button.closest('tr');  // Get the closest row
+//     const deductionData = {
+//         id: row.getAttribute('data-id'),
+//     };
+//     try {
+//         const response = await fetch(
+//             'deductions/modules/deductions-api',
+//             {
+//                 method: 'POST',
+//                 headers: {
+//                     'Accept': '*/*',
+//                     'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+//                     'X-Requested-With': 'XMLHttpRequest'
+//                 },
+//                 body: new URLSearchParams({
+//                     action: 'delete',
+//                     deduction: JSON.stringify(deductionData)
+//                 })
+//             });
+
+//             if (!response.ok){
+//                 showError(`[delete] Error: ${response.status}`);
+//             }
+
+//             const data = await response.text();
+//             return data;
+
+//     } catch (error) {
+//         showFatalError(`[delete] Fatal Error: ${error}`);
+//         return null;
+//     }
+// }
