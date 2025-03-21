@@ -12,8 +12,16 @@ require_once __DIR__ . '/../AllowanceService.php';
 require_once __DIR__ . '/../../includes/Helper.php';
 require_once __DIR__ . '/../../database/database.php';
 
+
+// echo "<br>";
+// echo "[create] API FILE (allowanceData): ";
+// print_r($allowanceData);
+// echo "<br>";
+
 try {
     $allowanceDao = new AllowanceDao($pdo);
+    $allowanceRepository = new AllowanceRepository($allowanceDao);
+    $allowanceService = new AllowanceService($allowanceRepository);
     $action = $_POST['action'] ?? '';
 
     if($action === 'fetchAll'){
@@ -26,6 +34,7 @@ try {
         $page = isset($_POST['page']) ? (int)$_POST['page'] : 1;
         $limit = isset($_POST['numberEntries']) ? $_POST['numberEntries'] : 10;
         $offset = ($page - 1) * $limit;
+        $viewMode = isset($_POST['view_mode']) ? $_POST['view_mode'] : 'table';
         
         $filterCriteria = [];
         
@@ -77,173 +86,139 @@ try {
                 "direction" => $_POST['sort_order']
             ]
         ];
-        $allowanceRepository = new AllowanceRepository($allowanceDao);
-        $allowanceService = new AllowanceService($allowanceRepository);
+
         $result = $allowanceService->fetchAllAllowances([], $filterCriteria, $sortCriteria, $limit, $offset);
         $allowances;
         if ($result !== ActionResult::FAILURE) {
             $allowances = $result['result_set'];
         }
 
+        
         $totalAllowances = $result["total_row_count"];
         $totalPages = ceil($totalAllowances / $limit);
-        include __DIR__ . '/allowance-table.php';
+        
+        if($viewMode == 'table'){
+            include __DIR__ . '/allowance-table.php';
+        }
+        else{
+            include __DIR__ . '/allowance-table-card.php';
+        }
         return;
     }
 
     
     if($action === 'create'){
         $allowanceData = $_POST['allowance'] ?? null;
+        
         if ($allowanceData == null) {
-            echo "Invalid allowance data.";
             return;
         }
 
-        $name = isset($allowanceData['name']) && $allowanceData['name'] !== '' ? validateInput($allowanceData['name'], "Name") : null;
-        $amount = isset($allowanceData['amount']) && $allowanceData['amount'] !== 0 ? validateNumericIdentifier((int) $allowanceData['amount'], 1, 30, "Amount") : null;
-        $frequency = isset($allowanceData['frequency']) && $allowanceData['frequency'] !== '' ? validateInput($allowanceData['frequency'], "Frequency") : null;
-        $description = isset($allowanceData['description']) ? $allowanceData['description'] : null;
-        $status = isset($allowanceData['status']) ? validateInput($allowanceData['status'], "Status") : null;
-        
-        $newAllowance = new Allowance(
-            id: null,
-            name: $name,
-            amount: $amount,
-            frequency: $frequency,
-            description: $description,
-            status: $status
-        );
-        $allowanceRepository = new AllowanceRepository($allowanceDao);
-        $allowanceService = new AllowanceService($allowanceRepository);
-        $result = $allowanceService->createAllowance($newAllowance);
-        
-        if ($result !== ActionResult::FAILURE) {
+        $result = $allowanceService->createAllowance($_POST['allowance']);
+
+        if (isset($result['status']) && $result['status'] === 'success') {
             die("
             <script>
                 showSuccessCreate();
             </script>
             ");
-        } else {
-            echo "Failed to create department. Please try again.";
+        } else if (isset($result['status']) && $result['status'] === 'error') {
+            die("
+            <script>
+                showError(" . json_encode($result) . ");
+            </script>
+            ");
+        } else if (isset($result['status']) && $result['status'] === 'invalid_input'){
+            die("
+            <script>
+                showValidationError(" . json_encode($result['errors']) . ");
+            </script>
+            ");
         }
+
         return;
     }
 
     if($action == 'update'){
-        $allowanceData = $_POST['allowanceData'] ?? null;
+        $allowanceData = $_POST['allowance'] ?? null;
         if (!$allowanceData) {
             return;
         }
-        $hashed_id = $allowanceData['md5_id'] ?? null;
+        $hashed_id = $allowanceData['id'] ?? null;
         if (!$hashed_id) {
             return;
         }
 
-        $name = isset($allowanceData['name']) && $allowanceData['name'] !== '' ? validateInput($allowanceData['name'], "Name") : null;
-        $amount = isset($allowanceData['amount']) && $allowanceData['amount'] !== 0 ? validateNumericIdentifier((int) $allowanceData['amount'], 1, 30, "Amount") : null;
-        $frequency = isset($allowanceData['frequency']) && $allowanceData['frequency'] !== '' ? validateInput($allowanceData['frequency'], "Frequency") : null;
-        $description = isset($allowanceData['description']) ? $allowanceData['description'] : null;
-        $status = isset($allowanceData['status']) ? validateInput($allowanceData['status'], "Status") : null;
+
+        $result = $allowanceService->updateAllowance($_POST['allowance']);
         
 
-        $updatedAllowance = new Allowance(
-            id: $hashed_id,
-            name: $name,
-            amount: $amount,
-            frequency: $frequency,
-            description: $description,
-            status: $status
-        );
-        $allowanceRepository = new AllowanceRepository($allowanceDao);
-        $allowanceService = new AllowanceService($allowanceRepository);
-        $result = $allowanceService->updateAllowance($updatedAllowance);
-        
-        if ($result !== ActionResult::FAILURE) {
+        if (isset($result['status']) && $result['status'] === 'success') {
             die("
             <script>
                 showSuccessUpdate();
             </script>
             ");
-        } else {
-            echo "Failed to create department. Please try again.";
+        } else if (isset($result['status']) && $result['status'] === 'error') {
+            die("
+            <script>
+                showError(" . json_encode($result) . ");
+            </script>
+            ");
+        } else if (isset($result['status']) && $result['status'] === 'invalid_input'){
+            die("
+            <script>
+                showValidationError(" . json_encode($result['errors']) . ");
+            </script>
+            ");
         }
+        
         return;
     }
         
     if($action == 'delete'){
-        $hashed_id = $_POST['md5_id'] ?? null;
-        $allowanceRepository = new AllowanceRepository($allowanceDao);
-        $allowanceService = new AllowanceService($allowanceRepository);
-        $result = $allowanceService->deleteAllowance($hashed_id);
+        $allowance = $_POST['allowance'] ?? null;
 
-        if ($result) {
+        if (!$allowance) {
+            return;
+        }
+
+        $result = $allowanceService->deleteAllowance($allowance['id']);
+
+        if (isset($result['status']) && $result['status'] === 'success') {
             die("
             <script>
                 showSuccessDeletion();
             </script>
             ");
-        } else {
-            echo "Failed to delete department. Please try again.";
+        } else if (isset($result['status']) && $result['status'] === 'error') {
+            die("
+            <script>
+                showError(" . json_encode($result) . ");
+            </script>
+            ");
+        } else if (isset($result['status']) && $result['status'] === 'invalid_input'){
+            die("
+            <script>
+                showValidationError(" . json_encode($result['errors']) . ");
+            </script>
+            ");
         }
+
         return;
     }
 
-
-    echo "Invalid action specified.";
-
+    $message = "Invalid action specified.";
+    die('
+    <script>
+        showFatalError(' . json_encode($message) 
+    . ');
+    </script>');
 } catch (Exception $e) {
-    echo "Error: " . $e->getMessage();
-}
-
-
-// Function to validate and sanitize input
-function validateInput($input, $fieldName) {
-
-    // Escape the field name for security
-    $escapedFieldName = htmlspecialchars($fieldName, ENT_QUOTES, 'UTF-8');
-
-    // Trim the input to remove extra whitespaces
-    $input = trim($input);
-    
-    // Check if input is empty after trimming
-    if (empty($input)) {
-        die("
-        <script>
-            missingFieldValues('{$escapedFieldName}');
-        </script>
-        ");
-    }
-    
-    // Additional validation can go here (e.g., regex for specific formats)
-    
-    return htmlspecialchars($input); // Sanitize to prevent XSS
-}
-
-function validateNumericIdentifier($value, $minLength, $maxLength, $fieldName = null) {
-    $value = trim($value);
-
-    // Escape the field name for security
-    $escapedFieldName = htmlspecialchars($fieldName, ENT_QUOTES, 'UTF-8');
-
-    // Check if the value is strictly numeric
-    if (!ctype_digit($value)) {
-        echo "
-        <script>
-            missingFieldValues('{$escapedFieldName}');
-        </script>
-        ";
-        exit;
-    }
-
-    // Check the length range
-    if (strlen($value) < $minLength || strlen($value) > $maxLength) {
-        echo "
-        <script>
-            missingFieldValues('{$escapedFieldName}');
-        </script>
-        ";
-        exit;
-    }
-
-    return $value;
+    $message = "Fatal error: " . $e->getMessage();
+    die('
+    <script>
+        showFatalError(' . json_encode($message) 
+    . ');
+    </script>');
 }

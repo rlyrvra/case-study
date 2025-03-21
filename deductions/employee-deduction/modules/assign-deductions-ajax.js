@@ -42,7 +42,7 @@ function assignDeductions(){
     });
 }
 
-function deleteDeduction(button){
+function deleteAssignedDeduction(button){
     const employeeDeductionId = button.getAttribute("data-id");
     
     $.ajax({

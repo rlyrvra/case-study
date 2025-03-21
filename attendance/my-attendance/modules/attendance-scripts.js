@@ -13,6 +13,31 @@ function getPage(page){
     return page;
 }
 
+function fetchPage(){
+    Swal.fire({
+        title: 'Enter a Number',
+        input: 'number',
+        inputAttributes: {
+            min: 1,
+            max: getMaxPageValue(),
+            step: 1
+        },
+        showCancelButton: true,
+        confirmButtonText: 'Submit',
+        cancelButtonText: 'Cancel',
+        preConfirm: (value) => {
+            if (!value || isNaN(value)) {
+                Swal.showValidationMessage('Please enter a valid number');
+            }
+            return value;
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetchAllMyAttendance(result.value);
+        }
+    });
+}
+
 function getMaxPageValue() {
     // Find all <a> tags inside the <ul> with id "pagination"
     let pageNumbers = $("#pagination .page-link").map(function() {
@@ -40,6 +65,11 @@ function getOrderBy(){
 function getByDate(){
     var byDate = selectedOptions.by_date;
     return byDate;
+}
+
+function getViewMode() {
+    let selected = document.querySelector('input[name="view"]:checked');
+    return selected ? selected.value : '';
 }
 
 function getByRecordsYear(){

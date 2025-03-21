@@ -21,6 +21,7 @@ function fetchAllAllowances(page = 1) {
         endDate = $("#dateEnd").val();
     }
     var search = $("#searchText").val();
+    var viewMode = getViewMode();
 
     
     // console.log(`
@@ -64,7 +65,8 @@ function fetchAllAllowances(page = 1) {
             filter_search: search,
             filter_date_column: dateColumn,
             filter_startDate: startDate,
-            filter_endDate: endDate
+            filter_endDate: endDate,
+            view_mode: viewMode
         },
         success: function(response) {
             document.getElementById('skeleton-allowance-table').classList.add("visually-hidden");
@@ -81,7 +83,6 @@ function fetchAllAllowances(page = 1) {
 function createAllowance() {
     const createForm = document.getElementById("add_allowance_form");
     if(!createForm.checkValidity()){
-        //showWarningIncompleteForm()
         return;
     }
     const allowanceName = document.getElementById('create_name').value;
@@ -108,7 +109,7 @@ function createAllowance() {
             allowance: allowanceData
         },
         success: function(response) {
-            $('#allowance-table').html(response);
+            $('#response-test').html(response);
             fetchAllAllowances();
             document.getElementById('add_allowance_form').reset();
             //showSuccessCreate();
@@ -126,14 +127,15 @@ function updateAllowance(button){
     const allowanceFrequency = document.getElementById('update_frequency').value;
     const allowanceDesc = document.getElementById('update_description').value;
     const allowanceStatus = document.getElementById('update_status').value;
+    
 
     $.ajax({
         url: 'allowances/modules/allowance-api',
         type: 'POST',
         data: {
             action: 'update',
-            allowanceData: {
-                md5_id: md5_id,
+            allowance: {
+                id: md5_id,
                 name: allowanceName,
                 amount: allowanceAmount,
                 frequency: allowanceFrequency,
@@ -155,7 +157,7 @@ function updateAllowance(button){
 
 function deleteAllowance(button){
     const row = button.closest('tr');  // Get the closest row
-    const allowanceData = {
+    const allowance = {
         token: row.getAttribute('data-id'),
     };
     
@@ -164,7 +166,9 @@ function deleteAllowance(button){
         type: 'POST',
         data: {
             action: 'delete',
-            md5_id: allowanceData.token
+            allowance: {
+                id: allowance.token
+            }
         },
         success: function(response) {
             $('#response-test').html(response);

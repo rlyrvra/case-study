@@ -118,7 +118,7 @@ function showSuccessDeleteDeduction(){
     });
 }
 
-function confirmDeleteDeduction(button){
+function confirmDeleteAssignedDeduction(button){
     $('#assign_deductions_modal').modal('hide');
     Swal.fire({
         title: 'Are you sure?',
@@ -130,7 +130,7 @@ function confirmDeleteDeduction(button){
         confirmButtonText: 'Yes, delete it!',
     }).then((result) => {
         if (result.isConfirmed) {
-            deleteDeduction(button);
+            deleteAssignedDeduction(button);
         } else {
             $('#assign_deductions_modal').modal('show');
         }

@@ -1,3 +1,11 @@
+<?php
+function highlightText($text, $searchText) {
+    if (!empty($searchText)) {
+        return preg_replace('/(' . preg_quote($searchText, '/') . ')/i', '<span style="background-color: yellow;">$1</span>', htmlspecialchars($text));
+    }
+    return htmlspecialchars($text);
+}
+?>
 <?php $i = 0; if (!empty($employees)): ?>
     <div class="d-flex justify-content-center row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
         <?php foreach ($employees as $row): ?>
@@ -12,8 +20,8 @@
             $roleBadge = isset($roleColors[$role]) ? $roleColors[$role] : 'bg-secondary'; // Default gray
             ?>
             <div class="col">
-              <div class="card border-0 p-3 shadow-sm transition-shadow hover-shadow-lg">
-                  <div class="d-flex align-items-center">
+              <div class="card border-1 p-3 shadow-sm transition-card">
+                  <div class="d-flex align-items-center header">
                       <div class="me-3">
                           <?php
                           if (!isset($row['profile_picture']) || empty($row['profile_picture'])) {
@@ -28,19 +36,19 @@
                           $fullName = htmlspecialchars($row['full_name']);
                           $shortFullName = (strlen($fullName) > 40) ? substr($fullName, 0, 17) . '...' : $fullName;
 
-                          $jobTitle = htmlspecialchars($row['job_title_title']);
+                          $jobTitle = htmlspecialchars($row['job_title']);
                           $shortJobTitle = (strlen($jobTitle) > 40) ? substr($jobTitle, 0, 17) . '...' : $jobTitle;
                           ?>
                           
                           <h5 class="mb-1" title="<?php echo $fullName; ?>">
                               <span class="text-truncate d-inline-block" style="max-width: 200px;">
-                                  <?php echo $shortFullName; ?>
+                                  <?= highlightText($shortFullName, $searchFilter); ?>
                               </span>
                           </h5>
                           
                           <p class="text-muted mb-1" title="<?php echo $jobTitle; ?>">
                               <span class="text-truncate d-inline-block" style="max-width: 200px;">
-                                  <?php echo $shortJobTitle; ?>
+                                  <?= highlightText($shortJobTitle, $searchFilter); ?>
                               </span>
                           </p>
 
@@ -61,7 +69,7 @@
                         <small class="text-muted">Email</small>
                         <div class="text-black" title="<?php echo $email; ?>">
                             <span class="d-inline-block text-truncate w-100" style="max-width: 100%;">
-                                <?php echo $shortEmail; ?>
+                                <?= highlightText($shortEmail, $searchFilter); ?>
                             </span>
                         </div>
                     </div>
@@ -172,4 +180,32 @@
     .page-item:hover{
         cursor: pointer !important;
     }
+    .transition-card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .transition-card:hover {
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+      border-color: #0d6efd;
+    }
+
+    .transition-card .header {
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    .transition-card:hover .header {
+      color: #fff;
+    }
+
+    .transition-card .card-body {
+      transition: background 0.3s ease;
+    }
+
+    .transition-card:hover .card-body {
+      background: #f9f9f9;
+    }
+    
 </style>

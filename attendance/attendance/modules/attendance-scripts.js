@@ -13,6 +13,31 @@ function getPage(page){
     return page;
 }
 
+function fetchPage(){
+    Swal.fire({
+        title: 'Enter a Number',
+        input: 'number',
+        inputAttributes: {
+            min: 1,
+            max: getMaxPageValue(),
+            step: 1
+        },
+        showCancelButton: true,
+        confirmButtonText: 'Submit',
+        cancelButtonText: 'Cancel',
+        preConfirm: (value) => {
+            if (!value || isNaN(value)) {
+                Swal.showValidationMessage('Please enter a valid number');
+            }
+            return value;
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetchAllAttendance(result.value);
+        }
+    });
+}
+
 function getMaxPageValue() {
     // Find all <a> tags inside the <ul> with id "pagination"
     let pageNumbers = $("#pagination .page-link").map(function() {
@@ -40,4 +65,57 @@ function getOrderBy(){
 function getByDate(){
     var byDate = selectedOptions.by_date;
     return byDate;
+}
+
+function getViewMode() {
+    let selected = document.querySelector('input[name="view"]:checked');
+    return selected ? selected.value : '';
+}
+
+function showSuccessOvertimeApproval() {
+    Swal.fire({
+        title: 'Success!',
+        text: 'The overtime of this attendance has been successfully approved.',
+        icon: 'success',
+        confirmButtonText: 'OK'
+    });
+}
+
+function showFatalError(message) {
+    Swal.fire({
+        title: 'Fatal Error!',
+        html: `${message} <br> Please contact the system administrator.`,
+        icon: 'error',
+        confirmButtonText: 'OK'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            location.reload();
+        }
+    });
+}
+
+
+function showError(message) {
+    Swal.fire({
+        title: 'Error!',
+        text: message,
+        icon: 'error',
+        confirmButtonText: 'OK'
+    });
+}
+
+function approveOvertimeClick(button) {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "Do you want to approve the overtime of this attendance?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, approve it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            approveOvertime(button);
+        }
+    });
 }

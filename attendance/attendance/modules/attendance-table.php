@@ -26,12 +26,14 @@
       <th>Overtime Approval</th>
       <th>Status</th>
       <th>Remarks</th>
+      <th>Updated</th>
+      <th>Action</th>
     </tr>
   </thead>
   <tbody>
     <?php if (!empty($myAttendance)): ?>
       <?php $i = ($offset + 1); foreach ($myAttendance as $row): ?>
-        <tr>
+        <tr data-id="<?php echo htmlspecialchars($row['id']); ?>">
           <td><?php echo htmlspecialchars($i); $i++;?></td>
           <td>
             <?php echo htmlspecialchars($row['employee_code']); ?>
@@ -103,20 +105,14 @@
           }
           ?> me-1"><?php echo htmlspecialchars($row['attendance_status']); ?></span>
           </td>
-          <?php if (isset($actionsMode) && $actionsMode === 'Actions'): ?>
-            <td><?php echo htmlspecialchars(date("l, F j, Y, g:i A", strtotime($row['created_at']))); ?></td>
-            <td><?php echo htmlspecialchars(date("l, F j, Y, g:i A", strtotime($row['updated_at']))); ?></td>
-            <?php if (isset($status) && $status === 'Archived') echo "<td>" . htmlspecialchars(date("l, F j, Y, g:i A", strtotime($row['deleted_at']))) . "</td>"; ?>
-            <?php if (!isset($status) || $status !== 'Archived') echo
-                '<td>
-                <button class="btn btn-info" title="Click to Edit" onclick="updateDepartmentClick(this)" data-bs-toggle="modal" data-bs-target="#update_departments_modal"> 
-                    <i class="bx bx-edit-alt"></i>
-                </button> 
-                <button class="btn btn-danger" title="Click to Delete" onclick="confirmDeleteDepartment(this)">
-                    <i class="bx bx-trash"></i>
-                </button> 
-                </td>';
-            ?>
+          <td><?php echo htmlspecialchars($row['remarks']); ?></td>
+          <td><?php echo htmlspecialchars(date("l, F j, Y, g:i A", strtotime($row['updated_at']))); ?></td>
+          <?php if ($row['is_overtime_approved'] == 0): ?>
+          <td>
+            <button class="btn btn-primary btn-sm" title="Approve overtime on this schedule" onclick="approveOvertimeClick(this)"> 
+              <i class="bx bx-calendar-check"></i>
+            </button> 
+          </td>
           <?php endif ?>
         </tr>
       <?php endforeach; ?>
@@ -158,12 +154,44 @@
           <span aria-hidden="true">&laquo;</span>
         </a>
       </li>
-      <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-        <!-- Page Numbers -->
+
+      <!-- First Page -->
+      <li class="page-item <?= $page === 1 ? 'active' : '' ?>">
+        <a class="page-link" onclick="fetchAllAttendance(1)">1</a>
+      </li>
+
+      <!-- Ellipsis Before Current Page -->
+      <?php if ($page > 3): ?>
+        <li class="page-item">
+          <a class="page-link" onclick="fetchPage()">...</a>
+        </li>
+      <?php endif; ?>
+
+      <!-- Dynamic Middle Pages -->
+      <?php
+      $start = max(2, $page - 1);
+      $end = min($totalPages - 1, $page + 1);
+      for ($i = $start; $i <= $end; $i++):
+      ?>
         <li class="page-item <?= $i === $page ? 'active' : '' ?>">
-          <a class="page-link" onclick="fetchAllAttendance(<?php echo $i ?>)" ><?= $i ?></a>
+          <a class="page-link" onclick="fetchAllAttendance(<?php echo $i ?>)"><?= $i ?></a>
         </li>
       <?php endfor; ?>
+
+      <!-- Ellipsis After Current Page -->
+      <?php if ($page < $totalPages - 2): ?>
+        <li class="page-item">
+          <a class="page-link" onclick="fetchPage()">...</a>
+        </li>
+      <?php endif; ?>
+
+      <!-- Last Page -->
+      <?php if ($totalPages > 1): ?>
+        <li class="page-item <?= $page == $totalPages ? 'active' : '' ?>">
+          <a class="page-link" onclick="fetchAllAttendance(<?= $totalPages ?>)"><?= $totalPages ?></a>
+        </li>
+      <?php endif; ?>
+
       <!-- Next Button -->
       <li class="page-item <?= $page >= $totalPages ? 'disabled' : '' ?>">
         <a class="page-link" onclick="fetchAllAttendance('next')" aria-label="Next">

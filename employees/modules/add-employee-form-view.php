@@ -184,7 +184,7 @@ if ($resultSet["total_row_count"] <= 0) {
                 <div class="col-md-4">
                     <label for="job-title" class="form-label">Job Title*</label>
                     <select class="form-select selectize_job_title" id="job-title" name="job-title" readonly disabled>
-                        <option value="<?php echo $employees[0]['job_title_id']; ?>" selected><?php echo $employees[0]['job_title_title']; ?></option>
+                        <option value="<?php echo $employees[0]['job_title_id']; ?>" selected><?php echo $employees[0]['job_title']; ?></option>
                     </select>
                 </div>
                 <div class="col-md-4">

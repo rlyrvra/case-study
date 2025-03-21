@@ -1,6 +1,10 @@
 <?php
-// table.php
-// Expecting $data to be passed from api.php
+function highlightText($text, $searchText) {
+    if (!empty($searchText)) {
+        return preg_replace('/(' . preg_quote($searchText, '/') . ')/i', '<span style="background-color: yellow;">$1</span>', htmlspecialchars($text));
+    }
+    return htmlspecialchars($text);
+}
 ?>
 <style>
 
@@ -27,7 +31,7 @@
         <tr data-id="<?php echo htmlspecialchars($row['id']); ?>"
         >  
           <td><?php $i++; echo htmlspecialchars($i); ?></td>
-          <td><?php echo htmlspecialchars($row['employee_full_name']); ?></td>
+          <td><?= highlightText($row['employee_full_name'], $searchFilter); ?></td>
           <td>
             <?php 
             $startTime = $row['start_time']; // Assuming $row['start_time'] contains '1970-01-01 08:00:00'

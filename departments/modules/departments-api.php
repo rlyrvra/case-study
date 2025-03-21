@@ -14,6 +14,17 @@ try {
     $action = $_POST['action'] ?? '';
 
     if ($action === 'fetchAll') {
+        $selectedColumns = [
+            "id", 
+            "name", 
+            "department_head_id", 
+            "description", 
+            "status", 
+            "created_at", 
+            "updated_at", 
+            "deleted_at", 
+            "department_head_full_name"
+        ];
         $status = isset($_POST['filter_status']) && $_POST['filter_status'] ? $_POST['filter_status'] : null;
         $searchAt = isset($_POST['filter_searchAt']) && $_POST['filter_searchAt'] !== "none" ? $_POST['filter_searchAt'] : null;
         $searchFilter = isset($_POST['filter_search']) ? $_POST['filter_search'] : null;
@@ -79,7 +90,7 @@ try {
         ];
         $departmentRepository = new DepartmentRepository($departmentDao);
         $departmentService = new DepartmentService($departmentRepository);
-        $result = $departmentService->fetchAllDepartments([], $filterCriteria, $sortCriteria, $limit, $offset);
+        $result = $departmentService->fetchAllDepartments($selectedColumns, $filterCriteria, $sortCriteria, $limit, $offset);
         $departments;
         if ($result !== ActionResult::FAILURE) {
             $departments = $result['result_set'];
@@ -110,109 +121,232 @@ try {
         if ($departmentData == null) {
             die('
             <script>
-            showCouldNotFindData();
+                showCouldNotFindData();
             </script>');
             return;
         }
-        $name = isset($departmentData['name']) && $departmentData['name'] !== '' ? $departmentData['name'] : null;
-        $departmentHeadId = $departmentData['departmentHeadId'] !== '' && $departmentData['departmentHeadId'] !== 'None' ? (int) $departmentData['departmentHeadId'] : null;
-        $description = isset($departmentData['description']) ? $departmentData['description'] : null;
-        $status = isset($departmentData['status']) ? $departmentData['status'] : null;
         
-        $newDepartment = new Department(
-            id: null,
-            name: $name,
-            departmentHeadId: $departmentHeadId,
-            description: $description,
-            status: $status
-        );
         $departmentRepository = new DepartmentRepository($departmentDao);
         $departmentService = new DepartmentService($departmentRepository);
-        $result = $departmentService->createDepartment($newDepartment);
+        $result = $departmentService->createDepartment($_POST['department']);
         
-        if ($result === ActionResult::SUCCESS) {
-            die('
+        if (isset($result['status']) && $result['status'] === 'success') {
+            die("
             <script>
-            showSuccessCreate();
-            </script>');
-        }else if($result === ActionResult::FAILURE){
-            $message = 'Failed to create department. Please try again.';
-            die('
+                showSuccessCreate();
+            </script>
+            ");
+        } else if (isset($result['status']) && $result['status'] === 'error') {
+            die("
             <script>
-            showError(' . json_encode($message) 
-            . ');
-            </script>');
+                showError(" . json_encode($result) . ");
+            </script>
+            ");
+        } else if (isset($result['status']) && $result['status'] === 'invalid_input'){
+            die("
+            <script>
+                showValidationError(" . json_encode($result['errors']) . ");
+            </script>
+            ");
         }
+
         return;
     }
 
     if($action == 'delete'){
 
-        $hashed_id = $_POST['md5_id'] ?? null;
+        $departmentData = $_POST['department'] ?? null;
+        if ($departmentData == null) {
+            die('
+            <script>
+                showCouldNotFindData();
+            </script>');
+            return;
+        }
+        $departmentId = $departmentData['id'];
+        
         $departmentRepository = new DepartmentRepository($departmentDao);
         $departmentService = new DepartmentService($departmentRepository);
-        $deleteResult = $departmentService->deleteDepartment($hashed_id);
+        $result = $departmentService->deleteDepartment($departmentId);
 
-        if ($deleteResult === ActionResult::SUCCESS) {
-            die('
+        if (isset($result['status']) && $result['status'] === 'success') {
+            die("
             <script>
-            showSuccessDelete();
-            </script>');
-        }else if($deleteResult === ActionResult::FAILURE){
-            $message = 'Failed to delete department. Please try again.';
-            die('
+                showSuccessDelete();
+            </script>
+            ");
+        } else if (isset($result['status']) && $result['status'] === 'error') {
+            die("
             <script>
-            showError(' . json_encode($message) 
-            . ');
-            </script>');
+                showError(" . json_encode($result) . ");
+            </script>
+            ");
+        } else if (isset($result['status']) && $result['status'] === 'invalid_input'){
+            die("
+            <script>
+                showValidationError(" . json_encode($result['errors']) . ");
+            </script>
+            ");
         }
+
+
         return;
     }
 
 
     if($action == 'update'){
         $departmentData = $_POST['department'] ?? null;
+
         if (!$departmentData) {
             die('
             <script>
-            showCouldNotFindData();
+                showCouldNotFindData();
             </script>');
             return;
         }
-        
-        $name = $departmentData['name'] ?? '';
-        $departmentHeadId = $departmentData['departmentHeadId'] !== '' && $departmentData['departmentHeadId'] !== 'None'  ? (int) $departmentData['departmentHeadId'] : null;
-        $departmentDescription = $departmentData['departmentDescription'] ?? null;
-        $departmentStatus = $departmentData['departmentStatus'] ?? null;
-        $hashed_id = $departmentData['md5_id'] ?? null;
 
-
-        $updatedDepartment = new Department(
-            id: $hashed_id,
-            name: $name,
-            departmentHeadId: $departmentHeadId,
-            description: $departmentDescription,
-            status: $departmentStatus
-        );
         $departmentRepository = new DepartmentRepository($departmentDao);
         $departmentService = new DepartmentService($departmentRepository);
-        $updateResult = $departmentService->updateDepartment($updatedDepartment);
+        $result = $departmentService->updateDepartment($_POST['department']);
 
-        if ($updateResult === ActionResult::SUCCESS) {
+        if (isset($result['status']) && $result['status'] === 'success') {
+            die("
+            <script>
+                showSuccessUpdate();
+            </script>
+            ");
+        } else if (isset($result['status']) && $result['status'] === 'error') {
+            die("
+            <script>
+                showError(" . json_encode($result) . ");
+            </script>
+            ");
+        } else if (isset($result['status']) && $result['status'] === 'invalid_input'){
+            die("
+            <script>
+                showValidationError(" . json_encode($result['errors']) . ");
+            </script>
+            ");
+        }
+
+        return;
+    }
+
+    if ($action === 'printFetch'){
+        $type = isset($_POST['type']) && $_POST['type'] ? $_POST['type'] : null;
+        if(!$type){
+            return;
+        }
+        if($type === 'Department + Job Title'){
+            fetchAllJoinedRecord($type);
+            return;
+        }
+        if($type === 'Department + Job Title + Employees'){
+            fetchAllJoinedRecord($type);
+            return;
+        }
+
+        $selectedColumns = [
+            "name", 
+            "department_head_full_name", 
+            "description", 
+            "status", 
+            "created_at", 
+            "updated_at", 
+            "deleted_at"
+        ];
+
+        $status = isset($_POST['filter_status']) && $_POST['filter_status'] ? $_POST['filter_status'] : null;
+        $searchAt = isset($_POST['filter_searchAt']) && $_POST['filter_searchAt'] !== "none" ? $_POST['filter_searchAt'] : null;
+        $searchFilter = isset($_POST['filter_search']) ? $_POST['filter_search'] : null;
+        $dateFilterColumn = isset($_POST['filter_date_column']) ? $_POST['filter_date_column'] : null;
+        $dateStart = isset($_POST['filter_startDate']) && $dateFilterColumn !== "none" ? $_POST['filter_startDate'] : 0;
+        $dateEnd = isset($_POST['filter_endDate']) && $dateFilterColumn !== "none" ? $_POST['filter_endDate'] : 0;
+        $page = isset($_POST['page']) ? (int)$_POST['page'] : 1;
+        $limit = isset($_POST['numberEntries']) ? $_POST['numberEntries'] : 10;
+        $offset = ($page - 1) * $limit;
+        
+        
+        $filterCriteria = [];
+        
+        if(!empty($status)){
+            $filterCriteria[] = [
+                "column" => "department.status",
+                "operator" => "=",
+                "value" => $status
+            ];
+        }
+
+        if(empty($searchAt) && !empty($searchFilter)){
+            $filterCriteria[] = 
+            [
+                [
+                    "column" => "department.description", 
+                    "operator" => "LIKE",
+                    "value" => "%$searchFilter%", 
+                    'boolean' => 'OR'
+                ],
+                [
+                    "column" => "department.name", 
+                    "operator" => "LIKE",
+                    "value" => "%$searchFilter%", 
+                    'boolean' => 'OR'
+                ]
+            ];
+        }
+
+        if(!empty($searchFilter) && !empty($searchAt)){
+            $filterCriteria[] = [
+                "column" => $searchAt, 
+                "operator" => "LIKE",
+                "value" => "%$searchFilter%"
+            ];
+        }
+
+        if((!empty($dateFilterColumn) && $dateFilterColumn !== "none") && !empty($dateStart) && !empty($dateEnd)){
+            $filterCriteria[] = [
+                "column" => "department." . $dateFilterColumn,
+                "operator" => "BETWEEN",
+                "lower_bound" => $dateStart,
+                "upper_bound" => $dateEnd
+            ];
+        }
+
+
+        $sortCriteria = [
+            [
+                "column" => "department." . $_POST['sort_by'],
+                "direction" => $_POST['sort_order']
+            ]
+        ];
+        $departmentRepository = new DepartmentRepository($departmentDao);
+        $departmentService = new DepartmentService($departmentRepository);
+        $result = $departmentService->fetchAllDepartments($selectedColumns, $filterCriteria, $sortCriteria, $limit, $offset);
+        $departments;
+        if (isset($result['result_set']) && !empty($result['result_set'])) {
+            $departments = $result['result_set'];
+            $totalDepartments = $result["total_row_count"];
+            $totalPages = ceil($totalDepartments / $limit);
+        } else if(empty($departments)){
+            $message = 'No records found. Printing failed.';
             die('
             <script>
-            showSuccessUpdate();
+            showError(' . json_encode($message) 
+            . ');
             </script>');
-        }else if($updateResult === ActionResult::FAILURE){
-            $message = 'Failed to update department. Please try again.';
+        } else if($result === ActionResult::FAILURE){
+            $message = 'Failed to fetch departments. Please try again.';
             die('
             <script>
             showError(' . json_encode($message) 
             . ');
             </script>');
         }
+
+        include __DIR__ . '/department-pdf.php';
         return;
     }
+
 
     $message = "Invalid action specified.";
     die('
@@ -227,4 +361,128 @@ try {
     showFatalError(' . json_encode($message) 
     . ');
     </script>');
+}
+
+
+function fetchAllJoinedRecord($type){
+    global $pdo;
+    if($type === 'Department + Job Title'){
+        $selectedColumns = [
+            "name", 
+            "department_head_full_name", 
+            "description", 
+            "status", 
+            "created_at", 
+            "updated_at", 
+            "deleted_at", 
+            "job_title",
+            "job_title_status"
+        ];
+    }
+    if($type === 'Department + Job Title + Employees'){
+        $selectedColumns = [
+            "name", 
+            "department_head_full_name", 
+            "description", 
+            "status", 
+            "created_at", 
+            "updated_at", 
+            "deleted_at", 
+            "job_title",
+            "job_title_status",
+            "employee_full_name",
+            "employee_code",
+            "employee_supervisor_full_name",
+            "employee_deleted_at"
+        ];
+    }
+    $status = isset($_POST['filter_status']) && $_POST['filter_status'] ? $_POST['filter_status'] : null;
+    $searchAt = isset($_POST['filter_searchAt']) && $_POST['filter_searchAt'] !== "none" ? $_POST['filter_searchAt'] : null;
+    $searchFilter = isset($_POST['filter_search']) ? $_POST['filter_search'] : null;
+    $dateFilterColumn = isset($_POST['filter_date_column']) ? $_POST['filter_date_column'] : null;
+    $dateStart = isset($_POST['filter_startDate']) && $dateFilterColumn !== "none" ? $_POST['filter_startDate'] : 0;
+    $dateEnd = isset($_POST['filter_endDate']) && $dateFilterColumn !== "none" ? $_POST['filter_endDate'] : 0;
+    $page = isset($_POST['page']) ? (int)$_POST['page'] : 1;
+    $limit = isset($_POST['numberEntries']) ? $_POST['numberEntries'] : 10;
+    $offset = ($page - 1) * $limit;
+    
+    
+    $filterCriteria = [];
+    
+    if(!empty($status)){
+        $filterCriteria[] = [
+            "column" => "department.status",
+            "operator" => "=",
+            "value" => $status
+        ];
+    }
+
+    if(empty($searchAt) && !empty($searchFilter)){
+        $filterCriteria[] = 
+        [
+            [
+                "column" => "department.description", 
+                "operator" => "LIKE",
+                "value" => "%$searchFilter%", 
+                'boolean' => 'OR'
+            ],
+            [
+                "column" => "department.name", 
+                "operator" => "LIKE",
+                "value" => "%$searchFilter%", 
+                'boolean' => 'OR'
+            ]
+        ];
+    }
+
+    if(!empty($searchFilter) && !empty($searchAt)){
+        $filterCriteria[] = [
+            "column" => $searchAt,
+            "operator" => "LIKE",
+            "value" => "%$searchFilter%"
+        ];
+    }
+
+    if((!empty($dateFilterColumn) && $dateFilterColumn !== "none") && !empty($dateStart) && !empty($dateEnd)){
+        $filterCriteria[] = [
+            "column" => "department." . $dateFilterColumn,
+            "operator" => "BETWEEN",
+            "lower_bound" => $dateStart,
+            "upper_bound" => $dateEnd
+        ];
+    }
+
+
+    $sortCriteria = [
+        [
+            "column" => "department." . $_POST['sort_by'],
+            "direction" => $_POST['sort_order']
+        ]
+    ];
+    $departmentDao = new DepartmentDao($pdo);
+    $departmentRepo = new DepartmentRepository($departmentDao);
+    $departmentService = new DepartmentService($departmentRepo);
+    $result = $departmentService->fetchAllDepartments($selectedColumns, $filterCriteria, $sortCriteria, $limit, $offset);
+    $departments = [];
+    if ($result !== ActionResult::FAILURE) {
+        $departments = $result['result_set'];
+        $totalDepartments = $result["total_row_count"];
+        $totalPages = ceil($totalDepartments / $limit);
+    } else if(empty($departments)){
+        $message = 'No records found. Printing failed.';
+        die('
+        <script>
+        showError(' . json_encode($message) 
+        . ');
+        </script>');
+    } else if($result === ActionResult::FAILURE){
+        $message = 'Failed to fetch departments. Please try again.';
+        die('
+        <script>
+        showError(' . json_encode($message) 
+        . ');
+        </script>');
+    }
+    
+    include __DIR__ . '/department-pdf.php';
 }

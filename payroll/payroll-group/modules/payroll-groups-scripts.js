@@ -13,6 +13,31 @@ function getPage(page){
     return page;
 }
 
+function fetchPage(){
+    Swal.fire({
+        title: 'Enter a Number',
+        input: 'number',
+        inputAttributes: {
+            min: 1,
+            max: getMaxPageValue(),
+            step: 1
+        },
+        showCancelButton: true,
+        confirmButtonText: 'Submit',
+        cancelButtonText: 'Cancel',
+        preConfirm: (value) => {
+            if (!value || isNaN(value)) {
+                Swal.showValidationMessage('Please enter a valid number');
+            }
+            return value;
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetchAllPayrollGroups(result.value);
+        }
+    });
+}
+
 function getMaxPageValue() {
     // Find all <a> tags inside the <ul> with id "pagination"
     let pageNumbers = $("#pagination .page-link").map(function() {
@@ -42,6 +67,11 @@ function getByDate(){
     return byDate;
 }
 
+function getViewMode() {
+    let selected = document.querySelector('input[name="view"]:checked');
+    return selected ? selected.value : '';
+}
+
 function showFrequencyOptions(selectElement, form) {
     // Get the selected option
     var selectedOption = selectElement.options[selectElement.selectedIndex];
@@ -54,7 +84,7 @@ function showFrequencyOptions(selectElement, form) {
         // Hide all containers first (optional)
         form.querySelectorAll('.frequency-container').forEach(function(container) {
             container.classList.add("visually-hidden");
-            container.querySelectorAll('.form-control').forEach(childTarget =>{
+            container.querySelectorAll('.form-select').forEach(childTarget =>{
                 childTarget.required = false;
                 childTarget.value = '';
             });
@@ -64,7 +94,7 @@ function showFrequencyOptions(selectElement, form) {
         var targetContainer = document.getElementById(dataTarget);
         if (targetContainer) {
             targetContainer.classList.remove("visually-hidden");
-            targetContainer.querySelectorAll('.form-control').forEach(childTarget =>{
+            targetContainer.querySelectorAll('.form-select').forEach(childTarget =>{
                 childTarget.required = true;
             });
         }
@@ -83,6 +113,19 @@ function calculateSecondPayUpdate(form){
     semiSecond.value = semiFirst + 15;
 }
 
+function clickCardEvent(card, event){
+    // Prevent modal from opening if the clicked element are buttons
+    if (event.target.closest('.btn')) {
+        return;
+    }
+
+    const button = card.querySelector('[onclick="updatePayrollGroupClick(this)"]');
+    if(!button){
+        return;
+    }
+    $('#update-payrollGroups-modal').modal('show');
+    updatePayrollGroupClick(button);
+}
 
 
 function updatePayrollGroupClick(button){

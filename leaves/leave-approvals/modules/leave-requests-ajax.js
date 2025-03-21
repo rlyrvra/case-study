@@ -21,18 +21,20 @@ function fetchAllLeaveRequests(page = 1){
         endDate = $("#dateEnd").val();
     }
     var search = $("#searchText").val();
+    var viewMode = getViewMode();
 
-    console.log(`
-        Number of Entries: ${numberEntries}, 
-        Sort By Column: ${sortByColumn}, 
-        Page Number: ${pageNumber}, 
-        Sort Order By: ${sortOrderBy}, 
-        Filter Status: ${filterStatus}, 
-        Search At Column: ${searchColumn}, 
-        Date Column: ${dateColumn}, 
-        Start Date: ${startDate}, 
-        End Date: ${endDate}, 
-        Search Text: ${search}`);
+
+    // console.log(`
+    //     Number of Entries: ${numberEntries}, 
+    //     Sort By Column: ${sortByColumn}, 
+    //     Page Number: ${pageNumber}, 
+    //     Sort Order By: ${sortOrderBy}, 
+    //     Filter Status: ${filterStatus}, 
+    //     Search At Column: ${searchColumn}, 
+    //     Date Column: ${dateColumn}, 
+    //     Start Date: ${startDate}, 
+    //     End Date: ${endDate}, 
+    //     Search Text: ${search}`);
 
     $.ajax({
         url: 'leaves/leave-approvals/modules/leave-requests-api',
@@ -48,7 +50,8 @@ function fetchAllLeaveRequests(page = 1){
             filter_search: search,
             filter_date_column: dateColumn,
             filter_startDate: startDate,
-            filter_endDate: endDate
+            filter_endDate: endDate,
+            view_mode: viewMode
         },
         success: function(response) {
             $('#leave_requests_table').html(response);

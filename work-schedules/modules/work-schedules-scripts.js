@@ -13,31 +13,6 @@ function getPage(page){
     return page;
 }
 
-function fetchPage(){
-    Swal.fire({
-        title: 'Enter a Number',
-        input: 'number',
-        inputAttributes: {
-            min: 1,
-            max: getMaxPageValue(),
-            step: 1
-        },
-        showCancelButton: true,
-        confirmButtonText: 'Submit',
-        cancelButtonText: 'Cancel',
-        preConfirm: (value) => {
-            if (!value || isNaN(value)) {
-                Swal.showValidationMessage('Please enter a valid number');
-            }
-            return value;
-        }
-    }).then((result) => {
-        if (result.isConfirmed) {
-            fetchAllWorkSchedules(result.value);
-        }
-    });
-}
-
 function getMaxPageValue() {
     // Find all <a> tags inside the <ul> with id "pagination"
     let pageNumbers = $("#pagination .page-link").map(function() {
@@ -90,6 +65,11 @@ function getOrderBy(){
 function getByDate(){
     var byDate = selectedOptions.by_date;
     return byDate;
+}
+
+function getViewMode() {
+    let selected = document.querySelector('input[name="view"]:checked');
+    return selected ? selected.value : '';
 }
 
 
@@ -304,10 +284,10 @@ function cancelBreakAssignment(button){
     rowAddedWork = false;
 }
 
-// JavaScript function to get all values in the table
 function getCreateBreaksValues(rows) {
     const workScheduleBreaks = [];
 
+    
     for (let i = 0; i < rows.length; i++) {
         const row = rows[i];
         const breakTypeId = row.cells[0].children[0].value;
@@ -315,19 +295,47 @@ function getCreateBreaksValues(rows) {
         const startTime = row.cells[2].children[0].value;
         const endTime = row.cells[3].children[0].value;
 
-        // Only add if a valid allowance was selected
         if (breakTypeId && breakTypeId !== "" && startTime !== "") {
-            workScheduleBreaks.push({
-                id: breakTypeId,
-                paid: paid,
-                start_time: convertTo24Hour(startTime),
-                end_time: convertTo24Hour(endTime)
-            });
+            const start24 = convertTo24Hour(startTime);
+            const end24 = convertTo24Hour(endTime);
+
+            // Check for overlaps with previously added breaks
+            let hasOverlap = workScheduleBreaks.some(breakItem => 
+                (start24 < breakItem.end_time && end24 > breakItem.start_time)
+            );
+
+            if (hasOverlap) {
+                // Clear overlapping row values
+                row.cells[0].children[0].value = "";
+                row.cells[2].children[0].value = "";
+                row.cells[3].children[0].value = "";
+            } else {
+                workScheduleBreaks.push({
+                    id: breakTypeId,
+                    paid: paid,
+                    start_time: start24,
+                    end_time: end24
+                });
+            }
         }
     }
 
-    //console.log(workScheduleBreaks); // Display in console or process as needed
     return workScheduleBreaks;
+}
+
+function clickCardEvent(card, event){
+    // Prevent modal from opening if the clicked element are buttons
+    if (event.target.closest('.btn')) {
+        return;
+    }
+
+    const button = card.querySelector('[onclick="fetchBreakTypes(); fetchWorkScheduleAndBreak(this);"]');
+    if(!button){
+        return;
+    }
+    $('#update_work_schedules').modal('show');
+    fetchBreakTypes();
+    fetchWorkScheduleAndBreak(button);
 }
 
 function updateWorkScheduleData(data){

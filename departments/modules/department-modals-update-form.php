@@ -15,7 +15,7 @@
             </div>
 
             <div class="modal-body">
-                <form id="update_departments_form" onsubmit="event.preventDefault(); updateDepartment(this);">
+                <form id="update_departments_form" onsubmit="event.preventDefault();">
                     <div class="row g-3">
                         <!-- Department Name -->
                         <div class="col-md-6">

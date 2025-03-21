@@ -1,55 +1,92 @@
-<!-- Card Rendering -->
+<?php
+function highlightText($text, $searchText) {
+    if (!empty($searchText)) {
+        return preg_replace('/(' . preg_quote($searchText, '/') . ')/i', '<span style="background-color: yellow;">$1</span>', htmlspecialchars($text));
+    }
+    return htmlspecialchars($text);
+}
+?>
+
 <div class="container">
   <div class="row">
     <?php $i = ($offset + 1); if (!empty($departments)): ?>
       <?php foreach ($departments as $row): ?>
-        <?php $i++; ?>
         <div class="col-md-6 col-lg-4">
-          <div class="card shadow-sm mb-4 transition-card">
-            <div class="card-body">
-              <h5 class="card-title fw-bold"> <?php echo htmlspecialchars($row['name']); ?> </h5>
-              <p class="text-muted mb-2"><strong>Department Head:</strong> 
+          <div class="card shadow-sm mb-4 transition-card border-1" onclick="clickCardEvent(this, event);">
+            <div class="card-header d-flex justify-content-between py-3 border-bottom mb-2">
+              <div>
+                <h5 class="card-title fw-bold"> <?= highlightText($row['name'], $searchFilter); ?> </h5>
+                <span>
                 <?php if (!empty($row['department_head_full_name'])): ?>
-                  <?php echo htmlspecialchars($row['department_head_full_name']); ?>
-                <?php else: ?>
-                  <span class="badge bg-danger">Unassigned</span>
-                <?php endif; ?>
-              </p>
-              <p class="card-text"> <strong>Description:</strong> <?php echo htmlspecialchars($row['description']); ?> </p>
-              <p class="mb-2">
-                <strong>Status:</strong> 
+                    <?php echo htmlspecialchars($row['department_head_full_name']); ?>
+                  <?php else: ?>
+                    <span class="badge bg-danger">Unassigned</span>
+                  <?php endif; ?>
+                </span>
+              </div>
+              <span class="text-muted fw-light">#<?= htmlspecialchars($i); $i++; ?></span>
+            </div>
+            <div class="card-body">
+              <p class="card-text mb-2" style="text-align: justify;"><strong>Description:</strong> <?= highlightText($row['description'], $searchFilter); ?> </p>
+              <div class="d-flex justify-content-between mb-2">
+                <span><strong>Status:</strong></span>
                 <span class="badge 
                   <?php echo $row['status'] === "Active" ? "bg-primary" : ($row['status'] === "Inactive" ? "bg-warning" : "bg-danger"); ?>">
                   <?php echo htmlspecialchars($row['status']); ?>
                 </span>
-              </p>
-              <p class="text-muted small mb-2"> <strong>Created:</strong> <?php echo htmlspecialchars(date("F j, Y, g:i A", strtotime($row['created_at']))); ?> </p>
-              <p class="text-muted small mb-3"> <strong>Modified:</strong> <?php echo htmlspecialchars(date("F j, Y, g:i A", strtotime($row['updated_at']))); ?> </p>
-              <?php if ($row['status'] !== "Archived"): ?>
-              <div class="d-flex gap-2 w-100">
-                <table>
-                  <tbody>
-                  <tr data-id="<?php echo htmlspecialchars($row['id']); ?>"
-                    data-name="<?php echo htmlspecialchars($row['name']); ?>"
-                    data-dept-head-id="<?php echo htmlspecialchars($row['department_head_id']); ?>"
-                    data-department-head-id="<?php echo htmlspecialchars($row['department_head_full_name']); ?>"
-                    data-description="<?php echo htmlspecialchars($row['description']); ?>"
-                    data-status="<?php echo htmlspecialchars($row['status']); ?>">
-                    <td>
-                      <button class="btn btn-sm btn-info" title="Edit" onclick="updateDepartmentClick(this)" data-bs-toggle="modal" data-bs-target="#update_departments_modal"> 
-                        <i class="bx bx-edit-alt"></i> Edit
-                      </button>
-                      <button class="btn btn-sm btn-danger" title="Delete" onclick="confirmDeleteDepartment(this)"> 
-                        <i class="bx bx-trash"></i> Delete
-                      </button>
-                      <!-- <span class="text-muted fw-bold" style="float: right;">#<?php echo htmlspecialchars($i); ?></span> -->
-                    </td>
-                  </tr>
-                  </tbody>
-                </table>
+              </div>
+              <div class="d-flex justify-content-between mb-2">
+                <span><strong>Created:</strong></span>
+                <span><?php echo htmlspecialchars(date("F j, Y, g:i A", strtotime($row['created_at']))); ?> </span>
+              </div>
+              <div class="d-flex justify-content-between mb-2">
+                <span><strong>Modified:</strong></span>
+                <span><?php echo htmlspecialchars(date("F j, Y, g:i A", strtotime($row['updated_at']))); ?> </span>
+              </div>
+              <?php if ($row['status'] === "Archived"): ?>
+              <div class="d-flex justify-content-between mb-2">
+                <span><strong>Deleted:</strong></span>
+                <span><?php echo htmlspecialchars(date("F j, Y, g:i A", strtotime($row['deleted_at']))); ?> </span>
               </div>
               <?php endif ?>
+              
+              <div class="d-flex gap-2 w-100">
+                
+              </div>
+              
             </div>
+            <?php if ($row['status'] !== "Archived"): ?>
+            <div class="card-footer bg-light py-3 border-top">
+              <table class="w-100">
+                  <tbody>
+                    <tr 
+                      data-id="<?php echo htmlspecialchars($row['id']); ?>"
+                      data-name="<?php echo htmlspecialchars($row['name']); ?>"
+                      data-dept-head-id="<?php echo htmlspecialchars($row['department_head_id']); ?>"
+                      <?php 
+                      // echo htmlspecialchars(hash('sha256', $row['id']));
+                      // echo htmlspecialchars(hash('sha256', $row['department_head_id']));
+                      // $_SESSION['departments'][hash('sha256', $row['department_head_id'])]['department_head_id'] = $row['department_head_id'];
+                      ?>
+                      data-department-head-id="<?php echo htmlspecialchars($row['department_head_full_name']); ?>"
+                      data-description="<?php echo htmlspecialchars($row['description']); ?>"
+                      data-status="<?php echo htmlspecialchars($row['status']); ?>">
+                      <td colspan="2">
+                        <div class="d-flex justify-content-between">
+                          <button class="btn btn-sm btn-info" title="Edit" onclick="updateDepartmentClick(this)" data-bs-toggle="modal" data-bs-target="#update_departments_modal"> 
+                            <i class="bx bx-edit-alt"></i> Edit
+                          </button>
+                          <button class="btn btn-sm btn-danger" title="Delete" onclick="confirmDeleteDepartment(this)"> 
+                            <i class="bx bx-trash"></i> Delete
+                          </button>
+                        <!-- <span class="text-muted fw-bold" style="float: right;">#<?php echo htmlspecialchars($i); ?></span> -->
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+            </div>
+            <?php endif ?>
           </div>
         </div>
       <?php endforeach; ?>
@@ -60,16 +97,6 @@
     <?php endif; ?>
   </div>
 </div>
-
-<style>
-.transition-card {
-  transition: all 0.3s ease-in-out;
-}
-.transition-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
-}
-</style>
 
 
 <!-- Pagination Block (Placed after the table) -->
@@ -133,5 +160,40 @@
 <style>
   .page-item:hover:not(.disabled) {
     cursor: pointer !important;
+  }
+  
+  .transition-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #fff;
+  }
+
+  .transition-card:hover {
+    cursor: pointer;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    border-color: #0d6efd;
+  }
+
+  .transition-card:hover .card-header h5, .transition-card:hover .card-header span {
+    color: white !important;
+  }
+
+  .transition-card .card-header {
+    background: #f8f9fa;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+
+  .transition-card:hover .card-header {
+    background: #0d6efd;
+    color: #fff;
+  }
+
+  .transition-card .card-body {
+    transition: background 0.3s ease;
+  }
+
+  .transition-card:hover .card-body {
+    background: #f9f9f9;
   }
 </style>

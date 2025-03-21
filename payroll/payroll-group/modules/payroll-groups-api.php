@@ -27,6 +27,7 @@ try {
         $page = isset($_POST['page']) ? (int)$_POST['page'] : 1;
         $limit = isset($_POST['numberEntries']) ? $_POST['numberEntries'] : 10;
         $offset = ($page - 1) * $limit;
+        $viewMode = isset($_POST['view_mode']) ? $_POST['view_mode'] : 'table';
         
         $filterCriteria = [];
         
@@ -86,9 +87,20 @@ try {
             $payrollGroups = $result['result_set'];
         }
 
+        
+
         $totalPayrollGroups = $result["total_row_count"];
         $totalPages = ceil($totalPayrollGroups / $limit);
-        include __DIR__ . '/payroll-groups-table.php';
+        
+        
+        if($viewMode == 'table'){
+            include __DIR__ . '/payroll-groups-table.php';
+        }
+        else{
+            include __DIR__ . '/payroll-groups-table-card.php';
+        }
+
+
         return;
     }
 

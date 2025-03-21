@@ -1,4 +1,19 @@
 <div class="controls d-flex justify-content-between flex-column flex-lg-row"> 
+    <!--View Mode-->
+    <div class="col-auto d-flex align-items-center mx-1">
+        <div class="btn-group">
+            <input class="btn-check" type="radio" name="view" id="table-view" value="table" checked onchange="fetchAllLeaveRequests()">
+            <label class="btn btn-outline-primary" for="table-view">
+                <i class="bx bx-table"></i>
+            </label>
+
+            <input class="btn-check" type="radio" name="view" id="card-view" value="card" onchange="fetchAllLeaveRequests()">
+            <label class="btn btn-outline-primary" for="card-view">
+                <i class="bx bx-grid-alt"></i>
+            </label>
+        </div>
+    </div>
+
 
     <div class="dropdown mx-1 d-flex align-items-center sort mx-1">
         <button

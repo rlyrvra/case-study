@@ -86,6 +86,10 @@ try{
                 "column" => "employee.employment_type",
                 "operator" => "=",
                 "value" => $employmentType
+            ],
+            [
+                "column" => "employee.deleted_at",
+                "operator" => "IS NULL"
             ]
         ]);
 
@@ -97,7 +101,11 @@ try{
                 "column" => "employment_type_benefit.employment_type",
                 "operator" => "=",
                 "value" => $employmentType
-            ]
+            ],
+            [
+                "column" => "employment_type_benefit.deleted_at",
+                "operator" => "IS NULL"
+            ],
         ]
         );
 

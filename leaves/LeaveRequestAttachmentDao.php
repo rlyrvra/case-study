@@ -151,6 +151,7 @@ class LeaveRequestAttachmentDao
             {$limitClause}
             {$offsetClause}
         ";
+        
 
         try {
             $statement = $this->pdo->prepare($query);

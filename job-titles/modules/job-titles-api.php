@@ -14,6 +14,17 @@ try {
     $action = $_POST['action'] ?? '';
 
     if($action === 'fetchAll'){
+        $selectedColumns = [
+            "id", 
+            "title", 
+            "department_id",
+            "department_name",
+            "description", 
+            "status", 
+            "created_at", 
+            "updated_at", 
+            "deleted_at"
+        ];
         $status = $_POST['filter_status'];
         $searchAt = isset($_POST['filter_searchAt']) & $_POST['filter_searchAt'] !== "none" ? $_POST['filter_searchAt'] : null;
         $searchFilter = $_POST['filter_search'];
@@ -23,6 +34,7 @@ try {
         $page = isset($_POST['page']) ? (int)$_POST['page'] : 1;
         $limit = isset($_POST['numberEntries']) ? $_POST['numberEntries'] : 5;
         $offset = ($page - 1) * $limit;
+        $viewMode = isset($_POST['view_mode']) ? $_POST['view_mode'] : 'table';
         
         
         $filterCriteria = [];
@@ -76,7 +88,7 @@ try {
         ];
         $jobTitleRepository = new JobTitleRepository($jobTitleDao);
         $jobTitleService = new JobTitleService($jobTitleRepository);
-        $result = $jobTitleService->fetchAllJobTitles([], $filterCriteria, $sortCriteria, $limit, $offset);
+        $result = $jobTitleService->fetchAllJobTitles($selectedColumns, $filterCriteria, $sortCriteria, $limit, $offset);
         $jobTitles;
         $totalJobTitles = 0;
         if ($result !== ActionResult::FAILURE){
@@ -92,7 +104,13 @@ try {
 
         $totalJobTitles = $result["total_row_count"];
         $totalPages = ceil($totalJobTitles / $limit);
-        include __DIR__ . '/job-titles-table.php';
+        if($viewMode == 'table'){
+            include __DIR__ . '/job-titles-table.php';
+        }
+        else{
+            include __DIR__ . '/job-titles-table-card.php';
+        }
+        
         return;
 
     }

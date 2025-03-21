@@ -39,6 +39,14 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function assignAllowanceName(){
+    const form = document.getElementById('allowance_form');
+    if(!form.checkValidity()){
+        return;
+    }
+    const modalHide = $('#assign_allowances_modal');
+    modalHide.modal('hide');
+    const modalShow = $('#allowance_entitlement_modal');
+    modalShow.modal('show');
     const select = $('#select_employee').selectize();
     const employeeId = parseInt(select[0].selectize.getValue(), 10);
     const matchedEmployee = employees.find(employee => employee.id === employeeId);
@@ -118,7 +126,7 @@ function showSuccessDeleteAllowance(){
     });
 }
 
-function confirmDeleteAllowance(button){
+function confirmDeleteAssignedAllowance(button){
     $('#assign_allowances_modal').modal('hide');
     Swal.fire({
         title: 'Are you sure?',
@@ -130,7 +138,7 @@ function confirmDeleteAllowance(button){
         confirmButtonText: 'Yes, delete it!',
     }).then((result) => {
         if (result.isConfirmed) {
-            deleteAllowance(button);
+            deleteAssignedAllowance(button);
         } else {
             $('#assign_allowances_modal').modal('show');
         }

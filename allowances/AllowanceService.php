@@ -2,18 +2,67 @@
 
 require_once __DIR__ . '/AllowanceRepository.php';
 
+require_once __DIR__ . '/AllowanceValidator.php' ;
+
 class AllowanceService
 {
     private readonly AllowanceRepository $allowanceRepository;
 
+    private readonly AllowanceValidator $allowanceValidator;
+
     public function __construct(AllowanceRepository $allowanceRepository)
     {
         $this->allowanceRepository = $allowanceRepository;
+
+        $this->allowanceValidator = new AllowanceValidator($allowanceRepository);
     }
 
-    public function createAllowance(Allowance $allowance): ActionResult
+    public function createAllowance(array $allowance): array
     {
-        return $this->allowanceRepository->createAllowance($allowance);
+        $this->allowanceValidator->setGroup('create');
+
+        $this->allowanceValidator->setData($allowance);
+
+        $this->allowanceValidator->validate([
+            'name'       ,
+            'amount'     ,
+            'frequency'  ,
+            'description',
+            'status'
+        ]);
+
+        $validationErrors = $this->allowanceValidator->getErrors();
+
+        if ( ! empty($validationErrors)) {
+            return [
+                'status'  => 'invalid_input',
+                'message' => 'There are validation errors. Please check the input values.',
+                'errors'  => $validationErrors
+            ];
+        }
+
+        $allowance = new Allowance(
+            id         :         null                     ,
+            name       :         $allowance['name'       ],
+            amount     : (float) $allowance['amount'     ],
+            frequency  :         $allowance['frequency'  ],
+            description:         $allowance['description'],
+            status     :         $allowance['status'     ]
+        );
+
+        $createAllowanceTypeResult = $this->allowanceRepository->createAllowance($allowance);
+
+        if ($createAllowanceTypeResult === ActionResult::FAILURE) {
+            return [
+                'status'  => 'error',
+                'message' => 'An unexpected error occurred while creating the allowance type. Please try again later.'
+            ];
+        }
+
+        return [
+            'status'  => 'success',
+            'message' => 'Allowance type created successfully.'
+        ];
     }
 
     public function fetchAllAllowances(
@@ -35,13 +84,99 @@ class AllowanceService
         );
     }
 
-    public function updateAllowance(Allowance $allowance): ActionResult
+    public function updateAllowance(array $allowance): array
     {
-        return $this->allowanceRepository->updateAllowance($allowance);
+        $this->allowanceValidator->setGroup('update');
+
+        $this->allowanceValidator->setData($allowance);
+
+        $this->allowanceValidator->validate([
+            'id'         ,
+            'name'       ,
+            'amount'     ,
+            'frequency'  ,
+            'description',
+            'status'
+        ]);
+
+        $validationErrors = $this->allowanceValidator->getErrors();
+
+        if ( ! empty($validationErrors)) {
+            return [
+                'status'  => 'invalid_input',
+                'message' => 'There are validation errors. Please check the input values.',
+                'errors'  => $validationErrors
+            ];
+        }
+
+        $allowanceId = $allowance['id'];
+
+        if (is_string($allowanceId) && preg_match('/^[1-9]\d*$/', $allowanceId)) {
+            $allowanceId = (int) $allowanceId;
+        }
+
+        $allowance = new Allowance(
+            id         :         $allowanceId             ,
+            name       :         $allowance['name'       ],
+            amount     : (float) $allowance['amount'     ],
+            frequency  :         $allowance['frequency'  ],
+            description:         $allowance['description'],
+            status     :         $allowance['status'     ]
+        );
+
+        $updateAllowanceTypeResult = $this->allowanceRepository->updateAllowance($allowance);
+
+        if ($updateAllowanceTypeResult === ActionResult::FAILURE) {
+            return [
+                'status'  => 'error',
+                'message' => 'An unexpected error occurred while updating the allowance type. Please try again later.'
+            ];
+        }
+
+        return [
+            'status'  => 'success',
+            'message' => 'Allowance type updated successfully.'
+        ];
     }
 
-    public function deleteAllowance(int|string $allowanceId): ActionResult
+    public function deleteAllowance(mixed $allowanceId): array
     {
-        return $this->allowanceRepository->deleteAllowance($allowanceId);
+        $this->allowanceValidator->setGroup('delete');
+
+        $this->allowanceValidator->setData([
+            'id' => $allowanceId
+        ]);
+
+        $this->allowanceValidator->validate([
+            'id'
+        ]);
+
+        $validationErrors = $this->allowanceValidator->getErrors();
+
+        if ( ! empty($validationErrors)) {
+            return [
+                'status'  => 'invalid_input',
+                'message' => 'There are validation errors. Please check the input values.',
+                'errors'  => $validationErrors
+            ];
+        }
+
+        if (is_string($allowanceId) && preg_match('/^[1-9]\d*$/', $allowanceId)) {
+            $allowanceId = (int) $allowanceId;
+        }
+
+        $deleteAllowanceTypeResult = $this->allowanceRepository->deleteAllowance($allowanceId);
+
+        if ($deleteAllowanceTypeResult === ActionResult::FAILURE) {
+            return [
+                'status'  => 'error',
+                'message' => 'An unexpected error occurred while deleting the allowance type. Please try again later.'
+            ];
+        }
+
+        return [
+            'status'  => 'success',
+            'message' => 'Allowance type deleted successfully.'
+        ];
     }
 }

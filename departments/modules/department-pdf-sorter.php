@@ -1,0 +1,189 @@
+<!-- Department Print Records Form -->
+<style>
+    .label-danger {
+        color: red;
+    }
+</style>
+<div class="modal fade" id="print_department_records" tabindex="-1" aria-labelledby="print_department_recordsTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-fullscreen">
+        <div class="modal-content shadow-sm border-0">
+            <div class="modal-header bg-light border-bottom">
+                <h2 class="modal-title fs-5 fw-semibold text-success" id="print_department_recordsTitle">
+                    <i class="bx bx-printer"></i> Print Department Records
+                </h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="controls d-flex justify-content-between flex-column flex-lg-row" id="print_filter"> 
+                    <style>
+                        .space{
+                            padding-left: 5px;
+                        }
+                    </style>
+                    <!--View Mode-->
+                    <div class="dropdown filter flex-fill col-auto  mx-1">
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bx bx-category-alt fs-4 lh-0"></i></span>
+                            <select class="form-select" id="print_record" name="print_record" placeholder="Filter By Status">
+                                <option value="Records" selected>Records</option>
+                                <option value="Department + Job Title">Department + Job Title</option>
+                                <option value="Department + Job Title + Employees">Department + Job Title + Employees</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-auto d-flex align-items-center mx-1">
+                        <!--Sort By dropdown-->
+                        <div class="dropdown sort mx-1">
+                            <button
+                                class="btn btn-primary dropdown-toggle"
+                                type="button"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
+                            >
+                                Sort By <span class="tf-icons bx bx-sort"></span>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="dropdownMenuButton">
+                                <li><a class="dropdown-item" href="#" data-group="sort_by" data-value="name">Name</a></li>
+                                <li><a class="dropdown-item selected" href="#" data-group="sort_by" data-value="created_at">Date Created</a></li>
+                                <li><a class="dropdown-item" href="#" data-group="sort_by" data-value="updated_at">Date Modified</a></li>
+                                <li><hr/></li>
+                                <li><a class="dropdown-item" href="#" data-group="order_by" data-value="ASC">Ascending</a></li>
+                                <li><a class="dropdown-item selected" href="#" data-group="order_by" data-value="DESC">Descending</a></li>
+                            </ul>
+                        </div>
+                        <!--Filter By Date dropdown-->
+                        <div class="dropdown sort mx-1">
+                            <button
+                                class="btn btn-primary dropdown-toggle"
+                                type="button"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
+                            >
+                                Filter By Date <span class="tf-icons bx bx-sort"></span>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="dropdownMenuButton">
+                                <li><a class="dropdown-item selected" href="#" data-group="by_date" data-value="">None</a></li>
+                                <li><a class="dropdown-item" href="#" data-group="by_date" data-value="created_at">Date Created</a></li>
+                                <li><a class="dropdown-item" href="#" data-group="by_date" data-value="updated_at">Date Modified</a></li>
+                                <li><hr/></li>
+                                <div class="space m-3">
+                                    <label for="print-dateStart" class="pb-1"><b>Start Date</b></label> 
+                                    <input type="date" id="print-dateStart"  class="form-control" required />
+                                </div>
+                                <div class="space m-3">
+                                    <label for="dateEnd" class="pb-1"><b>End Date</b></label> 
+                                    <input type="date" id="print-dateEnd"  class="form-control" required />
+                                </div>
+                            </ul>
+                        </div>  
+                    </div>
+
+                    <!--Entries-->
+                    <div class="align mx-1 d-flex align-items-center"> 
+                        <label for="print-entries-per-page" class="mx-1">Show</label>
+                        <select class="form-select" id="print-entries-per-page">
+                            <option value="100">100</option>
+                            <option value="200">200</option>
+                            <option value="300">300</option>
+                            <option value="400">400</option>
+                            <option value="500">500</option>
+                            <option value="600">600</option>
+                            <option value="700">700</option>
+                            <option value="800">800</option>
+                            <option value="900">900</option>
+                            <option value="1000">1000</option>
+                        </select>
+                        <label for="print-entries-per-page" class="mx-1">Entries</label>  
+                    </div>
+
+                    <!--Filter By Status-->
+                    <div class="dropdown filter flex-fill col-auto  mx-1">
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bx bx-category-alt fs-4 lh-0"></i></span>
+                            <select class="form-select" id="print-status" name="print-status" placeholder="Filter By Status">
+                                <option value="" selected>All</option>
+                                <option value="Active">Active</option>
+                                <option value="Inactive">Inactive</option>
+                                <option value="Archived">Archived</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!--Search At-->
+                    <div class="search col-auto  flex-fill col-auto  mx-1">
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bx bx-search-alt-2 fs-4 lh-0"></i></span>
+                            <select class="form-select" id="print-search_at" name="print-search_at" placeholder="Search At">
+                                <option value="none" selected>All</option>
+                                <option value="department.name">Department Name</option>
+                                <option value="department.description">Department Description</option>
+                                <option value="job_title.title">Job Title</option>
+                                <option value="employee.employee_code">Employee Code</option>
+                            </select>
+                            <input type="text" class="form-control" id="print-searchText" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="my-5 alert alert-danger text-center">
+            You must use the filter system to get what you want instead of printing all records.
+            Records above the maximum limit will be ignored!
+            </div>
+            <div class="modal-footer border-top bg-light">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    <i class="bx bx-arrow-back"></i> Close
+                </button>
+                <button type="submit" class="btn btn-success" onclick="printFetchAll();">
+                    <i class="bx bx-printer"></i> Print
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- Department Print Records Form -->
+
+
+
+
+
+<script>
+
+//Dropdown Selection Highlight
+const printDropdownItems = document.querySelectorAll('#printFilter .dropdown-item');
+
+var printSelectedOptions = {
+    sort_by: null,
+    order_by: null,
+    by_date: null};
+
+printDropdownItems.forEach(item => {
+    item.addEventListener('click', (e) => {
+    e.preventDefault();
+
+    const group = item.getAttribute('data-group');
+    const value = item.getAttribute('data-value');
+
+    // Deselect previously selected option in the same group
+    dropdownItems.forEach(option => {
+    if (option.getAttribute('data-group') === group) {
+        option.classList.remove('selected');
+        }
+    });
+    
+    // Select the clicked option
+    item.classList.add('selected');
+    selectedOptions[group] = value;
+
+    // Update dropdown button text
+    const selectedText = Object.values(selectedOptions)
+    .filter(val => val)
+    .map(val => val.replace('option', 'Option '))
+    .join(', ');
+    
+
+    });
+});
+</script>

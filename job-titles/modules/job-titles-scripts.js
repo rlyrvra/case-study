@@ -67,6 +67,11 @@ function getByDate(){
     return byDate;
 }
 
+function getViewMode() {
+    let selected = document.querySelector('input[name="view"]:checked');
+    return selected ? selected.value : '';
+}
+
 // Function to add or remove the "Deleted At" option
 function toggleDeletedAtOption() {
     const statusSelect = document.getElementById('status');
@@ -88,6 +93,20 @@ function toggleDeletedAtOption() {
             sortBySelect.removeChild(deletedAtOption);
         }
     }
+}
+
+function clickCardEvent(card, event){
+    // Prevent modal from opening if the clicked element are buttons
+    if (event.target.closest('.btn')) {
+        return;
+    }
+
+    const button = card.querySelector('[onclick="updateJobTitleClick(this)"]');
+    if(!button){
+        return;
+    }
+    $('#update_job_titles_modal').modal('show');
+    updateJobTitleClick(button);
 }
 
 
@@ -130,11 +149,6 @@ function confirmDeleteJobTitle(button) {
     }).then((result) => {
         if (result.isConfirmed) {
         deleteJobTitle(button);
-        Swal.fire(
-            'Deleted!',
-            'The job title has been deleted.',
-            'success'
-        );
         }
     });
 }

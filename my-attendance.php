@@ -34,9 +34,9 @@ if($_SESSION['access_role'] === 'Admin'){
 
 
 <!-- Ajax -->
-<script src="attendance/my-attendance/modules/attendance-ajax.js?v1.2.3"></script>
+<script src="attendance/my-attendance/modules/attendance-ajax.js?v1.2.4"></script>
 <!-- Scripts -->
-<script src="attendance/my-attendance/modules/attendance-scripts.js?v1.0.4"></script>
+<script src="attendance/my-attendance/modules/attendance-scripts.js?v1.0.6"></script>
 
 <!---Skeletons--->
 <script src="requests/table-skeleton.js?v1.2"></script>

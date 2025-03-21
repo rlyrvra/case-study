@@ -67,6 +67,32 @@ function getByDate(){
     return byDate;
 }
 
+function getViewMode() {
+    let selected = document.querySelector('input[name="view"]:checked');
+    return selected ? selected.value : '';
+}
+
+function clickCardEvent(card, event) {
+    // Prevent modal from opening if the clicked element is a button
+    if (event.target.closest('.btn')) {
+        return;
+    }
+
+    const triggerButton = card.querySelector('[data-bs-target]');
+    if (!triggerButton) {
+        return;
+    }
+
+    const modalSelector = triggerButton.getAttribute('data-bs-target');
+    const modal = document.querySelector(modalSelector);
+    if (!modal) {
+        return;
+    }
+
+    new bootstrap.Modal(modal).show();
+}
+
+
 function showReviewSuccess(){
     Swal.fire({
         title: 'Review Success!',

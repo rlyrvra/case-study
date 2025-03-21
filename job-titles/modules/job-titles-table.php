@@ -1,6 +1,10 @@
 <?php
-// table.php
-// Expecting $data to be passed from api.php
+function highlightText($text, $searchText) {
+  if (!empty($searchText)) {
+      return preg_replace('/(' . preg_quote($searchText, '/') . ')/i', '<span style="background-color: yellow;">$1</span>', htmlspecialchars($text));
+  }
+  return htmlspecialchars($text);
+}
 ?>
 <style>
 #pagination .page-item:hover{
@@ -32,9 +36,9 @@
             data-description="<?php echo htmlspecialchars($row['description']); ?>" 
             data-status="<?php echo htmlspecialchars($row['status']); ?>">
           <td><?php echo htmlspecialchars($i); $i++;?></td>
-          <td><?php echo htmlspecialchars($row['title']); ?></td>
+          <td><?php echo highlightText($row['title'], $searchFilter); ?></td>
           <td><?php echo htmlspecialchars($row['department_name']); ?></td>
-          <td><?php echo htmlspecialchars($row['description']); ?></td>
+          <td><?php echo highlightText($row['description'], $searchFilter); ?></td>
           <td><span class="badge 
           <?php 
           if($row['status'] === "Active"){

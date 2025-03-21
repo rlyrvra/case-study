@@ -33,7 +33,7 @@ try {
         $page = isset($_POST['page']) ? (int)$_POST['page'] : 1;
         $limit = isset($_POST['numberEntries']) ? $_POST['numberEntries'] : 5;
         $offset = ($page - 1) * $limit;
-        
+        $viewMode = isset($_POST['view_mode']) ? $_POST['view_mode'] : 'table';
         
         $filterCriteria = [];
         
@@ -66,7 +66,13 @@ try {
 
             ];
             $filterCriteria[] = [
-                "column" => "employee.email_address", 
+                "column" => "department.name", 
+                "operator" => "LIKE",
+                "value" => "%$searchFilter%", 
+                'boolean' => 'OR'
+            ];
+            $filterCriteria[] = [
+                "column" => "job_title.title", 
                 "operator" => "LIKE",
                 "value" => "%$searchFilter%", 
                 'boolean' => 'OR'
@@ -75,7 +81,7 @@ try {
 
         if(!empty($searchFilter) && !empty($searchAt)){
             $filterCriteria[] = [
-                "column" => "employee." . $searchAt, 
+                "column" => $searchAt, 
                 "operator" => "LIKE",
                 "value" => "%$searchFilter%"
             ];
@@ -107,7 +113,13 @@ try {
 
         $totalLeaveTypes = $result["total_row_count"];
         $totalPages = ceil($totalLeaveTypes / $_POST['numberEntries']);
-        include __DIR__ . '/work-schedules-table.php';
+        if($viewMode == 'table'){
+            include __DIR__ . '/work-schedules-table.php';
+        }
+        else{
+            include __DIR__ . '/work-schedules-table-card.php';
+        }
+        
         return;
 
     }
@@ -206,7 +218,7 @@ try {
                     $messageComposed .= " and " . $breakScheduleResult['number'] . " break(s) was attached successfully";
                     break;
                 default:
-                    $messageComposed .= " and creating breaks had uncatchable error";
+                    $messageComposed .= " and creating breaks had an uncatchable error";
                     $indicator = 'warning';
                     break;
             }

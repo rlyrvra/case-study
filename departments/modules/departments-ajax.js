@@ -83,7 +83,7 @@ function createDepartment() {
 
     const departmentData = {
         name: departmentName,
-        departmentHeadId: departmentHeadId,
+        department_head_id: departmentHeadId,
         description: departmentDescription,
         status: departmentStatus
     };
@@ -110,15 +110,15 @@ function createDepartment() {
 function deleteDepartment(button){
     const row = button.closest('tr');  // Get the closest row
     const departmentData = {
-        token: row.getAttribute('data-id'),
+        id: row.getAttribute('data-id'),
     };
-    
+    console.log(departmentData);
     $.ajax({
         url: 'departments/modules/departments-api',
         type: 'POST',
         data: {
             action: 'delete',
-            md5_id: departmentData.token
+            department: departmentData
         },
         success: function(response) {
             $('#response-test').html(response);
@@ -149,11 +149,11 @@ function updateDepartment(button){
         data: {
             action: 'update',
             department: {
-                md5_id: md5_id,
+                id: md5_id,
                 name: departmentName,
-                departmentHeadId: departmentHeadId,
-                departmentDescription: departmentDescription,
-                departmentStatus: departmentStatus
+                department_head_id: departmentHeadId,
+                description: departmentDescription,
+                status: departmentStatus
             }
         },
         success: function(response) {
@@ -166,4 +166,62 @@ function updateDepartment(button){
         }
     });
     
+}
+
+function printFetchAll(){
+    var type = $('#print_record').val();
+    var numberEntries = $("#print-entries-per-page").val();
+    var sortByColumn = getPrintSortByColumn();
+    if(sortByColumn == null){
+        sortByColumn = "created_at";
+    };
+    var sortOrderBy = getPrintOrderBy();
+    if(sortOrderBy == null) {
+        sortOrderBy = "DESC";
+    };
+    var filterStatus = $("#print-status").val();
+    var searchColumn = $("#print-search_at").val();
+    if(searchColumn == 'none'){
+        searchColumn = "";
+    };
+    var dateColumn = getPrintByDate();
+    var startDate, endDate;
+    if(dateColumn){
+        startDate = $("#print-dateStart").val();
+        endDate = $("#print-dateEnd").val();
+    }
+    var search = $("#print-searchText").val();
+    const time = $('#time').text();
+    const date = $('#date').text();
+    showSpinnerLoader();
+    $.ajax({
+        url: 'departments/modules/departments-api',
+        type: "POST",
+        data: {
+            action: "printFetch",
+            type: type,
+            numberEntries: numberEntries,
+            sort_by: sortByColumn,
+            sort_order: sortOrderBy,
+            filter_status: filterStatus,
+            filter_searchAt: searchColumn,
+            filter_search: search,
+            filter_date_column: dateColumn,
+            filter_startDate: startDate,
+            filter_endDate: endDate
+        },
+        xhrFields: { responseType: 'blob' }, // Expect binary data
+        success: function (response) {
+            var blob = new Blob([response], { type: "application/pdf" });
+            var link = document.createElement("a");
+            link.href = window.URL.createObjectURL(blob);
+            link.download = `department_${type}_${date}${time}.pdf`;
+            link.click();
+            closeSpinnerLoader();
+            // $('#response-test').html(response);
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log("AJAX Error: " + textStatus + ": " + errorThrown);
+        },
+    });
 }

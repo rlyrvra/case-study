@@ -32,10 +32,10 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
 />
 
 <!-- Ajax -->
-<script src="leaves/modules/leave-types-ajax.js?v1.9"></script>
+<script src="leaves/modules/leave-types-ajax.js?v1.10"></script>
 <script src="leaves/modules/assign-leaves-ajax.js?v1.4"></script>
 <!-- Scripts -->
-<script src="leaves/modules/leave-types-scripts.js?v1.6"></script>
+<script src="leaves/modules/leave-types-scripts.js?v1.7"></script>
 <script src="leaves/modules/assign-leaves-scripts.js?v1.5"></script>
 <!---Skeletons--->
 <script src="requests/table-skeleton.js?v1.2"></script>

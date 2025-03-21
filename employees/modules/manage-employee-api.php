@@ -27,7 +27,19 @@ try {
     $action = $_POST['action'] ?? '';
 
     if ($action === 'fetchAll') {
-        $selectedColumns = ["id", "full_name", "job_title_title", "profile_picture", "access_role", "department_name", "email_address", "employee_code", "phone_number", "date_of_hire", "created_at"];
+        $selectedColumns = [
+            "id", 
+            "full_name", 
+            "job_title", 
+            "profile_picture", 
+            "access_role", 
+            "department_name", 
+            "email_address", 
+            "employee_code", 
+            "phone_number", 
+            "date_of_hire", 
+            "created_at"
+        ];
         $status = isset($_POST['filter_status']) && $_POST['filter_status'] ? $_POST['filter_status'] : "";
         $searchAt = isset($_POST['filter_searchAt']) && $_POST['filter_searchAt'] !== "none" ? $_POST['filter_searchAt'] : "";
         $searchFilter = isset($_POST['filter_search']) ? $_POST['filter_search'] : "";

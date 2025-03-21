@@ -1,7 +1,11 @@
 
 <?php
-// table.php
-// Expecting $data to be passed from api.php
+function highlightText($text, $searchText) {
+    if (!empty($searchText)) {
+        return preg_replace('/(' . preg_quote($searchText, '/') . ')/i', '<span style="background-color: yellow;">$1</span>', htmlspecialchars($text));
+    }
+    return htmlspecialchars($text);
+}
 ?>
 <style>
 
@@ -39,10 +43,10 @@
           <!-- <td><?php //echo htmlspecialchars($row['id']); ?></td> -->
           <!-- <td><?php //echo htmlspecialchars($i); ?></td> -->
           <td><?php echo htmlspecialchars($i); $i++;?></td>
-          <td><?php echo htmlspecialchars($row['name']); ?></td>
+          <td><?= highlightText($row['name'], $searchFilter); ?></td>
           <td><?php echo htmlspecialchars($row['amount']); ?></td>
-          <td><?php echo htmlspecialchars($row['frequency']); ?></td>
-          <td><?php echo htmlspecialchars($row['description']); ?></td>
+          <td><?= highlightText($row['frequency'], $searchFilter); ?></td>
+          <td><?= highlightText($row['description'], $searchFilter); ?></td>
           <td><span class="badge 
           <?php 
           if($row['status'] === "Active"){
@@ -102,25 +106,59 @@
     <ul class="pagination pagination-lg">
       <!-- Previous Button -->
       <li class="page-item <?= $page <= 1 ? 'disabled' : '' ?>">
-        <a class="page-link" onclick="fetchAllDeductions('prev')" aria-label="Previous">
+        <a class="page-link" onclick="fetchAllDepartments('prev')" aria-label="Previous">
           <span aria-hidden="true">&laquo;</span>
         </a>
       </li>
-      <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-        <!-- Page Numbers -->
+
+      <!-- First Page -->
+      <li class="page-item <?= $page === 1 ? 'active' : '' ?>">
+        <a class="page-link" onclick="fetchAllDepartments(1)">1</a>
+      </li>
+
+      <!-- Ellipsis Before Current Page -->
+      <?php if ($page > 3): ?>
+        <li class="page-item">
+          <a class="page-link" onclick="fetchPage()">...</a>
+        </li>
+      <?php endif; ?>
+
+      <!-- Dynamic Middle Pages -->
+      <?php
+      $start = max(2, $page - 1);
+      $end = min($totalPages - 1, $page + 1);
+      for ($i = $start; $i <= $end; $i++):
+      ?>
         <li class="page-item <?= $i === $page ? 'active' : '' ?>">
-          <a class="page-link" onclick="fetchAllDeductions(<?php echo $i ?>)" ><?= $i ?></a>
+          <a class="page-link" onclick="fetchAllDepartments(<?php echo $i ?>)"><?= $i ?></a>
         </li>
       <?php endfor; ?>
+
+      <!-- Ellipsis After Current Page -->
+      <?php if ($page < $totalPages - 2): ?>
+        <li class="page-item">
+          <a class="page-link" onclick="fetchPage()">...</a>
+        </li>
+      <?php endif; ?>
+
+      <!-- Last Page -->
+      <?php if ($totalPages > 1): ?>
+        <li class="page-item <?= $page == $totalPages ? 'active' : '' ?>">
+          <a class="page-link" onclick="fetchAllDepartments(<?= $totalPages ?>)"><?= $totalPages ?></a>
+        </li>
+      <?php endif; ?>
+
       <!-- Next Button -->
       <li class="page-item <?= $page >= $totalPages ? 'disabled' : '' ?>">
-        <a class="page-link" onclick="fetchAllDeductions('next')" aria-label="Next">
+        <a class="page-link" onclick="fetchAllDepartments('next')" aria-label="Next">
           <span aria-hidden="true">&raquo;</span>
         </a>
       </li>
     </ul>
   </nav>
 </div>
+
+
 <style>
     .page-item:hover:not(.disabled){
         cursor: pointer !important;

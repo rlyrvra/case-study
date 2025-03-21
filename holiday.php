@@ -32,9 +32,9 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
 <script src='assets/vendor/libs/fullcalendar-6.1.15/packages/rrule/index.global.min.js'></script>
 
 <!-- Ajax -->
-<script src="holidays/modules/holidays-ajax.js?v1.5"></script>
+<script src="holidays/modules/holidays-ajax.js?v1.8"></script>
 <!-- Scripts -->
-<script src="holidays/modules/holidays-scripts.js?v1.5"></script>
+<script src="holidays/modules/holidays-scripts.js?v1.8"></script>
 
 <!---Skeletons--->
 <script src="requests/table-skeleton.js?v1.2"></script>

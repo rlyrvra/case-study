@@ -4,9 +4,6 @@ if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH
     exit('This resource is only accessible via AJAX requests.');
 }
 
-require_once __DIR__ . '/../Deduction.php';
-require_once __DIR__ . '/../DeductionDao.php';
-require_once __DIR__ . '/../DeductionRepository.php';
 require_once __DIR__ . '/../DeductionService.php';
 
 require_once __DIR__ . '/../../includes/Helper.php';
@@ -16,6 +13,7 @@ require_once __DIR__ . '/../../database/database.php';
 try {
     $deductionDao = new DeductionDao($pdo);
     $action = $_POST['action'] ?? '';
+    
 
     if($action === 'fetchAll'){
         $status = isset($_POST['filter_status']) && $_POST['filter_status'] ? $_POST['filter_status'] : null;
@@ -27,6 +25,7 @@ try {
         $page = isset($_POST['page']) ? (int)$_POST['page'] : 1;
         $limit = isset($_POST['numberEntries']) ? $_POST['numberEntries'] : 10;
         $offset = ($page - 1) * $limit;
+        $viewMode = isset($_POST['view_mode']) ? $_POST['view_mode'] : 'table';
         
         $filterCriteria = [];
         
@@ -88,44 +87,46 @@ try {
 
         $totalDeductions = $result["total_row_count"];
         $totalPages = ceil($totalDeductions / $limit);
-        include __DIR__ . '/deductions-table.php';
+        
+        if($viewMode == 'table'){
+            include __DIR__ . '/deductions-table.php';
+        }
+        else{
+            include __DIR__ . '/deductions-table-card.php';
+        }
         return;
     }
 
     if($action === 'create'){
         $deductionsData = $_POST['deduction'] ?? null;
         if (!$deductionsData) {
-            echo "Invalid deduction data.";
             return;
         }
 
-        $name = isset($deductionsData['name']) && $deductionsData['name'] !== '' ? validateInput($deductionsData['name'], "Name") : null;
-        $amount = isset($deductionsData['amount']) && $deductionsData['amount'] !== 0 ? validateNumericIdentifier((int) $deductionsData['amount'], 1, 30, "Amount") : null;
-        $frequency = isset($deductionsData['frequency']) && $deductionsData['frequency'] !== '' ? validateInput($deductionsData['frequency'], "Frequency") : null;
-        $description = isset($deductionsData['description']) ? $deductionsData['description'] : null;
-        $status = isset($deductionsData['status']) ? validateInput($deductionsData['status'], "Status") : null;
-        
-        $newDeduction = new Deduction(
-            id: null,
-            name: $name,
-            amount: $amount,
-            frequency: $frequency,
-            description: $description,
-            status: $status
-        );
         $deductionRepository = new DeductionRepository($deductionDao);
         $deductionService = new DeductionService($deductionRepository);
-        $result = $deductionService->createDeduction($newDeduction);
+        $result = $deductionService->createDeduction($_POST['deduction']);
         
-        if ($result !== ActionResult::FAILURE) {
+        if (isset($result['status']) && $result['status'] === 'success') {
             die("
             <script>
                 showSuccessCreate();
             </script>
             ");
-        } else {
-            echo "Failed to create deduction. Please try again.";
+        } else if (isset($result['status']) && $result['status'] === 'error') {
+            die("
+            <script>
+                showError(" . json_encode($result) . ");
+            </script>
+            ");
+        } else if (isset($result['status']) && $result['status'] === 'invalid_input'){
+            die("
+            <script>
+                showValidationError(" . json_encode($result['errors']) . ");
+            </script>
+            ");
         }
+
         return;
     }
 
@@ -135,37 +136,35 @@ try {
         if (!$deductionsData) {
             return;
         }
-        $hashed_id = $deductionsData['md5_id'] ?? null;
-        if (!$hashed_id) {
+        
+        $deductionId = $deductionsData['id'] ?? null;
+        if (!$deductionId) {
             return;
         }
 
-        $name = isset($deductionsData['name']) && $deductionsData['name'] !== '' ? validateInput($deductionsData['name'], "Name") : null;
-        $amount = isset($deductionsData['amount']) && $deductionsData['amount'] !== 0 ? validateNumericIdentifier((int) $deductionsData['amount'], 1, 30, "Amount") : null;
-        $frequency = isset($deductionsData['frequency']) && $deductionsData['frequency'] !== '' ? validateInput($deductionsData['frequency'], "Frequency") : null;
-        $description = isset($deductionsData['description']) ? $deductionsData['description'] : null;
-        $status = isset($deductionsData['status']) ? validateInput($deductionsData['status'], "Status") : null;
-        
-        $updateDeduction = new Deduction(
-            id: $hashed_id,
-            name: $name,
-            amount: $amount,
-            frequency: $frequency,
-            description: $description,
-            status: $status
-        );
         $deductionRepository = new DeductionRepository($deductionDao);
         $deductionService = new DeductionService($deductionRepository);
-        $result = $deductionService->updateDeduction($updateDeduction);
+        $result = $deductionService->updateDeduction($deductionsData);
         
-        if ($result !== ActionResult::FAILURE) {
+
+        if (isset($result['status']) && $result['status'] === 'success') {
             die("
             <script>
                 showSuccessUpdate();
             </script>
             ");
-        } else {
-            echo "Failed to update deduction. Please try again.";
+        } else if (isset($result['status']) && $result['status'] === 'error') {
+            die("
+            <script>
+                showError(" . json_encode($result) . ");
+            </script>
+            ");
+        } else if (isset($result['status']) && $result['status'] === 'invalid_input'){
+            die("
+            <script>
+                showValidationError(" . json_encode($result['errors']) . ");
+            </script>
+            ");
         }
 
         return;
@@ -173,79 +172,57 @@ try {
     }
 
     if($action == 'delete'){
-        $hashed_id = $_POST['md5_id'] ?? null;
+        $deductionData = $_POST['deduction'] ?? null;
+        if (!$deductionData) {
+            return;
+        }
+
+        $deductionData = json_decode($deductionData, true);
+        $deductionId = $deductionData['id'] ?? null;
+        if (!$deductionId) {
+            return;
+        }
+
         $deductionRepository = new DeductionRepository($deductionDao);
         $deductionService = new DeductionService($deductionRepository);
-        $result = $deductionService->deleteDeduction($hashed_id);
+        $result = $deductionService->deleteDeduction($deductionId);
 
-        if ($result) {
+        if (isset($result['status']) && $result['status'] === 'success') {
             die("
             <script>
                 showSuccessDeletion();
             </script>
             ");
-        } else {
-            echo "Failed to delete department. Please try again.";
+        } else if (isset($result['status']) && $result['status'] === 'error') {
+            die("
+            <script>
+                showError(" . json_encode($result) . ");
+            </script>
+            ");
+        } else if (isset($result['status']) && $result['status'] === 'invalid_input'){
+            die("
+            <script>
+                showValidationError(" . json_encode($result['errors']) . ");
+            </script>
+            ");
         }
+
         return;
     }
 
 
 
-    echo "Invalid action specified.";
+    $message = "Invalid action specified.";
+    die('
+    <script>
+        showFatalError(' . json_encode($message) 
+    . ');
+    </script>');
 } catch (Exception $e) {
-    echo "Error: " . $e->getMessage();
-}
-
-
-// Function to validate and sanitize input
-function validateInput($input, $fieldName) {
-
-    // Escape the field name for security
-    $escapedFieldName = htmlspecialchars($fieldName, ENT_QUOTES, 'UTF-8');
-
-    // Trim the input to remove extra whitespaces
-    $input = trim($input);
-    
-    // Check if input is empty after trimming
-    if (empty($input)) {
-        die("
-        <script>
-            missingFieldValues('{$escapedFieldName}');
-        </script>
-        ");
-    }
-    
-    // Additional validation can go here (e.g., regex for specific formats)
-    
-    return htmlspecialchars($input); // Sanitize to prevent XSS
-}
-
-function validateNumericIdentifier($value, $minLength, $maxLength, $fieldName = null) {
-    $value = trim($value);
-
-    // Escape the field name for security
-    $escapedFieldName = htmlspecialchars($fieldName, ENT_QUOTES, 'UTF-8');
-
-    // Check if the value is strictly numeric
-    if (!ctype_digit($value)) {
-        echo "
-        <script>
-            missingFieldValues('{$escapedFieldName}');
-        </script>
-        ";
-        exit;
-    }
-
-    // Check the length range
-    if (strlen($value) < $minLength || strlen($value) > $maxLength) {
-        echo "
-        <script>
-            missingFieldValues('{$escapedFieldName}');
-        </script>
-        ";
-        exit;
-    }
-
-    return $value;
+    $message = "Fatal error: " . $e->getMessage();
+    die('
+    <script>
+        showFatalError(' . json_encode($message) 
+    . ');
+    </script>');
 }

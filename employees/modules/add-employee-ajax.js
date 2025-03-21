@@ -1,4 +1,30 @@
 function updateEmployee(button){
+
+    const personalForm = document.getElementById('personal_information');
+    if(!personalForm.checkValidity()){
+        return;
+    }
+    const loginForm = document.getElementById('login_credentials');
+    if(!loginForm.checkValidity()){
+        return;
+    }
+    const contactForm = document.getElementById('contact_information');
+    if(!contactForm.checkValidity()){
+        return;
+    }
+    const employmentForm = document.getElementById('employment_information');
+    if(!employmentForm.checkValidity()){
+        return;
+    }
+    const payForm = document.getElementById('pay_information');
+    if(!payForm.checkValidity()){
+        return;
+    }
+    const governmentForm = document.getElementById('government-information');
+    if(!governmentForm.checkValidity()){
+        return;
+    }
+    
     showSpinnerLoader();
     let employeeData = {};
     //form 1
@@ -206,6 +232,32 @@ function updateEmployee(button){
 }
 
 function createEmployee(){
+
+    const personalForm = document.getElementById('personal_information');
+    if(!personalForm.checkValidity()){
+        return;
+    }
+    const loginForm = document.getElementById('login_credentials');
+    if(!loginForm.checkValidity()){
+        return;
+    }
+    const contactForm = document.getElementById('contact_information');
+    if(!contactForm.checkValidity()){
+        return;
+    }
+    const employmentForm = document.getElementById('employment_information');
+    if(!employmentForm.checkValidity()){
+        return;
+    }
+    const payForm = document.getElementById('pay_information');
+    if(!payForm.checkValidity()){
+        return;
+    }
+    const governmentForm = document.getElementById('government-information');
+    if(!governmentForm.checkValidity()){
+        return;
+    }
+
     showSpinnerLoader();
     let employeeData = {};
     //form 1

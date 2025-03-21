@@ -67,6 +67,21 @@ function getByDate(){
     return byDate;
 }
 
+function getPrintSortByColumn(){
+    var sortBy = selectedOptions.sort_by;
+    return sortBy;
+}
+
+function getPrintOrderBy(){
+    var orderBy = selectedOptions.order_by;
+    return orderBy;
+}
+
+function getPrintByDate(){
+    var byDate = selectedOptions.by_date;
+    return byDate;
+}
+
 // Function to add or remove the "Deleted At" option
 function toggleDeletedAtOption() {
     const statusSelect = document.getElementById('status');
@@ -88,6 +103,20 @@ function toggleDeletedAtOption() {
             sortBySelect.removeChild(deletedAtOption);
         }
     }
+}
+
+function clickCardEvent(card, event){
+    // Prevent modal from opening if the clicked element are buttons
+    if (event.target.closest('.btn')) {
+        return;
+    }
+
+    const button = card.querySelector('[onclick="updateDepartmentClick(this)"]');
+    if(!button){
+        return;
+    }
+    $('#update_departments_modal').modal('show');
+    updateDepartmentClick(button);
 }
 
 
@@ -131,6 +160,15 @@ function confirmDeleteDepartment(button) {
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
         confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+        deleteDepartment(button);
+        Swal.fire(
+            'Deleted!',
+            'This department has been deleted.',
+            'success'
+        );
+        }
     });
 }
 
@@ -170,7 +208,32 @@ function showSuccessDelete() {
     });
 }
 
+function showValidationError(errorMessages) {
+    $('#add-departments-modal').modal('hide');
+    $('#update_departments_modal').modal('hide');
+
+    let formattedMessages = '';
+
+    if (Array.isArray(errorMessages)) {
+        formattedMessages = errorMessages.join('<br>'); // Format as a list
+    } else if (typeof errorMessages === 'object') {
+        formattedMessages = Object.values(errorMessages).flat().join('<br>'); // Flatten object values
+    } else {
+        formattedMessages = errorMessages; // Assume it's already a string
+    }
+
+    Swal.fire({
+        title: 'Warning!',
+        html:  formattedMessages,
+        icon: 'warning',
+        confirmButtonText: 'OK'
+    });
+}
+
+
 function showError(message) {
+    $('#add-departments-modal').modal('hide');
+    $('#update_departments_modal').modal('hide');
     Swal.fire({
         title: 'Error!',
         text: message,
@@ -180,6 +243,8 @@ function showError(message) {
 }
 
 function showFatalError(message) {
+    $('#add-departments-modal').modal('hide');
+    $('#update_departments_modal').modal('hide');
     Swal.fire({
         title: 'Fatal Error!',
         html: `${message} <br> Please contact the system administrator.`,

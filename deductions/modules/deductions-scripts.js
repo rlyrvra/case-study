@@ -27,6 +27,31 @@ function getMaxPageValue() {
     return maxPage;
 }
 
+function fetchPage(){
+    Swal.fire({
+        title: 'Enter a Number',
+        input: 'number',
+        inputAttributes: {
+            min: 1,
+            max: getMaxPageValue(),
+            step: 1
+        },
+        showCancelButton: true,
+        confirmButtonText: 'Submit',
+        cancelButtonText: 'Cancel',
+        preConfirm: (value) => {
+            if (!value || isNaN(value)) {
+                Swal.showValidationMessage('Please enter a valid number');
+            }
+            return value;
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetchAllAllowances(result.value);
+        }
+    });
+}
+
 function getSortByColumn(){
     var sortBy = selectedOptions.sort_by;
     return sortBy;
@@ -42,6 +67,11 @@ function getByDate(){
     return byDate;
 }
 
+function getViewMode() {
+    let selected = document.querySelector('input[name="view"]:checked');
+    return selected ? selected.value : '';
+}
+
 function missingFieldValues(fieldName){
     $('#add-deductions-modal').modal('hide');
     $('#update-deductions-modal').modal('hide');
@@ -53,13 +83,58 @@ function missingFieldValues(fieldName){
     });
 }
 
+function showError(message) {
+    $('#add-deductions-modal').modal('hide');
+    $('#update-deductions-modal').modal('hide');
+    Swal.fire({
+        title: 'Error!',
+        text: message,
+        icon: 'error',
+        confirmButtonText: 'OK'
+    });
+}
+
+function showFatalError(message) {
+    Swal.fire({
+        title: 'Fatal Error!',
+        html: `${message} <br> Please contact the system administrator.`,
+        icon: 'error',
+        confirmButtonText: 'OK'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            location.reload();
+        }
+    });
+}
+
+function showValidationError(errorMessages) {
+    $('#add-deductions-modal').modal('hide');
+    $('#update-deductions-modal').modal('hide');
+
+    let formattedMessages = '';
+
+    if (Array.isArray(errorMessages)) {
+        formattedMessages = errorMessages.join('<br>'); // Format as a list
+    } else if (typeof errorMessages === 'object') {
+        formattedMessages = Object.values(errorMessages).flat().join('<br>'); // Flatten object values
+    } else {
+        formattedMessages = errorMessages; // Assume it's already a string
+    }
+
+    Swal.fire({
+        title: 'Warning!',
+        html:  formattedMessages,
+        icon: 'warning',
+        confirmButtonText: 'OK'
+    });
+}
+
 function showSuccessCreate() {
     $('#add-deductions-modal').modal('hide');
     Swal.fire({
         title: 'Success!',
         text: 'This deduction has been created successfully.',
         icon: 'success',
-        timer: 2000,
         confirmButtonText: 'OK'
     });
 }
@@ -70,7 +145,6 @@ function showSuccessUpdate() {
         title: 'Success!',
         text: 'This deduction has been updated successfully.',
         icon: 'success',
-        timer: 2000,
         confirmButtonText: 'OK'
     });
 }
@@ -80,9 +154,22 @@ function showSuccessDeletion() {
         title: 'Success!',
         text: 'This deduction has been deleted successfully.',
         icon: 'success',
-        timer: 2000,
         confirmButtonText: 'OK'
     });
+}
+
+function clickCardEvent(card, event){
+    // Prevent modal from opening if the clicked element are buttons
+    if (event.target.closest('.btn')) {
+        return;
+    }
+
+    const button = card.querySelector('[onclick="updateDeductionsClick(this)"]');
+    if(!button){
+        return;
+    }
+    $('#update-deductions-modal').modal('show');
+    updateDeductionsClick(button);
 }
 
 

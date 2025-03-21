@@ -41,7 +41,7 @@ function assignAllowances(){
     });
 }
 
-function deleteAllowance(button){
+function deleteAssignedAllowance(button){
     const employeeAllowanceId = button.getAttribute("data-id");
     
     $.ajax({

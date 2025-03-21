@@ -11,7 +11,7 @@ require_once __DIR__ . '/../../database/database.php';
 function getEmployeesForHeader($pdo, $token){
     try {
         $employeeDao = new EmployeeDao($pdo);
-        $selectedColumns = ["full_name", "profile_picture", "job_title_title", "department_name"];
+        $selectedColumns = ["full_name", "profile_picture", "job_title", "department_name"];
         $filterCriteria = [
             [
             "column" => "SHA2(employee.id, 256)", 
@@ -60,6 +60,6 @@ if($resultSet["total_row_count"] <= 0){
     <div>
         <h5 class="display-5"><?php echo $employees[0]['full_name']; ?></h5>
         <p class="mb-0"><?php echo $employees[0]['department_name']; ?></p>
-        <p class="mb-0"><?php echo $employees[0]['job_title_title']; ?></p>
+        <p class="mb-0"><?php echo $employees[0]['job_title']; ?></p>
     </div>
 </div>
