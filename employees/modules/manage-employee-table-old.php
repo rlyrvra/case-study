@@ -20,7 +20,7 @@
                   </div>
                   <div class="ms-3">
                   <p class="mb-1"><strong>Name:</strong> <?php echo htmlspecialchars($row['full_name']); ?></p>
-                  <p class="mb-1"><strong>Job Title: </strong> <?php echo htmlspecialchars($row['job_title_title']); ?></p>
+                  <p class="mb-1"><strong>Job Title: </strong> <?php echo htmlspecialchars($row['job_title']); ?></p>
                   <p class="mb-1"><strong>Role: </strong><?php echo htmlspecialchars($row['access_role']); ?></p>
                   <p class="mb-0"><strong>Department: </strong><?php echo htmlspecialchars($row['department_name']); ?></p>
                   </div>

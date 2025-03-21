@@ -1,7 +1,11 @@
 
 <?php
-// table.php
-// Expecting $data to be passed from api.php
+function highlightText($text, $searchText) {
+    if (!empty($searchText)) {
+        return preg_replace('/(' . preg_quote($searchText, '/') . ')/i', '<span style="background-color: yellow;">$1</span>', htmlspecialchars($text));
+    }
+    return htmlspecialchars($text);
+}
 ?>
 <style>
 
@@ -39,10 +43,10 @@
           <!-- <td><?php //echo htmlspecialchars($row['id']); ?></td> -->
           <!-- <td><?php //echo htmlspecialchars($i); ?></td> -->
           <td><?php echo htmlspecialchars($i); $i++;?></td>
-          <td><?php echo htmlspecialchars($row['name']); ?></td>
+          <td><?= highlightText($row['name'], $searchFilter); ?></td>
           <td><?php echo htmlspecialchars($row['amount']); ?></td>
-          <td><?php echo htmlspecialchars($row['frequency']); ?></td>
-          <td><?php echo htmlspecialchars($row['description']); ?></td>
+          <td><?= highlightText($row['frequency'], $searchFilter); ?></td>
+          <td><?= highlightText($row['description'], $searchFilter); ?></td>
           <td><span class="badge 
           <?php 
           if($row['status'] === "Active"){

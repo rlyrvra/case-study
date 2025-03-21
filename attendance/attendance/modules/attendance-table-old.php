@@ -26,8 +26,9 @@
       <th>Overtime Approval</th>
       <th>Status</th>
       <th>Remarks</th>
-      <th>Updated</th>
+      <?php if ($row['is_overtime_approved'] == 0): ?>
       <th>Action</th>
+      <?php endif; ?>
     </tr>
   </thead>
   <tbody>
@@ -105,14 +106,20 @@
           }
           ?> me-1"><?php echo htmlspecialchars($row['attendance_status']); ?></span>
           </td>
-          <td><?php echo htmlspecialchars($row['remarks']); ?></td>
           <td><?php echo htmlspecialchars(date("l, F j, Y, g:i A", strtotime($row['updated_at']))); ?></td>
-          <?php if ($row['is_overtime_approved'] == 0): ?>
-          <td>
-            <button class="btn btn-primary btn-sm" title="Approve overtime on this schedule" onclick="approveOvertimeClick(this)"> 
-              <i class="bx bx-calendar-check"></i>
-            </button> 
-          </td>
+          <?php if (isset($actionsMode) && $actionsMode === 'Actions'): ?>
+            
+            <?php if (isset($status) && $status === 'Archived') echo "<td>" . htmlspecialchars(date("l, F j, Y, g:i A", strtotime($row['deleted_at']))) . "</td>"; ?>
+            <?php if (!isset($status) || $status !== 'Archived') echo
+                '<td>
+                <button class="btn btn-info" title="Click to Edit" onclick="updateDepartmentClick(this)" data-bs-toggle="modal" data-bs-target="#update_departments_modal"> 
+                    <i class="bx bx-edit-alt"></i>
+                </button> 
+                <button class="btn btn-danger" title="Click to Delete" onclick="confirmDeleteDepartment(this)">
+                    <i class="bx bx-trash"></i>
+                </button> 
+                </td>';
+            ?>
           <?php endif ?>
         </tr>
       <?php endforeach; ?>

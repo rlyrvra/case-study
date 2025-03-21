@@ -8,23 +8,26 @@ function highlightText($text, $searchText) {
 ?>
 <div class="container">
   <div class="row">
-    <?php $i = ($offset + 1); if (!empty($jobTitles)): ?>
-      <?php foreach ($jobTitles as $row): ?>
+    <?php $i = ($offset + 1); if (!empty($leaveTypes)): ?>
+      <?php foreach ($leaveTypes as $row): ?>
         <div class="col-md-6 col-lg-4">
           <div class="card shadow-sm mb-4 transition-card border-1" onclick="clickCardEvent(this, event);">
             <div class="card-header d-flex justify-content-between py-3 border-bottom mb-2">
-              <div>
-                <h5 class="card-title fw-bold"> <?= highlightText($row['title'], $searchFilter); ?>  </h5>
-                <span>
-                    <?php echo htmlspecialchars($row['department_name']); ?>
-                </span>
-              </div>
+              <h5 class="card-title fw-bold"><?= highlightText($row['name'], $searchFilter); ?></h5>
               <span class="text-muted fw-light">#<?= htmlspecialchars($i); $i++; ?></span>
             </div>
             <div class="card-body">
-              <!-- <hr>
-              <h5 class="card-title fw-bold">  </h5> -->
               <p class="card-text" style="text-align: justify;"> <strong>Description:</strong> <?= highlightText($row['description'], $searchFilter); ?> </p>
+              <div class="d-flex justify-content-between mb-2">
+                <span><strong>Maximum Number of Days:</strong></span>
+                <span><?php echo htmlspecialchars($row['maximum_number_of_days']); ?></span>
+              </div>
+              <div class="d-flex justify-content-between mb-2">
+                <span><strong>Paid:</strong></span>
+                <span class="badge <?php echo $row['is_paid'] == 1 ? "bg-success" : "bg-danger"; ?>">
+                  <?php echo $row['is_paid'] == 1 ? "Yes" : "No"; ?>
+                </span>
+              </div>
               <div class="d-flex justify-content-between mb-2">
                 <span><strong>Status:</strong></span>
                 <span class="badge 
@@ -33,17 +36,17 @@ function highlightText($text, $searchText) {
                 </span>
               </div>
               <div class="d-flex justify-content-between mb-2">
-                <span><strong>Created:</strong></span>
-                <span><?php echo htmlspecialchars(date("F j, Y, g:i A", strtotime($row['created_at']))); ?> </span>
+                <span><strong>Date Created:</strong></span>
+                <span><?php echo htmlspecialchars(date("F j, Y, g:i A", strtotime($row['created_at']))); ?></span>
               </div>
               <div class="d-flex justify-content-between mb-2">
-                <span><strong>Modified:</strong></span>
-                <span><?php echo htmlspecialchars(date("F j, Y, g:i A", strtotime($row['updated_at']))); ?> </span>
+                <span><strong>Date Modified:</strong></span>
+                <span><?php echo htmlspecialchars(date("F j, Y, g:i A", strtotime($row['updated_at']))); ?></span>
               </div>
               <?php if ($row['status'] === "Archived"): ?>
               <div class="d-flex justify-content-between mb-2">
-                <span><strong>Deleted:</strong></span>
-                <span><?php echo htmlspecialchars(date("F j, Y, g:i A", strtotime($row['deleted_at']))); ?> </span>
+                <span><strong>Deleted At:</strong></span>
+                <span><?php echo htmlspecialchars(date("F j, Y, g:i A", strtotime($row['deleted_at']))); ?></span>
               </div>
               <?php endif ?>
             </div>
@@ -52,17 +55,19 @@ function highlightText($text, $searchText) {
                 <table class="w-100">
                   <tbody>
                     <tr data-id="<?php echo htmlspecialchars($row['id']); ?>" 
-                          data-title="<?php echo htmlspecialchars($row['title']); ?>" 
-                          data-department-id="<?php echo htmlspecialchars($row['department_id']); ?>" 
-                          data-department-name="<?php echo htmlspecialchars($row['department_name']); ?>" 
-                          data-description="<?php echo htmlspecialchars($row['description']); ?>" 
-                          data-status="<?php echo htmlspecialchars($row['status']); ?>">
+                        data-name="<?php echo htmlspecialchars($row['name']); ?>" 
+                        data-maximum-number-of-days="<?php echo htmlspecialchars($row['maximum_number_of_days']); ?>"
+                        data-is-paid="<?php echo htmlspecialchars($row['is_paid']); ?>" 
+                        data-is-encashable="<?php echo htmlspecialchars($row['is_encashable']); ?>" 
+                        data-description="<?php echo htmlspecialchars($row['description']); ?>" 
+                        data-status="<?php echo htmlspecialchars($row['status']); ?>"
+                    >
                       <td colspan="2">
                         <div class="d-flex justify-content-between">
-                          <button class="btn btn-sm btn-info" title="Edit" onclick="updateJobTitleClick(this)" data-bs-toggle="modal" data-bs-target="#update_job_titles_modal"> 
+                          <button class="btn btn-sm btn-info" title="Edit" onclick="updateLeaveTypeClick(this)" data-bs-toggle="modal" data-bs-target="#update_leave_types_modal"> 
                             <i class="bx bx-edit-alt"></i> Edit
                           </button>
-                          <button class="btn btn-sm btn-danger" title="Delete" onclick="confirmDeleteJobTitle(this)"> 
+                          <button class="btn btn-sm btn-danger" title="Delete" onclick="confirmDeleteLeaveTypes(this)"> 
                             <i class="bx bx-trash"></i> Delete
                           </button>
                         </div>
@@ -84,20 +89,21 @@ function highlightText($text, $searchText) {
 </div>
 
 
+
 <!-- Pagination Block (Placed after the table) -->
 <div class="container mt-5" id="pagination">
   <nav aria-label="Page navigation" class="d-flex justify-content-center">
     <ul class="pagination pagination-lg">
       <!-- Previous Button -->
       <li class="page-item <?= $page <= 1 ? 'disabled' : '' ?>">
-        <a class="page-link" onclick="fetchAllJobTitles('prev')" aria-label="Previous">
+        <a class="page-link" onclick="fetchAllLeaveTypes('prev')" aria-label="Previous">
           <span aria-hidden="true">&laquo;</span>
         </a>
       </li>
 
       <!-- First Page -->
       <li class="page-item <?= $page === 1 ? 'active' : '' ?>">
-        <a class="page-link" onclick="fetchAllJobTitles(1)">1</a>
+        <a class="page-link" onclick="fetchAllLeaveTypes(1)">1</a>
       </li>
 
       <!-- Ellipsis Before Current Page -->
@@ -114,7 +120,7 @@ function highlightText($text, $searchText) {
       for ($i = $start; $i <= $end; $i++):
       ?>
         <li class="page-item <?= $i === $page ? 'active' : '' ?>">
-          <a class="page-link" onclick="fetchAllJobTitles(<?php echo $i ?>)"><?= $i ?></a>
+          <a class="page-link" onclick="fetchAllLeaveTypes(<?php echo $i ?>)"><?= $i ?></a>
         </li>
       <?php endfor; ?>
 
@@ -128,13 +134,13 @@ function highlightText($text, $searchText) {
       <!-- Last Page -->
       <?php if ($totalPages > 1): ?>
         <li class="page-item <?= $page == $totalPages ? 'active' : '' ?>">
-          <a class="page-link" onclick="fetchAllJobTitles(<?= $totalPages ?>)"><?= $totalPages ?></a>
+          <a class="page-link" onclick="fetchAllLeaveTypes(<?= $totalPages ?>)"><?= $totalPages ?></a>
         </li>
       <?php endif; ?>
 
       <!-- Next Button -->
       <li class="page-item <?= $page >= $totalPages ? 'disabled' : '' ?>">
-        <a class="page-link" onclick="fetchAllJobTitles('next')" aria-label="Next">
+        <a class="page-link" onclick="fetchAllLeaveTypes('next')" aria-label="Next">
           <span aria-hidden="true">&raquo;</span>
         </a>
       </li>
@@ -146,7 +152,6 @@ function highlightText($text, $searchText) {
     .page-item:hover:not(.disabled){
         cursor: pointer !important;
     }
-
     .transition-card {
       transition: transform 0.3s ease, box-shadow 0.3s ease;
       border-radius: 12px;
@@ -181,5 +186,4 @@ function highlightText($text, $searchText) {
     .transition-card:hover .card-body {
       background: #f9f9f9;
     }
-
 </style>

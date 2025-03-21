@@ -215,7 +215,7 @@ function printFetchAll(){
             var blob = new Blob([response], { type: "application/pdf" });
             var link = document.createElement("a");
             link.href = window.URL.createObjectURL(blob);
-            link.download = `department_record${date}${time}.pdf`;
+            link.download = `department_${type}_${date}${time}.pdf`;
             link.click();
             closeSpinnerLoader();
             // $('#response-test').html(response);

@@ -31,6 +31,7 @@ try {
         $page = isset($_POST['page']) ? (int)$_POST['page'] : 1;
         $limit = isset($_POST['numberEntries']) ? $_POST['numberEntries'] : 10;
         $offset = ($page - 1) * $limit;
+        $viewMode = isset($_POST['view_mode']) ? $_POST['view_mode'] : 'table';
         
         $filterCriteria = [];
 
@@ -90,6 +91,7 @@ try {
             'attendance_status', 
             'created_at', 
             'updated_at', 
+            'remarks',
             'work_schedule_snapshot_id', 
             'work_schedule_snapshot_start_time', 
             'work_schedule_snapshot_end_time', 
@@ -189,8 +191,42 @@ try {
         $totalAttendance = $result["total_row_count"];
         $totalPages = ceil($totalAttendance / $limit);
 
-        include __DIR__ . '/attendance-table.php';
+        if($viewMode == 'table'){
+            include __DIR__ . '/attendance-table.php';
+        }
+        else{
+            include __DIR__ . '/attendance-table-card.php';
+        }
         return;
+    }
+
+    if ($action === 'approveOvertime') {
+        $attendanceData = $_POST['attendance'] ?? null;
+        if(!$attendanceData){
+            return;
+        }
+        $attendanceData = json_decode($attendanceData, true);
+        $attendanceId = $attendanceData['id'] ?? null;
+        if(!$attendanceId){
+            return;
+        }
+
+        echo $attendanceId;
+
+        $result = $attendanceDao->approveOvertime($attendanceId);
+        if ($result === ActionResult::SUCCESS){
+            die("
+            <script>
+                showSuccessOvertimeApproval();
+            </script>
+            ");
+        } else if ($result === ActionResult::FAILURE){
+            die("
+            <script>
+                showError();
+            </script>
+            ");
+        }
     }
 
 

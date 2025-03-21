@@ -26,6 +26,7 @@ try {
         $page = isset($_POST['page']) ? (int)$_POST['page'] : 1;
         $limit = isset($_POST['numberEntries']) ? $_POST['numberEntries'] : 10;
         $offset = ($page - 1) * $limit;
+        $viewMode = isset($_POST['view_mode']) ? $_POST['view_mode'] : 'table';
         
         $filterCriteria = [];
         
@@ -87,14 +88,20 @@ try {
             $message = 'Failed to fetch holidays. Please try again.';
             die('
             <script>
-            showError(' . json_encode($message) 
+                showError(' . json_encode($message) 
             . ');
             </script>');
         }
 
         $totalHolidays = $result["total_row_count"];
         $totalPages = ceil($totalHolidays / $limit);
-        include __DIR__ . '/holidays-table.php';
+        
+        if($viewMode == 'table'){
+            include __DIR__ . '/holidays-table.php';
+        }
+        else{
+            include __DIR__ . '/holidays-table-card.php';
+        }
         return;
     }
 
@@ -177,8 +184,8 @@ try {
         $description = isset($holidayData['description']) ? $holidayData['description'] : null;
         $status = isset($holidayData['status']) ? validateInput($holidayData['status'], "Status") : null;
 
-        echo $isPaid . " ";
-        echo $isRecurring . "<br>";
+        // echo $isPaid . " ";
+        // echo $isRecurring . "<br>";
 
         $updatedHoliday = new Holiday(
             id: $hashed_id,
@@ -210,7 +217,7 @@ try {
             $message = "Failed to update holidays. Please try again.";
             die('
             <script>
-            showError(' . json_encode($message) 
+                showError(' . json_encode($message) 
             . ');
             </script>');
         }

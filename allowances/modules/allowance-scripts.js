@@ -67,6 +67,11 @@ function getByDate(){
     return byDate;
 }
 
+function getViewMode() {
+    let selected = document.querySelector('input[name="view"]:checked');
+    return selected ? selected.value : '';
+}
+
 function showWarningIncompleteForm() {
     $('#add-allowances-modal').modal('hide');
     Swal.fire({
@@ -167,6 +172,20 @@ function missingFieldValues(fieldName){
         icon: 'warning',
         confirmButtonText: 'OK'
     });
+}
+
+function clickCardEvent(card, event){
+    // Prevent modal from opening if the clicked element are buttons
+    if (event.target.closest('.btn')) {
+        return;
+    }
+
+    const button = card.querySelector('[onclick="updateAllowanceClick(this)"]');
+    if(!button){
+        return;
+    }
+    $('#update-allowances-modal').modal('show');
+    updateAllowanceClick(button);
 }
 
 function updateAllowanceClick(button){

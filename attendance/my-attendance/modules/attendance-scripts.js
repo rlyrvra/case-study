@@ -67,6 +67,11 @@ function getByDate(){
     return byDate;
 }
 
+function getViewMode() {
+    let selected = document.querySelector('input[name="view"]:checked');
+    return selected ? selected.value : '';
+}
+
 function getByRecordsYear(){
     var byYear;
     if(selectedOptions.by_record === null){

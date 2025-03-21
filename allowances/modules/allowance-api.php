@@ -34,6 +34,7 @@ try {
         $page = isset($_POST['page']) ? (int)$_POST['page'] : 1;
         $limit = isset($_POST['numberEntries']) ? $_POST['numberEntries'] : 10;
         $offset = ($page - 1) * $limit;
+        $viewMode = isset($_POST['view_mode']) ? $_POST['view_mode'] : 'table';
         
         $filterCriteria = [];
         
@@ -95,7 +96,13 @@ try {
         
         $totalAllowances = $result["total_row_count"];
         $totalPages = ceil($totalAllowances / $limit);
-        include __DIR__ . '/allowance-table.php';
+        
+        if($viewMode == 'table'){
+            include __DIR__ . '/allowance-table.php';
+        }
+        else{
+            include __DIR__ . '/allowance-table-card.php';
+        }
         return;
     }
 

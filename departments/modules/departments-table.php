@@ -1,3 +1,11 @@
+<?php
+function highlightText($text, $searchText) {
+    if (!empty($searchText)) {
+        return preg_replace('/(' . preg_quote($searchText, '/') . ')/i', '<span style="background-color: yellow;">$1</span>', htmlspecialchars($text));
+    }
+    return htmlspecialchars($text);
+}
+?>
 <!-- Table Rendering -->
 <table class="table table-bordered table-hover table-striped">
   <thead>
@@ -17,9 +25,15 @@
   </thead>
   <tbody>
     <?php if (!empty($departments)): ?>
+      <?php session_start(); ?>
       <?php $i = ($offset + 1);
       foreach ($departments as $row): ?>
         <tr data-id="<?php echo htmlspecialchars($row['id']); ?>"
+          <?php 
+          // echo htmlspecialchars(hash('sha256', $row['id']));
+          // echo htmlspecialchars(hash('sha256', $row['department_head_id']));
+          // $_SESSION['departments'][hash('sha256', $row['id'])]['id'] = $row['id'];
+          ?>
           data-name="<?php echo htmlspecialchars($row['name']); ?>"
           data-dept-head-id="<?php echo htmlspecialchars($row['department_head_id']); ?>"
           data-department-head-id="<?php echo htmlspecialchars($row['department_head_full_name']); ?>"
@@ -27,7 +41,7 @@
           data-status="<?php echo htmlspecialchars($row['status']); ?>">
           <td><?php echo htmlspecialchars($i);
               $i++; ?></td>
-          <td><?php echo htmlspecialchars($row['name']); ?></td>
+          <td><?= highlightText($row['name'], $searchFilter); ?></td>
           <td>
             <?php if (!empty($row['department_head_full_name'])): ?>
               <?php echo htmlspecialchars($row['department_head_full_name']); ?>
@@ -35,7 +49,7 @@
               <span class="badge bg-label-danger">Unassigned</span>
             <?php endif; ?>
           </td>
-          <td><?php echo htmlspecialchars($row['description']); ?></td>
+          <td><?= highlightText($row['description'], $searchFilter); ?></td>
           <td><span class="badge 
           <?php
           if ($row['status'] === "Active") {

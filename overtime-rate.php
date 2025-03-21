@@ -18,7 +18,7 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
 
 </style>
 <head>
-<title> smartWage | Overtime Rates </title>
+<title> smartWage | Pay Rates </title>
 <link rel="icon" type="image/x-icon" href="img/logo-files/logo1.ico" />
 <!-- font-awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -100,7 +100,7 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
           <div id="response-test"></div>
           <div class="container-fluid mb-3">
               <div class="container-fluid mb-3 d-flex justify-content-between flex-column flex-lg-row">
-                <h1 class="display-1">Overtime Rates</h1>
+                <h1 class="display-1">Pay Rates</h1>
                 <button type="button" class="btn btn-success btn-xl" onclick="assignRates();">
                   <i class="bx bx-dots-vertical bx-lg"></i>Apply Rates
                 </button>
@@ -116,7 +116,7 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
 
           <div class="container-fluid card pt-5 pb-3 mt-5">
             <div class="card-header">
-              <h5>Overtime Rates Table
+              <h5>Pay Rates Table
             </div>
             <div class="card-body">
               <!-- <div id="skeleton-departments-table" class="visually-hidden table-responsive text-no-wrap"></div> -->

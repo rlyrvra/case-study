@@ -105,6 +105,20 @@ function toggleDeletedAtOption() {
     }
 }
 
+function clickCardEvent(card, event){
+    // Prevent modal from opening if the clicked element are buttons
+    if (event.target.closest('.btn')) {
+        return;
+    }
+
+    const button = card.querySelector('[onclick="updateDepartmentClick(this)"]');
+    if(!button){
+        return;
+    }
+    $('#update_departments_modal').modal('show');
+    updateDepartmentClick(button);
+}
+
 
 function updateDepartmentClick(button){
 

@@ -1,7 +1,11 @@
 
 <?php
-// table.php
-// Expecting $data to be passed from api.php
+function highlightText($text, $searchText) {
+  if (!empty($searchText)) {
+      return preg_replace('/(' . preg_quote($searchText, '/') . ')/i', '<span style="background-color: yellow;">$1</span>', htmlspecialchars($text));
+  }
+  return htmlspecialchars($text);
+}
 ?>
 <style>
 
@@ -65,8 +69,8 @@
           <!-- <td><?php //echo htmlspecialchars($row['id']); ?></td> -->
           <!-- <td><?php //echo htmlspecialchars($i); ?></td> -->
           <td><?php echo htmlspecialchars($i); $i++;?></td>
-          <td><?php echo htmlspecialchars($row['name']); ?></td>
-          <td><?php echo htmlspecialchars($row['payroll_frequency']); ?></td>
+          <td><?= highlightText($row['name'], $searchFilter); ?></td>
+          <td><?= highlightText($row['payroll_frequency'], $searchFilter); ?></td>
           <td>
             <?php
             
@@ -129,7 +133,7 @@
       <?php if (isset($status) && $status === 'Archived') echo "<th>Deleted At</th>"; ?>
       <?php //if (isset($status) && $status === 'Archived') echo "<th>Deleted By</th>"; ?>
       <?php if (!isset($status) || $status !== 'Archived') echo "<th style='width: 13%;'>Action</th>"; ?>
-      </tfoot>
+    </tfoot>
 </table>
 
 <!-- Pagination Block (Placed after the table) -->

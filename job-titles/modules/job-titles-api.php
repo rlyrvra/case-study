@@ -14,6 +14,17 @@ try {
     $action = $_POST['action'] ?? '';
 
     if($action === 'fetchAll'){
+        $selectedColumns = [
+            "id", 
+            "title", 
+            "department_id",
+            "department_name",
+            "description", 
+            "status", 
+            "created_at", 
+            "updated_at", 
+            "deleted_at"
+        ];
         $status = $_POST['filter_status'];
         $searchAt = isset($_POST['filter_searchAt']) & $_POST['filter_searchAt'] !== "none" ? $_POST['filter_searchAt'] : null;
         $searchFilter = $_POST['filter_search'];
@@ -77,7 +88,7 @@ try {
         ];
         $jobTitleRepository = new JobTitleRepository($jobTitleDao);
         $jobTitleService = new JobTitleService($jobTitleRepository);
-        $result = $jobTitleService->fetchAllJobTitles([], $filterCriteria, $sortCriteria, $limit, $offset);
+        $result = $jobTitleService->fetchAllJobTitles($selectedColumns, $filterCriteria, $sortCriteria, $limit, $offset);
         $jobTitles;
         $totalJobTitles = 0;
         if ($result !== ActionResult::FAILURE){

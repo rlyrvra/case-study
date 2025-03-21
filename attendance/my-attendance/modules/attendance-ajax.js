@@ -18,6 +18,7 @@ function fetchAllMyAttendance(page = 1) {
     }
     var month = getByRecordsMonth();
     var year =  getByRecordsYear();
+    var viewMode = getViewMode();
     
     // console.log(`
     //     Number of Entries: ${numberEntries},
@@ -80,6 +81,7 @@ function fetchAllMyAttendance(page = 1) {
             filter_date_column: dateColumn,
             filter_startDate: startDate,
             filter_endDate: endDate,
+            view_mode: viewMode
         },
         success: function (response) {
             loadingSpinner.classList.add("visually-hidden");

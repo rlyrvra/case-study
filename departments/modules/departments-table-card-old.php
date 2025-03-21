@@ -1,30 +1,23 @@
-<?php
-function highlightText($text, $searchText) {
-    if (!empty($searchText)) {
-        return preg_replace('/(' . preg_quote($searchText, '/') . ')/i', '<span style="background-color: yellow;">$1</span>', htmlspecialchars($text));
-    }
-    return htmlspecialchars($text);
-}
-?>
 <div class="container">
   <div class="row">
-    <?php $i = ($offset + 1); if (!empty($jobTitles)): ?>
-      <?php foreach ($jobTitles as $row): ?>
+    <?php $i = ($offset + 1); if (!empty($departments)): ?>
+      <?php foreach ($departments as $row): ?>
+        <?php $i++; ?>
         <div class="col-md-6 col-lg-4">
-          <div class="card shadow-sm mb-4 transition-card border-1" onclick="clickCardEvent(this, event);">
-            <div class="card-header d-flex justify-content-between py-3 border-bottom mb-2">
-              <div>
-                <h5 class="card-title fw-bold"> <?= highlightText($row['title'], $searchFilter); ?>  </h5>
-                <span>
-                    <?php echo htmlspecialchars($row['department_name']); ?>
-                </span>
-              </div>
-              <span class="text-muted fw-light">#<?= htmlspecialchars($i); $i++; ?></span>
+          <div class="card shadow-sm mb-4 transition-card border-1">
+            <div class="card-header text-muted text-center py-3">
+              <h5 class="card-title fw-bold"> <?php echo htmlspecialchars($row['name']); ?> </h5>
+              <span>
+              <?php if (!empty($row['department_head_full_name'])): ?>
+                  <?php echo htmlspecialchars($row['department_head_full_name']); ?>
+                <?php else: ?>
+                  <span class="badge bg-danger">Unassigned</span>
+                <?php endif; ?>
+              </span>
             </div>
             <div class="card-body">
-              <!-- <hr>
-              <h5 class="card-title fw-bold">  </h5> -->
-              <p class="card-text" style="text-align: justify;"> <strong>Description:</strong> <?= highlightText($row['description'], $searchFilter); ?> </p>
+              <hr>
+              <p class="card-text mb-2" style="text-align: justify;"><strong>Description:</strong> <?php echo htmlspecialchars($row['description']); ?> </p>
               <div class="d-flex justify-content-between mb-2">
                 <span><strong>Status:</strong></span>
                 <span class="badge 
@@ -46,31 +39,38 @@ function highlightText($text, $searchText) {
                 <span><?php echo htmlspecialchars(date("F j, Y, g:i A", strtotime($row['deleted_at']))); ?> </span>
               </div>
               <?php endif ?>
+              
+              <div class="d-flex gap-2 w-100">
+                
+              </div>
+              
             </div>
             <?php if ($row['status'] !== "Archived"): ?>
-              <div class="card-footer bg-light py-3 border-top">
-                <table class="w-100">
+            <div class="card-footer bg-light py-3">
+              <table class="w-100">
                   <tbody>
-                    <tr data-id="<?php echo htmlspecialchars($row['id']); ?>" 
-                          data-title="<?php echo htmlspecialchars($row['title']); ?>" 
-                          data-department-id="<?php echo htmlspecialchars($row['department_id']); ?>" 
-                          data-department-name="<?php echo htmlspecialchars($row['department_name']); ?>" 
-                          data-description="<?php echo htmlspecialchars($row['description']); ?>" 
-                          data-status="<?php echo htmlspecialchars($row['status']); ?>">
+                    <tr 
+                      data-id="<?php echo htmlspecialchars($row['id']); ?>"
+                      data-name="<?php echo htmlspecialchars($row['name']); ?>"
+                      data-dept-head-id="<?php echo htmlspecialchars($row['department_head_id']); ?>"
+                      data-department-head-id="<?php echo htmlspecialchars($row['department_head_full_name']); ?>"
+                      data-description="<?php echo htmlspecialchars($row['description']); ?>"
+                      data-status="<?php echo htmlspecialchars($row['status']); ?>">
                       <td colspan="2">
                         <div class="d-flex justify-content-between">
-                          <button class="btn btn-sm btn-info" title="Edit" onclick="updateJobTitleClick(this)" data-bs-toggle="modal" data-bs-target="#update_job_titles_modal"> 
+                          <button class="btn btn-sm btn-info" title="Edit" onclick="updateDepartmentClick(this)" data-bs-toggle="modal" data-bs-target="#update_departments_modal"> 
                             <i class="bx bx-edit-alt"></i> Edit
                           </button>
-                          <button class="btn btn-sm btn-danger" title="Delete" onclick="confirmDeleteJobTitle(this)"> 
+                          <button class="btn btn-sm btn-danger" title="Delete" onclick="confirmDeleteDepartment(this)"> 
                             <i class="bx bx-trash"></i> Delete
                           </button>
+                        <!-- <span class="text-muted fw-bold" style="float: right;">#<?php echo htmlspecialchars($i); ?></span> -->
                         </div>
                       </td>
                     </tr>
                   </tbody>
                 </table>
-              </div>
+            </div>
             <?php endif ?>
           </div>
         </div>
@@ -83,6 +83,16 @@ function highlightText($text, $searchText) {
   </div>
 </div>
 
+<style>
+.transition-card {
+  transition: all 0.3s ease-in-out;
+}
+.transition-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+}
+</style>
+
 
 <!-- Pagination Block (Placed after the table) -->
 <div class="container mt-5" id="pagination">
@@ -90,14 +100,14 @@ function highlightText($text, $searchText) {
     <ul class="pagination pagination-lg">
       <!-- Previous Button -->
       <li class="page-item <?= $page <= 1 ? 'disabled' : '' ?>">
-        <a class="page-link" onclick="fetchAllJobTitles('prev')" aria-label="Previous">
+        <a class="page-link" onclick="fetchAllDepartments('prev')" aria-label="Previous">
           <span aria-hidden="true">&laquo;</span>
         </a>
       </li>
 
       <!-- First Page -->
       <li class="page-item <?= $page === 1 ? 'active' : '' ?>">
-        <a class="page-link" onclick="fetchAllJobTitles(1)">1</a>
+        <a class="page-link" onclick="fetchAllDepartments(1)">1</a>
       </li>
 
       <!-- Ellipsis Before Current Page -->
@@ -114,7 +124,7 @@ function highlightText($text, $searchText) {
       for ($i = $start; $i <= $end; $i++):
       ?>
         <li class="page-item <?= $i === $page ? 'active' : '' ?>">
-          <a class="page-link" onclick="fetchAllJobTitles(<?php echo $i ?>)"><?= $i ?></a>
+          <a class="page-link" onclick="fetchAllDepartments(<?php echo $i ?>)"><?= $i ?></a>
         </li>
       <?php endfor; ?>
 
@@ -128,13 +138,13 @@ function highlightText($text, $searchText) {
       <!-- Last Page -->
       <?php if ($totalPages > 1): ?>
         <li class="page-item <?= $page == $totalPages ? 'active' : '' ?>">
-          <a class="page-link" onclick="fetchAllJobTitles(<?= $totalPages ?>)"><?= $totalPages ?></a>
+          <a class="page-link" onclick="fetchAllDepartments(<?= $totalPages ?>)"><?= $totalPages ?></a>
         </li>
       <?php endif; ?>
 
       <!-- Next Button -->
       <li class="page-item <?= $page >= $totalPages ? 'disabled' : '' ?>">
-        <a class="page-link" onclick="fetchAllJobTitles('next')" aria-label="Next">
+        <a class="page-link" onclick="fetchAllDepartments('next')" aria-label="Next">
           <span aria-hidden="true">&raquo;</span>
         </a>
       </li>
@@ -143,43 +153,7 @@ function highlightText($text, $searchText) {
 </div>
 
 <style>
-    .page-item:hover:not(.disabled){
-        cursor: pointer !important;
-    }
-
-    .transition-card {
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      border-radius: 12px;
-      overflow: hidden;
-      background: #fff;
-    }
-
-    .transition-card:hover {
-      cursor: pointer;
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-      border-color: #0d6efd;
-    }
-
-    .transition-card:hover .card-header h5, .transition-card:hover .card-header span {
-      color: white !important;
-    }
-
-    .transition-card .card-header {
-      background: #f8f9fa;
-      transition: background 0.3s ease, color 0.3s ease;
-    }
-
-    .transition-card:hover .card-header {
-      background: #0d6efd;
-      color: #fff;
-    }
-
-    .transition-card .card-body {
-      transition: background 0.3s ease;
-    }
-
-    .transition-card:hover .card-body {
-      background: #f9f9f9;
-    }
-
+  .page-item:hover:not(.disabled) {
+    cursor: pointer !important;
+  }
 </style>

@@ -88,6 +88,12 @@
                             <option value="200">200</option>
                             <option value="300">300</option>
                             <option value="400">400</option>
+                            <option value="500">500</option>
+                            <option value="600">600</option>
+                            <option value="700">700</option>
+                            <option value="800">800</option>
+                            <option value="900">900</option>
+                            <option value="1000">1000</option>
                         </select>
                         <label for="print-entries-per-page" class="mx-1">Entries</label>  
                     </div>
@@ -111,13 +117,19 @@
                             <span class="input-group-text"><i class="bx bx-search-alt-2 fs-4 lh-0"></i></span>
                             <select class="form-select" id="print-search_at" name="print-search_at" placeholder="Search At">
                                 <option value="none" selected>All</option>
-                                <option value="name">Name</option>
-                                <option value="description">Description</option>
+                                <option value="department.name">Department Name</option>
+                                <option value="department.description">Department Description</option>
+                                <option value="job_title.title">Job Title</option>
+                                <option value="employee.employee_code">Employee Code</option>
                             </select>
                             <input type="text" class="form-control" id="print-searchText" />
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="my-5 alert alert-danger text-center">
+            You must use the filter system to get what you want instead of printing all records.
+            Records above the maximum limit will be ignored!
             </div>
             <div class="modal-footer border-top bg-light">
                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
@@ -128,6 +140,7 @@
                 </button>
             </div>
         </div>
+
     </div>
 </div>
 <!-- Department Print Records Form -->

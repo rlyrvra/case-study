@@ -28,9 +28,9 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <!-- Ajax -->
-<script src="payroll/payroll-group/modules/payroll-groups-ajax.js?v1.3"></script>
+<script src="payroll/payroll-group/modules/payroll-groups-ajax.js?v1.4"></script>
 <!-- Scripts -->
-<script src="payroll/payroll-group/modules/payroll-groups-scripts.js?v1.4"></script>
+<script src="payroll/payroll-group/modules/payroll-groups-scripts.js?v1.5"></script>
 
 
 <!-- Fonts -->

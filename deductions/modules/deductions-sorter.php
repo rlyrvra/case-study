@@ -4,6 +4,21 @@
             padding-left: 5px;
         }
     </style>
+    <!--View Mode-->
+    <div class="col-auto d-flex align-items-center mx-1">
+        <div class="btn-group">
+            <input class="btn-check" type="radio" name="view" id="table-view" value="table" checked onchange="fetchAllDeductions()">
+            <label class="btn btn-outline-primary" for="table-view">
+                <i class="bx bx-table"></i>
+            </label>
+
+            <input class="btn-check" type="radio" name="view" id="card-view" value="card" onchange="fetchAllDeductions()">
+            <label class="btn btn-outline-primary" for="card-view">
+                <i class="bx bx-grid-alt"></i>
+            </label>
+        </div>
+    </div>
+
     <div class="col-auto d-flex align-items-center mx-1">
         <!--Sort By dropdown-->
         <div class="dropdown sort mx-1">

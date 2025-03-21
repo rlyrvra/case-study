@@ -67,6 +67,11 @@ function getByDate(){
     return byDate;
 }
 
+function getViewMode() {
+    let selected = document.querySelector('input[name="view"]:checked');
+    return selected ? selected.value : '';
+}
+
 function missingFieldValues(fieldName){
     $('#add-deductions-modal').modal('hide');
     $('#update-deductions-modal').modal('hide');
@@ -151,6 +156,20 @@ function showSuccessDeletion() {
         icon: 'success',
         confirmButtonText: 'OK'
     });
+}
+
+function clickCardEvent(card, event){
+    // Prevent modal from opening if the clicked element are buttons
+    if (event.target.closest('.btn')) {
+        return;
+    }
+
+    const button = card.querySelector('[onclick="updateDeductionsClick(this)"]');
+    if(!button){
+        return;
+    }
+    $('#update-deductions-modal').modal('show');
+    updateDeductionsClick(button);
 }
 
 

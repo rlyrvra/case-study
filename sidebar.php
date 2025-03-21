@@ -102,7 +102,7 @@
 
                 <li class="menu-item" id="overtime-rate-menu">
                     <a href="overtime-rate.php" class="menu-link">
-                    <div>Overtime Rates</div>
+                    <div>Pay Rates</div>
                     </a>
                 </li>
 

@@ -659,9 +659,9 @@
                     class="form-control" 
                     placeholder="123-456-789-000" 
                     required 
-                    minlength="14" 
-                    maxlength="14" 
-                    pattern="\d{4}-\d{4}-\d{4}"
+                    minlength="15" 
+                    maxlength="15" 
+                    pattern="\d{3}-\d{3}-\d{3}-\d{3}"
                     title="Format: 123-456-789-000 (15 digits with dashes)">
                 </div>
                 <div class="col-md-6">
@@ -670,12 +670,12 @@
                     type="text" 
                     id="SSSNumber" 
                     class="form-control"
-                    placeholder="12-3456789-0" 
+                    placeholder="1234-5678901-2" 
                     required 
                     minlength="14" 
                     maxlength="14" 
-                    pattern="\d{4}-\d{4}-\d{4}"
-                    title="Format: 12-3456789-0 (12 digits with dashes)">
+                    pattern="\d{4}-\d{7}-\d{1}"
+                    title="Format: 1234-5678901-2 (14 digits with dashes)">
                 </div>
 
             </div>
@@ -690,7 +690,7 @@
                     required 
                     minlength="14" 
                     maxlength="14" 
-                    pattern="\d{4}-\d{4}-\d{4}"
+                    pattern="\d{2}-\d{9}-\d{1}"
                     title="Format: 12-345678901-2 (14 digits with dashes)">
                 </div>
                 <div class="col-md-6">

@@ -14,7 +14,17 @@ try {
     $action = $_POST['action'] ?? '';
 
     if ($action === 'fetchAll') {
-        $selectedColumns = ["id", "name", "department_head_id", "description", "status", "created_at", "updated_at", "deleted_at", "department_head_full_name"];
+        $selectedColumns = [
+            "id", 
+            "name", 
+            "department_head_id", 
+            "description", 
+            "status", 
+            "created_at", 
+            "updated_at", 
+            "deleted_at", 
+            "department_head_full_name"
+        ];
         $status = isset($_POST['filter_status']) && $_POST['filter_status'] ? $_POST['filter_status'] : null;
         $searchAt = isset($_POST['filter_searchAt']) && $_POST['filter_searchAt'] !== "none" ? $_POST['filter_searchAt'] : null;
         $searchFilter = isset($_POST['filter_search']) ? $_POST['filter_search'] : null;
@@ -287,7 +297,7 @@ try {
 
         if(!empty($searchFilter) && !empty($searchAt)){
             $filterCriteria[] = [
-                "column" => "department." . $searchAt, 
+                "column" => $searchAt, 
                 "operator" => "LIKE",
                 "value" => "%$searchFilter%"
             ];
@@ -427,7 +437,7 @@ function fetchAllJoinedRecord($type){
 
     if(!empty($searchFilter) && !empty($searchAt)){
         $filterCriteria[] = [
-            "column" => "department." . $searchAt, 
+            "column" => $searchAt,
             "operator" => "LIKE",
             "value" => "%$searchFilter%"
         ];

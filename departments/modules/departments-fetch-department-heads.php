@@ -20,6 +20,10 @@ function getDepartmentHeads(){
 
     $data = $employeeDao->fetchAll($selectedColumns, $filterCriteria);
     $departmentHeads = $data['result_set'];
+    // foreach ($departmentHeads as &$departmentHead) {
+    //     $departmentHead['id'] = hash('sha256', $departmentHead['id']);
+    // }
+    // unset($departmentHead);
     return $departmentHeads;
 }
 

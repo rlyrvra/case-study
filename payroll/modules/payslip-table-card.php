@@ -13,7 +13,7 @@
     <div class="row g-3">
       <?php foreach ($payslips as $row): ?>
         <div class="col-md-6 col-lg-4">
-          <div class="card shadow-sm border-0">
+          <div class="card shadow-sm border-1 transition-card">
             <div class="card-header bg-primary text-white mb-2">
               <h5 class="mb-0 text-white"><?php echo htmlspecialchars($row['full_name']); ?></h5>
               <small><?php echo htmlspecialchars($row['job_title_title']); ?> - <?php echo htmlspecialchars($row['department_name']); ?></small>
@@ -164,5 +164,10 @@
 <style>
     .page-item:hover:not(.disabled){
         cursor: pointer !important;
+    }
+
+    .transition-card:hover {
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+      border-color: #0d6efd;
     }
 </style>

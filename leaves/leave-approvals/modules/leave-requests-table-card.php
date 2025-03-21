@@ -1,29 +1,51 @@
+<?php
+function highlightText($text, $searchText) {
+    if (!empty($searchText)) {
+        return preg_replace('/(' . preg_quote($searchText, '/') . ')/i', '<span style="background-color: yellow;">$1</span>', htmlspecialchars($text));
+    }
+    return htmlspecialchars($text);
+}
+?>
 <div class="container mt-5">
     <div class="row">
         <?php if (!empty($leaveRequests)): ?>
-            <?php foreach ($leaveRequests as $row): ?>
+            <?php $i = ($offset + 1); foreach ($leaveRequests as $row): ?>
                 <div class="col-md-6 col-lg-4 mb-4">
-                    <div class="card border-0 shadow-sm rounded-4">
-                        <div class="card-body p-4">
-                            <div class="d-flex align-items-center mb-3">
-                                <img src="<?php echo isset($row['employee_profile_picture']) ? 'data:image/jpg;base64,' . $row['employee_profile_picture'] : 'https://via.placeholder.com/50'; ?>" 
+                    <div class="card border-1 shadow-sm rounded-4">
+                        <div class="card-body p-4" onclick="clickCardEvent(this, event);">
+                            <div class="d-flex align-items-center">
+                                <img src="<?php echo isset($row['employee_profile_picture']) ? 'data:image/jpg;base64,' . $row['employee_profile_picture'] : 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&s=200'; ?>" 
                                      alt="Profile Picture" class="rounded-circle border me-3" width="55" height="55">
                                 <div>
-                                    <h5 class="mb-1 fw-semibold text-dark"><?php echo htmlspecialchars($row['employee_full_name']); ?></h5>
-                                    <small class="text-muted">Department: <?php echo htmlspecialchars($row['employee_department_name']); ?></small>
+                                    <div class="d-flex align-items-center">
+                                        <h5 class="mb-1 fw-semibold text-dark me-5"><?= highlightText($row['employee_full_name'], $searchFilter); ?></h5>
+                                        <span class="text-muted fw-light">#<?= htmlspecialchars($i); $i++; ?></span>
+                                    </div>
+                                    <small class="text-muted"><?php echo htmlspecialchars($row['employee_department_name']); ?></small>
                                 </div>
                             </div>
+                            <hr>
                             <div class="mb-3">
-                                <p class="mb-1 text-secondary"><strong>Leave Type:</strong> <?php echo htmlspecialchars($row['leave_type_name']); ?></p>
-                                <p class="mb-1 text-secondary"><strong>Duration:</strong> <?php echo htmlspecialchars($row['start_date']); ?> - <?php echo htmlspecialchars($row['end_date']); ?></p>
-                                <p class="mb-1 text-secondary"><strong>Half Day:</strong> 
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span><strong>Leave Type:</strong></span>
+                                    <span><?php echo htmlspecialchars($row['leave_type_name']); ?> </span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span><strong>Start Date:</strong></span>
+                                    <span><?php echo htmlspecialchars($row['start_date']); ?> </span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span><strong>End Date:</strong></span>
+                                    <span><?php echo htmlspecialchars($row['end_date']); ?> </span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span><strong>Half Day:</strong></span>
                                     <span class="badge rounded-pill <?php echo $row['is_half_day'] ? 'bg-success' : 'bg-danger'; ?>">
                                         <?php echo $row['is_half_day'] ? 'Yes' : 'No'; ?>
                                     </span>
-                                </p>
-                            </div>
-                            <div class="mb-3">
-                                <p class="mb-1 text-secondary"><strong>Status:</strong> 
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span><strong>Status:</strong></span>
                                     <span class="badge rounded-pill px-3 py-2 fw-semibold <?php 
                                         switch ($row['status']) {
                                             case 'Approved': echo 'bg-success'; break;
@@ -32,10 +54,9 @@
                                             case 'Canceled': echo 'bg-secondary'; break;
                                             case 'Expired': echo 'bg-dark'; break;
                                         } 
-                                    ?>">
-                                        <?php echo htmlspecialchars($row['status']); ?>
+                                    ?>"><?php echo htmlspecialchars($row['status']); ?>
                                     </span>
-                                </p>
+                                </div>
                             </div>
                             <?php if (!in_array($row['status'], ['Approved', 'Expired', 'Completed', 'In Progress', 'Canceled'])): ?>
                                 <button class="btn btn-outline-primary btn-sm mt-2 w-100" 
@@ -43,7 +64,6 @@
                                     data-bs-target="#R<?php echo htmlspecialchars($row['id']); ?>">
                                     View Reason <i class="bx bx-info-circle"></i>
                                 </button>
-                                
                             <?php endif; ?>
                         </div>
                     </div>
@@ -90,8 +110,9 @@
         border-radius: 12px;
     }
     #leave_requests_table .card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+        cursor: pointer;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        border-color: #0d6efd;
     }
     #leave_requests_table .badge {
         font-size: 0.85rem;

@@ -165,9 +165,9 @@
         <td><?= $department['status'] ?? '' ?></td>
         <td><?= date("l, F j, Y, g:i A", strtotime($department['created_at'])) ?? '' ?></td>
         <td><?= date("l, F j, Y, g:i A", strtotime($department['updated_at'])) ?? '' ?></td>
-        <?php if(!empty($department['deleted_at'])):?><td><?= date("l, F j, Y, g:i A", strtotime($department['deleted_at'])) ?? '' ?></td><?php endif ?>
-        <td><?= !empty($department['job_title']) ? $department['job_title'] : 'N/A' ?></td>
-        <td><?= $department['job_title_status'] ?? 'N/A' ?></td>
+        <?php if($status === 'Archived'):?><td><?= date("l, F j, Y, g:i A", strtotime($department['deleted_at'])) ?? '' ?></td><?php endif ?>
+        <td><?= !empty($department['job_title']) ? $department['job_title'] : '' ?></td>
+        <td><?= $department['job_title_status'] ?? '' ?></td>
       </tr>
     <?php endforeach; ?>
   </tbody>

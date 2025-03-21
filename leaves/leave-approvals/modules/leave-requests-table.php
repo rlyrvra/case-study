@@ -1,3 +1,11 @@
+<?php
+function highlightText($text, $searchText) {
+    if (!empty($searchText)) {
+        return preg_replace('/(' . preg_quote($searchText, '/') . ')/i', '<span style="background-color: yellow;">$1</span>', htmlspecialchars($text));
+    }
+    return htmlspecialchars($text);
+}
+?>
 <table id="leavesTable" class="table table-bordered table-hover table-striped">
     <thead>
         <tr>
@@ -31,7 +39,7 @@
             ?>
             </td>
             <td>
-              <?php echo htmlspecialchars($row['employee_full_name']); ?>
+              <?= highlightText($row['employee_full_name'], $searchFilter);?>
             </td>
             <td>
               <?php echo htmlspecialchars($row['employee_department_name']); ?>

@@ -28,7 +28,7 @@ try {
         $page = isset($_POST['page']) ? (int)$_POST['page'] : 1;
         $limit = isset($_POST['numberEntries']) ? $_POST['numberEntries'] : 5;
         $offset = ($page - 1) * $limit;
-        
+        $viewMode = isset($_POST['view_mode']) ? $_POST['view_mode'] : 'table';
         
         $filterCriteria = [];
         
@@ -92,7 +92,13 @@ try {
 
         $totalLeaveTypes = $result["total_row_count"];
         $totalPages = ceil($totalLeaveTypes / $_POST['numberEntries']);
-        include __DIR__ . '/leave-types-table.php';
+        if($viewMode == 'table'){
+            include __DIR__ . '/leave-types-table.php';
+        }
+        else{
+            include __DIR__ . '/leave-types-table-card.php';
+        }
+        
         return;
 
     }

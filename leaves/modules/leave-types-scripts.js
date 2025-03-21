@@ -67,6 +67,11 @@ function getByDate(){
     return byDate;
 }
 
+function getViewMode() {
+    let selected = document.querySelector('input[name="view"]:checked');
+    return selected ? selected.value : '';
+}
+
 // Function to add or remove the "Deleted At" option
 function toggleDeletedAtOption() {
     const statusSelect = document.getElementById('status');
@@ -179,6 +184,20 @@ function showError(){
             window.location.href = SMARTWAGE_LOCATION + "/leave-types";
         }
     });
+}
+
+function clickCardEvent(card, event){
+    // Prevent modal from opening if the clicked element are buttons
+    if (event.target.closest('.btn')) {
+        return;
+    }
+
+    const button = card.querySelector('[onclick="updateLeaveTypeClick(this)"]');
+    if(!button){
+        return;
+    }
+    $('#update_leave_types_modal').modal('show');
+    updateLeaveTypeClick(button);
 }
 
 function updateLeaveTypeClick(button){

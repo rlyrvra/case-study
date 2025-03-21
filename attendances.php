@@ -31,9 +31,9 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
 />
 
 <!-- Ajax -->
-<script src="attendance/attendance/modules/attendance-ajax.js?v1.2"></script>
+<script src="attendance/attendance/modules/attendance-ajax.js?v1.4"></script>
 <!-- Scripts -->
-<script src="attendance/attendance/modules/attendance-scripts.js?v1.0.2"></script>
+<script src="attendance/attendance/modules/attendance-scripts.js?v1.0.4"></script>
 
 <!---Skeletons--->
 <script src="requests/table-skeleton.js?v1.2"></script>
@@ -100,6 +100,7 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
       <!-- / Navbar -->
       <div class="content-wrapper">
         <div class="container-fluid pt-5 pb-5">
+            <div id="response-test"></div>
             <div class="container-fluid mb-3 d-flex justify-content-between flex-column flex-lg-row">
                 <h1 class="display-1">Attendance</h1>
             </div>

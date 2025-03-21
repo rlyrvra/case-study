@@ -17,6 +17,7 @@ function fetchAllAttendance(page = 1) {
         endDate = $("#dateEnd").val();
     }
     var employeeId = $("#selectize_employee_sorter").val();
+    var viewMode = getViewMode();
 
     // console.log(`
     //     Number of Entries: ${numberEntries},
@@ -78,6 +79,7 @@ function fetchAllAttendance(page = 1) {
             filter_date_column: dateColumn,
             filter_startDate: startDate,
             filter_endDate: endDate,
+            view_mode: viewMode
         },
         success: function (response) {
             loadingSpinner.classList.add("visually-hidden");
@@ -93,4 +95,41 @@ function fetchAllAttendance(page = 1) {
             console.log("AJAX Error: " + textStatus + ": " + errorThrown);
         },
     });
+}
+
+
+async function approveOvertime(button){
+    const row = button.closest('tr');  // Get the closest row
+    const attendanceData = {
+        id: row.getAttribute('data-id')
+    }
+    console.log(attendanceData);
+    try{
+        const response = await fetch(
+            'attendance/attendance/modules/attendance-api',
+            {
+                method: 'POST',
+                headers: {
+                    'Accept' : '*/*',
+                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                    'X-Requested-With' : 'XMLHttpRequest'
+                },
+                body: new URLSearchParams({
+                    action: 'approveOvertime',
+                    attendance: JSON.stringify(attendanceData)
+                })
+            }
+        );
+        if(!response.ok){
+            console.log("Response Error: " + error);
+            return;
+        }
+
+        const data = await response.text();
+        $('#response-test').html(data);
+        fetchAllAttendance();
+    } catch (error) {
+        console.log("Fatal Error: " + error);
+        return;
+    }
 }

@@ -67,6 +67,11 @@ function getByDate(){
     return byDate;
 }
 
+function getViewMode() {
+    let selected = document.querySelector('input[name="view"]:checked');
+    return selected ? selected.value : '';
+}
+
 function missingFieldValues(fieldName){
     $('#add-holidays-modal').modal('hide');
     $('#update-holidays-modal').modal('hide');
@@ -76,6 +81,20 @@ function missingFieldValues(fieldName){
         icon: 'warning',
         confirmButtonText: 'OK'
     });
+}
+
+function clickCardEvent(card, event){
+    // Prevent modal from opening if the clicked element are buttons
+    if (event.target.closest('.btn')) {
+        return;
+    }
+    
+    const button = card.querySelector('[onclick="updateHolidayClick(this)"]');
+    if(!button){
+        return;
+    }
+    $('#update-holidays-modal').modal('show');
+    updateHolidayClick(button);
 }
 
 function updateHolidayClick(button){

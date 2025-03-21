@@ -67,6 +67,11 @@ function getByDate(){
     return byDate;
 }
 
+function getViewMode() {
+    let selected = document.querySelector('input[name="view"]:checked');
+    return selected ? selected.value : '';
+}
+
 function showFrequencyOptions(selectElement, form) {
     // Get the selected option
     var selectedOption = selectElement.options[selectElement.selectedIndex];
@@ -108,6 +113,19 @@ function calculateSecondPayUpdate(form){
     semiSecond.value = semiFirst + 15;
 }
 
+function clickCardEvent(card, event){
+    // Prevent modal from opening if the clicked element are buttons
+    if (event.target.closest('.btn')) {
+        return;
+    }
+
+    const button = card.querySelector('[onclick="updatePayrollGroupClick(this)"]');
+    if(!button){
+        return;
+    }
+    $('#update-payrollGroups-modal').modal('show');
+    updatePayrollGroupClick(button);
+}
 
 
 function updatePayrollGroupClick(button){
