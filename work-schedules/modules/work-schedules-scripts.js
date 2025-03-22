@@ -160,17 +160,16 @@ function createCalculateWorkHrs(){
 }
 
 
-
 function convertTo24Hour(time) {
-    const [hours, minutes, period] = time.match(/(\d+):(\d+)(AM|PM)/).slice(1);
-    let hour = parseInt(hours, 10);
-    if (period === "PM" && hour !== 12) {
-        hour += 12;
-    } else if (period === "AM" && hour === 12) {
-        hour = 0;
-    }
-    return `${hour.toString().padStart(2, "0")}:${minutes}`;
+    // console.log(`Raw time: ${time}`);
+    // Insert a space if it's missing between the time and AM/PM
+    const formattedTime = time.replace(/(AM|PM)$/, " $1");
+    // console.log(`Formatted Time: ${moment(formattedTime, "h:mm A").format("HH:mm")}`);
+    return moment(formattedTime, "h:mm A").format("HH:mm");
+
 }
+
+
 
 let rowAddedWork = false;
 function addWorkSchedulesBreakCreate() {
@@ -301,8 +300,8 @@ function getCreateBreaksValues(rows) {
 
             // Check for overlaps with previously added breaks
             let hasOverlap = workScheduleBreaks.some(breakItem => 
-                (start24 < breakItem.end_time && end24 > breakItem.start_time)
-            );
+                (start24 <= breakItem.end_time && end24 > breakItem.start_time)
+            );            
 
             if (hasOverlap) {
                 // Clear overlapping row values
@@ -635,8 +634,16 @@ function findDifferences(currentBreakSchedules, updatedBreakSchedules) {
     });
   
     
-    // console.log(differences);
-    return differences;
+    const formattedBreakSchedules = differences.map((formattedBreakSchedule) =>{
+        const {...rest} = formattedBreakSchedule;
+        return{
+            ...rest,
+            start_time: convertTo24Hour(formattedBreakSchedule.start_time),
+            end_time: convertTo24Hour(formattedBreakSchedule.end_time)
+        }
+    });
+
+    return formattedBreakSchedules;
 }
 
 function createFlextimeEnabled(){
