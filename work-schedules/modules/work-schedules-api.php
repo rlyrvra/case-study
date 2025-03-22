@@ -270,6 +270,9 @@ try {
                 }
             }
         }
+
+        print_r($breakTobeCreated);
+        print_r($breakTobeUpdated);
         
 
         $selectedColumns = ['employee_id'];
