@@ -23,17 +23,42 @@ class PayrollGroupService
 
         $this->payrollGroupValidator->setData($payrollGroup);
 
-        $this->payrollGroupValidator->validate([
-            'name'                      ,
-            'payroll_frequency'         ,
-            'day_of_weekly_cutoff'      ,
-            'day_of_biweekly_cutoff'    ,
-            'semi_monthly_first_cutoff' ,
-            'semi_monthly_second_cutoff',
-            'payday_offset'             ,
-            'payday_adjustment'         ,
-            'status'
-        ]);
+        if($payrollGroup['payroll_frequency'] === "Weekly"){
+            $this->payrollGroupValidator->validate([
+                'name'                      ,
+                'payroll_frequency'         ,
+                'day_of_weekly_cutoff'      ,
+                'payday_offset'             ,
+                'payday_adjustment'         ,
+                'status'
+            ]);
+        }else if($payrollGroup['payroll_frequency'] === "Bi-weekly"){
+            $this->payrollGroupValidator->validate([
+                'name'                      ,
+                'payroll_frequency'         ,
+                'day_of_biweekly_cutoff'    ,
+                'payday_offset'             ,
+                'payday_adjustment'         ,
+                'status'
+            ]);
+        }else if($payrollGroup['payroll_frequency'] === "Semi-monthly"){
+            $this->payrollGroupValidator->validate([
+                'name'                      ,
+                'payroll_frequency'         ,
+                'semi_monthly_first_cutoff' ,
+                'semi_monthly_second_cutoff',
+                'payday_offset'             ,
+                'payday_adjustment'         ,
+                'status'
+            ]);
+        }else{
+            return [
+                'status'  => 'error',
+                'message' => 'The selected payroll frequency is not supported.'
+            ];
+        }
+
+        
 
         $validationErrors = $this->payrollGroupValidator->getErrors();
 
@@ -59,7 +84,7 @@ class PayrollGroupService
         );
 
         $createPayrollGroupResult = $this->payrollGroupRepository->createPayrollGroup($newPayrollGroup);
-
+        
         if ($createPayrollGroupResult === ActionResult::FAILURE) {
             return [
                 'status'  => 'error',
@@ -98,18 +123,40 @@ class PayrollGroupService
 
         $this->payrollGroupValidator->setData($payrollGroup);
 
-        $this->payrollGroupValidator->validate([
-            'id'                        ,
-            'name'                      ,
-            'payroll_frequency'         ,
-            'day_of_weekly_cutoff'      ,
-            'day_of_biweekly_cutoff'    ,
-            'semi_monthly_first_cutoff' ,
-            'semi_monthly_second_cutoff',
-            'payday_offset'             ,
-            'payday_adjustment'         ,
-            'status'
-        ]);
+        if($payrollGroup['payroll_frequency'] === "Weekly"){
+            $this->payrollGroupValidator->validate([
+                'name'                      ,
+                'payroll_frequency'         ,
+                'day_of_weekly_cutoff'      ,
+                'payday_offset'             ,
+                'payday_adjustment'         ,
+                'status'
+            ]);
+        }else if($payrollGroup['payroll_frequency'] === "Bi-weekly"){
+            $this->payrollGroupValidator->validate([
+                'name'                      ,
+                'payroll_frequency'         ,
+                'day_of_biweekly_cutoff'    ,
+                'payday_offset'             ,
+                'payday_adjustment'         ,
+                'status'
+            ]);
+        }else if($payrollGroup['payroll_frequency'] === "Semi-monthly"){
+            $this->payrollGroupValidator->validate([
+                'name'                      ,
+                'payroll_frequency'         ,
+                'semi_monthly_first_cutoff' ,
+                'semi_monthly_second_cutoff',
+                'payday_offset'             ,
+                'payday_adjustment'         ,
+                'status'
+            ]);
+        }else{
+            return [
+                'status'  => 'error',
+                'message' => 'The selected payroll frequency is not supported.'
+            ];
+        }
 
         $validationErrors = $this->payrollGroupValidator->getErrors();
 

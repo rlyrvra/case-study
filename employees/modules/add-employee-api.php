@@ -56,7 +56,7 @@ try {
         } else if (isset($result['status']) && $result['status'] === 'error') {
             die("
             <script>
-                showError(" . json_encode($result) . ");
+                showError(" . json_encode($result['message']) . ")
             </script>
             ");
         } else if (isset($result['status']) && $result['status'] === 'invalid_input'){
@@ -110,7 +110,7 @@ try {
         } else if (isset($result['status']) && $result['status'] === 'error') {
             die("
             <script>
-                showError(" . json_encode($result) . ");
+                showError(" . json_encode($result['message']) . ")
             </script>
             ");
         } else if (isset($result['status']) && $result['status'] === 'invalid_input'){

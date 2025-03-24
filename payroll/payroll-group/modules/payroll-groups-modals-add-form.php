@@ -15,7 +15,7 @@
             </div>
 
             <div class="modal-body">
-                <form id="add_payrollGroups_form" onsubmit="event.preventDefault(); createPayrollGroup();">
+                <form id="add_payrollGroups_form" onsubmit="event.preventDefault();">
                     <div class="row g-3">
                         <!-- Payroll Group Name -->
                         <div class="col-md-6">
@@ -25,7 +25,7 @@
                             <input type="text" class="form-control shadow-sm" id="create_name" name="create_name"
                                 required minlength="3" maxlength="50" pattern="^[A-Za-z0-9 ]{3,50}$"
                                 title="Only letters, numbers, and spaces allowed (3-50 characters)"
-                                oninput="this.value = this.value.replace(/[^A-Za-z0-9 ]/g, '')" placeholder="Payroll A">
+                                oninput="this.value = this.value.replace(/[^A-Za-z0-9 ]/g, '')" placeholder="Payroll A" required>
                         </div>
 
                         <!-- Pay Frequency -->

@@ -16,7 +16,7 @@
             </div>
             
             <div class="modal-body">
-                <form id="update_payrollGroups_form" onsubmit="event.preventDefault(); updatePayrollGroup(this);">
+                <form id="update_payrollGroups_form" onsubmit="event.preventDefault();">
                     <div class="row g-3">
                         <!-- Name -->
                         <div class="col-md-6">
@@ -136,7 +136,6 @@
                             <option value="Inactive">Inactive</option>
                         </select>
                     </div>
-                </form>
             </div>
 
             <div class="modal-footer border-top bg-light">
@@ -147,6 +146,7 @@
                     <i class="bx bx-edit"></i> Update
                 </button>
             </div>
+            </form>
         </div>
     </div>
 </div>
