@@ -2,15 +2,11 @@
 require_once __DIR__ . '/includes/Helper.php';
 require_once __DIR__ . '/database/database.php';
 
-require_once __DIR__ . '/employees/EmployeeDao.php';
 require_once __DIR__ . '/employees/EmployeeService.php';
-require_once __DIR__ . '/employees/EmployeeRepository.php';
-require_once __DIR__ . '/employees/Employee.php';
 
-require_once __DIR__ . '/departments/DepartmentDao.php';
 require_once __DIR__ . '/departments/DepartmentService.php';
-require_once __DIR__ . '/departments/DepartmentRepository.php';
-require_once __DIR__ . '/departments/Department.php';
+
+require_once __DIR__ . '/attendance/AttendanceDao.php';
 
 ?>
 <!-- Google Fonts -->
@@ -159,138 +155,380 @@ h2.my-4 {
             <div class="dashboard-card">
                 <h3>Total Employees in the Department</h3>
                 <h2>
+                <?php
+                    function getTotalEmployees(){
+                        global $pdo;
+                        $selectedColumns = ["id"];
+                        $filterCriteria = [];
+                        $filterCriteria[] = [
+                            "column" => "employee.deleted_at",
+                            "operator" => "IS NULL"
+                        ];
+                        $departmentDao = new DepartmentDao($pdo);
+                        $departmentRepository = new DepartmentRepository($departmentDao);
+                        $departmentService = new DepartmentService($departmentRepository);
+                        $employeeDao = new EmployeeDao($pdo);
+                        $employeeRepository = new EmployeeRepository($employeeDao);
+                        $employeeService = new EmployeeService($employeeRepository);
+
+                        if(!$departmentService->isEmployeeDepartmentHead($_SESSION['id'])){
+                            return;
+                        }
+                        $departmentId = $employeeService->fetchAllEmployees(
+                            ['department_id'],
+                            [
+                                [
+                                    "column" => "employee.id",
+                                    "operator" => "=",
+                                    "value" => $_SESSION['id']
+                                ]
+                            ],
+                            [],
+                            1
+                        )['result_set'][0]['department_id'];
+                        $filterCriteria[] = [
+                            "column" => "employee.department_id",
+                            "operator" => "=",
+                            "value" => $departmentId
+                        ];
+
+                        $result = $employeeService->fetchAllEmployees($selectedColumns, $filterCriteria);
+                        $employees = [];
+                        if ($result !== ActionResult::FAILURE) {
+                            $employees = $result['result_set'];
+                        }
+
+                        $totalEmployees = $result["total_row_count"];
+                        return $totalEmployees;
+                    }
+
+                    echo getTotalEmployees();
+                    ?>
                 </h2>
             </div>
             <div class="dashboard-card">
                 <h3>Total Supervisors in the Department</h3>
-                <h2>143</h2>
+                <h2>
+                <?php
+                    function getTotalSupervisors(){
+                        global $pdo;
+                        $selectedColumns = ["id"];
+                        $filterCriteria = [];
+                        $filterCriteria[] = [
+                            "column" => "employee.deleted_at",
+                            "operator" => "IS NULL"
+                        ];
+                        $filterCriteria[] = [
+                            "column" => "employee.access_role",
+                            "operator" => "=",
+                            "value" => "Supervisor"
+                        ];
+                        $departmentDao = new DepartmentDao($pdo);
+                        $departmentRepository = new DepartmentRepository($departmentDao);
+                        $departmentService = new DepartmentService($departmentRepository);
+                        $employeeDao = new EmployeeDao($pdo);
+                        $employeeRepository = new EmployeeRepository($employeeDao);
+                        $employeeService = new EmployeeService($employeeRepository);
+
+                        if(!$departmentService->isEmployeeDepartmentHead($_SESSION['id'])){
+                            return;
+                        }
+                        $departmentId = $employeeService->fetchAllEmployees(
+                            ['department_id'],
+                            [
+                                [
+                                    "column" => "employee.id",
+                                    "operator" => "=",
+                                    "value" => $_SESSION['id']
+                                ]
+                            ],
+                            [],
+                            1
+                        )['result_set'][0]['department_id'];
+                        $filterCriteria[] = [
+                            "column" => "employee.department_id",
+                            "operator" => "=",
+                            "value" => $departmentId
+                        ];
+
+                        $result = $employeeService->fetchAllEmployees($selectedColumns, $filterCriteria);
+                        $employees = [];
+                        if ($result !== ActionResult::FAILURE) {
+                            $employees = $result['result_set'];
+                        }
+
+                        $totalSupervisors = $result["total_row_count"];
+                        return $totalSupervisors;
+                    }
+                    
+                    echo getTotalSupervisors();
+                ?>
+                </h2>
             </div>
             <div class="dashboard-card">
                 <h3>Total Managers in the Department</h3>
-                <h2>154</h2>
+                <h2>
+                <?php
+                    function getTotalManagers(){
+                        global $pdo;
+                        $selectedColumns = ["id"];
+                        $filterCriteria = [];
+                        $filterCriteria[] = [
+                            "column" => "employee.deleted_at",
+                            "operator" => "IS NULL"
+                        ];
+                        $filterCriteria[] = [
+                            "column" => "employee.access_role",
+                            "operator" => "=",
+                            "value" => "Manager"
+                        ];
+                        $departmentDao = new DepartmentDao($pdo);
+                        $departmentRepository = new DepartmentRepository($departmentDao);
+                        $departmentService = new DepartmentService($departmentRepository);
+                        $employeeDao = new EmployeeDao($pdo);
+                        $employeeRepository = new EmployeeRepository($employeeDao);
+                        $employeeService = new EmployeeService($employeeRepository);
+
+                        if(!$departmentService->isEmployeeDepartmentHead($_SESSION['id'])){
+                            return;
+                        }
+                        $departmentId = $employeeService->fetchAllEmployees(
+                            ['department_id'],
+                            [
+                                [
+                                    "column" => "employee.id",
+                                    "operator" => "=",
+                                    "value" => $_SESSION['id']
+                                ]
+                            ],
+                            [],
+                            1
+                        )['result_set'][0]['department_id'];
+                        $filterCriteria[] = [
+                            "column" => "employee.department_id",
+                            "operator" => "=",
+                            "value" => $departmentId
+                        ];
+
+                        $result = $employeeService->fetchAllEmployees($selectedColumns, $filterCriteria);
+                        $employees = [];
+                        if ($result !== ActionResult::FAILURE) {
+                            $employees = $result['result_set'];
+                        }
+
+                        $totalManagers = $result["total_row_count"];
+                        return $totalManagers;
+                    }
+                    
+                    echo getTotalManagers();
+                ?>
+                </h2>
             </div>
             <div class="dashboard-card">
                 <h3>Total Staff in the Department</h3>
-                <h2>165</h2>
+                <h2>
+                <?php
+                    function getTotalStaff(){
+                        global $pdo;
+                        $selectedColumns = ["id"];
+                        $filterCriteria = [];
+                        $filterCriteria[] = [
+                            "column" => "employee.deleted_at",
+                            "operator" => "IS NULL"
+                        ];
+                        $filterCriteria[] = [
+                            "column" => "employee.access_role",
+                            "operator" => "=",
+                            "value" => "Staff"
+                        ];
+                        $departmentDao = new DepartmentDao($pdo);
+                        $departmentRepository = new DepartmentRepository($departmentDao);
+                        $departmentService = new DepartmentService($departmentRepository);
+                        $employeeDao = new EmployeeDao($pdo);
+                        $employeeRepository = new EmployeeRepository($employeeDao);
+                        $employeeService = new EmployeeService($employeeRepository);
+
+                        if(!$departmentService->isEmployeeDepartmentHead($_SESSION['id'])){
+                            return;
+                        }
+                        $departmentId = $employeeService->fetchAllEmployees(
+                            ['department_id'],
+                            [
+                                [
+                                    "column" => "employee.id",
+                                    "operator" => "=",
+                                    "value" => $_SESSION['id']
+                                ]
+                            ],
+                            [],
+                            1
+                        )['result_set'][0]['department_id'];
+                        $filterCriteria[] = [
+                            "column" => "employee.department_id",
+                            "operator" => "=",
+                            "value" => $departmentId
+                        ];
+
+                        $result = $employeeService->fetchAllEmployees($selectedColumns, $filterCriteria);
+                        $employees = [];
+                        if ($result !== ActionResult::FAILURE) {
+                            $employees = $result['result_set'];
+                        }
+
+                        $totalManagers = $result["total_row_count"];
+                        return $totalManagers;
+                    }
+
+                    echo getTotalManagers();
+                ?>
+                    
+                </h2>
             </div>
         </div>
 
         <div class="container">
-            <h2 class="my-4">Work Hours Table</h2>
+            <?php
+                $attendanceDao = new AttendanceDao($pdo);
+                $originalCurrentDateTime = new DateTime();
+                $result = $attendanceDao->fetchAll(
+                    [
+                        "check_in_time",
+                        "check_out_time",
+                        "total_hours_worked",
+                        "work_schedule_snapshot_employee_id"
+                    ], 
+                    [
+                        [
+                            "column" => "attendance.deleted_at",
+                            "operator" => "IS NULL"
+                        ],
+                        [
+                            "column" => "work_schedule_snapshot.employee_id",
+                            "operator" => "=",
+                            "value" => $_SESSION['id']
+                        ],
+                        [
+                            "column" => "attendance.date",
+                            "operator" => "=",
+                            "value" => $originalCurrentDateTime->format("Y-m-d")
+                        ]
+                    ], 
+                    [
+                        [
+                            "column" => "attendance.date",
+                            "direction" => "DESC"
+                        ]
+                    ], 5, 0);
+                    
+                    $myAttendance = $result['result_set'];
+            ?>
+            <h2 class="my-4">Work Hours Table (<?= htmlspecialchars($originalCurrentDateTime->format("l, F j, Y")); ?>)</h2>
             <table>
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Date</th>
                         <th>Check In</th>
                         <th>Check Out</th>
                         <th>Total Hours Worked</th>
                     </tr>
                 </thead>
                 <tbody>
+                <?php if (!empty($myAttendance)): ?>
+                    <?php $i = ($offset + 1); foreach ($myAttendance as $row): ?>
                     <tr>
-                        <td>1</td>
-                        <td>2024-12-20</td>
-                        <td>9:00 AM</td>
-                        <td>5:00 PM</td>
-                        <td>8 hours</td>
+                        <td><?php echo htmlspecialchars($i); $i++;?></td>
+                        <td><?php echo !empty($row['check_in_time']) ? htmlspecialchars(date("h:i:s A", strtotime($row['check_in_time']))) : ''; ?></td>
+                        <td><?php echo !empty($row['check_out_time']) ? htmlspecialchars(date("h:i:s A", strtotime($row['check_out_time']))) : ''; ?></td>
+                        <td><?php echo htmlspecialchars($row['total_hours_worked']); ?></td>
                     </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>2024-12-19</td>
-                        <td>9:30 AM</td>
-                        <td>5:30 PM</td>
-                        <td>8 hours</td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>2024-12-18</td>
-                        <td>10:00 AM</td>
-                        <td>6:00 PM</td>
-                        <td>8 hours</td>
-                    </tr>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                <tr>
+                    <td colspan="4">No data available</td>
+                </tr>
+                <?php endif; ?>
                 </tbody>
             </table>
         </div>
 
-        <div class="chart-container">
+        <!-- <div class="chart-container">
             <h3 class="text-center">Employee Distribution by Department</h3>
             <canvas id="barChart"></canvas>
-        </div>
+        </div> -->
 
 
     </div>
 
     <script>
-        const barCtx = document.getElementById('barChart').getContext('2d');
-        new Chart(barCtx, {
-            type: 'bar',
-            data: {
-                labels: ['Engineering', 'IT', 'Finance', 'HR', 'Housekeeping', 'Marketing'],
-                datasets: [{
-                    label: 'Number of Employees per Department',
-                    data: [10, 15, 8, 12, 5, 10],
-                    backgroundColor: ['#28a745', '#ffc107', '#007bff', '#6f42c1', '#fd7e14', '#d63384'],
-                    borderColor: ['#28a745', '#ffc107', '#007bff', '#6f42c1', '#fd7e14', '#d63384'],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        labels: {
-                            font: {
-                                family: "'Poppins', sans-serif",
-                                size: 14,
-                                weight: '500'
-                            },
-                            color: '#2f5932'
-                        }
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            font: {
-                                family: "'Poppins', sans-serif",
-                                size: 12
-                            },
-                            color: '#43634a'
-                        },
-                        title: {
-                            display: true,
-                            text: 'Number of Employees',
-                            font: {
-                                family: "'Poppins', sans-serif",
-                                size: 14,
-                                weight: '600'
-                            }
-                        }
-                    },
-                    x: {
-                        ticks: {
-                            font: {
-                                family: "'Poppins', sans-serif",
-                                size: 12
-                            },
-                            color: '#43634a'
-                        },
-                        title: {
-                            display: true,
-                            text: 'Departments',
-                            font: {
-                                family: "'Poppins', sans-serif",
-                                size: 14,
-                                weight: '600'
-                            }
-                        }
-                    }
-                }
-            }
-        });
+        // const barCtx = document.getElementById('barChart').getContext('2d');
+        // new Chart(barCtx, {
+        //     type: 'bar',
+        //     data: {
+        //         labels: ['Engineering', 'IT', 'Finance', 'HR', 'Housekeeping', 'Marketing'],
+        //         datasets: [{
+        //             label: 'Number of Employees per Department',
+        //             data: [10, 15, 8, 12, 5, 10],
+        //             backgroundColor: ['#28a745', '#ffc107', '#007bff', '#6f42c1', '#fd7e14', '#d63384'],
+        //             borderColor: ['#28a745', '#ffc107', '#007bff', '#6f42c1', '#fd7e14', '#d63384'],
+        //             borderWidth: 1
+        //         }]
+        //     },
+        //     options: {
+        //         responsive: true,
+        //         maintainAspectRatio: false,
+        //         plugins: {
+        //             legend: {
+        //                 labels: {
+        //                     font: {
+        //                         family: "'Poppins', sans-serif",
+        //                         size: 14,
+        //                         weight: '500'
+        //                     },
+        //                     color: '#2f5932'
+        //                 }
+        //             }
+        //         },
+        //         scales: {
+        //             y: {
+        //                 beginAtZero: true,
+        //                 ticks: {
+        //                     font: {
+        //                         family: "'Poppins', sans-serif",
+        //                         size: 12
+        //                     },
+        //                     color: '#43634a'
+        //                 },
+        //                 title: {
+        //                     display: true,
+        //                     text: 'Number of Employees',
+        //                     font: {
+        //                         family: "'Poppins', sans-serif",
+        //                         size: 14,
+        //                         weight: '600'
+        //                     }
+        //                 }
+        //             },
+        //             x: {
+        //                 ticks: {
+        //                     font: {
+        //                         family: "'Poppins', sans-serif",
+        //                         size: 12
+        //                     },
+        //                     color: '#43634a'
+        //                 },
+        //                 title: {
+        //                     display: true,
+        //                     text: 'Departments',
+        //                     font: {
+        //                         family: "'Poppins', sans-serif",
+        //                         size: 14,
+        //                         weight: '600'
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //     }
+        // });
     </script>
 </html>
 
