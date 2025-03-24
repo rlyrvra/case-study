@@ -183,6 +183,11 @@ function addWorkSchedulesBreakCreate() {
     if(rowAddedWork){
         return;
     }
+    const isFlextime = Boolean(document.getElementById('isFlextime').checked);
+
+    if(isFlextime){
+        return;
+    }
 
     const tableBody = document.getElementById('create_break_assignment_table_body'); // Ensure we target tbody
     if(tableBody.rows.length >= 5){
@@ -460,6 +465,12 @@ function updateWorkSchedulesBreakCreate(){
         return;
     }
 
+    const isFlextime = Boolean(document.getElementById('update_isFlextime').checked);
+
+    if(isFlextime){
+        return;
+    }
+
     const tableBody = document.getElementById('update_break_assignment_table_body'); // Ensure we target tbody
     if(tableBody.rows.length >= 5){
         return;
@@ -659,6 +670,10 @@ function createFlextimeEnabled(){
         endTime.value = "";
         const workHrs = document.getElementById('totalWorkHours');
         workHrs.value = 0.00;
+        const tableBody = document.querySelector('#create_break_assignment table tbody');
+        if (tableBody) {
+            tableBody.innerHTML = "";
+        }
     }else{
         const startTime = document.getElementById('startTime');
         startTime.disabled = false;
@@ -683,6 +698,10 @@ function updateFlextimeEnabled(){
         endTime.disabled = true;
         endTime.required = false;
         endTime.value = "";
+        const tableBody = document.querySelector('#update_break_assignment table tbody');
+        if (tableBody) {
+            tableBody.innerHTML = "";
+        }
     }else{
         const startTime = document.getElementById('update_startTime');
         startTime.disabled = false;
