@@ -674,6 +674,7 @@ function createFlextimeEnabled(){
         if (tableBody) {
             tableBody.innerHTML = "";
         }
+        rowAddedWork = false;
     }else{
         const startTime = document.getElementById('startTime');
         startTime.disabled = false;
@@ -681,7 +682,7 @@ function createFlextimeEnabled(){
         const endTime = document.getElementById('endTime');
         endTime.disabled = false;
         endTime.required = true;
-        const workHrs = document.getElementById('update_totalWorkHours');
+        const workHrs = document.getElementById('totalWorkHours');
         workHrs.value = 0.00;
     }
     
@@ -702,6 +703,7 @@ function updateFlextimeEnabled(){
         if (tableBody) {
             tableBody.innerHTML = "";
         }
+        rowAddedUpdate = false;
     }else{
         const startTime = document.getElementById('update_startTime');
         startTime.disabled = false;
@@ -709,7 +711,8 @@ function updateFlextimeEnabled(){
         const endTime = document.getElementById('update_endTime');
         endTime.disabled = false;
         endTime.required = true;
-        
+        const workHrs = document.getElementById('update_totalWorkHours');
+        workHrs.value = 0.00;
     }
     
 }
