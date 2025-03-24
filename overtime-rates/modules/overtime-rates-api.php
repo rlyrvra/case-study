@@ -38,7 +38,7 @@ try {
         $jobTitleId = isset($_POST['job_title_id']) && $_POST['job_title_id'] != null && $_POST['job_title_id'] != '' ? (int) $_POST['job_title_id'] : null;
         $employeeId = isset($_POST['employee_id']) && $_POST['employee_id'] != null && $_POST['employee_id'] != '' ? (int) $_POST['employee_id'] : null;
         $overtimeRateRepo = new OvertimeRateRepository($overtimeRateDao);
-        $overtimeRateService = new OvertimeRateService($overtimeRateRepo);
+        $overtimeRateService = new OvertimeRateService($pdo, $overtimeRateRepo);
         $overtimeRateAssignment = new OvertimeRateAssignment(
             id: $overtimeRatesId,
             departmentId: $departmentId,
@@ -75,42 +75,36 @@ try {
         // echo "Job Title ID: " . ($jobTitleId ?? 'null') . "<br>";
         // echo "Employee ID: " . ($employeeId ?? 'null') . "<br>";
         $overtimeRateRepo = new OvertimeRateRepository($overtimeRateDao);
-        $overtimeRateService = new OvertimeRateService($overtimeRateRepo);
-        $overtimeRateAssignment = new OvertimeRateAssignment(
-            id: $overtimeRatesId,
-            departmentId: $departmentId,
-            jobTitleId: $jobTitleId,
-            employeeId: $employeeId
-        );
+        $overtimeRateService = new OvertimeRateService($pdo, $overtimeRateRepo);
+        $overtimeRateAssignment = [
+            'id' => $overtimeRatesId,
+            'department_id' => $departmentId,
+            'job_title_id' => $jobTitleId,
+            'employee_id' => $employeeId
+        ];        
 
-        $createResult = $overtimeRateAssignmentService->assignOvertimeRateAssignment($overtimeRateAssignment, $rates);
+        $result = $overtimeRateAssignmentService->assignOvertimeRateAssignment($overtimeRateAssignment, $rates);
         //print_r($createResult);
         $createResult;
 
-        switch ($createResult) {
-            case ActionResult::FAILURE:
-                die("
-                <script>
-                    showError();
-                </script>
-                ");
-                echo "Fail";
-                break;
-            case ActionResult::SUCCESS:
-                die("
-                <script>
-                    showSuccessCreation();
-                </script>
-                ");
-                break;
-            default:
-                die("
-                <script>
-                    showError();
-                </script>
-                ");
-                echo "Uncatchable error";
-                break;
+        if (isset($result['status']) && $result['status'] === 'success') {
+            die("
+            <script>
+                showSuccessCreation();
+            </script>
+            ");
+        } else if (isset($result['status']) && $result['status'] === 'error') {
+            die("
+            <script>
+                showError(" . json_encode($result) . ");
+            </script>
+            ");
+        } else if (isset($result['status']) && $result['status'] === 'invalid_input'){
+            die("
+            <script>
+                showValidationError(" . json_encode($result['errors']) . ");
+            </script>
+            ");
         }
         
         //print_r($overtimeRates);
