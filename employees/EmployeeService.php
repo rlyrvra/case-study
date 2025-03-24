@@ -129,7 +129,7 @@ class EmployeeService
             tinNumber                   : $employee['tin_number'                     ],
             sssNumber                   : $employee['sss_number'                     ],
             philhealthNumber            : $employee['philhealth_number'              ],
-            pagibigFundNumber           : $employee['pagibig_number'                 ],
+            pagibigFundNumber           : $employee['pagibig_fund_number'                 ],
             bankName                    : $employee['bank_name'                      ],
             bankBranchName              : $employee['bank_branch_name'               ],
             bankAccountNumber           : $employee['bank_account_number'            ],
@@ -263,7 +263,7 @@ class EmployeeService
             $payrollGroupId = (int) $payrollGroupId;
         }
 
-        $newEmployee = new Employee(
+        $updatedEmployee = new Employee(
             id                          : $employeeId                                 ,
             rfidUid                     : $employee['rfid_uid'                       ],
             firstName                   : $employee['first_name'                     ],
@@ -295,7 +295,7 @@ class EmployeeService
             tinNumber                   : $employee['tin_number'                     ],
             sssNumber                   : $employee['sss_number'                     ],
             philhealthNumber            : $employee['philhealth_number'              ],
-            pagibigFundNumber           : $employee['pagibig_number'                 ],
+            pagibigFundNumber           : $employee['pagibig_fund_number'                 ],
             bankName                    : $employee['bank_name'                      ],
             bankBranchName              : $employee['bank_branch_name'               ],
             bankAccountNumber           : $employee['bank_account_number'            ],
@@ -305,9 +305,9 @@ class EmployeeService
             notes                       : null
         );
 
-        $createEmployeeResult = $this->employeeRepository->createEmployee($newEmployee);
+        $updateEmployeeResult = $this->employeeRepository->updateEmployee($updatedEmployee);
 
-        if ($createEmployeeResult === ActionResult::FAILURE) {
+        if ($updateEmployeeResult === ActionResult::FAILURE) {
             return [
                 'status'  => 'error',
                 'message' => 'An unexpected error occurred while creating the employee. Please try again later.'

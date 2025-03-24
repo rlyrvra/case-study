@@ -107,7 +107,7 @@ function updateEmployee(button){
         // After imageData is set, construct employeeData
         const employeeData = {
             //form 1
-            token: token,
+            id: token,
             first_name: firstName,
             middle_name: middleName,
             last_name: lastName,
@@ -121,37 +121,37 @@ function updateEmployee(button){
             username: username,
             password: password,
             //form 3
-            phone: phone,
-            email: email,
+            phone_number: phone,
+            email_address: email,
             address: address,
-            emergency_name: emergencyName,
-            emergency_relationship: relationship,
-            emergency_phone: emergencyPhone,
-            emergency_email: emergencyEmail,
-            emergency_address: emergencyAddress,
+            emergency_contact_name: emergencyName,
+            emergency_contact_relationship: relationship,
+            emergency_contact_phone_number: emergencyPhone,
+            emergency_contact_email_address: emergencyEmail,
+            emergency_contact_address: emergencyAddress,
             //form 4
-            rfid: rfid,
+            rfid_uid: rfid,
             employment_type: employmentType,
             job_title_id: jobTitle,
             department_id: department,
             date_of_hire: dateOfHire,
-            supervisor: supervisor,
+            supervisor_id: supervisor,
             access_role: accessRole,
             //form 5
             payroll_group_id: payrollGroup,
-            hourly_rate: hourlyRate,
-            branch_name: branchName,
+            basic_salary: hourlyRate,
             bank_name: bankName,
+            bank_branch_name: branchName,
             bank_account_number: bankAccountNumber,
             bank_account_type: bankAccountType,
             //form 6
             tin_number: tinNumber,
             sss_number: SSSNumber,
             philhealth_number: PhilHealthNumber,
-            pagibig_number: PagIBIGNumber
+            pagibig_fund_number: PagIBIGNumber
         };
         
-        console.log(employeeData);
+        // console.log(employeeData);
     
         
         // const employeeData1 = {
@@ -213,8 +213,7 @@ function updateEmployee(button){
             type: 'POST',
             data: {
                 action: 'update',
-                employeeData: employeeData,
-                md5_id: employeeData.token
+                employeeData: employeeData
             },
             success: function(response) {
                 $('#response-test').html(response);
@@ -336,7 +335,6 @@ function createEmployee(){
             imageData = document.getElementById("profileImage").getAttribute('data-img');
         }
     
-        // After imageData is set, construct employeeData
         const employeeData = {
             //form 1
             first_name: firstName,
@@ -352,34 +350,34 @@ function createEmployee(){
             username: username,
             password: password,
             //form 3
-            phone: phone,
-            email: email,
+            phone_number: phone,
+            email_address: email,
             address: address,
-            emergency_name: emergencyName,
-            emergency_relationship: relationship,
-            emergency_phone: emergencyPhone,
-            emergency_email: emergencyEmail,
-            emergency_address: emergencyAddress,
+            emergency_contact_name: emergencyName,
+            emergency_contact_relationship: relationship,
+            emergency_contact_phone_number: emergencyPhone,
+            emergency_contact_email_address: emergencyEmail,
+            emergency_contact_address: emergencyAddress,
             //form 4
-            rfid: rfid,
+            rfid_uid: rfid,
             employment_type: employmentType,
             job_title_id: jobTitle,
             department_id: department,
             date_of_hire: dateOfHire,
-            supervisor: supervisor,
+            supervisor_id: supervisor,
             access_role: accessRole,
             //form 5
             payroll_group_id: payrollGroup,
-            hourly_rate: hourlyRate,
-            branch_name: branchName,
+            basic_salary: hourlyRate,
             bank_name: bankName,
+            bank_branch_name: branchName,
             bank_account_number: bankAccountNumber,
             bank_account_type: bankAccountType,
             //form 6
             tin_number: tinNumber,
             sss_number: SSSNumber,
             philhealth_number: PhilHealthNumber,
-            pagibig_number: PagIBIGNumber
+            pagibig_fund_number: PagIBIGNumber
         };
         
         //console.log(employeeData);
