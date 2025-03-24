@@ -9,10 +9,12 @@
     
     <title>smartWage - Attendance</title>
     <link rel="icon" type="image/x-icon" href="img/logo-files/logo1.ico" />
+    <link rel="stylesheet" href="assets/vendor/fonts/boxicons.css" />
 
     
     <script src="https://kit.fontawesome.com/e82c3ed260.js" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+
     <!-- Sweet Alert -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
@@ -319,12 +321,12 @@
     }
 
 
-    .swal2-popup {
-        border-radius: 20px;
-        padding: 30px;
-        background: linear-gradient(180deg, #58e877, #052a06);
-        color: white;
+    .swal-popup {
+        border-radius: 20px !important;
+        padding: 30px !important;
+        color: black !important;
     }
+
     .profile-pic {
         width: 120px;
         height: 120px;
@@ -333,22 +335,26 @@
         margin-bottom: 15px;
         border: 4px solid white;
     }
+
     .user-info {
         text-align: left;
         font-size: 18px;
         font-weight: bold;
     }
+
     .countdown-container {
         position: relative;
         width: 120px;
         height: 120px;
         margin: 20px auto;
     }
+
     .countdown-circle {
         stroke-dasharray: 377 377;
         stroke-dashoffset: 377;
         transition: stroke-dashoffset 1s linear;
     }
+
     .countdown-text {
         position: absolute;
         top: 50%;
@@ -357,6 +363,7 @@
         font-size: 22px;
         font-weight: bold;
     }
+
 
     </style>
 </head>
@@ -428,8 +435,8 @@
 
 
 <script src="assets/vendor/libs/jquery/jquery.js"></script>
-<script src="requests/attendance/attendance-rfid-scripts.js?v1.2.2"></script>
-<script src="requests/attendance/attendance-rfid-ajax.js?v1.2.2"></script>
+<script src="requests/attendance/attendance-rfid-scripts.js?v1.2.3"></script>
+<script src="requests/attendance/attendance-rfid-ajax.js?v1.2.3"></script>
 <script src="sweet-alert-toasts/loader/loader.js?v1.0.0"></script>
 
 </body>
