@@ -263,7 +263,7 @@ class BreakTypeDao
         } catch (PDOException $exception) {
             error_log("Database Error: An error occurred while fetching the break types. " .
                       "Exception: {$exception->getMessage()}");
-
+                      
             return ActionResult::FAILURE;
         }
     }

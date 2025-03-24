@@ -29,9 +29,9 @@ if ($_SESSION['access_role'] !== 'Admin') {
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Ajax -->
-    <script src="settings/modules/company-settings-ajax.js?v1.0"></script>
+    <script src="settings/modules/company-settings-ajax.js?v1.1"></script>
     <!-- Scripts -->
-    <script src="settings/modules/company-settings-scripts.js?v1.0"></script>
+    <script src="settings/modules/company-settings-scripts.js?v1.1"></script>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />

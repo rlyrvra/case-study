@@ -45,7 +45,7 @@ class SettingValidator extends BaseValidator
         }
 
         $validConfigurations = [
-            'minutes_can_check_in_before_shit',
+            'minutes_can_check_in_before_shift',
             'grace_period'
         ];
 
@@ -118,7 +118,7 @@ class SettingValidator extends BaseValidator
         }
 
         $validGroups = [
-            'work_schedules'
+            'work_schedule'
         ];
 
         if ( ! in_array($groupName, $validGroups)) {

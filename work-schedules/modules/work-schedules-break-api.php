@@ -139,70 +139,72 @@ try {
 
 
     if($action === 'create'){
-        $breakTypeData = $_POST['breakTypeData'] ?? null;
+        $breakTypeData = $_POST['break_type'] ?? null;
         if (!$breakTypeData) {
             return;
         } 
-        $name = isset($breakTypeData['name']) && $breakTypeData['name'] !== '' ? validateInput($breakTypeData['name'], "Name") : null;
-        $isPaid = isset($breakTypeData['is_paid']) && $breakTypeData['is_paid'] === 'Paid' ? true : false;
-        $duration = isset($breakTypeData['duration']) && $breakTypeData['duration'] !== '' ? validateInput($breakTypeData['duration'], "Duration") : null;
-
-        $newBreakType = new BreakType(
-            id: null,
-            name: $name,
-            durationInMinutes: $duration,
-            isPaid: $isPaid,
-            requireBreakInAndBreakOut: 0
-        );
         $breakTypeRepo = new BreakTypeRepository($breakTypeDao);
         $breakTypeService = new BreakTypeService($breakTypeRepo);
-        $result = $breakTypeService->createBreakType($newBreakType);
-        if ($result !== ActionResult::FAILURE) {
+        $result = $breakTypeService->createBreakType($breakTypeData);
+        if (isset($result['status']) && $result['status'] === 'success') {
             die("
             <script>
                 showSuccessCreateBreak();
             </script>
             ");
-        } else {
-            echo "Failed to create breaks. Please try again.";
+        } else if (isset($result['status']) && $result['status'] === 'error') {
+            die("
+            <script>
+                showError(" . json_encode($result) . ");
+            </script>
+            ");
+        } else if (isset($result['status']) && $result['status'] === 'invalid_input'){
+            die("
+            <script>
+                showValidationError(" . json_encode($result['errors']) . ");
+            </script>
+            ");
         }
         return;
     }
 
     if($action === 'update'){
-        $breakTypeData = $_POST['breakTypeData'] ?? null;
+        $breakTypeData = $_POST['break_type'] ?? null;
         if (!$breakTypeData) {
             return;
         } 
-        $id = isset($breakTypeData['id']) && $breakTypeData['id'] !== '' ? validateInput($breakTypeData['id'], "ID") : null;
-        $name = isset($breakTypeData['name']) && $breakTypeData['name'] !== '' ? validateInput($breakTypeData['name'], "Name") : null;
-        $isPaid = isset($breakTypeData['is_paid']) && $breakTypeData['is_paid'] === 'Paid' ? true : false;
-        $duration = isset($breakTypeData['duration']) && $breakTypeData['duration'] !== '' ? validateInput($breakTypeData['duration'], "Duration") : null;
-
-        $updatedBreakType = new BreakType(
-            id: $id,
-            name: $name,
-            durationInMinutes: $duration,
-            isPaid: $isPaid,
-            requireBreakInAndBreakOut: 0
-        );
         $breakTypeRepo = new BreakTypeRepository($breakTypeDao);
         $breakTypeService = new BreakTypeService($breakTypeRepo);
-        $result = $breakTypeService->updateBreakType($updatedBreakType);
-        if ($result !== ActionResult::FAILURE) {
+        $result = $breakTypeService->updateBreakType($breakTypeData);
+
+        if (isset($result['status']) && $result['status'] === 'success') {
             die("
             <script>
                 showSuccessUpdateBreak();
             </script>
             ");
-        } else {
-            echo "Failed to update breaks. Please try again.";
+        } else if (isset($result['status']) && $result['status'] === 'error') {
+            die("
+            <script>
+                showError(" . json_encode($result) . ");
+            </script>
+            ");
+        } else if (isset($result['status']) && $result['status'] === 'invalid_input'){
+            die("
+            <script>
+                showValidationError(" . json_encode($result['errors']) . ");
+            </script>
+            ");
         }
         return;
     }
 
     if($action === 'delete'){
-        $token = $_POST['token'] ?? null;
+        $breakTypeData = $_POST['break_type'] ?? null;
+        if (!$breakTypeData) {
+            return;
+        } 
+        $token = $breakTypeData['id'] ?? null;
         if (!$token) {
             return;
         } 
@@ -210,17 +212,25 @@ try {
         $breakTypeRepo = new BreakTypeRepository($breakTypeDao);
         $breakTypeService = new BreakTypeService($breakTypeRepo);
         $result = $breakTypeService->deleteBreakType($token);
-        if ($result !== ActionResult::FAILURE) {
+
+        if (isset($result['status']) && $result['status'] === 'success') {
             die("
             <script>
                 showSuccessDeletionBreak();
             </script>
             ");
-        } else {
+        } else if (isset($result['status']) && $result['status'] === 'error') {
             die("
             <script>
-                alert('Error encountered deleting break type');
-            </script>");
+                showError(" . json_encode($result) . ");
+            </script>
+            ");
+        } else if (isset($result['status']) && $result['status'] === 'invalid_input'){
+            die("
+            <script>
+                showValidationError(" . json_encode($result['errors']) . ");
+            </script>
+            ");
         }
         return;
     }
@@ -251,9 +261,19 @@ try {
     }
 
 
-    echo "Invalid action specified.";
+    $message = "Invalid action specified.";
+    die('
+    <script>
+        showFatalError(' . json_encode($message) 
+    . ');
+    </script>');
 } catch (Exception $e) {
-    echo "Error: " . $e->getMessage();
+    $message = "Fatal error: " . $e->getMessage();
+    die('
+    <script>
+        showFatalError(' . json_encode($message) 
+    . ');
+    </script>');
 }
 
 // Function to validate and sanitize input
