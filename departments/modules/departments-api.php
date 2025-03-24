@@ -133,7 +133,7 @@ try {
         if (isset($result['status']) && $result['status'] === 'success') {
             die("
             <script>
-                showSuccessCreate();
+                showSuccessCreate(" . json_encode($result['message']) . ");
             </script>
             ");
         } else if (isset($result['status']) && $result['status'] === 'error') {

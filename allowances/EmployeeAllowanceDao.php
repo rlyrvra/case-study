@@ -221,7 +221,7 @@ class EmployeeAllowanceDao
         } catch (PDOException $exception) {
             error_log("Database Error: An error occurred while fetching employee allowances. " .
                       "Exception: {$exception->getMessage()}");
-
+            
             return ActionResult::FAILURE;
         }
     }

@@ -39,9 +39,9 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
 <!-- Scripts -->
 <script src="allowances/modules/allowance-scripts.js?v1.23"></script>
 <!-- Ajax -->
-<script src="allowances/employee-allowance/modules/assign-allowances-ajax.js?v1.4"></script>
+<script src="allowances/employee-allowance/modules/assign-allowances-ajax.js?v1.5"></script>
 <!-- Scripts -->
-<script src="allowances/employee-allowance/modules/assign-allowances-scripts.js?v1.4"></script>
+<script src="allowances/employee-allowance/modules/assign-allowances-scripts.js?v1.5"></script>
 
 <!---Skeletons--->
 <script src="requests/table-skeleton.js?v1.2"></script>

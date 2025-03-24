@@ -83,12 +83,13 @@ class EmployeeAllowanceService
 
         } catch (PDOException $exception) {
             $this->pdo->rollBack();
-
+            
             return [
                 'status'  => 'error',
                 'message' => 'An unexpected error occurred while assigning the allowance to an employee. Please try again later.'
             ];
         }
+        
 
         return [
             'status'  => 'success',

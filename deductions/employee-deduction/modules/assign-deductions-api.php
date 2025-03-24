@@ -48,7 +48,7 @@ try{
             ]
         ];
         $employeeDeductionRepository = new EmployeeDeductionRepository($employeeDeductionDao);
-        $employeeDeductionService = new EmployeeDeductionService($employeeDeductionRepository);
+        $employeeDeductionService = new EmployeeDeductionService($pdo, $employeeDeductionRepository);
         $result = $employeeDeductionService->fetchAllEmployeeDeductions($selectedColumns, $filterCriteria);
         $employeeDeductions;
         if ($result !== ActionResult::FAILURE){
@@ -72,7 +72,7 @@ try{
         //print_r($employeeDeductionsData);
 
         $employeeDeductionRepository = new EmployeeDeductionRepository($employeeDeductionDao);
-        $employeeDeductionService = new EmployeeDeductionService($employeeDeductionRepository);
+        $employeeDeductionService = new EmployeeDeductionService($pdo, $employeeDeductionRepository);
         foreach ($employeeDeductionsData as $employeeDeduction) {
             $newEmployeeDeduction = new EmployeeDeduction(
                 id: null,
@@ -108,7 +108,7 @@ try{
         }
 
         $employeeDeductionRepository = new EmployeeDeductionRepository($employeeDeductionDao);
-        $employeeDeductionService = new EmployeeDeductionService($employeeDeductionRepository);
+        $employeeDeductionService = new EmployeeDeductionService($pdo, $employeeDeductionRepository);
         $deleteresult = $employeeDeductionService->deleteEmployeeDeduction($employeeDeductionId);
         if ($deleteresult === ActionResult::SUCCESS){
             echo "
