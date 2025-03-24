@@ -131,7 +131,7 @@ try {
 
         die("
         <script>
-        currentBreakSchedule = " . json_encode($currentData) .
+            currentBreakSchedule = " . json_encode($currentData) .
         "
         </script>
         ");

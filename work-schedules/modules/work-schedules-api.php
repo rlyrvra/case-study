@@ -340,6 +340,26 @@ try {
                 break;
         }
 
+        if($is_flex_time === true){
+            $result = deleteExistingBreakSchedules($pdo, $workScheduleId);
+            if(isset($result['action']) && $result['action'] === ActionResult::SUCCESS){
+                $messageComposed .= " and flextime was enabled properly.";
+                die("
+                <script>
+                    showSuccessCreate('$messageComposed', '$indicator');
+                </script>
+                ");
+                return;
+            }
+            $messageComposed .= " and flextime encountered an error. There may be leftover breaks assigned in the work schedule.";
+            die("
+            <script>
+                showSuccessCreate('$messageComposed', '$indicator');
+            </script>
+            ");
+            return;
+        }
+
         $pdo->beginTransaction();
 
         if ($updateResult !== ActionResult::SUCCESS) {
@@ -565,5 +585,35 @@ function updateBreakSchedules($pdo, $workScheduleId, $breakSchedules){
     return [
         "action" => ActionResult::SUCCESS,
         "number" => $updatedCounter
+    ];
+}
+
+function deleteExistingBreakSchedules($pdo, $workScheduleId){
+    $breakScheduleDao = new BreakScheduleDao($pdo);
+    $breakScheduleRepo = new BreakScheduleRepository($breakScheduleDao);
+    $breakScheduleService = new BreakScheduleService($breakScheduleRepo);
+    $breakSchedules = $breakScheduleService->fetchAllBreakSchedules(
+        ['id'],
+        [
+            [
+                "column" => "break_schedule.work_schedule_id",
+                "operator" => "=",
+                "value" => $workScheduleId
+            ],
+            [
+                "column" => "break_schedule.deleted_at",
+                "operator" => "IS NULL"
+            ]
+        ]
+    )['result_set'];
+    $result = null;
+    $deleteCounter = 0;
+    foreach($breakSchedules as $breakSchedule){
+        $result = $breakScheduleService->deleteBreakSchedule($breakSchedule['id']);
+        if($result === ActionResult::SUCCESS) $deleteCounter++;
+    }
+    return [
+        "action" => ActionResult::SUCCESS,
+        "number" => $deleteCounter
     ];
 }
