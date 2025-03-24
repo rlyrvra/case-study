@@ -10,7 +10,19 @@ abstract class BaseValidator
 
     public function isValidId(mixed $id): bool
     {
-        if (is_int($id) || (is_string($id) && preg_match('/^[1-9]\d*$/', $id))) {
+        $isEmpty = is_string($id) && trim($id) === '';
+
+        if (($id === null || $isEmpty) && $this->group === 'create') {
+            return true;
+        }
+
+        if ($id === null || $isEmpty) {
+            $this->errors['id'] = 'The ID is required.';
+
+            return false;
+        }
+
+        if (is_int($id) || filter_var($id, FILTER_VALIDATE_INT) !== false || (is_string($id) && preg_match('/^-?(0|[1-9]\d*)$/', $id))) {
             if ($id < 1) {
                 $this->errors['id'] = 'The ID must be greater than 0.';
 
@@ -23,36 +35,22 @@ abstract class BaseValidator
                 return false;
             }
 
-            $id = (int) $id;
+            return true;
         }
 
-        if (is_string($id) && ! $this->isValidHash($id)) {
-            $this->errors['id'] = 'The ID is an invalid type.';
-
-            return false;
+        if ( ! $isEmpty && $this->isValidHash($id)) {
+            return true;
         }
 
-        if ($id === null && $this->group !== 'create') {
-            $this->errors['id'] = 'The ID cannot be null.';
+        $this->errors['id'] = 'Invalid ID. Please ensure the ID is correct and try again.';
 
-            return false;
-        }
-
-        if ($id !== null && ! is_int($id) && ! is_string($id)) {
-            $this->errors['id'] = 'The ID is an invalid type.';
-
-            return false;
-        }
-
-        return true;
+        return false;
     }
 
     public function isValidDescription(mixed $description): bool
     {
-        if (is_string($description)) {
-            $description = trim($description);
-
-            if (strlen($description) > 255) {
+        if (is_string($description) && trim($description) !== '') {
+            if (mb_strlen($description) > 255) {
                 $this->errors['description'] = 'The description cannot exceed 255 characters long.';
 
                 return false;
@@ -76,6 +74,12 @@ abstract class BaseValidator
 
     public function isValidStatus(mixed $status): bool
     {
+        if ($status === null) {
+            $this->errors['status'] = 'The status cannot be null.';
+
+            return false;
+        }
+
         if ( ! is_string($status)) {
             $this->errors['status'] = 'The status must be a string.';
 
@@ -88,7 +92,13 @@ abstract class BaseValidator
             return false;
         }
 
-        if ( ! in_array(strtolower($status), ['active', 'inactive', 'archived'])) {
+        $validStatuses = [
+            'active'  ,
+            'inactive',
+            'archived'
+        ];
+
+        if ( ! in_array(strtolower($status), $validStatuses)) {
             $this->errors['status'] = 'The status must be active, inactive, or archived.';
 
             return false;
@@ -115,11 +125,11 @@ abstract class BaseValidator
     protected function isValidHash(string $value): bool
     {
         $patterns = [
-            '/^[a-f0-9]{32}$/i'                       ,
-            '/^[a-f0-9]{40}$/i'                       ,
-            '/^[a-f0-9]{64}$/i'                       ,
-            '/^[a-f0-9]{128}$/i'                      ,
-            '/^\$2[ayb]\$\d{2}\$[.\/A-Za-z0-9]{53}$/i'
+            '/^[a-f0-9]{32}$/'                       ,
+            '/^[a-f0-9]{40}$/'                       ,
+            '/^[a-f0-9]{64}$/'                       ,
+            '/^[a-f0-9]{128}$/'                      ,
+            '/^\$2[ayb]\$\d{2}\$[.\/A-Za-z0-9]{53}$/'
         ];
 
         foreach ($patterns as $pattern) {

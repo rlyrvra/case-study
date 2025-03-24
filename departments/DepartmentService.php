@@ -42,11 +42,13 @@ class DepartmentService
 
         $departmentHeadId = $department['department_head_id'];
 
-        if (is_string($departmentHeadId) && preg_match('/^[1-9]\d*$/', $departmentHeadId)) {
+        if (filter_var($departmentHeadId, FILTER_VALIDATE_INT) !== false) {
             $departmentHeadId = (int) $departmentHeadId;
+        } elseif (is_string($departmentHeadId) && trim($departmentHeadId) === '') {
+            $departmentHeadId = null;
         }
 
-        $department = new Department(
+        $newDepartment = new Department(
             id              : null                      ,
             name            : $department['name'       ],
             departmentHeadId: $departmentHeadId         ,
@@ -54,7 +56,7 @@ class DepartmentService
             status          : $department['status'     ]
         );
 
-        $createDepartmentResult = $this->departmentRepository->createDepartment($department);
+        $createDepartmentResult = $this->departmentRepository->createDepartment($newDepartment);
 
         if ($createDepartmentResult === ActionResult::FAILURE) {
             return [
@@ -122,19 +124,20 @@ class DepartmentService
             ];
         }
 
-        $departmentId = $department['id'];
+        $departmentId     = $department['id'                ];
+        $departmentHeadId = $department['department_head_id'];
 
-        if (is_string($departmentId) && preg_match('/^[1-9]\d*$/', $departmentId)) {
+        if (filter_var($departmentId, FILTER_VALIDATE_INT) !== false) {
             $departmentId = (int) $departmentId;
         }
 
-        $departmentHeadId = $department['department_head_id'];
-
-        if (is_string($departmentHeadId) && preg_match('/^[1-9]\d*$/', $departmentHeadId)) {
+        if (filter_var($departmentHeadId, FILTER_VALIDATE_INT) !== false) {
             $departmentHeadId = (int) $departmentHeadId;
+        } elseif (is_string($departmentHeadId) && trim($departmentHeadId) === '') {
+            $departmentHeadId = null;
         }
 
-        $department = new Department(
+        $newDepartment = new Department(
             id              : $departmentId             ,
             name            : $department['name'       ],
             departmentHeadId: $departmentHeadId         ,
@@ -142,7 +145,7 @@ class DepartmentService
             status          : $department['status'     ]
         );
 
-        $updateDepartmentResult = $this->departmentRepository->updateDepartment($department);
+        $updateDepartmentResult = $this->departmentRepository->updateDepartment($newDepartment);
 
         if ($updateDepartmentResult === ActionResult::FAILURE) {
             return [
@@ -179,7 +182,7 @@ class DepartmentService
             ];
         }
 
-        if (is_string($departmentId) && preg_match('/^[1-9]\d*$/', $departmentId)) {
+        if (filter_var($departmentId, FILTER_VALIDATE_INT) !== false) {
             $departmentId = (int) $departmentId;
         }
 

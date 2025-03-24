@@ -41,7 +41,7 @@ class DeductionService
             ];
         }
 
-        $deduction = new Deduction(
+        $newDeduction = new Deduction(
             id         :         null                     ,
             name       :         $deduction['name'       ],
             amount     : (float) $deduction['amount'     ],
@@ -50,7 +50,7 @@ class DeductionService
             status     :         $deduction['status'     ]
         );
 
-        $createDeductionResult = $this->deductionRepository->createDeduction($deduction);
+        $createDeductionResult = $this->deductionRepository->createDeduction($newDeduction);
 
         if ($createDeductionResult === ActionResult::FAILURE) {
             return [
@@ -111,11 +111,11 @@ class DeductionService
 
         $deductionId = $deduction['id'];
 
-        if (is_string($deductionId) && preg_match('/^[1-9]\d*$/', $deductionId)) {
+        if (filter_var($deductionId, FILTER_VALIDATE_INT) !== false) {
             $deductionId = (int) $deductionId;
         }
 
-        $deduction = new Deduction(
+        $newDeduction = new Deduction(
             id         :         $deductionId             ,
             name       :         $deduction['name'       ],
             amount     : (float) $deduction['amount'     ],
@@ -124,7 +124,7 @@ class DeductionService
             status     :         $deduction['status'     ]
         );
 
-        $updateDeductionResult = $this->deductionRepository->updateDeduction($deduction);
+        $updateDeductionResult = $this->deductionRepository->updateDeduction($newDeduction);
 
         if ($updateDeductionResult === ActionResult::FAILURE) {
             return [
@@ -161,7 +161,7 @@ class DeductionService
             ];
         }
 
-        if (is_string($deductionId) && preg_match('/^[1-9]\d*$/', $deductionId)) {
+        if (filter_var($deductionId, FILTER_VALIDATE_INT) !== false) {
             $deductionId = (int) $deductionId;
         }
 
