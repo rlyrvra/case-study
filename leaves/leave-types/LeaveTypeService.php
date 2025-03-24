@@ -46,8 +46,8 @@ class LeaveTypeService
             id                 :        null                                ,
             name               :        $leaveType['name'                  ],
             maximumNumberOfDays: (int ) $leaveType['maximum_number_of_days'],
-            isPaid             : (bool) $leaveType['is_paid'               ],
-            isEncashable       : (bool) $leaveType['is_encashable'         ],
+            isPaid             : filter_var($leaveType['is_paid'               ], FILTER_VALIDATE_BOOLEAN),
+            isEncashable       : filter_var($leaveType['is_encashable'         ], FILTER_VALIDATE_BOOLEAN),
             description        :        $leaveType['description'           ],
             status             :        $leaveType['status'                ]
         );
@@ -122,8 +122,8 @@ class LeaveTypeService
             id                 :        $leaveTypeId                        ,
             name               :        $leaveType['name'                  ],
             maximumNumberOfDays: (int ) $leaveType['maximum_number_of_days'],
-            isPaid             : (bool) $leaveType['is_paid'               ],
-            isEncashable       : (bool) $leaveType['is_encashable'         ],
+            isPaid             : filter_var($leaveType['is_paid'               ], FILTER_VALIDATE_BOOLEAN),
+            isEncashable       : filter_var($leaveType['is_encashable'         ], FILTER_VALIDATE_BOOLEAN),
             description        :        $leaveType['description'           ],
             status             :        $leaveType['status'                ]
         );

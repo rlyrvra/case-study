@@ -15,7 +15,7 @@
             </div>
 
             <div class="modal-body">
-                <form id="update_leave_type_form" onsubmit="event.preventDefault(); updateLeaveType(this);">
+                <form id="update_leave_type_form" onsubmit="event.preventDefault();">
                     <div class="row g-3">
                         <!-- Leave Name -->
                         <div class="col-md-6">

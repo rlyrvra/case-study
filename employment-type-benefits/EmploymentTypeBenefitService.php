@@ -71,7 +71,7 @@ class EmploymentTypeBenefitService
         );
 
         $assignBenefitToEmploymentTypeResult = $this->employmentTypeBenefitRepository->createEmploymentTypeBenefit($newEmploymentTypeBenefit);
-
+        
         if ($assignBenefitToEmploymentTypeResult === ActionResult::FAILURE) {
             return [
                 'status'  => 'error',

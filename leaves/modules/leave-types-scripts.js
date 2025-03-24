@@ -169,19 +169,55 @@ function missingFieldValues(fieldName){
     });
 }
 
-function showError(){
+function showValidationError(errorMessages) {
+    $('#add_leave_types_modal').modal('hide');
+    $('#update_leave_types_modal').modal('hide');
+
+    let formattedMessages = '';
+
+    if (Array.isArray(errorMessages)) {
+        formattedMessages = errorMessages.join('<br>'); // Format as a list
+    } else if (typeof errorMessages === 'object') {
+        formattedMessages = Object.values(errorMessages).flat().join('<br>'); // Flatten object values
+    } else {
+        formattedMessages = errorMessages; // Assume it's already a string
+    }
+
+    Swal.fire({
+        title: 'Warning!',
+        html:  formattedMessages,
+        icon: 'warning',
+        confirmButtonText: 'OK'
+    });
+}
+
+
+function showError(message) {
     const modal = $('#add_leave_types_modal');
     modal.modal.hide();
     const modal2 = $('#update_leave_types_modal');
     modal2.modal.hide();
     Swal.fire({
         title: 'Error!',
-        text: 'An error has occured. Please try again.',
+        text: message,
+        icon: 'error',
+        confirmButtonText: 'OK'
+    });
+}
+
+function showFatalError(message) {
+    const modal = $('#add_leave_types_modal');
+    modal.modal.hide();
+    const modal2 = $('#update_leave_types_modal');
+    modal2.modal.hide();
+    Swal.fire({
+        title: 'Fatal Error!',
+        html: `${message} <br> Please contact the system administrator.`,
         icon: 'error',
         confirmButtonText: 'OK'
     }).then((result) => {
-        if(result.isConfirmed){
-            window.location.href = SMARTWAGE_LOCATION + "/leave-types";
+        if (result.isConfirmed) {
+            location.reload();
         }
     });
 }

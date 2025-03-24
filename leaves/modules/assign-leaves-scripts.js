@@ -159,7 +159,7 @@ function showNoEmployeePresent(){
     $('#leaveEntitlementModal').modal('hide');
     Swal.fire({
         title: 'Warning!',
-        text: 'The selected employment type has no employee present but its leaves have been successfully assigned.',
+        text: 'The selected employment type has no employee present.',
         icon: 'warning',
         timer: 2000,
         confirmButtonText: 'OK'
