@@ -127,14 +127,13 @@ try{
         // print_r($onQueueDeletionLeaves);
         // echo "<br>";
         foreach ($employeeLeavesData as $employeeLeaves) {
-            $newEmploymentTypeLeave = new EmploymentTypeBenefit(
-                id: null,
-                employmentType: $employmentType,
-                leaveTypeId: $employeeLeaves['id'],
-                allowanceId: null,
-                deductionId: null
-            );
-
+            $newEmploymentTypeLeave = [
+                'id' => '',
+                'employment_type' => $employmentType,
+                'leave_type_id' => $employeeLeaves['id'],
+                'allowance_id' => '',
+                'deduction_id' => ''
+            ];
 
             $createEmploymentTypeServiceResult = $employmentTypeService->createEmploymentTypeBenefit($newEmploymentTypeLeave);
 
@@ -222,8 +221,18 @@ try{
 
         return;
     }
-    echo "Invalid action specified";
+    $message = "Invalid action specified.";
+    die('
+    <script>
+        showFatalError(' . json_encode($message) 
+    . ');
+    </script>');
 } catch (Exception $e) {
-    echo "Error: " . $e->getMessage();
+    $message = "Fatal error: " . $e->getMessage();
+    die('
+    <script>
+        showFatalError(' . json_encode($message) 
+    . ');
+    </script>');
 }
 

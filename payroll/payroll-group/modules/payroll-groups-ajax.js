@@ -65,6 +65,10 @@ function fetchAllPayrollGroups(page = 1){
 }
 
 function createPayrollGroup(){
+    const form = document.getElementById('add_payrollGroups_form');
+    if(!form.checkValidity()){
+        return;
+    }
     const name = document.getElementById("create_name").value;
     const freq = document.getElementById("add_pay_frequency").value;
     const weeklyDay = document.getElementById("weekly_payday").value;
@@ -87,13 +91,15 @@ function createPayrollGroup(){
         status: status
     };
 
+    console.log(payrollGroupData);
+
 
     $.ajax({
         url: 'payroll/payroll-group/modules/payroll-groups-api',
         type: 'POST',
         data: {
             action: 'create',
-            payroll_groups_data: payrollGroupData
+            payroll_group: payrollGroupData
         },
         success: function(response) {
             $('#response-test').html(response);
@@ -106,9 +112,13 @@ function createPayrollGroup(){
 }
 
 function updatePayrollGroup(button){
+    const form = document.getElementById('update_payrollGroups_form');
+    if(!form.checkValidity()){
+        return;
+    }
     const name = document.getElementById("update_name").value;
     const freq = document.getElementById("update_pay_frequency").value;
-    const weeklyDay = document.getElementById("update_pay_frequency").value;
+    const weeklyDay = document.getElementById("update_weekly_payday").value;
     const biWeeklyDay = document.getElementById("update_bi_weekly_payday").value;
     const semiFirst = document.getElementById("update_semi_monthly_first_cutoff").value;
     const semiSecond = document.getElementById("update_semi_monthly_second_cutoff").value;
@@ -117,7 +127,7 @@ function updatePayrollGroup(button){
     const status = document.getElementById("update_status").value;
 
     const payrollGroupData = {
-        token: button.getAttribute('data-token'),
+        id: button.getAttribute('data-token'),
         name: name,
         payroll_frequency: freq,
         day_of_weekly_cutoff: weeklyDay,
@@ -129,14 +139,14 @@ function updatePayrollGroup(button){
         status: status
     };
 
-    // console.log(payrollGroupData);
+    console.log(payrollGroupData);
 
     $.ajax({
         url: 'payroll/payroll-group/modules/payroll-groups-api',
         type: 'POST',
         data: {
             action: 'update',
-            payroll_groups_data: payrollGroupData
+            payroll_group: payrollGroupData
         },
         success: function(response) {
             $('#response-test').html(response);
@@ -158,7 +168,9 @@ function deletePayrollGroup(button){
         type: 'POST',
         data: {
             action: 'delete',
-            token: token
+            payroll_group: {
+                id: token
+            }
         },
         success: function(response) {
             $('#response-test').html(response);

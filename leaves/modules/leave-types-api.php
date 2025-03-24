@@ -108,161 +108,122 @@ try {
         if (!$leaveTypesData) {
             return;
         } 
-        $name = isset($leaveTypesData['name']) ? validateInput($leaveTypesData['name'], 'Name') : '';
-        $maximumNumberOfDays = isset($leaveTypesData['maximum_number_of_days']) ? validateNumericIdentifier($leaveTypesData['maximum_number_of_days'], 1, 30, 'Maximum Number of Days') : null;
-        $isPaid = isset($leaveTypesData['is_paid']) && validateInput($leaveTypesData['is_paid'], 'Is Paid') == 'true' ? true : false;
-        $isEnchashable = false;
-        $description = isset($leaveTypesData['description']) ? validateInput($leaveTypesData['description'], 'Description') : '';
-        $status = isset($leaveTypesData['status']) ? validateInput($leaveTypesData['status'], 'Status') : '';
-
-
-        $newLeaveType = new LeaveType(
-            id: null,
-            name: $name,
-            maximumNumberOfDays: $maximumNumberOfDays,
-            isPaid: $isPaid,
-            isEncashable: $isEnchashable,
-            description: $description,
-            status: $status
-        );
 
 
         $leaveTypeRepository = new LeaveTypeRepository($leaveTypeDao);
         $leaveTypeService = new LeaveTypeService($leaveTypeRepository);
-        $result = $leaveTypeService->createLeaveType($newLeaveType);
+        $result = $leaveTypeService->createLeaveType($leaveTypesData);
 
-        if ($result === ActionResult::SUCCESS) {
-            echo "
-            <script> 
-                showSuccessCreate(); 
-            </script>";
-        } else {
-            echo "
-            <script> 
-                showError(); 
-            </script>";
+        if (isset($result['status']) && $result['status'] === 'success') {
+            die("
+            <script>
+                showSuccessCreate();
+            </script>
+            ");
+        } else if (isset($result['status']) && $result['status'] === 'error') {
+            die("
+            <script>
+                showError(" . json_encode($result['message']) . ")
+            </script>
+            ");
+        } else if (isset($result['status']) && $result['status'] === 'invalid_input'){
+            die("
+            <script>
+                showValidationError(" . json_encode($result['errors']) . ");
+            </script>
+            ");
         }
+
         return;
     }
     
     if($action == 'delete'){
-        $hashed_id = isset($_POST['md5_id']) ? (int) validateNumericIdentifier($_POST['md5_id'], 1, 30) : null;
+        $leaveTypesData = $_POST['leave_type'] ?? null;
+        if (!$leaveTypesData) {
+            return;
+        } 
+        $hashed_id = $leaveTypesData['id'] ?? null;
+        if (!$hashed_id) {
+            return;
+        }
+
+
         $leaveTypeRepository = new LeaveTypeRepository($leaveTypeDao);
         $leaveTypeService = new LeaveTypeService($leaveTypeRepository);
-        $deleteresult = $leaveTypeService->deleteLeaveType($hashed_id);
+        $result = $leaveTypeService->deleteLeaveType($hashed_id);
 
-        if ($deleteresult === ActionResult::SUCCESS) {
-            echo "
-            <script> 
-                showSuccessDelete(); 
-            </script>";
-        } else {
-            echo "
-            <script> 
-                showError(); 
-            </script>";
+        if (isset($result['status']) && $result['status'] === 'success') {
+            die("
+            <script>
+                showSuccessDelete();
+            </script>
+            ");
+        } else if (isset($result['status']) && $result['status'] === 'error') {
+            die("
+            <script>
+                showError(" . json_encode($result['message']) . ")
+            </script>
+            ");
+        } else if (isset($result['status']) && $result['status'] === 'invalid_input'){
+            die("
+            <script>
+                showValidationError(" . json_encode($result['errors']) . ");
+            </script>
+            ");
         }
+
         return;
     }
 
 
     if($action == 'update'){
         $leaveTypeData = $_POST['leave_type'] ?? null;
-
         if(!$leaveTypeData){
             return;
         }
-
-        $hashed_id = isset($_POST['md5_id']) ? (int) validateNumericIdentifier($_POST['md5_id'], 1, 30) : null;
-        $name = $leaveTypeData['name'] ?? '';
-        $maxNumberOfDays = $leaveTypeData['maxNumberOfDays'] ?? null;
-        $isPaid = isset($leaveTypeData['isPaid']) && validateInput($leaveTypeData['isPaid'], 'Is Paid') == 'true' ? true : false;
-        $isEnchashable = false;
-        $description = $leaveTypeData['description'] ?? null;
-        $status = $leaveTypeData['status'] ?? null;
-
-        $updatedLeaveType = new LeaveType(
-            id: $hashed_id,
-            name: $name,
-            maximumNumberOfDays: $maxNumberOfDays,
-            isPaid: $isPaid,
-            isEncashable: $isEnchashable,
-            description: $description,
-            status: $status
-        );
+        $hashed_id = $leaveTypeData['id'] ?? null;
+        if (!$hashed_id) {
+            return;
+        }
     
 
         $leaveTypeRepository = new LeaveTypeRepository($leaveTypeDao);
         $leaveTypeService = new LeaveTypeService($leaveTypeRepository);
-        $updateResult = $leaveTypeService->updateLeaveType($updatedLeaveType);
+        $result = $leaveTypeService->updateLeaveType($leaveTypeData);
 
-        if ($updateResult === ActionResult::SUCCESS) {
-            echo "
-            <script> 
-                showSuccessUpdate(); 
-            </script>";
-        } else {
-            echo "
-            <script> 
-                showError(); 
-            </script>";
+        if (isset($result['status']) && $result['status'] === 'success') {
+            die("
+            <script>
+                showSuccessUpdate();
+            </script>
+            ");
+        } else if (isset($result['status']) && $result['status'] === 'error') {
+            die("
+            <script>
+                showError(" . json_encode($result['message']) . ")
+            </script>
+            ");
+        } else if (isset($result['status']) && $result['status'] === 'invalid_input'){
+            die("
+            <script>
+                showValidationError(" . json_encode($result['errors']) . ");
+            </script>
+            ");
         }
         return;
     }
 
-    echo "Invalid action specified.";
+    $message = "Invalid action specified.";
+    die('
+    <script>
+        showFatalError(' . json_encode($message) 
+    . ');
+    </script>');
 } catch (Exception $e) {
-    echo "Error: " . $e->getMessage();
-}
-
-// Function to validate and sanitize input
-function validateInput($input, $fieldName) {
-
-    // Escape the field name for security
-    $escapedFieldName = htmlspecialchars($fieldName, ENT_QUOTES, 'UTF-8');
-
-    // Trim the input to remove extra whitespaces
-    $input = trim($input);
-    
-    // Check if input is empty after trimming
-    if (empty($input)) {
-        die("
-        <script>
-            missingFieldValues('{$escapedFieldName}');
-        </script>
-        ");
-    }
-    
-    // Additional validation can go here (e.g., regex for specific formats)
-    
-    return htmlspecialchars($input); // Sanitize to prevent XSS
-}
-
-function validateNumericIdentifier($value, $minLength, $maxLength, $fieldName = null) {
-    $value = trim($value);
-
-    // Escape the field name for security
-    $escapedFieldName = htmlspecialchars($fieldName, ENT_QUOTES, 'UTF-8');
-
-    // Check if the value is strictly numeric
-    if (!ctype_digit($value)) {
-        echo "
-        <script>
-            missingFieldValues('{$escapedFieldName}');
-        </script>
-        ";
-        exit;
-    }
-
-    // Check the length range
-    if (strlen($value) < $minLength || strlen($value) > $maxLength) {
-        echo "
-        <script>
-            missingFieldValues('{$escapedFieldName}');
-        </script>
-        ";
-        exit;
-    }
-
-    return $value;
+    $message = "Fatal error: " . $e->getMessage();
+    die('
+    <script>
+        showFatalError(' . json_encode($message) 
+    . ');
+    </script>');
 }

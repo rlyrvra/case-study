@@ -96,7 +96,7 @@ function createLeaveTypes(){
         name: leaveTypeName,
         maximum_number_of_days: maxNumber,
         is_paid: isPaid,
-        //is_encashable: isEncashable,
+        is_encashable: false,
         description: description,
         status: status
     };
@@ -139,28 +139,23 @@ function updateLeaveType(button){
     //     Description: ${description}, 
     //     Status: ${status}`);
     const leave_type = {
+        id: token,
         name: leaveTypeName,
-        maxNumberOfDays: maxNumber,
-        isPaid: isPaid,
-        //is_encashable: isEncashable,
+        maximum_number_of_days: maxNumber,
+        is_paid: isPaid,
+        is_encashable: false,
         description: description,
         status: status
     };
-    console.log(leave_type);
+
+    //console.log(leave_type);
+
     $.ajax({
         url: 'leaves/modules/leave-types-api',
         type: 'POST',
         data: {
             action: 'update',
-            md5_id: token,
-            leave_type: {
-                name: leaveTypeName,
-                maxNumberOfDays: maxNumber,
-                isPaid: isPaid,
-                //is_encashable: isEncashable,
-                description: description,
-                status: status
-            }
+            leave_type: leave_type
         },
         success: function(response) {
             $('#response-test').html(response);
@@ -175,7 +170,7 @@ function updateLeaveType(button){
 function deleteLeaveTypes(button){
     const row = button.closest('tr');  // Get the closest row
     const leaveTypeData = {
-        token: row.getAttribute('data-id'),
+        id: row.getAttribute('data-id'),
     };
     
     $.ajax({
@@ -183,7 +178,7 @@ function deleteLeaveTypes(button){
         type: 'POST',
         data: {
             action: 'delete',
-            md5_id: leaveTypeData.token
+            leave_type: leaveTypeData
         },
         success: function(response) {
             $('#response-test').html(response);

@@ -61,7 +61,7 @@ function getSelectedAllowances() {
         if (checkbox.checked) {
         // If the checkbox is checked, push the leave type and credits to the array
         selectedAllowances.push({
-            id: allowances[index].id,
+            allowance_id: allowances[index].id,
             name: allowances[index].name,
             amount: allowances[index].amount
             });
@@ -96,12 +96,12 @@ function assignAllowancesClick(){
       });
 }
 
-function showSuccessEntitlement(){
+function showSuccessEntitlement(message = 'The allowances have been assigned successfully.'){
     $('#allowance_entitlement_modal').modal('hide');
     $('#assign_allowances_modal').modal('hide');
     Swal.fire({
         title: 'Success!',
-        text: 'The allowances have been assigned successfully.',
+        text: message,
         icon: 'success',
         confirmButtonText: 'OK'
     }).then((result) => {
@@ -141,6 +141,56 @@ function confirmDeleteAssignedAllowance(button){
             deleteAssignedAllowance(button);
         } else {
             $('#assign_allowances_modal').modal('show');
+        }
+    });
+}
+
+
+function showValidationError(errorMessages) {
+    $('#allowance_entitlement_modal').modal('hide');
+    $('#assign_allowances_modal').modal('hide');
+
+    let formattedMessages = '';
+
+    if (Array.isArray(errorMessages)) {
+        formattedMessages = errorMessages.join('<br>'); // Format as a list
+    } else if (typeof errorMessages === 'object') {
+        formattedMessages = Object.values(errorMessages).flat().join('<br>'); // Flatten object values
+    } else {
+        formattedMessages = errorMessages; // Assume it's already a string
+    }
+
+    Swal.fire({
+        title: 'Warning!',
+        html:  formattedMessages,
+        icon: 'warning',
+        confirmButtonText: 'OK'
+    });
+}
+
+
+function showError(message) {
+    $('#allowance_entitlement_modal').modal('hide');
+    $('#assign_allowances_modal').modal('hide');
+    Swal.fire({
+        title: 'Error!',
+        text: message,
+        icon: 'error',
+        confirmButtonText: 'OK'
+    });
+}
+
+function showFatalError(message) {
+    $('#allowance_entitlement_modal').modal('hide');
+    $('#assign_allowances_modal').modal('hide');
+    Swal.fire({
+        title: 'Fatal Error!',
+        html: `${message} <br> Please contact the system administrator.`,
+        icon: 'error',
+        confirmButtonText: 'OK'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            location.reload();
         }
     });
 }

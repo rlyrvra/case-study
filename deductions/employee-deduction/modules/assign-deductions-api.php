@@ -48,7 +48,7 @@ try{
             ]
         ];
         $employeeDeductionRepository = new EmployeeDeductionRepository($employeeDeductionDao);
-        $employeeDeductionService = new EmployeeDeductionService($employeeDeductionRepository);
+        $employeeDeductionService = new EmployeeDeductionService($pdo, $employeeDeductionRepository);
         $result = $employeeDeductionService->fetchAllEmployeeDeductions($selectedColumns, $filterCriteria);
         $employeeDeductions;
         if ($result !== ActionResult::FAILURE){
@@ -72,29 +72,32 @@ try{
         //print_r($employeeDeductionsData);
 
         $employeeDeductionRepository = new EmployeeDeductionRepository($employeeDeductionDao);
-        $employeeDeductionService = new EmployeeDeductionService($employeeDeductionRepository);
-        foreach ($employeeDeductionsData as $employeeDeduction) {
-            $newEmployeeDeduction = new EmployeeDeduction(
-                id: null,
-                employeeId: $employeeId,
-                deductionId: $employeeDeduction['id'],
-                amount: $employeeDeduction['amount']
-            );
-            $assignResult = $employeeDeductionService->createEmployeeDeduction($newEmployeeDeduction);
+        $employeeDeductionService = new EmployeeDeductionService($pdo, $employeeDeductionRepository);
+
+        foreach ($employeeDeductionsData as $key => $employeeDeduction) {
+            $employeeDeductionsData[$key]['employee_id'] = $employeeId;
         }
+
+        $result = $employeeDeductionService->createEmployeeDeduction($employeeDeductionsData);
         
-        if ($assignResult === ActionResult::SUCCESS) {
-            echo "
+        if (isset($result['status']) && $result['status'] === 'success') {
+            die("
             <script>
-                showSuccessEntitlement();
+                showSuccessEntitlement(" . json_encode($result['message']) . ");
             </script>
-            ";
-        } else {
-            echo "
+            ");
+        } else if (isset($result['status']) && $result['status'] === 'error') {
+            die("
             <script>
-                showError();
+                showError(" . json_encode($result['message']) . ")
             </script>
-            ";
+            ");
+        } else if (isset($result['status']) && $result['status'] === 'invalid_input'){
+            die("
+            <script>
+                showValidationError(" . json_encode($result['errors']) . ");
+            </script>
+            ");
         }
         
         return;
@@ -108,22 +111,45 @@ try{
         }
 
         $employeeDeductionRepository = new EmployeeDeductionRepository($employeeDeductionDao);
-        $employeeDeductionService = new EmployeeDeductionService($employeeDeductionRepository);
-        $deleteresult = $employeeDeductionService->deleteEmployeeDeduction($employeeDeductionId);
-        if ($deleteresult === ActionResult::SUCCESS){
-            echo "
+        $employeeDeductionService = new EmployeeDeductionService($pdo, $employeeDeductionRepository);
+        $result = $employeeDeductionService->deleteEmployeeDeduction($employeeDeductionId);
+
+        if (isset($result['status']) && $result['status'] === 'success') {
+            die("
             <script>
-            showSuccessDeleteDeduction();
+                showSuccessDeleteDeduction();
             </script>
-            ";
+            ");
+        } else if (isset($result['status']) && $result['status'] === 'error') {
+            die("
+            <script>
+                showError(" . json_encode($result['message']) . ")
+            </script>
+            ");
+        } else if (isset($result['status']) && $result['status'] === 'invalid_input'){
+            die("
+            <script>
+                showValidationError(" . json_encode($result['errors']) . ");
+            </script>
+            ");
         }
 
         return;
     }
 
-    echo "Invalid action specified";
+    $message = "Invalid action specified.";
+    die('
+    <script>
+    showFatalError(' . json_encode($message) 
+    . ');
+    </script>');
 } catch (Exception $e) {
-echo "Error: " . $e->getMessage();
+    $message = "Fatal error: " . $e->getMessage();
+    die('
+    <script>
+    showFatalError(' . json_encode($message) 
+    . ');
+    </script>');
 }
 
 

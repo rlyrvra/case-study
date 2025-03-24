@@ -56,7 +56,6 @@
                 <i class="bx bx-plus bx-sm"></i>Save Assigned Allowances
                 </button>
             </div>
-            </form>
         </div>
     </div>
 </div>

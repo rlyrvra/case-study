@@ -221,7 +221,7 @@ class EmployeeAllowanceDao
         } catch (PDOException $exception) {
             error_log("Database Error: An error occurred while fetching employee allowances. " .
                       "Exception: {$exception->getMessage()}");
-
+            
             return ActionResult::FAILURE;
         }
     }
@@ -340,7 +340,7 @@ class EmployeeAllowanceDao
             WHERE
         ";
 
-        if (preg_match("/^[1-9]\d*$/", $employeeAllowanceId)) {
+        if (filter_var($employeeAllowanceId, FILTER_VALIDATE_INT) !== false) {
             $query .= "id = :employee_allowance_id";
         } else {
             $query .= "SHA2(id, 256) = :employee_allowance_id";

@@ -127,35 +127,28 @@ try {
             return;
         }
 
-        $jobTitleTitle = $jobTitleData['title'] ?? '';
-        $jobTitleDepartmentId = $jobTitleData['department_id'] ?? null;
-        $jobTitledescription = $jobTitleData['description'] ?? null;
-        $jobTitleStatus = $jobTitleData['status'] ?? null;
-
-        $newJobTitle = new JobTitle(
-            id: null,
-            title: $jobTitleTitle,
-            departmentId: $jobTitleDepartmentId,
-            description: $jobTitledescription,
-            status: $jobTitleStatus
-        );
-
         $jobTitleRepository = new JobTitleRepository($jobTitleDao);
         $jobTitleService = new JobTitleService($jobTitleRepository);
-        $result = $jobTitleService->createJobTitle($newJobTitle);
+        $result = $jobTitleService->createJobTitle($jobTitleData);
 
-        if ($result === ActionResult::SUCCESS) {
-            die('
+        if (isset($result['status']) && $result['status'] === 'success') {
+            die("
             <script>
-            showSuccessCreate();
-            </script>');
-        }else if($result === ActionResult::FAILURE){
-            $message = 'Failed to create job title. Please try again.';
-            die('
+                showSuccessCreate();
+            </script>
+            ");
+        } else if (isset($result['status']) && $result['status'] === 'error') {
+            die("
             <script>
-            showError(' . json_encode($message) 
-            . ');
-            </script>');
+                showError(" . json_encode($result['message']) . ")
+            </script>
+            ");
+        } else if (isset($result['status']) && $result['status'] === 'invalid_input'){
+            die("
+            <script>
+                showValidationError(" . json_encode($result['errors']) . ");
+            </script>
+            ");
         }
 
         return;
@@ -167,68 +160,75 @@ try {
         if (!$jobTitleData) {
             die('
             <script>
-            showCouldNotFindData();
+                showCouldNotFindData();
             </script>');
             return;
         }
-
-        $hashed_id = $jobTitleData['md5_id'] ?? null;
-        $jobTitleTitle = $jobTitleData['title'] ?? '';
-        $jobTitleDepartmentId = $jobTitleData['department_id'] ?? null;
-        $jobTitledescription = $jobTitleData['description'] ?? null;
-        $jobTitleStatus = $jobTitleData['status'] ?? null;
-
-
-        $updateJobTitle = new JobTitle(
-            id: $hashed_id,
-            title: $jobTitleTitle,
-            departmentId: $jobTitleDepartmentId,
-            description: $jobTitledescription,
-            status: $jobTitleStatus
-        );
 
         //echo "$hashed_id, $jobTitleTitle, $jobTitleDepartmentId, $jobTitledescription, $jobTitleStatus </br>";
 
         $jobTitleRepository = new JobTitleRepository($jobTitleDao);
         $jobTitleService = new JobTitleService($jobTitleRepository);
-        $updateResult = $jobTitleService->updateJobTitle($updateJobTitle);
+        $result = $jobTitleService->updateJobTitle($jobTitleData);
 
-        if ($updateResult === ActionResult::SUCCESS) {
-            die('
+        if (isset($result['status']) && $result['status'] === 'success') {
+            die("
             <script>
-            showSuccessUpdate();
-            </script>');
-        }else if($updateResult === ActionResult::FAILURE){
-            $message = 'Failed to update job title. Please try again.';
-            die('
+                showSuccessUpdate();
+            </script>
+            ");
+        } else if (isset($result['status']) && $result['status'] === 'error') {
+            die("
             <script>
-            showError(' . json_encode($message) 
-            . ');
-            </script>');
+                showError(" . json_encode($result['message']) . ")
+            </script>
+            ");
+        } else if (isset($result['status']) && $result['status'] === 'invalid_input'){
+            die("
+            <script>
+                showValidationError(" . json_encode($result['errors']) . ");
+            </script>
+            ");
         }
         
         return;
     }
 
     if($action == 'delete'){
-        $hashed_id = $_POST['md5_id'] ?? null;
+        $jobTitleData = $_POST['job_title'] ?? null;
+        if (!$jobTitleData) {
+            die('
+            <script>
+                showCouldNotFindData();
+            </script>');
+            return;
+        }
+
+        $hashed_id = $jobTitleData['id'] ?? null;
         $jobTitleRepository = new JobTitleRepository($jobTitleDao);
         $jobTitleService = new JobTitleService($jobTitleRepository);
-        $deleteResult = $jobTitleService->deleteJobTitle($hashed_id);
+        $result = $jobTitleService->deleteJobTitle($hashed_id);
 
-        if ($deleteResult === ActionResult::SUCCESS) {
-            die('
+        if (isset($result['status']) && $result['status'] === 'success') {
+            die("
             <script>
-            showSuccessDelete();
-            </script>');
-        }else if($deleteResult === ActionResult::FAILURE){
-            $message = 'Failed to delete job title. Please try again.';
-            die('
+                showSuccessDelete();
+            </script>
+            ");
+        } else if (isset($result['status']) && $result['status'] === 'error') {
+            die("
             <script>
-            showError(' . json_encode($message) 
-            . ');
-            </script>');
+                showError(" . json_encode($result['message']) . ")
+            </script>
+            ");
+        } else if (isset($result['status']) && $result['status'] === 'invalid_input'){
+            die("
+            <script>
+                showValidationError(" . json_encode($result['errors']) . ");
+            </script>
+            ");
         }
+
         return;
     }
 

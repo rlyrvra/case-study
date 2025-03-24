@@ -20,6 +20,7 @@ function fetchAllSettings() {
 
 function updateSetting(button){
     const settingValues = getSettingValues(button);
+    
     $.ajax({
         url: "settings/modules/company-settings-api",
         type: "POST",

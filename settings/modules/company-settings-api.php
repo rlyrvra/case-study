@@ -33,55 +33,42 @@ try {
         if(!$settings){
             return;
         }
-        $token = $settings['token'] ?? null; if(!$token) return;
-        $settingKey = strtolower(str_replace(' ', '_', $settings['setting_key'])) ?? null;
-        $settingValue = $settings['setting_value'] ?? null;
-        $groupName = strtolower(str_replace(' ', '_', $settings['group_name'])) ?? null;
-
-        $updatedSetting = new Setting(
-            id:           $token             ,
-            settingKey:   $settingKey        ,
-            settingValue: $settingValue      ,
-            groupName:    $groupName          
-        );
-        $result = $settingService->updateSetting($updatedSetting);
-        showUpdateResult($result);
+        
+        $result = $settingService->updateSetting($settings);
+        if (isset($result['status']) && $result['status'] === 'success') {
+            die("
+            <script>
+                showUpdateSuccess();
+            </script>
+            ");
+        } else if (isset($result['status']) && $result['status'] === 'error') {
+            die("
+            <script>
+                showError(" . json_encode($result['message']) . ")
+            </script>
+            ");
+        } else if (isset($result['status']) && $result['status'] === 'invalid_input'){
+            die("
+            <script>
+                showValidationError(" . json_encode($result['errors']) . ");
+            </script>
+            ");
+        }
         return;
     }
 
 
-    echo "Invalid action specified.";
+    $message = "Invalid action specified.";
+    die('
+    <script>
+        showFatalError(' . json_encode($message) 
+    . ');
+    </script>');
 } catch (Exception $e) {
-    echo "Error: " . $e->getMessage();
-}
-
-
-function showUpdateResult($result){
-    if(isset($result) && $result instanceof ActionResult){
-        switch ($result) {
-            case ActionResult::FAILURE:
-                die("
-                <script>
-                    showError();
-                </script>
-                ");
-                break;
-            case ActionResult::SUCCESS:
-                die("
-                <script>
-                    showUpdateSuccess();
-                </script>
-                ");
-                break;
-            default:
-                die("
-                <script>
-                    showError();
-                </script>
-                ");
-                break;
-        }
-    }else{
-        die("An error occurred.");
-    }
+    $message = "Fatal error: " . $e->getMessage();
+    die('
+    <script>
+        showFatalError(' . json_encode($message) 
+    . ');
+    </script>');
 }

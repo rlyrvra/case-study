@@ -187,7 +187,6 @@ function showSuccessCreate() {
         title: 'Success!',
         text: 'This payroll group has been created successfully.',
         icon: 'success',
-        timer: 2000,
         confirmButtonText: 'OK'
     });
 }
@@ -198,7 +197,6 @@ function showSuccessDeletion() {
         title: 'Success!',
         text: 'This payroll group has been deleted successfully.',
         icon: 'success',
-        timer: 2000,
         confirmButtonText: 'OK'
     });
 }
@@ -209,7 +207,6 @@ function showSuccessUpdate() {
         title: 'Success!',
         text: 'This payroll group has been updated successfully.',
         icon: 'success',
-        timer: 2000,
         confirmButtonText: 'OK'
     });
 }
@@ -228,6 +225,51 @@ function confirmDeletePayrollGroup(button) {
     }).then((result) => {
         if (result.isConfirmed) {
         deletePayrollGroup(button);
+        }
+    });
+}
+
+function showValidationError(errorMessages) {
+    $('#update-payrollGroups-modal').modal('hide');
+    $('#add-payrollGroups-modal').modal('hide');
+
+    let formattedMessages = '';
+
+    if (Array.isArray(errorMessages)) {
+        formattedMessages = errorMessages.join('<br>'); // Format as a list
+    } else if (typeof errorMessages === 'object') {
+        formattedMessages = Object.values(errorMessages).flat().join('<br>'); // Flatten object values
+    } else {
+        formattedMessages = errorMessages; // Assume it's already a string
+    }
+
+    Swal.fire({
+        title: 'Warning!',
+        html:  formattedMessages,
+        icon: 'warning',
+        confirmButtonText: 'OK'
+    });
+}
+
+
+function showError(message) {
+    Swal.fire({
+        title: 'Error!',
+        text: message,
+        icon: 'error',
+        confirmButtonText: 'OK'
+    });
+}
+
+function showFatalError(message) {
+    Swal.fire({
+        title: 'Fatal Error!',
+        html: `${message} <br> Please contact the system administrator.`,
+        icon: 'error',
+        confirmButtonText: 'OK'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            location.reload();
         }
     });
 }

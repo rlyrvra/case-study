@@ -16,7 +16,7 @@ function fetchAllBreakTypes(page = 1){
 
 function createBreaks(){
     const breakName = document.getElementById("create_break_name").value.trim();
-    const breakPaid = document.getElementById("create_paid").value.trim();
+    const breakPaid = document.getElementById("create_paid").value.trim() === "Paid";
     const breakDuration = document.getElementById("create_duration_in_minutes").value.trim();
 
     if(!validateInputs(breakName, breakPaid, breakDuration)){
@@ -26,7 +26,8 @@ function createBreaks(){
     const breakTypeData = {
         name: breakName,
         is_paid: breakPaid,
-        duration: breakDuration
+        duration_in_minutes: breakDuration,
+        is_require_break_in_and_break_out: false
     };
 
     $.ajax({
@@ -34,7 +35,7 @@ function createBreaks(){
         type: 'POST',
         data: {
             action: 'create',
-            breakTypeData: breakTypeData
+            break_type: breakTypeData
         },
         success: function(response) {
             $('#response-test').html(response);
@@ -53,12 +54,13 @@ function updateBreakType(button){
     const token = button.getAttribute('data-token');
     const updateName = row.querySelector('#update_name').value;
     const updateDuration = row.querySelector('#update_duration').value;
-    const updatePaid = row.querySelector('#update_paid').value;
+    const updatePaid = row.querySelector('#update_paid').value.trim() === "Paid";
     const breakTypeData = {
         id: token,
         name: updateName,
         is_paid: updatePaid,
-        duration: updateDuration
+        duration_in_minutes: updateDuration,
+        is_require_break_in_and_break_out: false
     };
     if(!validateInputs(updateName, updatePaid, updateDuration)){
         return;
@@ -70,7 +72,7 @@ function updateBreakType(button){
         type: 'POST',
         data: {
             action: 'update',
-            breakTypeData: breakTypeData
+            break_type: breakTypeData
         },
         success: function(response) {
             $('#response-test').html(response);
@@ -91,7 +93,9 @@ function deleteBreakType(button){
         type: 'POST',
         data: {
             action: 'delete',
-            token: token
+            break_type: {
+                id: token
+            }
         },
         success: function(response) {
             $('#response-test').html(response);

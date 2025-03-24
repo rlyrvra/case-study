@@ -4,6 +4,7 @@ function getRatesValues(rows) {
 
     for (let i = 0; i < rows.length; i++) {
         const row = rows[i];
+        const id = rows[i].getAttribute('data-id');
         const dayType = row.cells[0].innerHTML.trim();
         const holidayType = row.cells[1].innerHTML.trim();
         const regularHr = row.cells[2].children[0].value;
@@ -12,6 +13,7 @@ function getRatesValues(rows) {
         const nightAndOvertimeRate = row.cells[5].children[0].value;
 
         rates.push({
+            id: id,
             day_type: dayType,
             holiday_type: holidayType,
             regular_time_rate: regularHr,
@@ -30,7 +32,51 @@ function showSuccessCreation() {
         title: 'Success!',
         text: 'The rates has been successfully assigned.',
         icon: 'success',
-        timer: 2000,
         confirmButtonText: 'OK'
+    });
+}
+
+function showValidationError(errorMessages) {
+    $('#update-allowances-modal').modal('hide');
+    $('#add-allowances-modal').modal('hide');
+
+    let formattedMessages = '';
+
+    if (Array.isArray(errorMessages)) {
+        formattedMessages = errorMessages.join('<br>'); // Format as a list
+    } else if (typeof errorMessages === 'object') {
+        formattedMessages = Object.values(errorMessages).flat().join('<br>'); // Flatten object values
+    } else {
+        formattedMessages = errorMessages; // Assume it's already a string
+    }
+
+    Swal.fire({
+        title: 'Warning!',
+        html:  formattedMessages,
+        icon: 'warning',
+        confirmButtonText: 'OK'
+    });
+}
+
+
+function showError(message) {
+    Swal.fire({
+        title: 'Error!',
+        text: message,
+        icon: 'error',
+        confirmButtonText: 'OK'
+    });
+}
+
+function showFatalError(message) {
+    Swal.fire({
+        title: 'Fatal Error!',
+        html: `${message} <br> Please contact the system administrator.`,
+        icon: 'error',
+        confirmButtonText: 'OK'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            location.reload();
+        }
     });
 }

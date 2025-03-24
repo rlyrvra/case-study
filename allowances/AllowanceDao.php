@@ -328,7 +328,7 @@ class AllowanceDao
             WHERE
         ";
 
-        if (preg_match("/^[1-9]\d*$/", $allowance->getId())) {
+        if (filter_var($allowance->getId(), FILTER_VALIDATE_INT) !== false) {
             $query .= "id = :allowance_id";
         } else {
             $query .= "SHA2(id, 256) = :allowance_id";
@@ -386,7 +386,7 @@ class AllowanceDao
             WHERE
         ";
 
-        if (preg_match("/^[1-9]\d*$/", $allowanceId)) {
+        if (filter_var($allowanceId, FILTER_VALIDATE_INT) !== false) {
             $query .= "id = :allowance_id";
         } else {
             $query .= "SHA2(id, 256) = :allowance_id";

@@ -15,7 +15,7 @@
             <td><?php echo htmlspecialchars($row['amount']); ?></td>
             <td><?php echo htmlspecialchars($row['deduction_frequency']); ?></td>
             <td>
-              <button class="btn btn-danger" title="Click to Delete" onclick="confirmDeleteDeduction(this)" data-id="<?php echo htmlspecialchars($row['id']); ?>">
+              <button class="btn btn-danger" title="Click to Delete" onclick="confirmDeleteAssignedDeduction(this)" data-id="<?php echo htmlspecialchars($row['id']); ?>">
                 <i class="bx bx-trash"></i>
               </button> 
             </td>

@@ -39,6 +39,12 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function assignDeductionName(){
+    const form = document.getElementById('deduction_form');
+    if(!form.checkValidity()){
+        return;
+    }
+    $('#assign_deductions_modal').modal('hide');
+    $('#deductions_entitlement_modal').modal('show');
     const select = $('#select_employee').selectize();
     const employeeId = parseInt(select[0].selectize.getValue(), 10);
     const matchedEmployee = employees.find(employee => employee.id === employeeId);
@@ -53,7 +59,7 @@ function getSelectedDeductions() {
         if (checkbox.checked) {
         // If the checkbox is checked, push the leave type and credits to the array
         selectedDeductions.push({
-            id: deductions[index].id,
+            deduction_id: deductions[index].id,
             name: deductions[index].name,
             amount: deductions[index].amount
             });
@@ -69,12 +75,12 @@ function clearSelectedDeductions(){
     });
 }
 
-function showSuccessEntitlement(){
+function showSuccessEntitlement(message = 'The deductions have been assigned successfully.'){
     $('#deductions_entitlement_modal').modal('hide');
     $('#assign_deductions_modal').modal('hide');
     Swal.fire({
         title: 'Success!',
-        text: 'The deductions have been assigned successfully.',
+        text: message,
         icon: 'success',
         confirmButtonText: 'OK'
     }).then((result) => {
@@ -133,6 +139,55 @@ function confirmDeleteAssignedDeduction(button){
             deleteAssignedDeduction(button);
         } else {
             $('#assign_deductions_modal').modal('show');
+        }
+    });
+}
+
+function showValidationError(errorMessages) {
+    $('#add-departments-modal').modal('hide');
+    $('#update_departments_modal').modal('hide');
+
+    let formattedMessages = '';
+
+    if (Array.isArray(errorMessages)) {
+        formattedMessages = errorMessages.join('<br>'); // Format as a list
+    } else if (typeof errorMessages === 'object') {
+        formattedMessages = Object.values(errorMessages).flat().join('<br>'); // Flatten object values
+    } else {
+        formattedMessages = errorMessages; // Assume it's already a string
+    }
+
+    Swal.fire({
+        title: 'Warning!',
+        html:  formattedMessages,
+        icon: 'warning',
+        confirmButtonText: 'OK'
+    });
+}
+
+
+function showError(message) {
+    $('#add-departments-modal').modal('hide');
+    $('#update_departments_modal').modal('hide');
+    Swal.fire({
+        title: 'Error!',
+        text: message,
+        icon: 'error',
+        confirmButtonText: 'OK'
+    });
+}
+
+function showFatalError(message) {
+    $('#add-departments-modal').modal('hide');
+    $('#update_departments_modal').modal('hide');
+    Swal.fire({
+        title: 'Fatal Error!',
+        html: `${message} <br> Please contact the system administrator.`,
+        icon: 'error',
+        confirmButtonText: 'OK'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            location.reload();
         }
     });
 }

@@ -614,7 +614,7 @@ class EmployeeDao
             WHERE
         ";
 
-        if (preg_match("/^[1-9]\d*$/", $employee->getId())) {
+        if (filter_var($employee->getId(), FILTER_VALIDATE_INT) !== false) {
             $query .= "id = :employee_id";
         } else {
             $query .= "SHA2(id, 256) = :employee_id";
@@ -707,7 +707,7 @@ class EmployeeDao
             WHERE
         ";
 
-        if (preg_match("/^[1-9]\d*$/", $employeeId)) {
+        if (filter_var($employeeId, FILTER_VALIDATE_INT) !== false) {
             $query .= "id = :employee_id";
         } else {
             $query .= "SHA2(id, 256) = :employee_id";
@@ -786,7 +786,7 @@ class EmployeeDao
             WHERE
         ";
 
-        if (preg_match("/^[1-9]\d*$/", $employeeId)) {
+        if (filter_var($employeeId, FILTER_VALIDATE_INT) !== false) {
             $query .= "id = :employee_id";
         } else {
             $query .= "SHA2(id, 256) = :employee_id";

@@ -13,7 +13,8 @@
         <?php if (!empty($overtimeRates)): ?>
         <form id="overtime-rates-form" onsubmit=event.preventDefault();>
             <?php foreach ($overtimeRates as $row): ?>
-                <tr>
+                <tr data-id=<?php echo htmlspecialchars($row['id']); ?>
+                >
                     <td>
                         <?php echo htmlspecialchars($row['day_type']); ?>
                     </td>

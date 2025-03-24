@@ -213,7 +213,6 @@ function showSuccessCreate() {
         title: 'Success!',
         text: 'This holiday has been created successfully.',
         icon: 'success',
-        timer: 2000,
         confirmButtonText: 'OK'
     });
 }
@@ -224,10 +223,41 @@ function showSuccessUpdate(){
         title: 'Success!',
         text: 'This holiday has been updated successfully.',
         icon: 'success',
-        timer: 2000,
         confirmButtonText: 'OK'
     });
 }
+
+function showSuccessDelete() {
+    Swal.fire({
+        title: 'Success!',
+        text: 'This holiday has been deleted successfully.',
+        icon: 'success',
+        confirmButtonText: 'OK'
+    });
+}
+
+function showValidationError(errorMessages) {
+    $('#add-holidays-modal').modal('hide');
+    $('#update-holidays-modal').modal('hide');
+
+    let formattedMessages = '';
+
+    if (Array.isArray(errorMessages)) {
+        formattedMessages = errorMessages.join('<br>'); // Format as a list
+    } else if (typeof errorMessages === 'object') {
+        formattedMessages = Object.values(errorMessages).flat().join('<br>'); // Flatten object values
+    } else {
+        formattedMessages = errorMessages; // Assume it's already a string
+    }
+
+    Swal.fire({
+        title: 'Warning!',
+        html:  formattedMessages,
+        icon: 'warning',
+        confirmButtonText: 'OK'
+    });
+}
+
 
 function showError(message) {
     Swal.fire({

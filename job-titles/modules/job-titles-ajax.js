@@ -139,7 +139,7 @@ function updateJobTitle(button){
         data: {
             action: 'update',
             job_title: {
-                md5_id: token,
+                id: token,
                 title: jobTitleName,
                 department_id: jobTitleDepartmentName,
                 description: jobTitleDescription,
@@ -162,7 +162,7 @@ function updateJobTitle(button){
 function deleteJobTitle(button){
     const row = button.closest('tr');  // Get the closest row
     const jobTitleData = {
-        token: row.getAttribute('data-id'),
+        id: row.getAttribute('data-id'),
     };
     
     $.ajax({
@@ -170,7 +170,7 @@ function deleteJobTitle(button){
         type: 'POST',
         data: {
             action: 'delete',
-            md5_id: jobTitleData.token
+            job_title: jobTitleData
         },
         success: function(response) {
             $('#response-test').html(response);
