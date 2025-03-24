@@ -141,6 +141,8 @@
       <th>Overtime Approval</th>
       <th>Status</th>
       <th>Remarks</th>
+      <th>Updated</th>
+      <th>Action</th>
   </tfoot>
 </table>
 
