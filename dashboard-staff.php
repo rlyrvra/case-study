@@ -20,6 +20,8 @@ require_once __DIR__ . '/leaves/LeaveEntitlementService.php';
 require_once __DIR__ . '/leaves/LeaveRequestAttachment.php';
 require_once __DIR__ . '/leaves/LeaveRequestAttachmentDao.php';
 require_once __DIR__ . '/leaves/LeaveRequestAttachmentRepository.php';
+
+require_once __DIR__ . '/attendance/AttendanceDao.php';
 ?>
 <!-- Google Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -218,39 +220,66 @@ h2.my-4 {
         </div>
 
         <div class="container">
-            <h2 class="my-4">Work Hours Table</h2>
+            <?php
+                $attendanceDao = new AttendanceDao($pdo);
+                $originalCurrentDateTime = new DateTime();
+                $result = $attendanceDao->fetchAll(
+                    [
+                        "check_in_time",
+                        "check_out_time",
+                        "total_hours_worked",
+                        "work_schedule_snapshot_employee_id"
+                    ], 
+                    [
+                        [
+                            "column" => "attendance.deleted_at",
+                            "operator" => "IS NULL"
+                        ],
+                        [
+                            "column" => "work_schedule_snapshot.employee_id",
+                            "operator" => "=",
+                            "value" => $_SESSION['id']
+                        ],
+                        [
+                            "column" => "attendance.date",
+                            "operator" => "=",
+                            "value" => $originalCurrentDateTime->format("Y-m-d")
+                        ]
+                    ], 
+                    [
+                        [
+                            "column" => "attendance.date",
+                            "direction" => "DESC"
+                        ]
+                    ], 5, 0);
+                    
+                    $myAttendance = $result['result_set'];
+            ?>
+            <h2 class="my-4">Work Hours Table (<?= htmlspecialchars($originalCurrentDateTime->format("l, F j, Y")); ?>)</h2>
             <table>
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Date</th>
                         <th>Check In</th>
                         <th>Check Out</th>
                         <th>Total Hours Worked</th>
                     </tr>
                 </thead>
                 <tbody>
+                <?php if (!empty($myAttendance)): ?>
+                    <?php $i = ($offset + 1); foreach ($myAttendance as $row): ?>
                     <tr>
-                        <td>1</td>
-                        <td>2024-12-20</td>
-                        <td>9:00 AM</td>
-                        <td>5:00 PM</td>
-                        <td>8 hours</td>
+                        <td><?php echo htmlspecialchars($i); $i++;?></td>
+                        <td><?php echo !empty($row['check_in_time']) ? htmlspecialchars(date("h:i:s A", strtotime($row['check_in_time']))) : ''; ?></td>
+                        <td><?php echo !empty($row['check_out_time']) ? htmlspecialchars(date("h:i:s A", strtotime($row['check_out_time']))) : ''; ?></td>
+                        <td><?php echo htmlspecialchars($row['total_hours_worked']); ?></td>
                     </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>2024-12-19</td>
-                        <td>9:30 AM</td>
-                        <td>5:30 PM</td>
-                        <td>8 hours</td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>2024-12-18</td>
-                        <td>10:00 AM</td>
-                        <td>6:00 PM</td>
-                        <td>8 hours</td>
-                    </tr>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                <tr>
+                    <td colspan="4">No data available</td>
+                </tr>
+                <?php endif; ?>
                 </tbody>
             </table>
         </div>
