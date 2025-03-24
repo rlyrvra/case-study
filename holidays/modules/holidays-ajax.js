@@ -88,8 +88,8 @@ function createHolidays(){
     const holidayName = document.getElementById('create_name').value;
     const holidayStart = document.getElementById('create_start_date').value;
     const holidayEnd = document.getElementById('create_end_date').value;
-    const holidayIsPaid = document.getElementById('create_isPaid').checked;
-    const holidayIsRecurring = document.getElementById('create_isRecurring').checked;
+    const holidayIsPaid = Boolean(document.getElementById('create_isPaid').checked);
+    const holidayIsRecurring = Boolean(document.getElementById('create_isRecurring').checked);
     const holidayDescription = document.getElementById('create_description').value;
     const holidayStatus = document.getElementById("create_status").value;
     
@@ -98,8 +98,8 @@ function createHolidays(){
         name: holidayName,
         start_date: holidayStart,
         end_date: holidayEnd,
-        isPaid: holidayIsPaid,
-        isRecurring: holidayIsRecurring,
+        is_paid: holidayIsPaid,
+        is_recurring_annually: holidayIsRecurring,
         description: holidayDescription,
         status: holidayStatus
     };
@@ -110,7 +110,7 @@ function createHolidays(){
         method: 'POST',
         data: {
             action: 'create',
-            holidayData: holidayData
+            holiday: holidayData
         },
         success: function(response) {
             $('#holiday-table').html(response);
@@ -134,19 +134,19 @@ function updateHolidays(button){
     const holidayName = document.getElementById('update_name').value;
     const holidayStart = document.getElementById('update_start_date').value;
     const holidayEnd = document.getElementById('update_end_date').value;
-    const holidayIsPaid = document.getElementById('update_isPaid').checked;
-    const holidayIsRecurring = document.getElementById('update_isRecurring').checked;
+    const holidayIsPaid = Boolean(document.getElementById('update_isPaid').checked);
+    const holidayIsRecurring = Boolean(document.getElementById('update_isRecurring').checked);
     const holidayDescription = document.getElementById('update_description').value;
     const holidayStatus = document.getElementById("update_status").value;
     
 
     const holidayData = {
-        md5_id: md5_id,
+        id: md5_id,
         name: holidayName,
         start_date: holidayStart,
         end_date: holidayEnd,
-        isPaid: holidayIsPaid,
-        isRecurring: holidayIsRecurring,
+        is_paid: holidayIsPaid,
+        is_recurring_annually: holidayIsRecurring,
         description: holidayDescription,
         status: holidayStatus
     };
@@ -157,10 +157,10 @@ function updateHolidays(button){
         method: 'POST',
         data: {
             action: 'update',
-            holidayData: holidayData
+            holiday: holidayData
         },
         success: function(response) {
-            $('#holiday-table').html(response);
+            $('#response-test').html(response);
             fetchAllHolidays();
         },
         error(xhr, status, error) {
@@ -172,8 +172,8 @@ function updateHolidays(button){
 
 function deleteHoliday(button){
     const row = button.closest('tr');  // Get the closest row
-    const allowanceData = {
-        token: row.getAttribute('data-id'),
+    const holidayData = {
+        id: row.getAttribute('data-id'),
     };
     
     $.ajax({
@@ -181,7 +181,7 @@ function deleteHoliday(button){
         type: 'POST',
         data: {
             action: 'delete',
-            md5_id: allowanceData.token
+            holiday: holidayData
         },
         success: function(response) {
             $('#response-test').html(response);

@@ -106,127 +106,84 @@ try {
     }
 
     if($action === 'create'){
-        $holidayData = $_POST['holidayData'] ?? null;
+        $holidayData = $_POST['holiday'] ?? null;
         if ($holidayData == null) {
             echo "Invalid holiday data.";
             return;
         }
-
-        $name = isset($holidayData['name']) && $holidayData['name'] !== '' ? validateInput($holidayData['name'], "Name") : null;
-        $startDate = isset($holidayData['start_date']) ? 
-                date('Y-m-d', strtotime(validateInput($holidayData['start_date'], 'Start Date'))) : '1970-01-01';
-        $endDate = isset($holidayData['end_date']) ? 
-                date('Y-m-d', strtotime(validateInput($holidayData['end_date'], 'End Date'))) : '1970-01-01';
-        $isPaid = 
-        (isset($holidayData['isPaid']) && validateInput($holidayData['isPaid'], "Is Paid") === 'true') 
-        ? true : false;
-        $isRecurring = 
-        (isset($holidayData['isRecurring']) && validateInput($holidayData['isRecurring'], "Is Recurring") === 'true') 
-        ? true : false;
-        $description = isset($holidayData['description']) ? $holidayData['description'] : null;
-        $status = isset($holidayData['status']) ? validateInput($holidayData['status'], "Status") : null;
         
-        $newHoliday = new Holiday(
-            id: null,
-            name: $name,
-            startDate: $startDate,
-            endDate: $endDate,
-            isPaid: $isPaid,
-            isRecurringAnnually: $isRecurring,
-            description: $description,
-            status: $status
-        );
         $holidayRepository = new HolidayRepository($holidayDao);
         $holidayService = new HolidayService($holidayRepository);
-        $result = $holidayService->createHoliday($newHoliday);
-        
-        if ($result === ActionResult::SUCCESS) {
+        $result = $holidayService->createHoliday($holidayData);
+    
+
+        if (isset($result['status']) && $result['status'] === 'success') {
             die("
             <script>
                 showSuccessCreate();
             </script>
             ");
-        }else if($result === ActionResult::FAILURE){
-            $message = 'Failed to create holiday. Please try again.';
-            die('
+        } else if (isset($result['status']) && $result['status'] === 'error') {
+            die("
             <script>
-            showError(' . json_encode($message) 
-            . ');
-            </script>');
+                showError(" . json_encode($result) . ");
+            </script>
+            ");
+        } else if (isset($result['status']) && $result['status'] === 'invalid_input'){
+            die("
+            <script>
+                showValidationError(" . json_encode($result['errors']) . ");
+            </script>
+            ");
         }
         return;
     }
 
 
     if($action === 'update'){
-        $holidayData = $_POST['holidayData'] ?? null;
+        $holidayData = $_POST['holiday'] ?? null;
         if (!$holidayData) {
             return;
         }
-        $hashed_id = $holidayData['md5_id'] ?? null;
+        $hashed_id = $holidayData['id'] ?? null;
         if (!$hashed_id) {
             return;
         }
 
-        //print_r($holidayData);
-
-        $name = isset($holidayData['name']) && $holidayData['name'] !== '' ? validateInput($holidayData['name'], "Name") : null;
-        $startDate = isset($holidayData['start_date']) ? 
-                date('Y-m-d', strtotime(validateInput($holidayData['start_date'], 'Start Date'))) : '1970-01-01';
-        $endDate = isset($holidayData['end_date']) ? 
-                date('Y-m-d', strtotime(validateInput($holidayData['end_date'], 'End Date'))) : '1970-01-01';
-        $isPaid = 
-        (isset($holidayData['isPaid']) && $holidayData['isPaid'] === 'true') 
-        ? true : false;
-        $isRecurring = 
-        (isset($holidayData['isRecurring']) && $holidayData['isRecurring'] === 'true') 
-        ? true : false;
-        $description = isset($holidayData['description']) ? $holidayData['description'] : null;
-        $status = isset($holidayData['status']) ? validateInput($holidayData['status'], "Status") : null;
-
-        // echo $isPaid . " ";
-        // echo $isRecurring . "<br>";
-
-        $updatedHoliday = new Holiday(
-            id: $hashed_id,
-            name: $name,
-            startDate: $startDate,
-            endDate: $endDate,
-            isPaid: $isPaid,
-            isRecurringAnnually: $isRecurring,
-            description: $description,
-            status: $status
-        );
-
-        // var_dump($updatedHoliday);
-
-        // echo "<br>" . $updatedHoliday->getIsPaid() . " ";
-        // echo $updatedHoliday->getIsRecurringAnnually() . "<br>";
-
         $holidayRepository = new HolidayRepository($holidayDao);
         $holidayService = new HolidayService($holidayRepository);
-        $result = $holidayService->updateHoliday($updatedHoliday);
-        
-        if ($result === ActionResult::SUCCESS) {
+        $result = $holidayService->updateHoliday($holidayData);
+
+
+        if (isset($result['status']) && $result['status'] === 'success') {
             die("
             <script>
                 showSuccessUpdate();
             </script>
             ");
-        } else if ($result === ActionResult::FAILURE){
-            $message = "Failed to update holidays. Please try again.";
-            die('
+        } else if (isset($result['status']) && $result['status'] === 'error') {
+            die("
             <script>
-                showError(' . json_encode($message) 
-            . ');
-            </script>');
+                showError(" . json_encode($result) . ");
+            </script>
+            ");
+        } else if (isset($result['status']) && $result['status'] === 'invalid_input'){
+            die("
+            <script>
+                showValidationError(" . json_encode($result['errors']) . ");
+            </script>
+            ");
         }
         return;
     }
 
 
     if($action === 'delete'){
-        $hashed_id = $_POST['md5_id'] ?? null;
+        $holidayData = $_POST['holiday'] ?? null;
+        if (!$holidayData) {
+            return;
+        }
+        $hashed_id = $holidayData['id'] ?? null;
         if (!$hashed_id) {
             return;
         }
@@ -235,19 +192,24 @@ try {
         $holidayService = new HolidayService($holidayRepository);
         $result = $holidayService->deleteHoliday($hashed_id);
         
-        if ($result === ActionResult::SUCCESS) {
+        if (isset($result['status']) && $result['status'] === 'success') {
             die("
             <script>
                 showSuccessDelete();
             </script>
             ");
-        } else if ($result === ActionResult::FAILURE) {
-            $message ="Failed to delete holidays. Please try again.";
-            die('
+        } else if (isset($result['status']) && $result['status'] === 'error') {
+            die("
             <script>
-            showError(' . json_encode($message) 
-            . ');
-            </script>');
+                showError(" . json_encode($result) . ");
+            </script>
+            ");
+        } else if (isset($result['status']) && $result['status'] === 'invalid_input'){
+            die("
+            <script>
+                showValidationError(" . json_encode($result['errors']) . ");
+            </script>
+            ");
         }
         return;
     }
@@ -269,56 +231,4 @@ try {
     showFatalError(' . json_encode($message) 
     . ');
     </script>');
-}
-
-// Function to validate and sanitize input
-function validateInput($input, $fieldName) {
-
-    // Escape the field name for security
-    $escapedFieldName = htmlspecialchars($fieldName, ENT_QUOTES, 'UTF-8');
-
-    // Trim the input to remove extra whitespaces
-    $input = trim($input);
-    
-    // Check if input is empty after trimming
-    if (empty($input)) {
-        die("
-        <script>
-            missingFieldValues('{$escapedFieldName}');
-        </script>
-        ");
-    }
-    
-    // Additional validation can go here (e.g., regex for specific formats)
-    
-    return htmlspecialchars($input); // Sanitize to prevent XSS
-}
-
-function validateNumericIdentifier($value, $minLength, $maxLength, $fieldName = null) {
-    $value = trim($value);
-
-    // Escape the field name for security
-    $escapedFieldName = htmlspecialchars($fieldName, ENT_QUOTES, 'UTF-8');
-
-    // Check if the value is strictly numeric
-    if (!ctype_digit($value)) {
-        echo "
-        <script>
-            missingFieldValues('{$escapedFieldName}');
-        </script>
-        ";
-        exit;
-    }
-
-    // Check the length range
-    if (strlen($value) < $minLength || strlen($value) > $maxLength) {
-        echo "
-        <script>
-            missingFieldValues('{$escapedFieldName}');
-        </script>
-        ";
-        exit;
-    }
-
-    return $value;
 }
