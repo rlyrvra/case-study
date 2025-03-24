@@ -66,9 +66,8 @@ try {
         $departmentId = isset($_POST['department_id']) && $_POST['department_id'] != null && $_POST['department_id'] != '' ? (int) $_POST['department_id'] : null;
         $jobTitleId = isset($_POST['job_title_id']) && $_POST['job_title_id'] != null && $_POST['job_title_id'] != '' ? (int) $_POST['job_title_id'] : null;
         $employeeId = isset($_POST['employee_id']) && $_POST['employee_id'] != null && $_POST['employee_id'] != '' ? (int) $_POST['employee_id'] : null;
-        foreach ($rates as &$rate) {
-            $rate['id'] = null;
-            $rate['overtime_rate_assignment_id'] = $overtimeRatesId;
+        foreach ($rates as $key => $rate) {
+            $rates[$key]['overtime_rate_assignment_id'] = $overtimeRatesId;
         }
         // print_r($rates);
         // echo "Overtime Rates ID: " . ($overtimeRatesId ?? 'null') . "<br>";

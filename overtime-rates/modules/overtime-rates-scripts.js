@@ -4,6 +4,7 @@ function getRatesValues(rows) {
 
     for (let i = 0; i < rows.length; i++) {
         const row = rows[i];
+        const id = rows[i].getAttribute('data-id');
         const dayType = row.cells[0].innerHTML.trim();
         const holidayType = row.cells[1].innerHTML.trim();
         const regularHr = row.cells[2].children[0].value;
@@ -12,6 +13,7 @@ function getRatesValues(rows) {
         const nightAndOvertimeRate = row.cells[5].children[0].value;
 
         rates.push({
+            id: id,
             day_type: dayType,
             holiday_type: holidayType,
             regular_time_rate: regularHr,
