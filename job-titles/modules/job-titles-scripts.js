@@ -248,8 +248,8 @@ function showCouldNotFindData(){
 }
 
 function showValidationError(errorMessages) {
-    $('#update-allowances-modal').modal('hide');
-    $('#add-allowances-modal').modal('hide');
+    $('#add_job_titles_modal').modal('hide');
+    $('#update_job_titles_modal').modal('hide');
 
     let formattedMessages = '';
 
