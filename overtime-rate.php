@@ -152,7 +152,7 @@ $(document).ready(function() {
   $("#selectize_employee_sorter").selectize({
       persist: false,
       maxItems: 1,
-      placeholder: 'Select an employee',
+      placeholder: 'All',
       allowEmptyOption: true,
       valueField: "id",
       valueField: "id",
@@ -230,7 +230,7 @@ $(document).ready(function () {
   $("#selectize_jobTitle_sorter").selectize({
     persist: false,
     maxItems: 1,
-    placeholder: 'Select a job title',
+    placeholder: 'All',
     allowEmptyOption: true,
     valueField: "id",
     labelField: "description",
@@ -302,7 +302,7 @@ $(document).ready(function () {
   $("#selectize_department_sorter").selectize({
     persist: false,
     maxItems: 1,
-    placeholder: 'Select a department',
+    placeholder: 'All',
     allowEmptyOption: true,
     valueField: "id",
     labelField: "description",
