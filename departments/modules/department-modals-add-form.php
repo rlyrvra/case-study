@@ -33,7 +33,6 @@
                         <div class="col-md-6">
                             <label for="create_department_head" class="form-label fw-semibold">Department Head</label>
                             <select class="form-select shadow-sm" id="create_department_head" name="create_department_head">
-                                <option value="" disabled selected>Select Department Head</option>
                                 <!-- Dynamic options will be added here -->
                             </select>
                         </div>

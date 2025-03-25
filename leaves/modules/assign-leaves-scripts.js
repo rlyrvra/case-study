@@ -135,6 +135,7 @@ function showSuccessLeaveEntitlement() {
     }).then((result) => {
         if (result.isConfirmed) {
             $('#assign_leave_types_modal').modal('show');
+            $('#assign_leave_types_form').get(0).reset();
         }
     });
 }
@@ -145,11 +146,11 @@ function showSuccessDeleteLeaveEntitlement(){
         title: 'Success!',
         text: 'This leaves type has been removed from this employee.',
         icon: 'success',
-        timer: 2000,
         confirmButtonText: 'OK'
     }).then((result) => {
         if (result.isConfirmed) {
             $('#assign_leave_types_modal').modal('show');
+            $('#assign_leave_types_form').get(0).reset();
         }
     });
 }
@@ -161,7 +162,6 @@ function showNoEmployeePresent(){
         title: 'Warning!',
         text: 'The selected employment type has no employee present.',
         icon: 'warning',
-        timer: 2000,
         confirmButtonText: 'OK'
     }).then((result) => {
         if (result.isConfirmed) {
@@ -178,7 +178,6 @@ function showError(){
         title: 'Error!',
         text: 'An error has occured.',
         icon: 'error',
-        timer: 2000,
         confirmButtonText: 'OK'
     }).then((result) => {
         if (result.isConfirmed) {

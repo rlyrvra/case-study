@@ -133,6 +133,7 @@ try {
             die("
             <script>
                 showValidationError(" . json_encode($result['errors']) . ");
+                $('#add-holidays-modal').modal('show');
             </script>
             ");
         }
@@ -171,6 +172,7 @@ try {
             die("
             <script>
                 showValidationError(" . json_encode($result['errors']) . ");
+                $('#update-holidays-modal').modal('show');
             </script>
             ");
         }

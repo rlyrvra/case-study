@@ -717,7 +717,24 @@ function updateFlextimeEnabled(){
     
 }
 
-
+function createFormReset(){
+    const startTime = document.getElementById('startTime');
+    startTime.disabled = false;
+    startTime.required = true;
+    const endTime = document.getElementById('endTime');
+    endTime.disabled = false;
+    endTime.required = true;
+    const workHrs = document.getElementById('totalWorkHours');
+    workHrs.value = 0.00;
+    document.getElementById('isFlextime').checked = false;
+    document.getElementById('flextimeOptions').classList.remove('show');
+    document.getElementById('totalHoursPerWeek').value = 0.00;
+    const tableBody = document.querySelector('#create_break_assignment table tbody');
+    if (tableBody) {
+        tableBody.innerHTML = "";
+    }
+    rowAddedWork = false;
+}
 
 function showFormIncomplete(modal){
     modal.modal('hide');

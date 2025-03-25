@@ -139,13 +139,14 @@ try {
         } else if (isset($result['status']) && $result['status'] === 'error') {
             die("
             <script>
-                showError(" . json_encode($result['message']) . ")
+                showError(" . json_encode($result['message']) . ");
             </script>
             ");
         } else if (isset($result['status']) && $result['status'] === 'invalid_input'){
             die("
             <script>
                 showValidationError(" . json_encode($result['errors']) . ");
+                $('#add-departments-modal').modal('show');
             </script>
             ");
         }
@@ -185,6 +186,7 @@ try {
             die("
             <script>
                 showValidationError(" . json_encode($result['errors']) . ");
+                $('#update_departments_modal').modal('show');
             </script>
             ");
         }

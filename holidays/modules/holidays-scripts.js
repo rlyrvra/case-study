@@ -215,6 +215,7 @@ function showSuccessCreate() {
         icon: 'success',
         confirmButtonText: 'OK'
     });
+    $('#add_holidays_form').get(0).reset();
 }
 
 function showSuccessUpdate(){
@@ -225,6 +226,7 @@ function showSuccessUpdate(){
         icon: 'success',
         confirmButtonText: 'OK'
     });
+    $('#update_holidays_form').get(0).reset();
 }
 
 function showSuccessDelete() {
