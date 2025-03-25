@@ -123,6 +123,7 @@ try {
             die("
             <script>
                 showValidationError(" . json_encode($result['errors']) . ");
+                $('#add-deductions-modal').modal('show');
             </script>
             ");
         }
@@ -163,6 +164,7 @@ try {
             die("
             <script>
                 showValidationError(" . json_encode($result['errors']) . ");
+                $('#update-deductions-modal').modal('show');
             </script>
             ");
         }

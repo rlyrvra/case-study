@@ -132,6 +132,7 @@ try {
             die("
             <script>
                 showValidationError(" . json_encode($result['errors']) . ");
+                $('#add_payrollGroups_modal').modal('show');
             </script>
             ");
         }
@@ -168,6 +169,7 @@ try {
             die("
             <script>
                 showValidationError(" . json_encode($result['errors']) . ");
+                $('#update-payrollGroups-modal').modal('hide');
             </script>
             ");
         }

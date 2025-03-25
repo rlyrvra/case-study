@@ -153,8 +153,9 @@ function confirmDeleteBreakType(button) {
 }
 
 function showValidationError(errorMessages) {
-    $('#update-allowances-modal').modal('hide');
-    $('#add-allowances-modal').modal('hide');
+    $('#add_breaks').modal('hide');
+    $('#add_work_schedules').modal('hide');
+    $('#update_work_schedules').modal('hide');
 
     let formattedMessages = '';
 

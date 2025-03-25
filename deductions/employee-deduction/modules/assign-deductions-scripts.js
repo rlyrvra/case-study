@@ -86,6 +86,7 @@ function showSuccessEntitlement(message = 'The deductions have been assigned suc
     }).then((result) => {
         if (result.isConfirmed) {
             $('#assign_deductions_modal').modal('show');
+            $('#assign_deductions_form').get(0).reset();
         }
     });
 }

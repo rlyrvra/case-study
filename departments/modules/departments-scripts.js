@@ -176,7 +176,6 @@ function showSuccessCreate() {
     const modal = $('#add-departments-modal');
     modal.modal('hide');
     const form = $('#add-departments-form');
-    modal.modal('hide');
     Swal.fire({
         title: 'Created!',
         text: 'The department has been CREATED successfully.',

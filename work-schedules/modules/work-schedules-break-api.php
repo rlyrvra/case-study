@@ -162,6 +162,7 @@ try {
             die("
             <script>
                 showValidationError(" . json_encode($result['errors']) . ");
+                $('#add_breaks').modal('show');
             </script>
             ");
         }
@@ -193,6 +194,7 @@ try {
             die("
             <script>
                 showValidationError(" . json_encode($result['errors']) . ");
+                $('#add_breaks').modal('show');
             </script>
             ");
         }

@@ -137,6 +137,7 @@ function showSuccessCreate() {
         icon: 'success',
         confirmButtonText: 'OK'
     });
+    $('#add_deductions_form').get(0).reset();
 }
 
 function showSuccessUpdate() {
@@ -147,6 +148,7 @@ function showSuccessUpdate() {
         icon: 'success',
         confirmButtonText: 'OK'
     });
+    $('#update_deductions_form').get(0).reset();
 }
 
 function showSuccessDeletion() {

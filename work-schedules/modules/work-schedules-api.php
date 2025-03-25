@@ -237,6 +237,7 @@ try {
             die("
             <script>
                 showSuccessCreate('$messageComposed', '$indicator');
+                createFormReset();
             </script>
             ");
         }
@@ -465,9 +466,19 @@ try {
         return;
     }
 
-    echo "Invalid action specified.";
+    $message = "Invalid action specified.";
+    die('
+    <script>
+        showFatalError(' . json_encode($message) 
+    . ');
+    </script>');
 } catch (Exception $e) {
-    echo "Error: " . $e->getMessage();
+    $message = "Fatal error: " . $e->getMessage();
+    die('
+    <script>
+        showFatalError(' . json_encode($message) 
+    . ');
+    </script>');
 }
 
 // Function to validate and sanitize input

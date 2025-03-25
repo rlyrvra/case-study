@@ -189,10 +189,12 @@ function showSuccessCreate() {
         icon: 'success',
         confirmButtonText: 'OK'
     });
+    $('#add_payrollGroups_form').get(0).reset();
 }
 
 function showSuccessDeletion() {
     $('#add_payrollGroups_modal').modal('hide');
+    $('#update-payrollGroups-modal').modal('hide');
     Swal.fire({
         title: 'Success!',
         text: 'This payroll group has been deleted successfully.',
@@ -209,6 +211,7 @@ function showSuccessUpdate() {
         icon: 'success',
         confirmButtonText: 'OK'
     });
+    $('#update_payrollGroups_form').get(0).reset();
 }
 
 

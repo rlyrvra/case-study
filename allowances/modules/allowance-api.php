@@ -132,6 +132,7 @@ try {
             die("
             <script>
                 showValidationError(" . json_encode($result['errors']) . ");
+                $('#add-allowances-modal').modal('show');
             </script>
             ");
         }
@@ -169,6 +170,7 @@ try {
             die("
             <script>
                 showValidationError(" . json_encode($result['errors']) . ");
+                $('#update-allowances-modal').modal('show');
             </script>
             ");
         }

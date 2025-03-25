@@ -130,6 +130,7 @@ try {
             die("
             <script>
                 showValidationError(" . json_encode($result['errors']) . ");
+                $('#add_leave_types_modal').modal('show');
             </script>
             ");
         }
@@ -207,6 +208,7 @@ try {
             die("
             <script>
                 showValidationError(" . json_encode($result['errors']) . ");
+                $('#update_leave_types_modal').modal('show');
             </script>
             ");
         }
