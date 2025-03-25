@@ -74,8 +74,10 @@ function highlightText($text, $searchText) {
           <td>
             <?php
             
-            if($row['payroll_frequency'] === 'Weekly' || $row['payroll_frequency'] === 'Bi-weekly'){
+            if($row['payroll_frequency'] === 'Weekly'){
               echo htmlspecialchars(findNamedDay($row['day_of_weekly_cutoff']));
+            }else if($row['payroll_frequency'] === 'Bi-weekly'){
+              echo htmlspecialchars(findNamedDay($row['day_of_biweekly_cutoff']));
             }else if($row['payroll_frequency'] === 'Semi-monthly'){
               echo htmlspecialchars("Every " . $row['semi_monthly_first_cutoff'] . " and " . $row['semi_monthly_second_cutoff'] . " of the month");
             }else{
@@ -98,9 +100,9 @@ function highlightText($text, $searchText) {
           
           ?> me-1"><?php echo htmlspecialchars($row['status']); ?></span>
           </td>
-          <td><?php echo htmlspecialchars($row['created_at']); ?></td>
-          <td><?php echo htmlspecialchars($row['updated_at']); ?></td>
-          <?php if (isset($status) && $status === 'Archived') echo "<td>" . htmlspecialchars($row['deleted_at']) . "</td>"; ?>
+          <td><?php echo htmlspecialchars(date("l, F j, Y, g:i A", strtotime($row['created_at']))); ?></td>
+          <td><?php echo htmlspecialchars(date("l, F j, Y, g:i A", strtotime($row['updated_at']))); ?></td>
+          <?php if (isset($status) && $status === 'Archived') echo "<td>" . htmlspecialchars(date("l, F j, Y, g:i A", strtotime($row['deleted_at']))) . "</td>"; ?>
           <?php if (!isset($status) || $status !== 'Archived') echo
             '<td>
               <button class="btn btn-info" title="Click to Edit" onclick="updatePayrollGroupClick(this)" data-bs-toggle="modal" data-bs-target="#update-payrollGroups-modal"> 
