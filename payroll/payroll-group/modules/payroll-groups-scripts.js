@@ -182,7 +182,7 @@ function updatePayrollGroupClick(button){
 }
 
 function showSuccessCreate() {
-    $('#add-payrollGroups-modal').modal('hide');
+    $('#add_payrollGroups_modal').modal('hide');
     Swal.fire({
         title: 'Success!',
         text: 'This payroll group has been created successfully.',
@@ -192,7 +192,7 @@ function showSuccessCreate() {
 }
 
 function showSuccessDeletion() {
-    $('#add-payrollGroups-modal').modal('hide');
+    $('#add_payrollGroups_modal').modal('hide');
     Swal.fire({
         title: 'Success!',
         text: 'This payroll group has been deleted successfully.',
@@ -213,7 +213,6 @@ function showSuccessUpdate() {
 
 
 function confirmDeletePayrollGroup(button) {
-    $('#add-payrollGroups-modal').modal('hide');
     Swal.fire({
         title: 'Are you sure?',
         text: "Do you want to delete this payroll group?",
@@ -231,7 +230,7 @@ function confirmDeletePayrollGroup(button) {
 
 function showValidationError(errorMessages) {
     $('#update-payrollGroups-modal').modal('hide');
-    $('#add-payrollGroups-modal').modal('hide');
+    $('#add_payrollGroups_modal').modal('hide');
 
     let formattedMessages = '';
 

@@ -115,7 +115,7 @@ try {
         $payrollGroupRepository = new PayrollGroupRepository($payrollGroupDao);
         $payrollGroupService = new PayrollGroupService($payrollGroupRepository);
         $result = $payrollGroupService->createPayrollGroup($payrollGroupData);
-        print_r($result);
+        //print_r($result);
         if (isset($result['status']) && $result['status'] === 'success') {
             die("
             <script>

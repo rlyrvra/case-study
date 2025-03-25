@@ -41,11 +41,17 @@ function findNamedDay($dayNumber) {
                 <span><strong>Cut Off:</strong></span>
                 <span>
                   <?php
-                  if($row['payroll_frequency'] === 'Weekly' || $row['payroll_frequency'] === 'Bi-weekly'){
+
+                  if($row['payroll_frequency'] === 'Weekly'){
                     echo htmlspecialchars(findNamedDay($row['day_of_weekly_cutoff']));
-                  } else if($row['payroll_frequency'] === 'Semi-monthly'){
+                  }else if($row['payroll_frequency'] === 'Bi-weekly'){
+                    echo htmlspecialchars(findNamedDay($row['day_of_biweekly_cutoff']));
+                  }else if($row['payroll_frequency'] === 'Semi-monthly'){
                     echo htmlspecialchars("Every " . $row['semi_monthly_first_cutoff'] . " and " . $row['semi_monthly_second_cutoff'] . " of the month");
+                  }else{
+                    //do nothing
                   }
+                  
                   ?>
                 </span>
               </div>

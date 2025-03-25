@@ -146,7 +146,7 @@
                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                     <i class="bx bx-arrow-back"></i> Close
                 </button>
-                <button type="submit" id="create_payroll_group_btn" class="btn btn-success">
+                <button type="submit" id="create_payroll_group_btn" class="btn btn-success" onclick="createPayrollGroup();">
                     <i class="bx bx-plus"></i> Create
                 </button>
             </div>
