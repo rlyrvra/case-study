@@ -80,3 +80,19 @@ function showFatalError(message) {
         }
     });
 }
+
+function confirmAssignRates() {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "These rates will apply to the payroll calculation of your selected [department->job title->employee]!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            assignRates();
+        }
+    });
+}

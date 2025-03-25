@@ -101,7 +101,7 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
           <div class="container-fluid mb-3">
               <div class="container-fluid mb-3 d-flex justify-content-between flex-column flex-lg-row">
                 <h1 class="display-1">Pay Rates</h1>
-                <button type="button" class="btn btn-success btn-xl" onclick="assignRates();">
+                <button type="button" class="btn btn-success btn-xl" onclick="confirmAssignRates();">
                   <i class="bx bx-dots-vertical bx-lg"></i>Apply Rates
                 </button>
               </div>
