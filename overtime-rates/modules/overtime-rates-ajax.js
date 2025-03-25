@@ -67,8 +67,8 @@ function assignRates(){
     let overId = overElement ? parseInt(overElement.getAttribute('data-token'), 10) : null;
     const rows = document.getElementById('overtime_rates_table_body')?.getElementsByTagName('tr') || [];
     const rates = getRatesValues(rows);
-    console.log(`${overId} ,${department}, ${jobTitle}, ${employee}`);
-    console.log(rates);
+    // console.log(`${overId} ,${department}, ${jobTitle}, ${employee}`);
+    // console.log(rates);
     $.ajax({
         url: 'overtime-rates/modules/overtime-rates-api',
         type: 'POST',
