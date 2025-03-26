@@ -131,8 +131,7 @@ try {
         } else if (isset($result['status']) && $result['status'] === 'invalid_input'){
             die("
             <script>
-                showValidationError(" . json_encode($result['errors']) . ");
-                $('#add-allowances-modal').modal('show');
+                showValidationError(" . json_encode($result['errors']) . ", modal = $('#add-allowances-modal'));
             </script>
             ");
         }
@@ -169,8 +168,7 @@ try {
         } else if (isset($result['status']) && $result['status'] === 'invalid_input'){
             die("
             <script>
-                showValidationError(" . json_encode($result['errors']) . ");
-                $('#update-allowances-modal').modal('show');
+                showValidationError(" . json_encode($result['errors']) . ", modal = $('#update-allowances-modal'));
             </script>
             ");
         }

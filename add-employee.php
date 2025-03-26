@@ -83,7 +83,7 @@ if(isset($_GET['m']) && $_GET['m'] === 'u'){
 />
 
 <!-- Ajax -->
-<script src="employees/modules/add-employee-ajax.js?v1.10"></script>
+<script src="employees/modules/add-employee-ajax.js?v1.14"></script>
 <!-- Scripts -->
 <script src="employees/modules/add-employee-scripts.js?v1.17"></script>
 <!-- Loader -->

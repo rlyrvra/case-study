@@ -145,8 +145,7 @@ try {
         } else if (isset($result['status']) && $result['status'] === 'invalid_input'){
             die("
             <script>
-                showValidationError(" . json_encode($result['errors']) . ");
-                $('#add-departments-modal').modal('show');
+                showValidationError(" . json_encode($result['errors']) . ", modal = $('#add-departments-modal'));
             </script>
             ");
         }
@@ -186,7 +185,6 @@ try {
             die("
             <script>
                 showValidationError(" . json_encode($result['errors']) . ");
-                $('#update_departments_modal').modal('show');
             </script>
             ");
         }
@@ -226,7 +224,7 @@ try {
         } else if (isset($result['status']) && $result['status'] === 'invalid_input'){
             die("
             <script>
-                showValidationError(" . json_encode($result['errors']) . ");
+                showValidationError(" . json_encode($result['errors']) . ", modal = $('#update_departments_modal'));
             </script>
             ");
         }

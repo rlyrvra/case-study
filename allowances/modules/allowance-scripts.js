@@ -119,7 +119,7 @@ function showSuccessDeletion() {
     });
 }
 
-function showValidationError(errorMessages) {
+function showValidationError(errorMessages, modal) {
     $('#update-allowances-modal').modal('hide');
     $('#add-allowances-modal').modal('hide');
 
@@ -138,6 +138,10 @@ function showValidationError(errorMessages) {
         html:  formattedMessages,
         icon: 'warning',
         confirmButtonText: 'OK'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            modal.modal('show');
+        }
     });
 }
 

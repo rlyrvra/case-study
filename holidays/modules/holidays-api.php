@@ -132,8 +132,7 @@ try {
         } else if (isset($result['status']) && $result['status'] === 'invalid_input'){
             die("
             <script>
-                showValidationError(" . json_encode($result['errors']) . ");
-                $('#add-holidays-modal').modal('show');
+                showValidationError(" . json_encode($result['errors']) . ", modal = $('#add-holidays-modal'));
             </script>
             ");
         }
@@ -171,7 +170,7 @@ try {
         } else if (isset($result['status']) && $result['status'] === 'invalid_input'){
             die("
             <script>
-                showValidationError(" . json_encode($result['errors']) . ");
+                showValidationError(" . json_encode($result['errors']) . ", modal = $('#add-holidays-modal'));
                 $('#update-holidays-modal').modal('show');
             </script>
             ");

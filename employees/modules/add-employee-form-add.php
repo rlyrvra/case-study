@@ -142,7 +142,7 @@
                     type="text" 
                     class="form-control" 
                     id="username" 
-                    placeholder="Enter your username" 
+                    placeholder="Enter your username"
                     required 
                     title="Username must be 3-50 characters"
                     oninput="setCustomValidity('')"
@@ -158,10 +158,10 @@
                         id="password" 
                         placeholder="Enter your password" 
                         required 
-                        pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,255}$"
-                        title="Password must be at least 8 characters, with at least one letter and one number."
-                        oninput="setCustomValidity('')"
-                        oninvalid="setCustomValidity('Password must be at least 8 characters, including one letter and one number.')"
+                        pattern="^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*\-+=]).{8,50}$"
+                        title="Password must be 8 to 50 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character (!@#$%^&*()-+=)." 
+                        oninput="setCustomValidity('')" 
+                        oninvalid="setCustomValidity('Password must be 8 to 50 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character (!@#$%^&*()-+=).')"
                     >
                     <button class="btn btn-outline-secondary" type="button" onclick="togglePassword('password')">
                         <i class="bx bx-show"></i>
@@ -263,7 +263,10 @@
                     list="emergency-name-options" 
                     required 
                     minlength="1" 
-                    maxlength="90">
+                    maxlength="90"
+                    pattern="^[A-Za-z\s]+$" 
+                    oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')"
+                    title="Only letters and spaces allowed">
                     <datalist id="emergency-name-options">
                         <option value="Jane Doe">
                         <option value="Michael Smith">
@@ -298,7 +301,10 @@
                     list="emergency-phone-options" 
                     required 
                     minlength="1" 
-                    maxlength="15">
+                    maxlength="15"
+                    pattern="^[0-9+\-]+$" 
+                    oninput="this.value = this.value.replace(/[^0-9+-]/g, '')" 
+                    title="Only numbers, dashes, and plus sign allowed">
                     <datalist id="emergency-phone-options">
                         <option value="321-654-0987">
                         <option value="(777) 222-3344">
@@ -406,7 +412,8 @@
                     <select 
                     class="form-select selectize_job_title" 
                     id="job-title" 
-                    name="job-title">
+                    name="job-title"
+                    required>
                     </select>
                 </div>
                 <div class="col-md-4">
@@ -414,7 +421,8 @@
                     <select 
                     class="form-select selectize_department" 
                     id="department" 
-                    name="departments">
+                    name="departments"
+                    required>
                     </select>
                 </div>
                 <div class="col-md-4">
@@ -465,7 +473,7 @@
             <div class="row mb-3">
                 <div class="btn-group">
                     <label class="display-5 pe-4">Role*:</label>
-                    <input class="btn-check" type="radio" name="role" id="role-staff" value="Staff">
+                    <input class="btn-check" type="radio" name="role" id="role-staff" value="Staff" required>
                     <label class="btn btn-outline-primary" for="role-staff">Staff</label>
                     <input class="btn-check" type="radio" name="role" id="role-supervisor" value="Supervisor">
                     <label class="btn btn-outline-primary" for="role-supervisor">Supervisor</label>
@@ -627,7 +635,7 @@
                     </div>
                     <div class="col-md-6">
                         <label for="accountType" class="form-label">Account Type<span class="label-danger">(*)</span>:</label>
-                        <select id="accountType" class="form-control" placeholder="Enter account type" value="">
+                        <select id="accountType" class="form-control" placeholder="Enter account type" value="" required>
                             <option value="" disabled selected>Select Account Type...</option>
                             <option value="Payroll Account">Payroll Account</option>
                             <option value="Current Account">Current Account</option>
@@ -662,7 +670,8 @@
                     minlength="15" 
                     maxlength="15" 
                     pattern="\d{3}-\d{3}-\d{3}-\d{3}"
-                    title="Format: 123-456-789-000 (15 digits with dashes)">
+                    title="Format: 123-456-789-000 (15 digits with dashes)"
+                    oninput="this.value = this.value.replace(/[^0-9-]/g, '')">
                 </div>
                 <div class="col-md-6">
                     <label for="SSSNumber" class="form-label">SSS Number<span class="label-danger">(*)</span>:</label>
@@ -675,7 +684,8 @@
                     minlength="14" 
                     maxlength="14" 
                     pattern="\d{4}-\d{7}-\d{1}"
-                    title="Format: 1234-5678901-2 (14 digits with dashes)">
+                    title="Format: 1234-5678901-2 (14 digits with dashes)"
+                    oninput="this.value = this.value.replace(/[^0-9-]/g, '')">
                 </div>
 
             </div>
@@ -691,7 +701,8 @@
                     minlength="14" 
                     maxlength="14" 
                     pattern="\d{2}-\d{9}-\d{1}"
-                    title="Format: 12-345678901-2 (14 digits with dashes)">
+                    title="Format: 12-345678901-2 (14 digits with dashes)"
+                    oninput="this.value = this.value.replace(/[^0-9-]/g, '')">
                 </div>
                 <div class="col-md-6">
                     <label for="PagIBIGNumber" class="form-label">Pag-IBIG Number<span class="label-danger">(*)</span>:</label>
@@ -703,7 +714,8 @@
                     minlength="14" 
                     maxlength="14" 
                     pattern="\d{4}-\d{4}-\d{4}"
-                    title="Format: 1234-5678-9012 (14 digits with dashes)">
+                    title="Format: 1234-5678-9012 (14 digits with dashes)"
+                    oninput="this.value = this.value.replace(/[^0-9-]/g, '')">
                 </div>
             </div>
             <div class="row mb-3">

@@ -125,12 +125,12 @@ function createHolidays(){
 }
 
 function updateHolidays(button){
-    const md5_id = button.getAttribute('data-token');
     const updateForm = document.getElementById("update_holidays_form");
     if(!updateForm.checkValidity()){
         //showWarningIncompleteForm()
         return;
     }
+    const md5_id = button.getAttribute('data-token');
     const holidayName = document.getElementById('update_name').value;
     const holidayStart = document.getElementById('update_start_date').value;
     const holidayEnd = document.getElementById('update_end_date').value;

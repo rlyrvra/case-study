@@ -33,7 +33,7 @@ if($_SESSION['access_role'] !== 'Admin'){
 <!-- Ajax -->
 <script src="departments/modules/departments-ajax.js?v1.15"></script>
 <!-- Scripts -->
-<script src="departments/modules/departments-scripts.js?v1.15"></script>
+<script src="departments/modules/departments-scripts.js?v1.17"></script>
 
 <!---Skeletons--->
 <script src="requests/table-skeleton.js?v1.2"></script>

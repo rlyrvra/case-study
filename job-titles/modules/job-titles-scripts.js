@@ -247,7 +247,7 @@ function showCouldNotFindData(){
     });
 }
 
-function showValidationError(errorMessages) {
+function showValidationError(errorMessages, modal) {
     $('#add_job_titles_modal').modal('hide');
     $('#update_job_titles_modal').modal('hide');
 
@@ -266,6 +266,10 @@ function showValidationError(errorMessages) {
         html:  formattedMessages,
         icon: 'warning',
         confirmButtonText: 'OK'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            modal.modal('show');
+        }
     });
 }
 

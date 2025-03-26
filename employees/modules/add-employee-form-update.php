@@ -220,10 +220,10 @@ if($resultSet["total_row_count"] <= 0){
                         placeholder="Enter your password" 
                         value='<?php echo $employees[0]['password'];?>'
                         required 
-                        pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,255}$"
-                        title="Password must be at least 8 characters, with at least one letter and one number."
-                        oninput="setCustomValidity('')"
-                        oninvalid="setCustomValidity('Password must be at least 8 characters, including one letter and one number.')"
+                        pattern="^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*\-+=]).{8,50}$"
+                        title="Password must be 8 to 50 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character (!@#$%^&*()-+=)." 
+                        oninput="setCustomValidity('')" 
+                        oninvalid="setCustomValidity('Password must be 8 to 50 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character (!@#$%^&*()-+=).')"
                     >
                     <button class="btn btn-outline-secondary" type="button" onclick="togglePassword('password')">
                         <i class="bx bx-show"></i>
@@ -240,7 +240,7 @@ if($resultSet["total_row_count"] <= 0){
                         placeholder="Confirm your password" 
                         value='<?php echo $employees[0]['password'];?>'
                         required 
-                        oninput="validateConfirmPassword()"
+                        oninput="validateConfirmPassword();"
                     >
                     <button class="btn btn-outline-secondary" type="button" onclick="togglePassword('confirmPassword')">
                         <i class="bx bx-show"></i>
@@ -329,6 +329,9 @@ if($resultSet["total_row_count"] <= 0){
                     required 
                     minlength="1" 
                     maxlength="90"
+                    pattern="^[A-Za-z\s]+$" 
+                    oninput="this.value = this.value.replace(/[^A-Za-z\s]/g, '')"
+                    title="Only letters and spaces allowed"
                     value='<?php echo $employees[0]['emergency_contact_name'];?>'>
                     <datalist id="emergency-name-options">
                         <option value="Jane Doe">
@@ -366,6 +369,9 @@ if($resultSet["total_row_count"] <= 0){
                     required 
                     minlength="1" 
                     maxlength="15"
+                    pattern="^[0-9+\-]+$" 
+                    oninput="this.value = this.value.replace(/[^0-9+-]/g, '')" 
+                    title="Only numbers, dashes, and plus sign allowed"
                     value='<?php echo $employees[0]['emergency_contact_phone_number'];?>'>
                     <datalist id="emergency-phone-options">
                         <option value="321-654-0987">
@@ -460,13 +466,13 @@ if($resultSet["total_row_count"] <= 0){
             <div class="row mb-3">
                 <div class="col-md-4">
                     <label for="job-title" class="form-label">Job Title<span class="label-danger">(*)</span>:</label>
-                    <select class="form-select selectize_job_title" id="job-title" name="job-title">
+                    <select class="form-select selectize_job_title" id="job-title" name="job-title" required>
                         <option value="<?php echo $employees[0]['job_title_id']; ?>" selected><?php echo $employees[0]['job_title']; ?></option>
                     </select>
                 </div>
                 <div class="col-md-4">
                     <label for="department" class="form-label">Department<span class="label-danger">(*)</span>:</label>
-                    <select class="form-select selectize_department" id="department" name="departments">
+                    <select class="form-select selectize_department" id="department" name="departments" required>
                         <option value="<?php echo $employees[0]['department_id']; ?>" selected><?php echo $employees[0]['department_name']; ?></option>
                     </select>
                 </div>
@@ -518,7 +524,7 @@ if($resultSet["total_row_count"] <= 0){
             <div class="row mb-3">
                 <div class="btn-group">
                     <label class="display-5 pe-4">Role*:</label>
-                    <input class="btn-check" type="radio" name="role" id="role-staff" value="Staff" <?php echo ($employees[0]['access_role'] == 'Staff') ? 'checked' : ''; ?>>
+                    <input class="btn-check" type="radio" name="role" id="role-staff" value="Staff" required <?php echo ($employees[0]['access_role'] == 'Staff') ? 'checked' : ''; ?>>
                     <label class="btn btn-outline-primary" for="role-staff">Staff</label>
                     <input class="btn-check" type="radio" name="role" id="role-supervisor" value="Supervisor" <?php echo ($employees[0]['access_role'] == 'Supervisor') ? 'checked' : ''; ?>>
                     <label class="btn btn-outline-primary" for="role-supervisor">Supervisor</label>
@@ -725,6 +731,7 @@ if($resultSet["total_row_count"] <= 0){
                     maxlength="15" 
                     pattern="\d{3}-\d{3}-\d{3}-\d{3}"
                     title="Format: 123-456-789-000 (15 digits with dashes)"
+                    oninput="this.value = this.value.replace(/[^0-9-]/g, '')"
                     value="<?php echo $employees[0]['tin_number']; ?>">
                 </div>
                 <div class="col-md-6">
@@ -739,6 +746,7 @@ if($resultSet["total_row_count"] <= 0){
                     maxlength="15" 
                     pattern="\d{4}-\d{7}-\d{1}"
                     title="Format: 1234-5678901-2 (14 digits with dashes)"
+                    oninput="this.value = this.value.replace(/[^0-9-]/g, '')"
                     value="<?php echo $employees[0]['sss_number']; ?>">
                 </div>
             </div>
@@ -755,6 +763,7 @@ if($resultSet["total_row_count"] <= 0){
                     maxlength="14" 
                     pattern="\d{2}-\d{9}-\d{1}"
                     title="Format: 12-345678901-2 (14 digits with dashes)"
+                    oninput="this.value = this.value.replace(/[^0-9-]/g, '')"
                     value="<?php echo $employees[0]['philhealth_number']; ?>">
                 </div>
                 <div class="col-md-6">
@@ -768,6 +777,7 @@ if($resultSet["total_row_count"] <= 0){
                     maxlength="14" 
                     pattern="\d{4}-\d{4}-\d{4}"
                     title="Format: 1234-5678-9012 (14 digits with dashes)"
+                    oninput="this.value = this.value.replace(/[^0-9-]/g, '')"
                     value="<?php echo $employees[0]['pagibig_fund_number']; ?>">
                 </div>
             </div>

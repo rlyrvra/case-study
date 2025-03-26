@@ -97,7 +97,7 @@ function updateEmployee(button){
     const PagIBIGNumber = document.getElementById("PagIBIGNumber").value;
 
     async function handleData() {
-        let imageData;
+        let imageData = null;
         if (profilePictureRaw) {
             imageData = await getBase64Image(profilePictureRaw); // Wait for base64 conversion
         } else if (!profilePictureRaw && document.getElementById("profileImage").getAttribute('data-img') !== null) {
@@ -328,12 +328,12 @@ function createEmployee(){
     
 
     async function handleData() {
-        let imageData;
+        let imageData = null;
         if (profilePictureRaw) {
             imageData = await getBase64Image(profilePictureRaw); // Wait for base64 conversion
         } else if (!profilePictureRaw && document.getElementById("profileImage").getAttribute('data-img') !== null) {
             imageData = document.getElementById("profileImage").getAttribute('data-img');
-        }
+        } 
     
         const employeeData = {
             //form 1
@@ -380,7 +380,7 @@ function createEmployee(){
             pagibig_fund_number: PagIBIGNumber
         };
         
-        //console.log(employeeData);
+        // console.log(employeeData);
     
         
         // const employeeData1 = {
@@ -388,7 +388,7 @@ function createEmployee(){
         //     password: password,
         // };
 
-        // console.log(employeeData1);
+        console.log(employeeData);
     
         // const employeeData2 = {
         //     phone: phone,

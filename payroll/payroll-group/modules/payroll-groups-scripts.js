@@ -231,7 +231,7 @@ function confirmDeletePayrollGroup(button) {
     });
 }
 
-function showValidationError(errorMessages) {
+function showValidationError(errorMessages, modal) {
     $('#update-payrollGroups-modal').modal('hide');
     $('#add_payrollGroups_modal').modal('hide');
 
@@ -250,6 +250,10 @@ function showValidationError(errorMessages) {
         html:  formattedMessages,
         icon: 'warning',
         confirmButtonText: 'OK'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            modal.modal('show');
+        }
     });
 }
 

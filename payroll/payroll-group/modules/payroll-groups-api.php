@@ -131,8 +131,7 @@ try {
         } else if (isset($result['status']) && $result['status'] === 'invalid_input'){
             die("
             <script>
-                showValidationError(" . json_encode($result['errors']) . ");
-                $('#add_payrollGroups_modal').modal('show');
+                showValidationError(" . json_encode($result['errors']) . ", modal = $('#add_payrollGroups_modal'));
             </script>
             ");
         }
@@ -168,8 +167,7 @@ try {
         } else if (isset($result['status']) && $result['status'] === 'invalid_input'){
             die("
             <script>
-                showValidationError(" . json_encode($result['errors']) . ");
-                $('#update-payrollGroups-modal').modal('hide');
+                showValidationError(" . json_encode($result['errors']) . ", modal = $('#update-payrollGroups-modal'));
             </script>
             ");
         }
