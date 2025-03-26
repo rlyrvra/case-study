@@ -56,3 +56,54 @@ function deleteEmployeeLeave(button){
         }
     });
 }
+
+async function checkEmploymentTypeLeaves(){
+    const checkboxes = document.querySelectorAll('#leaveEntitlementModal #leaveTableBody input[type="checkbox"]');
+    checkboxes.forEach(checkbox => checkbox.checked = false);
+
+    const employmentType = document.getElementById('employment-type').value;
+    if(!employmentType){
+        return;
+    }
+    const employmentTypeLeaves = await fetchSelectedEmploymentType(employmentType);
+    if (!employmentTypeLeaves || employmentTypeLeaves.length === 0) {
+        return;
+    }
+    
+    employmentTypeLeaves.forEach(employmentTypeLeave => {
+        const checkbox = document.querySelector(`#leaveEntitlementModal #leaveTableBody input[type="checkbox"][id="${employmentTypeLeave.leave_type_id}"]`);
+        if(!checkbox){
+            return;
+        }
+        checkbox.checked = true;
+    });
+    
+}
+
+async function fetchSelectedEmploymentType(employmentType){
+    try{
+        const response = await fetch(
+            'leaves/modules/assign-leaves-api',{
+                method: 'POST',
+                headers: {
+                    'Accept': '*/*',
+                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                    'X-Requested-With': 'XMLHttpRequest',
+                },
+                body: new URLSearchParams({
+                    action: 'fetchEmploymentTypeLeaves',
+                    employmentType: employmentType
+                })
+            }
+            
+        );
+        if(!response.ok){
+            console.error(`HTTP error! Status: ${response.status}`);
+        }
+        const employmentTypeLeaves = await response.json();
+        return employmentTypeLeaves;
+    } catch (error) {
+        console.error('Fetch error:', error);
+        return null; // Return null in case of an error
+    }
+}
