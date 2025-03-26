@@ -238,7 +238,7 @@ function showSuccessDelete() {
     });
 }
 
-function showValidationError(errorMessages) {
+function showValidationError(errorMessages, modal) {
     $('#add-holidays-modal').modal('hide');
     $('#update-holidays-modal').modal('hide');
 
@@ -257,6 +257,10 @@ function showValidationError(errorMessages) {
         html:  formattedMessages,
         icon: 'warning',
         confirmButtonText: 'OK'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            modal.modal('show');
+        }
     });
 }
 

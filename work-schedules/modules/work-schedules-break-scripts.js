@@ -152,7 +152,7 @@ function confirmDeleteBreakType(button) {
     });
 }
 
-function showValidationError(errorMessages) {
+function showValidationError(errorMessages, modal) {
     $('#add_breaks').modal('hide');
     $('#add_work_schedules').modal('hide');
     $('#update_work_schedules').modal('hide');

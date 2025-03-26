@@ -348,22 +348,22 @@ if ($resultSet["total_row_count"] <= 0) {
             <div class="row mb-3">
                 <div class="col-md-6">
                     <label for="tinNumber" class="form-label">TIN Number*:</label>
-                    <input type="number" id="tinNumber" class="form-control" placeholder="Enter TIN Number" value="<?php echo $employees[0]['tin_number']; ?>" readonly>
+                    <input type="text" id="tinNumber" class="form-control" placeholder="Enter TIN Number" value="<?php echo $employees[0]['tin_number']; ?>" readonly>
                 </div>
                 <div class="col-md-6">
                     <label for="SSSNumber" class="form-label">SSS Number*:</label>
-                    <input type="number" id="SSSNumber" class="form-control" placeholder="Enter SSS Number" value="<?php echo $employees[0]['sss_number']; ?>" readonly>
+                    <input type="text" id="SSSNumber" class="form-control" placeholder="Enter SSS Number" value="<?php echo $employees[0]['sss_number']; ?>" readonly>
                 </div>
 
             </div>
             <div class="row mb-3">
                 <div class="col-md-6">
                     <label for="PhilHealthNumber" class="form-label">PhilHealth Number*:</label>
-                    <input type="number" id="PhilHealthNumber" class="form-control" placeholder="Enter PhilHealth Number" value="<?php echo $employees[0]['philhealth_number']; ?>" readonly>
+                    <input type="text" id="PhilHealthNumber" class="form-control" placeholder="Enter PhilHealth Number" value="<?php echo $employees[0]['philhealth_number']; ?>" readonly>
                 </div>
                 <div class="col-md-6">
                     <label for="PagIBIGNumber" class="form-label">Pag-IBIG Number*:</label>
-                    <input type="number" id="PagIBIGNumber" class="form-control" placeholder="Enter Pag-IBIG Number" value="<?php echo $employees[0]['pagibig_fund_number']; ?>" readonly>
+                    <input type="text" id="PagIBIGNumber" class="form-control" placeholder="Enter Pag-IBIG Number" value="<?php echo $employees[0]['pagibig_fund_number']; ?>" readonly>
                 </div>
             </div>
         </form>

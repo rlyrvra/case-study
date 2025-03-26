@@ -10,7 +10,7 @@
             </div>
             
             <div class="modal-body">
-                <form id="add_holidays_form" onsubmit="event.preventDefault(); createHolidays();">
+                <form id="add_holidays_form" onsubmit="event.preventDefault();">
                     <!-- Holiday Name -->
                     <div class="row g-3">
                         <div class="col-12">
@@ -66,7 +66,6 @@
                             <option value="Inactive">Inactive</option>
                         </select>
                     </div>
-                </form>
             </div>
             
             <div class="modal-footer border-top bg-light">
@@ -77,6 +76,7 @@
                     <i class="bx bx-plus"></i> Create
                 </button>
             </div>
+            </form>
         </div>
     </div>
 </div>

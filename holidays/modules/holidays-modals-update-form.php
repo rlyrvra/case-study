@@ -66,7 +66,6 @@
                             <option value="Inactive">Inactive</option>
                         </select>
                     </div>
-                </form>
             </div>
             
             <div class="modal-footer border-top bg-light">
@@ -77,6 +76,7 @@
                     <i class="bx bx-edit"></i> Update
                 </button>
             </div>
+            </form>
         </div>
     </div>
 </div>

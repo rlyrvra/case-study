@@ -97,6 +97,8 @@ class EmployeeService
             $payrollGroupId = (int) $payrollGroupId;
         }
 
+        $profilePicture = !empty($employee['profile_picture']) ? $employee['profile_picture'] : NULL;
+
         $newEmployee = new Employee(
             id                          : null                                        ,
             rfidUid                     : $employee['rfid_uid'                       ],
@@ -111,7 +113,7 @@ class EmployeeService
             phoneNumber                 : $employee['phone_number'                   ],
             emailAddress                : $employee['email_address'                  ],
             address                     : $employee['address'                        ],
-            profilePicture              : $employee['profile_picture'                ],
+            profilePicture              : $profilePicture                             ,
             emergencyContactName        : $employee['emergency_contact_name'         ],
             emergencyContactRelationship: $employee['emergency_contact_relationship' ],
             emergencyContactPhoneNumber : $employee['emergency_contact_phone_number' ],
@@ -263,6 +265,8 @@ class EmployeeService
             $payrollGroupId = (int) $payrollGroupId;
         }
 
+        $profilePicture = !empty($employee['profile_picture']) ? $employee['profile_picture'] : NULL;
+
         $updatedEmployee = new Employee(
             id                          : $employeeId                                 ,
             rfidUid                     : $employee['rfid_uid'                       ],
@@ -277,7 +281,7 @@ class EmployeeService
             phoneNumber                 : $employee['phone_number'                   ],
             emailAddress                : $employee['email_address'                  ],
             address                     : $employee['address'                        ],
-            profilePicture              : $employee['profile_picture'                ],
+            profilePicture              : $profilePicture                             ,
             emergencyContactName        : $employee['emergency_contact_name'         ],
             emergencyContactRelationship: $employee['emergency_contact_relationship' ],
             emergencyContactPhoneNumber : $employee['emergency_contact_phone_number' ],

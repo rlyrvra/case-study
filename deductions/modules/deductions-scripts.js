@@ -107,7 +107,7 @@ function showFatalError(message) {
     });
 }
 
-function showValidationError(errorMessages) {
+function showValidationError(errorMessages, modal) {
     $('#add-deductions-modal').modal('hide');
     $('#update-deductions-modal').modal('hide');
 
@@ -126,6 +126,10 @@ function showValidationError(errorMessages) {
         html:  formattedMessages,
         icon: 'warning',
         confirmButtonText: 'OK'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            modal.modal('show');
+        }
     });
 }
 
