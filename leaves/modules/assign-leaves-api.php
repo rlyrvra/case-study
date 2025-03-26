@@ -95,7 +95,7 @@ try{
 
         $matchingEmployees = $fetchEmployeeTypesResult['result_set'];
 
-        $fetchExistingLeaves = $employmentTypeService->fetchAllEmploymentTypeBenefits(['leave_type_id'],
+        $fetchExistingLeaves = $employmentTypeService->fetchAllEmploymentTypeBenefits(['id', 'leave_type_id'],
         [
             [
                 "column" => "employment_type_benefit.employment_type",
@@ -156,15 +156,22 @@ try{
         foreach ($onQueueDeletionLeaves as $deletedLeaveId){
             // print_r($deletedLeaveId);
             // echo $deletedLeaveId['leave_type_id'];
+            $employmentTypeId = (int) $deletedLeaveId['id'];
+            $deleteEmploymentTypeServiceResult = $employmentTypeService->deleteEmploymentTypeBenefit($employmentTypeId);
+
             $currentDeletedId = (int) $deletedLeaveId['leave_type_id'];
-            $deleteEmploymentTypeServiceResult = $employmentTypeService->deleteEmploymentTypeBenefit($currentDeletedId);
-            $fetchLeaveTypeIdByEntitlement = $leaveService->getAllLeaveEntitlements(["id"],
+            $fetchLeaveTypeIdByEntitlement = $leaveService->getAllLeaveEntitlements(["id", "employee_first_name"],
                 [
                     [
-                    "column" => "leave_entitlement.leave_type_id",
-                    "operator" => "=",
-                    "value" => $currentDeletedId
+                        "column" => "leave_entitlement.leave_type_id",
+                        "operator" => "=",
+                        "value" => $currentDeletedId
                     ],
+                    [
+                        "column" => "employee.employment_type",
+                        "operator" => "=",
+                        "value" => $employmentType
+                    ]
                 ]
                 );
             $matchingLeaveEntitlements = $fetchLeaveTypeIdByEntitlement['result_set'];
@@ -221,6 +228,33 @@ try{
 
         return;
     }
+
+    if($action === 'fetchEmploymentTypeLeaves'){
+        $employmentType = $_POST['employmentType'] ?? '';
+        if(empty($employmentType)){
+            return;
+        }
+        $employmentTypeRepo = new EmploymentTypeBenefitRepository($employmentTypeDao);
+        $employmentTypeService = new EmploymentTypeBenefitService($employmentTypeRepo);
+        $fetchExistingLeaves = $employmentTypeService->fetchAllEmploymentTypeBenefits(['leave_type_id'],
+        [
+            [
+                "column" => "employment_type_benefit.employment_type",
+                "operator" => "=",
+                "value" => $employmentType
+            ],
+            [
+                "column" => "employment_type_benefit.deleted_at",
+                "operator" => "IS NULL"
+            ],
+        ]
+        );
+        echo json_encode($fetchExistingLeaves['result_set']);
+
+        return;
+    }
+
+
     $message = "Invalid action specified.";
     die('
     <script>

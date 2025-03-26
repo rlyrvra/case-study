@@ -14,7 +14,7 @@
             </div>
 
             <div class="modal-body">
-                <form id="assign_leave_types_form" onsubmit="event.preventDefault(); assignLeaveTypes();">
+                <form id="assign_leave_types_form" onsubmit="event.preventDefault();" onchange="checkEmploymentTypeLeaves()">
                     <div class="row g-3">
                         <!-- Employment Type -->
                         <div class="col-md-12">
@@ -71,7 +71,7 @@
                 >
                 <i class="bx bx-arrow-back bx-sm"></i>Back
                 </button>
-                <button type="submit" class="btn btn-outline-info" onclick="leaveTypeInputTest()"
+                <button type="submit" class="btn btn-outline-info" onclick="assignLeavesViaType()"
                 >
                 <i class="bx bx-plus bx-sm"></i>Save Assigned Leaves
                 </button>

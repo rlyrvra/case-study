@@ -7,7 +7,7 @@ function renderLeaveTypes(tbody) {
         const selectCell = document.createElement('td');
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
-        checkbox.id = `leaveType_${index}`;
+        checkbox.id = `${leaveType.id}`;
         selectCell.appendChild(checkbox);
         
         // Create leave type cell
@@ -40,7 +40,7 @@ function clearSelectedLeaveTypes(){
     });
 }
 
-function leaveTypeInputTest(){
+function assignLeavesViaType(){
     const form = document.getElementById('assign_leave_types_form');
     if(!form.checkValidity()){
         return;
