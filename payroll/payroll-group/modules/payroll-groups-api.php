@@ -185,7 +185,7 @@ try {
         if (!$payrollGroupData) {
             return;
         }
-        $token = $_POST['id'] ?? null;
+        $token = $payrollGroupData['id'] ?? null;
         if (!$token) {
             return;
         }
