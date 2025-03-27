@@ -36,9 +36,9 @@ if(isset($_GET['s']) && $_GET['s'] == true){
 />
 
 <!-- Ajax -->
-<script src="leaves/apply-leave/modules/apply-leave-ajax.js?v1.6"></script>
+<script src="leaves/apply-leave/modules/apply-leave-ajax.js?v1.7"></script>
 <!-- Scripts -->
-<script src="leaves/apply-leave/modules/apply-leave-scripts.js?v1.5"></script>
+<script src="leaves/apply-leave/modules/apply-leave-scripts.js?v1.7"></script>
 
 <!---Skeletons--->
 <script src="requests/table-skeleton.js?v1.2"></script>
