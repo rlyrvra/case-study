@@ -193,6 +193,7 @@ function printFetchAll(){
     var search = $("#print-searchText").val();
     const time = $('#time').text();
     const date = $('#date').text();
+    $('#print_department_records').modal('hide');
     showSpinnerLoader();
     $.ajax({
         url: 'departments/modules/departments-api',
@@ -209,15 +210,26 @@ function printFetchAll(){
             filter_date_column: dateColumn,
             filter_startDate: startDate,
             filter_endDate: endDate
+        }, 
+        xhrFields: {
+            responseType: 'blob' // Expect binary data
         },
-        xhrFields: { responseType: 'blob' }, // Expect binary data
-        success: function (response) {
-            var blob = new Blob([response], { type: "application/pdf" });
-            var link = document.createElement("a");
-            link.href = window.URL.createObjectURL(blob);
-            link.download = `department_${type}_${date}${time}.pdf`;
-            link.click();
-            closeSpinnerLoader();
+        success: function (response, textStatus, jqXHR) {
+            var contentType = jqXHR.getResponseHeader("Content-Type");
+
+            if (contentType.includes("application/pdf")) {
+                closeSpinnerLoader();
+                var blob = new Blob([response], { type: "application/pdf" });
+                var link = document.createElement("a");
+                link.href = window.URL.createObjectURL(blob);
+                link.download = `department_${type}_${date}${time}.pdf`;
+                link.click();
+            } else {
+                closeSpinnerLoader();
+                showValidationError(['No records have been found and/or you need to select records with [+] because you are looking for data other than departments.'], modal = $('#print_department_records'));
+            }
+
+            
             // $('#response-test').html(response);
         },
         error: function (jqXHR, textStatus, errorThrown) {

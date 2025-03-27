@@ -295,6 +295,16 @@ try {
             ];
         }
 
+        if ($searchAt && !str_starts_with($searchAt, 'department.')) {
+            header('Content-Type: text/html');
+            $message = 'You need to select records with [+] because you are looking for data other than departments.';
+            die("
+            <script>
+            showValidationError(" . json_encode($message) 
+            . ", modal = $('#print_department_records'));
+            </script>");
+        }
+
         if(!empty($searchFilter) && !empty($searchAt)){
             $filterCriteria[] = [
                 "column" => $searchAt, 
@@ -324,23 +334,26 @@ try {
         $result = $departmentService->fetchAllDepartments($selectedColumns, $filterCriteria, $sortCriteria, $limit, $offset);
         $departments;
         if (isset($result['result_set']) && !empty($result['result_set'])) {
+            header('Content-Type: application/pdf');
             $departments = $result['result_set'];
             $totalDepartments = $result["total_row_count"];
             $totalPages = ceil($totalDepartments / $limit);
         } else if(empty($departments)){
+            header('Content-Type: text/html');
             $message = 'No records found. Printing failed.';
-            die('
+            die("
             <script>
-            showError(' . json_encode($message) 
-            . ');
-            </script>');
+            showValidationError(" . json_encode($message) 
+            . ", modal = $('#print_department_records'));
+            </script>");
         } else if($result === ActionResult::FAILURE){
+            header('Content-Type: text/html');
             $message = 'Failed to fetch departments. Please try again.';
-            die('
+            die("
             <script>
-            showError(' . json_encode($message) 
-            . ');
-            </script>');
+            showValidationError(" . json_encode($message) 
+            . ", modal = $('#print_department_records'));
+            </script>");
         }
 
         include __DIR__ . '/department-pdf.php';
@@ -470,18 +483,18 @@ function fetchAllJoinedRecord($type){
         $totalPages = ceil($totalDepartments / $limit);
     } else if(empty($departments)){
         $message = 'No records found. Printing failed.';
-        die('
+        die("
         <script>
-        showError(' . json_encode($message) 
-        . ');
-        </script>');
+        showValidationError(" . json_encode($message) 
+        . ", modal = $('#print_department_records'));
+        </script>");
     } else if($result === ActionResult::FAILURE){
         $message = 'Failed to fetch departments. Please try again.';
-        die('
+        die("
         <script>
-        showError(' . json_encode($message) 
-        . ');
-        </script>');
+        showValidationError(" . json_encode($message) 
+        . ", modal = $('#print_department_records'));
+        </script>");
     }
     
     include __DIR__ . '/department-pdf.php';
