@@ -296,9 +296,8 @@ class PayrollGroupValidator extends BaseValidator
 
             $filterCriteria = [
                 [
-                    'column'   => 'payroll_group.status',
-                    'operator' => '='                   ,
-                    'value'    => 'Active'
+                    'column'   => 'payroll_group.deleted_at',
+                    'operator' => 'IS NULL'
                 ],
                 [
                     'column'   => 'payroll_group.' . $field,
