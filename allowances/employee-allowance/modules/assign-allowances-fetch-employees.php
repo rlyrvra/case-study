@@ -9,7 +9,12 @@ function getEmployees(){
     global $pdo;
     $employeeDao = new EmployeeDao($pdo);
     $selectedColumns = ["id", "full_name", "email_address"];
-    $filterCriteria = [];
+    $filterCriteria = [
+        [
+            "column"   => "employee.deleted_at", 
+            "operator" => "IS NULL", 
+        ],
+    ];
     $data = $employeeDao->fetchAll($selectedColumns, $filterCriteria, []);
     $employees = $data['result_set'];
     return $employees;

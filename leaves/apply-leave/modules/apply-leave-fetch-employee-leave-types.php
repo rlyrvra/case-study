@@ -24,6 +24,11 @@ function getEmployeeLeaveTypes(){
         [
             "column"   => "leave_entitlement.deleted_at", 
             "operator" => "IS NULL", 
+        ],
+        [
+            "column"   => "leave_type.status", 
+            "operator" => "=", 
+            "value"    => "Active"
         ]
     ];
     $data = $employeeLeavesService->getAllLeaveEntitlements($selectedColumns, $filterCriteria, []);
