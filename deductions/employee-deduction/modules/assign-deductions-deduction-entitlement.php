@@ -14,7 +14,7 @@
             </div>
 
             <div class="modal-body">
-                <form id="assign_deductions_form" onsubmit="event.preventDefault(); assignDeductionsClick();">
+                <form id="assign_deductions_form" onsubmit="event.preventDefault();">
                     <div class="row g-3">
                         <!-- Employee Name -->
                         <div class="col-md-12">
@@ -52,10 +52,11 @@
                 >
                 <i class="bx bx-arrow-back bx-sm"></i>Back
                 </button>
-                <button type="submit" class="btn btn-outline-danger">
-                <i class="bx bx-plus bx-sm"></i>Save Assigned Deductions
+                <button type="submit" class="btn btn-outline-danger" onclick="assignDeductionsClick();">
+                    <i class="bx bx-plus bx-sm"></i>Save Assigned Deductions
                 </button>
             </div>
+            </form>
         </div>
     </div>
 </div>
