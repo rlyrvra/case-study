@@ -210,6 +210,7 @@ function showSuccessDelete() {
 function showValidationError(errorMessages, modal) {
     $('#add-departments-modal').modal('hide');
     $('#update_departments_modal').modal('hide');
+    $('#print_department_records').modal('hide');
 
     let formattedMessages = '';
 
