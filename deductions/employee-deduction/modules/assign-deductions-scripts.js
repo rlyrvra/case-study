@@ -125,6 +125,21 @@ function showSuccessDeleteDeduction(){
     });
 }
 
+function showNoSelectedDeductions(){
+    $('#deductions_entitlement_modal').modal('hide');
+    Swal.fire({
+        title: 'Warning!',
+        text: "You have no selected deductions.",
+        icon: 'warning',
+        confirmButtonText: 'OK',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $('#deductions_entitlement_modal').modal('show');
+        }
+    });
+}
+
+
 function confirmDeleteAssignedDeduction(button){
     $('#assign_deductions_modal').modal('hide');
     Swal.fire({

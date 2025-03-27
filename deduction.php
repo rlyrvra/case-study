@@ -38,9 +38,9 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
 <!-- Scripts -->
 <script src="deductions/modules/deductions-scripts.js?v1.10"></script>
 <!-- Ajax -->
-<script src="deductions/employee-deduction/modules/assign-deductions-ajax.js?v1.4"></script>
+<script src="deductions/employee-deduction/modules/assign-deductions-ajax.js?v1.5"></script>
 <!-- Scripts -->
-<script src="deductions/employee-deduction/modules/assign-deductions-scripts.js?v1.4"></script>
+<script src="deductions/employee-deduction/modules/assign-deductions-scripts.js?v1.5"></script>
 
 <!---Skeletons--->
 <script src="requests/table-skeleton.js?v1.2"></script>
