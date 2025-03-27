@@ -78,7 +78,7 @@
                         </div>
 
                         <div class="card card-body visually-hidden frequency-container shadow-sm" id="semi-monthly-container">
-                            <label for="semi_monthly_first_cutoff" class="form-label">First Pay Date</label>
+                            <label for="semi_monthly_first_cutoff" class="form-label">First Pay Date<span class="text-danger">*</span></label>
                             <div class="input-group mb-3" name="semi_monthly_first_cutoff">
                                 <span class="display-6 input-group-text">1st Pay Date:</span>
                                 <select class="form-select shadow-sm" id="semi_monthly_first_cutoff" onchange="calculateSecondPay(document.getElementById('add_payrollGroups_form'));">
