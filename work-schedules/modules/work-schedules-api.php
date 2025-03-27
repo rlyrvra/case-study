@@ -130,7 +130,7 @@ try {
         if (!$workScheduleData) {
             return;
         }
-        
+        //print_r($workScheduleData);
         
 
         $employee = isset($workScheduleData['employee']) ? validateInput($workScheduleData['employee'], 'Employee') : '';
@@ -159,7 +159,7 @@ try {
             $end_time = '2024-01-01 23:59:59';
             $total_hrs_per_week = isset($workScheduleData['total_hrs_per_week']) ? (float) validateInput($workScheduleData['total_hrs_per_week'], 'Total Hours Per Week') * 6 : null;
         }
-        $total_work_hrs = isset($workScheduleData['total_work_hrs']) ? (float) (validateNumericIdentifier($workScheduleData['total_work_hrs'], 1, 4, 'Total Work Hours')): null;
+        $total_work_hrs = isset($workScheduleData['total_work_hrs']) ? (float) (validateNumericIdentifier($workScheduleData['total_work_hrs'], 1, 24, 'Total Work Hours')): null;
         $start_date = '2024-01-01';
         
 
