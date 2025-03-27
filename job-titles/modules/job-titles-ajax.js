@@ -112,7 +112,6 @@ function createJobTitle() {
         success: function(response) {
             $('#response-test').html(response);
             fetchAllJobTitles();
-            document.getElementById('create_job_title_form').reset();
         },
         error(xhr, status, error) {
             console.error("Error creating job titles:", error);
