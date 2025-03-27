@@ -85,6 +85,22 @@ try {
         }
         $reason = isset($_POST['reason']) ? validateInput($_POST['reason'], 'Reason') : '';
         $status = "Pending";
+
+        $leaveRequestAttachmentRepo = new LeaveRequestAttachmentRepository($leaveRequestAttachmentDao);
+        if(!isOverlapping($pdo, $leaveRequestAttachmentRepo, $employeeId, $start_date, $end_date)){
+            $errorMessages = [
+                'start_date' => 'You already have an overlapping request, ongoing leaves or an approved leave on that selected date range.'
+            ];
+            die("
+            <script>
+                showValidationError(" . json_encode($errorMessages) . ", modal = $('#add-allowances-modal'));
+            </script>
+            ");
+        }
+
+
+
+
         $newLeaveRequest = new LeaveRequest(
             id: null,
             employeeId: $employeeId,
@@ -295,4 +311,56 @@ function getLastInsertIdBySql($pdo, $employeeId): int {
         error_log("Database error: " . $e->getMessage());
         return 0; // Return 0 as a fallback
     }
+}
+
+function isOverlapping($pdo, $leaveRequestAttachmentRepo, $employeeId, $leaveRequestEndDate, $leaveRequestStartDate): bool{
+    $leaveRequestColumns = [
+        'id', 'start_date', 'end_date', 'leave_type_name'
+    ];
+    
+    $leaveRequestFilterCriteria = [
+        [
+            'column'   => 'leave_request.deleted_at',
+            'operator' => 'IS NULL'
+        ],
+        [
+            'column'   => 'leave_request.employee_id',
+            'operator' => '='                        ,
+            'value'    => $employeeId
+        ],
+        [
+            'column'   => 'leave_request.start_date',
+            'operator' => '<='                      ,
+            'value'    => $leaveRequestStartDate
+        ],
+        [
+            'column'   => 'leave_request.end_date',
+            'operator' => '>='                    ,
+            'value'    => $leaveRequestEndDate
+        ],
+        [
+            'column'     => 'leave_request.status'      ,
+            'operator'   => 'IN'                        ,
+            'value_list' => ['Pending', 'Approved', 'In Progress', 'Completed']
+        ]
+    ];
+    
+    $leaveRequestDao = new LeaveRequestDao($pdo);
+    $leaveRequestRepo = new LeaveRequestRepository($leaveRequestDao);
+    $leaveRequestService = new LeaveRequestService($leaveRequestRepo, $leaveRequestAttachmentRepo);
+
+    $isLeaveDateOverlapped = $leaveRequestService->fetchAllLeaveRequests(
+        columns             : $leaveRequestColumns       ,
+        filterCriteria      : $leaveRequestFilterCriteria,
+        limit               : 1                          ,
+        includeTotalRowCount: false
+    );
+    
+    if ($isLeaveDateOverlapped === ActionResult::FAILURE) {
+    }
+
+    
+    $isLeaveDateOverlapped = empty($isLeaveDateOverlapped['result_set']);
+    
+    return $isLeaveDateOverlapped;
 }
