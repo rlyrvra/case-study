@@ -527,15 +527,17 @@ $payrollGroupFilterCriteria = [
         'boolean'  => 'AND'
     ],
     [
-        'column'   => 'payroll_group.day_of_weekly_cutoff',
-        'operator' => '='                                 ,
-        'value'    => $currentDayOfWeek                   ,
-        'boolean'  => 'OR'
+        [
+            'column'   => 'payroll_group.day_of_weekly_cutoff',
+            'operator' => '='                                 ,
+            'value'    => $currentDayOfWeek                   ,
+            'boolean'  => 'OR'
+        ]
     ]
 ];
 
 if ($currentWeekNumber % 2 === 0) {
-    $payrollGroupFilterCriteria[] = [
+    $payrollGroupFilterCriteria[1][] = [
         'column'   => 'payroll_group.day_of_biweekly_cutoff',
         'operator' => '='                                   ,
         'value'    => $currentDayOfWeek                     ,
@@ -543,7 +545,7 @@ if ($currentWeekNumber % 2 === 0) {
     ];
 }
 
-$payrollGroupFilterCriteria[] = [
+$payrollGroupFilterCriteria[1][] = [
     'column'   => 'payroll_group.semi_monthly_first_cutoff',
     'operator' => 'IS NOT NULL'                            ,
     'boolean'  => 'OR'
