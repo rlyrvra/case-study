@@ -18,6 +18,10 @@ function fetchEmployeeLeaves(){
 }
 
 function assignLeaves(selectedLeavesTypes){
+    if (!selectedLeavesTypes || selectedLeavesTypes.length === 0) {
+        showNoSelectedLeaves();
+        return;
+    }
     const employment_type = document.getElementById('employment-type').value;
     $.ajax({
         url: 'leaves/modules/assign-leaves-api',

@@ -8,6 +8,7 @@ function renderLeaveTypes(tbody) {
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
         checkbox.id = `${leaveType.id}`;
+        checkbox.name = `leaveType_${index}`;
         selectCell.appendChild(checkbox);
         
         // Create leave type cell
@@ -119,6 +120,20 @@ function confirmDeleteEmployeeLeave(button){
         if (result.isConfirmed) {
         deleteEmployeeLeave(button);
         } else {
+            $('#assign_leave_types_modal').modal('show');
+        }
+    });
+}
+
+function showNoSelectedLeaves(){
+    $('#assign_leave_types_modal').modal('hide');
+    Swal.fire({
+        title: 'Warning!',
+        text: "You have no selected leaves.",
+        icon: 'warning',
+        confirmButtonText: 'OK',
+    }).then((result) => {
+        if (result.isConfirmed) {
             $('#assign_leave_types_modal').modal('show');
         }
     });

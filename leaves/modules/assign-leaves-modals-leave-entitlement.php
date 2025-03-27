@@ -14,14 +14,14 @@
             </div>
 
             <div class="modal-body">
-                <form id="assign_leave_types_form" onsubmit="event.preventDefault();" onchange="checkEmploymentTypeLeaves()">
+                <form id="assign_leave_types_form" onsubmit="event.preventDefault();">
                     <div class="row g-3">
                         <!-- Employment Type -->
                         <div class="col-md-12">
                             <label for="employment-type" class="form-label fw-semibold">
                                 Employment Type <span class="text-danger">*</span>
                             </label>
-                            <select class="form-select shadow-sm" id="employment-type" name="employment-type" required>
+                            <select class="form-select shadow-sm" id="employment-type" name="employment-type" required onchange="checkEmploymentTypeLeaves()">
                                 <option value="" selected disabled>Select Type</option>
                                 <option value="Regular">Regular</option>
                                 <option value="Regular Permanent">Regular Permanent</option>

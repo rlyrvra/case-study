@@ -19,6 +19,10 @@ function fetchEmployeeDeductions(){
 
 function assignDeductions(){
     const selectedDeductions = getSelectedDeductions();
+    if (!selectedDeductions || selectedDeductions.length === 0) {
+        showNoSelectedDeductions();
+        return;
+    }
     const employeeId = document.getElementById('select_employee').value;
 
     $.ajax({

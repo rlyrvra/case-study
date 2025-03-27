@@ -19,6 +19,11 @@ function fetchEmployeeAllowances(){
 
 function assignAllowances(){
     const selectedAllowances = getSelectedAllowances();
+    if (!selectedAllowances || selectedAllowances.length === 0) {
+        showNoSelectedAllowances();
+        return;
+    }
+
     const employeeId = document.getElementById('select_employee').value;
     $.ajax({
         url: 'allowances/employee-allowance/modules/assign-allowances-api',

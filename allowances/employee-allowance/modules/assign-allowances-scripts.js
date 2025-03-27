@@ -126,6 +126,20 @@ function showSuccessDeleteAllowance(){
     });
 }
 
+function showNoSelectedAllowances(){
+    $('#allowance_entitlement_modal').modal('hide');
+    Swal.fire({
+        title: 'Warning!',
+        text: "You have no selected allowances.",
+        icon: 'warning',
+        confirmButtonText: 'OK',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $('#allowance_entitlement_modal').modal('show');
+        }
+    });
+}
+
 function confirmDeleteAssignedAllowance(button){
     $('#assign_allowances_modal').modal('hide');
     Swal.fire({
