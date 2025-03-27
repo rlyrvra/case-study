@@ -134,6 +134,20 @@ try {
         
 
         $employee = isset($workScheduleData['employee']) ? validateInput($workScheduleData['employee'], 'Employee') : '';
+
+        if(isScheduled($employee)){
+            $errorMessages = [
+                'employee_id' => 'This employee already has an assigned work schedule. You can either update it properly or delete it to be able to assign a new one.'
+            ];
+            die("
+            <script>
+                showValidationError(" . json_encode($errorMessages) . ", modal = $('#add-allowances-modal'));
+            </script>
+            ");
+        }
+
+
+
         $start_time = isset($workScheduleData['start_time']) && $workScheduleData['start_time'] !== '' ? 
             date('Y-m-d H:i:s', strtotime(validateInput($workScheduleData['start_time'], 'Start Time'))) : '2024-01-01 00:00:00';
         $end_time = isset($workScheduleData['end_time']) && $workScheduleData['end_time'] !== '' ? 
@@ -272,8 +286,8 @@ try {
             }
         }
 
-        print_r($breakTobeCreated);
-        print_r($breakTobeUpdated);
+        // print_r($breakTobeCreated);
+        // print_r($breakTobeUpdated);
         
 
         $selectedColumns = ['employee_id'];
@@ -630,4 +644,30 @@ function deleteExistingBreakSchedules($pdo, $workScheduleId){
         "action" => ActionResult::SUCCESS,
         "number" => $deleteCounter
     ];
+}
+
+function isScheduled($employeeId): bool{
+    global $pdo;
+    $workScheduleDao = new WorkScheduleDao($pdo);
+    $workScheduleRepo = new WorkScheduleRepository($workScheduleDao);
+    $workScheduleService = new WorkScheduleService($workScheduleRepo);
+    $result = $workScheduleService->fetchAllWorkSchedules(
+        columns : ['start_time', 'end_time'],
+        filterCriteria: [
+            [
+                "column" => "work_schedule.employee_id",
+                "operator" => "=",
+                "value" => $employeeId
+            ],
+            [
+                "column" => "work_schedule.deleted_at",
+                "operator" => "IS NULL"
+            ]
+        ], 
+        limit: 1);
+    $rowCount = $result['total_row_count'];
+    if($rowCount >= 1){
+        return true;
+    }
+    return false;
 }
