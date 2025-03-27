@@ -11,6 +11,9 @@
             
             <div class="modal-body">
                 <form onsubmit="event.preventDefault()" id="work_schedules_update_form">
+                    <div class="my-3 alert alert-danger text-center">
+                        New schedule may overlap with existing attendance records if the original schedule is deleted and will be applied on the next scheduled day.
+                    </div>
                     <div class="row g-3">
 
                         <!-- Start Time -->
