@@ -511,7 +511,7 @@
                     id="hourlyRate" 
                     list="wageOptions2025" 
                     class="form-control no-spinners" 
-                    placeholder="Enter hourly wage" 
+                    placeholder="Enter basic salary" 
                     required 
                     onchange="samplePayroll()" 
                     min="1">

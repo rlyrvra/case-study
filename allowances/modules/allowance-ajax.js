@@ -111,7 +111,6 @@ function createAllowance() {
         success: function(response) {
             $('#response-test').html(response);
             fetchAllAllowances();
-            document.getElementById('add_allowance_form').reset();
             //showSuccessCreate();
         },
         error(xhr, status, error) {

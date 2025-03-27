@@ -69,31 +69,31 @@ class EmployeeValidator extends BaseValidator
     public function isValidRfidUid(mixed $rfidUid): bool
     {
         if ($rfidUid === null) {
-            $this->errors['rfid_uid'] = 'The RFID UID cannot be null.';
+            $this->errors['rfid_uid'] = 'Employment Information: The RFID UID cannot be null.';
 
             return false;
         }
 
         if ( ! is_string($rfidUid)) {
-            $this->errors['rfid_uid'] = 'The RFID UID must be a string.';
+            $this->errors['rfid_uid'] = 'Employment Information: The RFID UID must be a string.';
 
             return false;
         }
 
         if (trim($rfidUid) === '') {
-            $this->errors['rfid_uid'] = 'The RFID UID cannot be empty.';
+            $this->errors['rfid_uid'] = 'Employment Information: The RFID UID cannot be empty.';
 
             return false;
         }
 
         if (mb_strlen($rfidUid) < 8 || mb_strlen($rfidUid) > 32) {
-            $this->errors['rfid_uid'] = 'The RFID UID must be between 8 and 32 characters long.';
+            $this->errors['rfid_uid'] = 'Employment Information: The RFID UID must be between 8 and 32 characters long.';
 
             return false;
         }
 
         if ( ! preg_match('/^[A-Fa-f0-9]+$/', $rfidUid)) {
-            $this->errors['rfid_uid'] = 'The RFID UID contains invalid characters. Only hexadecimal characters from 0 to 9 and A to F are allowed.';
+            $this->errors['rfid_uid'] = 'Employment Information: The RFID UID contains invalid characters. Only hexadecimal characters from 0 to 9 and A to F are allowed.';
 
             return false;
         }
@@ -101,13 +101,13 @@ class EmployeeValidator extends BaseValidator
         $isUnique = $this->isUnique('rfid_uid', $rfidUid);
 
         if ($isUnique === null) {
-            $this->errors['rfid_uid'] = 'Unable to verify the uniqueness of the RFID UID. The provided employee ID may be missing or invalid. Please try again later.';
+            $this->errors['rfid_uid'] = 'Employment Information: Unable to verify the uniqueness of the RFID UID. The provided employee ID may be missing or invalid. Please try again later.';
 
             return false;
         }
 
         if ($isUnique === false) {
-            $this->errors['rfid_uid'] = 'This RFID UID already exists. Please provide a different one.';
+            $this->errors['rfid_uid'] = 'Employment Information: This RFID UID already exists. Please provide a different one.';
 
             return false;
         }
@@ -118,31 +118,31 @@ class EmployeeValidator extends BaseValidator
     public function isValidFirstName(mixed $firstName): bool
     {
         if ($firstName === null) {
-            $this->errors['first_name'] = 'The first name cannot be null.';
+            $this->errors['first_name'] = 'Personal Information: The first name cannot be null.';
 
             return false;
         }
 
         if ( ! is_string($firstName)) {
-            $this->errors['first_name'] = 'The first name must be a string.';
+            $this->errors['first_name'] = 'Personal Information: The first name must be a string.';
 
             return false;
         }
 
         if (trim($firstName) === '') {
-            $this->errors['first_name'] = 'The first name cannot be empty.';
+            $this->errors['first_name'] = 'Personal Information: The first name cannot be empty.';
 
             return false;
         }
 
         if (mb_strlen($firstName) < 2 || mb_strlen($firstName) > 30) {
-            $this->errors['first_name'] = 'The first name must be between 2 and 30 characters long.';
+            $this->errors['first_name'] = 'Personal Information: The first name must be between 2 and 30 characters long.';
 
             return false;
         }
 
         if ( ! preg_match('/^[\p{L}._\'\-, ]+$/u', $firstName)) {
-            $this->errors['first_name'] = 'The first name contains invalid characters. Only letters, spaces, and the following characters are allowed: - . , \' _';
+            $this->errors['first_name'] = 'Personal Information: The first name contains invalid characters. Only letters, spaces, and the following characters are allowed: - . , \' _';
 
             return false;
         }
@@ -153,20 +153,20 @@ class EmployeeValidator extends BaseValidator
     public function isValidMiddleName(mixed $middleName): bool
     {
         if ($middleName !== null && ! is_string($middleName)) {
-            $this->errors['middle_name'] = 'The middle name must be a string.';
+            $this->errors['middle_name'] = 'Personal Information: The middle name must be a string.';
 
             return false;
         }
 
         if (is_string($middleName) && trim($middleName) !== '') {
             if (mb_strlen($middleName) < 2 || mb_strlen($middleName) > 30) {
-                $this->errors['middle_name'] = 'The middle name must be between 2 and 30 characters long.';
+                $this->errors['middle_name'] = 'Personal Information: The middle name must be between 2 and 30 characters long.';
 
                 return false;
             }
 
             if ( ! preg_match('/^[\p{L}._\'\-, ]+$/u', $middleName)) {
-                $this->errors['middle_name'] = 'The middle name contains invalid characters. Only letters, spaces, and the following characters are allowed: - . , \' _';
+                $this->errors['middle_name'] = 'Personal Information: The middle name contains invalid characters. Only letters, spaces, and the following characters are allowed: - . , \' _';
 
                 return false;
             }
@@ -178,37 +178,37 @@ class EmployeeValidator extends BaseValidator
     public function isValidLastName(mixed $lastName): bool
     {
         if ($lastName === null) {
-            $this->errors['last_name'] = 'The last name cannot be null.';
+            $this->errors['last_name'] = 'Personal Information: The last name cannot be null.';
 
             return false;
         }
 
         if ( ! is_string($lastName)) {
-            $this->errors['last_name'] = 'The last name must be a string.';
+            $this->errors['last_name'] = 'Personal Information: The last name must be a string.';
 
             return false;
         }
 
         if (trim($lastName) === '') {
-            $this->errors['last_name'] = 'The last name cannot be empty.';
+            $this->errors['last_name'] = 'Personal Information: The last name cannot be empty.';
 
             return false;
         }
 
         if (mb_strlen($lastName) < 2 || mb_strlen($lastName) > 30) {
-            $this->errors['last_name'] = 'The last name must be between 2 and 30 characters long.';
+            $this->errors['last_name'] = 'Personal Information: The last name must be between 2 and 30 characters long.';
 
             return false;
         }
 
         if ( ! preg_match('/^[\p{L}._\'\-, ]+$/u', $lastName)) {
-            $this->errors['last_name'] = 'The last name contains invalid characters. Only letters, spaces, and the following characters are allowed: - . , \' _';
+            $this->errors['last_name'] = 'Personal Information: The last name contains invalid characters. Only letters, spaces, and the following characters are allowed: - . , \' _';
 
             return false;
         }
 
         if ($lastName !== htmlspecialchars(strip_tags($lastName), ENT_QUOTES, 'UTF-8')) {
-            $this->errors['last_name'] = 'The last name contains HTML tags or special characters that are not allowed.';
+            $this->errors['last_name'] = 'Personal Information: The last name contains HTML tags or special characters that are not allowed.';
 
             return false;
         }
@@ -218,26 +218,26 @@ class EmployeeValidator extends BaseValidator
 
     public function isValidFullName(): bool
     {
-        if (   array_key_exists('first_name', $this->data) &&
-               array_key_exists('last_name' , $this->data) &&
+        // if (   array_key_exists('first_name', $this->data) &&
+        //        array_key_exists('last_name' , $this->data) &&
 
-             ! isset($this->errors['first_name']) &&
-             ! isset($this->errors['last_name' ])) {
+        //      ! isset($this->errors['first_name']) &&
+        //      ! isset($this->errors['last_name' ])) {
 
-            $isUnique = $this->isUnique('full_name', $this->data['first_name'] . ' ' . $this->data['last_name']);
+        //     $isUnique = $this->isUnique('full_name', $this->data['first_name'] . ' ' . $this->data['last_name']);
 
-            if ($isUnique === null) {
-                $this->errors['full_name'] = 'Unable to verify the uniqueness of the employee name. The provided employee ID may be missing or invalid. Please try again later.';
+        //     if ($isUnique === null) {
+        //         $this->errors['full_name'] = 'Unable to verify the uniqueness of the employee name. The provided employee ID may be missing or invalid. Please try again later.';
 
-                return false;
-            }
+        //         return false;
+        //     }
 
-            if ($isUnique === false) {
-                $this->errors['full_name'] = 'This employee name already exists. Please provide a different one.';
+        //     if ($isUnique === false) {
+        //         $this->errors['full_name'] = 'This employee name already exists. Please provide a different one.';
 
-                return false;
-            }
-        }
+        //         return false;
+        //     }
+        // }
 
         return true;
     }
@@ -245,19 +245,19 @@ class EmployeeValidator extends BaseValidator
     public function isValidDateOfBirth(mixed $dateOfBirth): bool
     {
         if ($dateOfBirth === null) {
-            $this->errors['date_of_birth'] = 'The date of birth cannot be null.';
+            $this->errors['date_of_birth'] = 'Personal Information: The date of birth cannot be null.';
 
             return false;
         }
 
         if ( ! is_string($dateOfBirth)) {
-            $this->errors['date_of_birth'] = 'The date of birth must be a string.';
+            $this->errors['date_of_birth'] = 'Personal Information: The date of birth must be a string.';
 
             return false;
         }
 
         if (trim($dateOfBirth) === '') {
-            $this->errors['date_of_birth'] = 'The date of birth cannot be empty.';
+            $this->errors['date_of_birth'] = 'Personal Information: The date of birth cannot be empty.';
 
             return false;
         }
@@ -265,13 +265,13 @@ class EmployeeValidator extends BaseValidator
         $date = DateTime::createFromFormat('Y-m-d', $dateOfBirth);
 
         if ($date === false || $date->format('Y-m-d') !== $dateOfBirth) {
-            $this->errors['date_of_birth'] = 'The date of birth must be in the Y-m-d format and be a valid date, e.g., 1990-12-31.';
+            $this->errors['date_of_birth'] = 'Personal Information: The date of birth must be in the Y-m-d format and be a valid date, e.g., 1990-12-31.';
 
             return false;
         }
 
         if ($date > new DateTime()) {
-            $this->errors['date_of_birth'] = 'The date of birth cannot be in the future.';
+            $this->errors['date_of_birth'] = 'Personal Information: The date of birth cannot be in the future.';
 
             return false;
         }
@@ -282,31 +282,31 @@ class EmployeeValidator extends BaseValidator
     public function isValidGender(mixed $gender): bool
     {
         if ($gender === null) {
-            $this->errors['gender'] = 'The gender cannot be null.';
+            $this->errors['gender'] = 'Personal Information: The gender cannot be null.';
 
             return false;
         }
 
         if ( ! is_string($gender)) {
-            $this->errors['gender'] = 'The gender must be a string.';
+            $this->errors['gender'] = 'Personal Information: The gender must be a string.';
 
             return false;
         }
 
         if (trim($gender) === '') {
-            $this->errors['gender'] = 'The gender cannot be empty.';
+            $this->errors['gender'] = 'Personal Information: The gender cannot be empty.';
 
             return false;
         }
 
         if (mb_strlen($gender) < 3 || mb_strlen($gender) > 50) {
-            $this->errors['gender'] = 'The gender must be between 3 and 50 characters long.';
+            $this->errors['gender'] = 'Personal Information: The gender must be between 3 and 50 characters long.';
 
             return false;
         }
 
         if ( ! preg_match('/^[A-Za-z ]+$/', $gender)) {
-            $this->errors['gender'] = 'The gender contains invalid characters. Only letters and spaces are allowed.';
+            $this->errors['gender'] = 'Personal Information: The gender contains invalid characters. Only letters and spaces are allowed.';
 
             return false;
         }
@@ -317,19 +317,19 @@ class EmployeeValidator extends BaseValidator
     public function isValidMaritalStatus(mixed $maritalStatus): bool
     {
         if ($maritalStatus === null) {
-            $this->errors['marital_status'] = 'The marital status cannot be null.';
+            $this->errors['marital_status'] = 'Personal Information: The marital status cannot be null.';
 
             return false;
         }
 
         if ( ! is_string($maritalStatus)) {
-            $this->errors['marital_status'] = 'The marital status must be a string.';
+            $this->errors['marital_status'] = 'Personal Information: The marital status must be a string.';
 
             return false;
         }
 
         if (trim($maritalStatus) === '') {
-            $this->errors['marital_status'] = 'The marital status cannot be empty.';
+            $this->errors['marital_status'] = 'Personal Information: The marital status cannot be empty.';
 
             return false;
         }
@@ -343,7 +343,7 @@ class EmployeeValidator extends BaseValidator
         ];
 
         if ( ! in_array(strtolower($maritalStatus), $validMaritalStatuses)) {
-            $this->errors['marital_status'] = 'The marital status must be single, married, divorced, widowed, or separated.';
+            $this->errors['marital_status'] = 'Personal Information: The marital status must be single, married, divorced, widowed, or separated.';
 
             return false;
         }
@@ -354,31 +354,31 @@ class EmployeeValidator extends BaseValidator
     public function isValidNationality(mixed $nationality): bool
     {
         if ($nationality === null) {
-            $this->errors['nationality'] = 'The nationality cannot be null.';
+            $this->errors['nationality'] = 'Personal Information: The nationality cannot be null.';
 
             return false;
         }
 
         if ( ! is_string($nationality)) {
-            $this->errors['nationality'] = 'The nationality must be a string.';
+            $this->errors['nationality'] = 'Personal Information: The nationality must be a string.';
 
             return false;
         }
 
         if (trim($nationality) === '') {
-            $this->errors['nationality'] = 'The nationality cannot be empty.';
+            $this->errors['nationality'] = 'Personal Information: The nationality cannot be empty.';
 
             return false;
         }
 
         if (mb_strlen($nationality) < 3 || mb_strlen($nationality) > 50) {
-            $this->errors['nationality'] = 'The nationality must be between 3 and 50 characters long.';
+            $this->errors['nationality'] = 'Personal Information: The nationality must be between 3 and 50 characters long.';
 
             return false;
         }
 
         if ( ! preg_match('/^[A-Za-z ]+$/', $nationality)) {
-            $this->errors['nationality'] = 'The nationality contains invalid characters. Only letters and spaces are allowed.';
+            $this->errors['nationality'] = 'Personal Information: The nationality contains invalid characters. Only letters and spaces are allowed.';
 
             return false;
         }
@@ -389,20 +389,20 @@ class EmployeeValidator extends BaseValidator
     public function isValidReligion(mixed $religion): bool
     {
         if ($religion !== null && ! is_string($religion)) {
-            $this->errors['religion'] = 'The religion must be a string.';
+            $this->errors['religion'] = 'Personal Information: The religion must be a string.';
 
             return false;
         }
 
         if (is_string($religion) && trim($religion) !== '') {
             if (mb_strlen($religion) < 3 || mb_strlen($religion) > 50) {
-                $this->errors['religion'] = 'The religion must be between 3 and 50 characters long.';
+                $this->errors['religion'] = 'Personal Information: The religion must be between 3 and 50 characters long.';
 
                 return false;
             }
 
             if ( ! preg_match('/^[A-Za-z ]+$/', $religion)) {
-                $this->errors['religion'] = 'The religion contains invalid characters. Only letters and spaces are allowed.';
+                $this->errors['religion'] = 'Personal Information: The religion contains invalid characters. Only letters and spaces are allowed.';
 
                 return false;
             }
@@ -414,25 +414,25 @@ class EmployeeValidator extends BaseValidator
     public function isValidPhoneNumber(mixed $phoneNumber): bool
     {
         if ($phoneNumber === null) {
-            $this->errors['phone_number'] = 'The phone number cannot be null.';
+            $this->errors['phone_number'] = 'Contact Information: The phone number cannot be null.';
 
             return false;
         }
 
         if ( ! is_string($phoneNumber)) {
-            $this->errors['phone_number'] = 'The phone number must be a string.';
+            $this->errors['phone_number'] = 'Contact Information: The phone number must be a string.';
 
             return false;
         }
 
         if (trim($phoneNumber) === '') {
-            $this->errors['phone_number'] = 'The phone number cannot be empty.';
+            $this->errors['phone_number'] = 'Contact Information: The phone number cannot be empty.';
 
             return false;
         }
 
         if ( ! preg_match('/^\+?(\d{1,3}[-. ]?)?(\(\d{3}\)|\d{3})[-. ]?(\d{3})[-. ]?(\d{4})$/', $phoneNumber)) {
-            $this->errors['phone_number'] = 'The phone number contains invalid characters or format. Please use a valid phone number format, e.g., +63 912 345 6789 or 0912-345-6789.';
+            $this->errors['phone_number'] = 'Contact Information: The phone number contains invalid characters or format. Please use a valid phone number format, e.g., +63 912 345 6789 or 0912-345-6789.';
 
             return false;
         }
@@ -440,7 +440,7 @@ class EmployeeValidator extends BaseValidator
         $digits = preg_replace('/[^0-9]/', '', $phoneNumber);
 
         if (strlen($digits) < 7 || strlen($digits) > 15) {
-            $this->errors['phone_number'] = 'The phone number must be between 7 and 15 digits long, excluding non-numeric characters.';
+            $this->errors['phone_number'] = 'Contact Information: The phone number must be between 7 and 15 digits long, excluding non-numeric characters.';
 
             return false;
         }
@@ -448,13 +448,13 @@ class EmployeeValidator extends BaseValidator
         $isUnique = $this->isUnique('phone_number', $phoneNumber);
 
         if ($isUnique === null) {
-            $this->errors['phone_number'] = 'Unable to verify the uniqueness of the phone number. The provided employee ID may be missing or invalid. Please try again later.';
+            $this->errors['phone_number'] = 'Contact Information: Unable to verify the uniqueness of the phone number. The provided employee ID may be missing or invalid. Please try again later.';
 
             return false;
         }
 
         if ($isUnique === false) {
-            $this->errors['phone_number'] = 'This phone number already exists. Please provide a different one.';
+            $this->errors['phone_number'] = 'Contact Information: This phone number already exists. Please provide a different one.';
 
             return false;
         }
@@ -465,25 +465,25 @@ class EmployeeValidator extends BaseValidator
     public function isValidEmailAddress(mixed $emailAddress): bool
     {
         if ($emailAddress === null) {
-            $this->errors['email_address'] = 'The email address cannot be null.';
+            $this->errors['email_address'] = 'Contact Information: The email address cannot be null.';
 
             return false;
         }
 
         if ( ! is_string($emailAddress)) {
-            $this->errors['email_address'] = 'The email address must be a string.';
+            $this->errors['email_address'] = 'Contact Information: The email address must be a string.';
 
             return false;
         }
 
         if (trim($emailAddress) === '') {
-            $this->errors['email_address'] = 'The email address cannot be empty.';
+            $this->errors['email_address'] = 'Contact Information: The email address cannot be empty.';
 
             return false;
         }
 
         if (filter_var($emailAddress, FILTER_VALIDATE_EMAIL) === false) {
-            $this->errors['email_address'] = 'The email address must be a valid email address.';
+            $this->errors['email_address'] = 'Contact Information: The email address must be a valid email address.';
 
             return false;
         }
@@ -491,13 +491,13 @@ class EmployeeValidator extends BaseValidator
         $isUnique = $this->isUnique('email_address', $emailAddress);
 
         if ($isUnique === null) {
-            $this->errors['email_address'] = 'Unable to verify the uniqueness of the email address. The provided employee ID may be missing or invalid. Please try again later.';
+            $this->errors['email_address'] = 'Contact Information: Unable to verify the uniqueness of the email address. The provided employee ID may be missing or invalid. Please try again later.';
 
             return false;
         }
 
         if ($isUnique === false) {
-            $this->errors['email_address'] = 'This email address already exists. Please provide a different one.';
+            $this->errors['email_address'] = 'Contact Information: This email address already exists. Please provide a different one.';
 
             return false;
         }
@@ -508,37 +508,37 @@ class EmployeeValidator extends BaseValidator
     public function isValidAddress(mixed $address): bool
     {
         if ($address === null) {
-            $this->errors['address'] = 'The address cannot be null.';
+            $this->errors['address'] = 'Contact Information: The address cannot be null.';
 
             return false;
         }
 
         if ( ! is_string($address)) {
-            $this->errors['address'] = 'The address must be a string.';
+            $this->errors['address'] = 'Contact Information: The address must be a string.';
 
             return false;
         }
 
         if (trim($address) === '') {
-            $this->errors['address'] = 'The address cannot be empty.';
+            $this->errors['address'] = 'Contact Information: The address cannot be empty.';
 
             return false;
         }
 
         if (mb_strlen($address) < 10 || mb_strlen($address) > 255) {
-            $this->errors['address'] = 'The address must be between 10 and 255 characters long.';
+            $this->errors['address'] = 'Contact Information: The address must be between 10 and 255 characters long.';
 
             return false;
         }
 
         if ( ! preg_match('/^[a-zA-Z0-9\s.,\'\-\/#]+$/', $address)) {
-            $this->errors['address'] = 'The address contains invalid characters. Only letters, numbers, spaces, and the following characters are allowed: - . , \' / #';
+            $this->errors['address'] = 'Contact Information: The address contains invalid characters. Only letters, numbers, spaces, and the following characters are allowed: - . , \' / #';
 
             return false;
         }
 
         if ($address !== htmlspecialchars(strip_tags($address), ENT_QUOTES, 'UTF-8')) {
-            $this->errors['address'] = 'The address contains HTML tags or special characters that are not allowed.';
+            $this->errors['address'] = 'Contact Information: The address contains HTML tags or special characters that are not allowed.';
 
             return false;
         }
@@ -608,37 +608,37 @@ class EmployeeValidator extends BaseValidator
     public function isValidEmergencyContactName(mixed $emergencyContactName): bool
     {
         if ($emergencyContactName === null) {
-            $this->errors['emergency_contact_name'] = 'The emergency contact name cannot be null.';
+            $this->errors['emergency_contact_name'] = 'Contact Information: The emergency contact name cannot be null.';
 
             return false;
         }
 
         if ( ! is_string($emergencyContactName)) {
-            $this->errors['emergency_contact_name'] = 'The emergency contact name must be a string.';
+            $this->errors['emergency_contact_name'] = 'Contact Information: The emergency contact name must be a string.';
 
             return false;
         }
 
         if (trim($emergencyContactName) === '') {
-            $this->errors['emergency_contact_name'] = 'The emergency contact name cannot be empty.';
+            $this->errors['emergency_contact_name'] = 'Contact Information: The emergency contact name cannot be empty.';
 
             return false;
         }
 
         if (mb_strlen($emergencyContactName) < 6 || mb_strlen($emergencyContactName) > 90) {
-            $this->errors['emergency_contact_name'] = 'The emergency contact name must be between 6 and 90 characters long.';
+            $this->errors['emergency_contact_name'] = 'Contact Information: The emergency contact name must be between 6 and 90 characters long.';
 
             return false;
         }
 
         if ( ! preg_match('/^[\p{L}._\'\-, ]+$/u', $emergencyContactName)) {
-            $this->errors['emergency_contact_name'] = 'The emergency contact name contains invalid characters. Only letters, spaces, and the following characters are allowed: . _ \' - ,';
+            $this->errors['emergency_contact_name'] = 'Contact Information: The emergency contact name contains invalid characters. Only letters, spaces, and the following characters are allowed: . _ \' - ,';
 
             return false;
         }
 
         if ($emergencyContactName !== htmlspecialchars(strip_tags($emergencyContactName), ENT_QUOTES, 'UTF-8')) {
-            $this->errors['emergency_contact_name'] = 'The emergency contact name contains HTML tags or special characters that are not allowed.';
+            $this->errors['emergency_contact_name'] = 'Contact Information: The emergency contact name contains HTML tags or special characters that are not allowed.';
 
             return false;
         }
@@ -649,31 +649,31 @@ class EmployeeValidator extends BaseValidator
     public function isValidEmergencyContactRelationship(mixed $emergencyContactRelationship): bool
     {
         if ($emergencyContactRelationship === null) {
-            $this->errors['emergency_contact_relationship'] = 'The emergency contact relationship cannot be null.';
+            $this->errors['emergency_contact_relationship'] = 'Contact Information: The emergency contact relationship cannot be null.';
 
             return false;
         }
 
         if ( ! is_string($emergencyContactRelationship)) {
-            $this->errors['emergency_contact_relationship'] = 'The emergency contact relationship must be a string.';
+            $this->errors['emergency_contact_relationship'] = 'Contact Information: The emergency contact relationship must be a string.';
 
             return false;
         }
 
         if (trim($emergencyContactRelationship) === '') {
-            $this->errors['emergency_contact_relationship'] = 'The emergency contact relationship cannot be empty.';
+            $this->errors['emergency_contact_relationship'] = 'Contact Information: The emergency contact relationship cannot be empty.';
 
             return false;
         }
 
         if (strlen($emergencyContactRelationship) < 2 || strlen($emergencyContactRelationship) > 30) {
-            $this->errors['emergency_contact_relationship'] = 'The emergency contact relationship must be between 2 and 30 characters long.';
+            $this->errors['emergency_contact_relationship'] = 'Contact Information: The emergency contact relationship must be between 2 and 30 characters long.';
 
             return false;
         }
 
         if ( ! preg_match('/^[A-Za-z ]+$/', $emergencyContactRelationship)) {
-            $this->errors['emergency_contact_relationship'] = 'The emergency contact relationship contains invalid characters. Only letters and spaces are allowed.';
+            $this->errors['emergency_contact_relationship'] = 'Contact Information: The emergency contact relationship contains invalid characters. Only letters and spaces are allowed.';
 
             return false;
         }
@@ -684,25 +684,25 @@ class EmployeeValidator extends BaseValidator
     public function isValidEmergencyContactPhoneNumber(mixed $emergencyContactPhoneNumber): bool
     {
         if ($emergencyContactPhoneNumber === null) {
-            $this->errors['emergency_contact_phone_number'] = 'The emergency contact phone number cannot be null.';
+            $this->errors['emergency_contact_phone_number'] = 'Contact Information: The emergency contact phone number cannot be null.';
 
             return false;
         }
 
         if ( ! is_string($emergencyContactPhoneNumber)) {
-            $this->errors['emergency_contact_phone_number'] = 'The emergency contact phone number must be a string.';
+            $this->errors['emergency_contact_phone_number'] = 'Contact Information: The emergency contact phone number must be a string.';
 
             return false;
         }
 
         if (trim($emergencyContactPhoneNumber) === '') {
-            $this->errors['emergency_contact_phone_number'] = 'The emergency contact phone number cannot be empty.';
+            $this->errors['emergency_contact_phone_number'] = 'Contact Information: The emergency contact phone number cannot be empty.';
 
             return false;
         }
 
         if ( ! preg_match('/^\+?(\d{1,3}[-. ]?)?(\(\d{3}\)|\d{3})[-. ]?(\d{3})[-. ]?(\d{4})$/', $emergencyContactPhoneNumber)) {
-            $this->errors['emergency_contact_phone_number'] = 'The emergency contact phone number contains invalid characters or format. Please use a valid phone number format, e.g., +63 912 345 6789 or 0912-345-6789.';
+            $this->errors['emergency_contact_phone_number'] = 'Contact Information: The emergency contact phone number contains invalid characters or format. Please use a valid phone number format, e.g., +63 912 345 6789 or 0912-345-6789.';
 
             return false;
         }
@@ -710,7 +710,7 @@ class EmployeeValidator extends BaseValidator
         $digits = preg_replace('/[^0-9]/', '', $emergencyContactPhoneNumber);
 
         if (strlen($digits) < 7 || strlen($digits) > 15) {
-            $this->errors['emergency_contact_phone_number'] = 'The emergency contact phone number must be between 7 and 15 digits long, excluding non-numeric characters.';
+            $this->errors['emergency_contact_phone_number'] = 'Contact Information: The emergency contact phone number must be between 7 and 15 digits long, excluding non-numeric characters.';
 
             return false;
         }
@@ -721,14 +721,14 @@ class EmployeeValidator extends BaseValidator
     public function isValidEmergencyContactEmailAddress(mixed $emergencyContactEmailAddress): bool
     {
         if ($emergencyContactEmailAddress !== null && ! is_string($emergencyContactEmailAddress)) {
-            $this->errors['emergency_contact_email_address'] = 'The emergency contact email address must be a string.';
+            $this->errors['emergency_contact_email_address'] = 'Contact Information: The emergency contact email address must be a string.';
 
             return false;
         }
 
         if (is_string($emergencyContactEmailAddress) && trim($emergencyContactEmailAddress) !== '') {
             if (filter_var($emergencyContactEmailAddress, FILTER_VALIDATE_EMAIL) === false) {
-                $this->errors['emergency_contact_email_address'] = 'The emergency contact email address must be a valid email address.';
+                $this->errors['emergency_contact_email_address'] = 'Contact Information: The emergency contact email address must be a valid email address.';
 
                 return false;
             }
@@ -740,26 +740,26 @@ class EmployeeValidator extends BaseValidator
     public function isValidEmergencyContactAddress(mixed $emergencyContactAddress): bool
     {
         if ($emergencyContactAddress !== null && ! is_string($emergencyContactAddress)) {
-            $this->errors['emergency_contact_address'] = 'The emergency contact address must be a string.';
+            $this->errors['emergency_contact_address'] = 'Contact Information: The emergency contact address must be a string.';
 
             return false;
         }
 
         if (is_string($emergencyContactAddress) && trim($emergencyContactAddress) !== '') {
             if (mb_strlen($emergencyContactAddress) < 10 || mb_strlen($emergencyContactAddress) > 255) {
-                $this->errors['emergency_contact_address'] = 'The emergency contact address must be between 10 and 255 characters long.';
+                $this->errors['emergency_contact_address'] = 'Contact Information: The emergency contact address must be between 10 and 255 characters long.';
 
                 return false;
             }
 
             if ( ! preg_match('/^[a-zA-Z0-9\s.,\'\-\/#]+$/', $emergencyContactAddress)) {
-                $this->errors['emergency_contact_address'] = "The emergency contact address contains invalid characters. Only letters, numbers, spaces, and the following characters are allowed: - . , ' / #";
+                $this->errors['emergency_contact_address'] = "Contact Information: The emergency contact address contains invalid characters. Only letters, numbers, spaces, and the following characters are allowed: - . , ' / #";
 
                 return false;
             }
 
             if ($emergencyContactAddress !== htmlspecialchars(strip_tags($emergencyContactAddress), ENT_QUOTES, 'UTF-8')) {
-                $this->errors['emergency_contact_address'] = 'The emergency contact address contains HTML tags or special characters that are not allowed.';
+                $this->errors['emergency_contact_address'] = 'Contact Information: The emergency contact address contains HTML tags or special characters that are not allowed.';
 
                 return false;
             }
@@ -771,31 +771,31 @@ class EmployeeValidator extends BaseValidator
     public function isValidEmployeeCode(mixed $employeeCode): bool
     {
         if ($employeeCode === null) {
-            $this->errors['employee_code'] = 'The employee code cannot be null.';
+            $this->errors['employee_code'] = 'Employment Information: The employee code cannot be null.';
 
             return false;
         }
 
         if ( ! is_string($employeeCode)) {
-            $this->errors['employee_code'] = 'The employee code must be a string.';
+            $this->errors['employee_code'] = 'Employment Information: The employee code must be a string.';
 
             return false;
         }
 
         if (trim($employeeCode) === '') {
-            $this->errors['employee_code'] = 'The employee code cannot be empty.';
+            $this->errors['employee_code'] = 'Employment Information: The employee code cannot be empty.';
 
             return false;
         }
 
         if (mb_strlen($employeeCode) < 5 || mb_strlen($employeeCode) > 50) {
-            $this->errors['employee_code'] = 'The employee code must be between 5 and 50 characters long.';
+            $this->errors['employee_code'] = 'Employment Information: The employee code must be between 5 and 50 characters long.';
 
             return false;
         }
 
         if (!preg_match('/^[A-Za-z0-9]+[-_\.]?[A-Za-z0-9]+$/', $employeeCode)) {
-            $this->errors['employee_code'] = 'The employee code contains invalid characters. Only letters, numbers, and the following characters are allowed: - _ .';
+            $this->errors['employee_code'] = 'Employment Information: The employee code contains invalid characters. Only letters, numbers, and the following characters are allowed: - _ .';
 
             return false;
         }
@@ -803,13 +803,13 @@ class EmployeeValidator extends BaseValidator
         $isUnique = $this->isUnique('employee_code', $employeeCode);
 
         if ($isUnique === null) {
-            $this->errors['employee_code'] = 'Unable to verify the uniqueness of the employee code. The provided employee ID may be missing or invalid. Please try again later.';
+            $this->errors['employee_code'] = 'Employment Information: Unable to verify the uniqueness of the employee code. The provided employee ID may be missing or invalid. Please try again later.';
 
             return false;
         }
 
         if ($isUnique === false) {
-            $this->errors['employee_code'] = 'This employee code already exists. Please provide a different one.';
+            $this->errors['employee_code'] = 'Employment Information: This employee code already exists. Please provide a different one.';
 
             return false;
         }
@@ -822,20 +822,20 @@ class EmployeeValidator extends BaseValidator
         $isEmpty = is_string($id) && trim($id) === '';
 
         if ($id === null || $isEmpty) {
-            $this->errors['job_title_id'] = 'The job title ID is required.';
+            $this->errors['job_title_id'] = 'Employment Information: The job title ID is required.';
 
             return false;
         }
 
         if (is_int($id) || filter_var($id, FILTER_VALIDATE_INT) !== false || (is_string($id) && preg_match('/^-?(0|[1-9]\d*)$/', $id))) {
             if ($id < 1) {
-                $this->errors['job_title_id'] = 'The job title ID must be greater than 0.';
+                $this->errors['job_title_id'] = 'Employment Information: The job title ID must be greater than 0.';
 
                 return false;
             }
 
             if ($id > PHP_INT_MAX) {
-                $this->errors['job_title_id'] = 'The job title ID exceeds the maximum allowable integer size.';
+                $this->errors['job_title_id'] = 'Employment Information: The job title ID exceeds the maximum allowable integer size.';
 
                 return false;
             }
@@ -847,7 +847,7 @@ class EmployeeValidator extends BaseValidator
             return true;
         }
 
-        $this->errors['job_title_id'] = 'Invalid job title ID. Please ensure the job title ID is correct and try again.';
+        $this->errors['job_title_id'] = 'Employment Information: Invalid job title ID. Please ensure the job title ID is correct and try again.';
 
         return false;
     }
@@ -857,20 +857,20 @@ class EmployeeValidator extends BaseValidator
         $isEmpty = is_string($id) && trim($id) === '';
 
         if ($id === null || $isEmpty) {
-            $this->errors['department_id'] = 'The department ID is required.';
+            $this->errors['department_id'] = 'Employment Information: The department ID is required.';
 
             return false;
         }
 
         if (is_int($id) || filter_var($id, FILTER_VALIDATE_INT) !== false || (is_string($id) && preg_match('/^-?(0|[1-9]\d*)$/', $id))) {
             if ($id < 1) {
-                $this->errors['department_id'] = 'The department ID must be greater than 0.';
+                $this->errors['department_id'] = 'Employment Information: The department ID must be greater than 0.';
 
                 return false;
             }
 
             if ($id > PHP_INT_MAX) {
-                $this->errors['department_id'] = 'The department ID exceeds the maximum allowable integer size.';
+                $this->errors['department_id'] = 'Employment Information: The department ID exceeds the maximum allowable integer size.';
 
                 return false;
             }
@@ -882,7 +882,7 @@ class EmployeeValidator extends BaseValidator
             return true;
         }
 
-        $this->errors['department_id'] = 'Invalid department ID. Please ensure the department ID is correct and try again.';
+        $this->errors['department_id'] = 'Employment Information: Invalid department ID. Please ensure the department ID is correct and try again.';
 
         return false;
     }
@@ -890,19 +890,19 @@ class EmployeeValidator extends BaseValidator
     public function isValidEmploymentType(mixed $employmentType): bool
     {
         if ($employmentType === null) {
-            $this->errors['employment_type'] = 'The employment type cannot be null.';
+            $this->errors['employment_type'] = 'Employment Information: The employment type cannot be null.';
 
             return false;
         }
 
         if ( ! is_string($employmentType)) {
-            $this->errors['employment_type'] = 'The employment type must be a string.';
+            $this->errors['employment_type'] = 'Employment Information: The employment type must be a string.';
 
             return false;
         }
 
         if (trim($employmentType) === '') {
-            $this->errors['employment_type'] = 'The employment type cannot be empty.';
+            $this->errors['employment_type'] = 'Employment Information: The employment type cannot be empty.';
 
             return false;
         }
@@ -929,7 +929,7 @@ class EmployeeValidator extends BaseValidator
         ];
 
         if ( ! in_array(strtolower($employmentType), $validEmploymentTypes)) {
-            $this->errors['employment_type'] = 'Please select a valid employment type.';
+            $this->errors['employment_type'] = 'Employment Information: Please select a valid employment type.';
 
             return false;
         }
@@ -940,19 +940,19 @@ class EmployeeValidator extends BaseValidator
     public function isValidDateOfHire(mixed $dateOfHire): bool
     {
         if ($dateOfHire === null) {
-            $this->errors['date_of_hire'] = 'The date of hire cannot be null';
+            $this->errors['date_of_hire'] = 'Employment Information: The date of hire cannot be null';
 
             return false;
         }
 
         if ( ! is_string($dateOfHire)) {
-            $this->errors['date_of_hire'] = 'The date of hire must be a string.';
+            $this->errors['date_of_hire'] = 'Employment Information: The date of hire must be a string.';
 
             return false;
         }
 
         if (trim($dateOfHire) === '') {
-            $this->errors['date_of_hire'] = 'The date of hire cannot be empty.';
+            $this->errors['date_of_hire'] = 'Employment Information: The date of hire cannot be empty.';
 
             return false;
         }
@@ -960,13 +960,13 @@ class EmployeeValidator extends BaseValidator
         $date = DateTime::createFromFormat('Y-m-d', $dateOfHire);
 
         if ($date === false || $date->format('Y-m-d') !== $dateOfHire) {
-            $this->errors['date_of_hire'] = 'The date of hire must be in the Y-m-d format and be a valid date, e.g., 2025-01-01.';
+            $this->errors['date_of_hire'] = 'Employment Information: The date of hire must be in the Y-m-d format and be a valid date, e.g., 2025-01-01.';
 
             return false;
         }
 
         if ($date > new DateTime()) {
-            $this->errors['date_of_hire'] = 'The date of hire cannot be in the future.';
+            $this->errors['date_of_hire'] = 'Employment Information: The date of hire cannot be in the future.';
 
             return false;
         }
@@ -984,13 +984,13 @@ class EmployeeValidator extends BaseValidator
 
         if (is_int($id) || filter_var($id, FILTER_VALIDATE_INT) !== false || (is_string($id) && preg_match('/^-?(0|[1-9]\d*)$/', $id))) {
             if ($id < 1) {
-                $this->errors['supervisor_id'] = 'The supervisor ID must be greater than 0.';
+                $this->errors['supervisor_id'] = 'Employment Information: The supervisor ID must be greater than 0.';
 
                 return false;
             }
 
             if ($id > PHP_INT_MAX) {
-                $this->errors['supervisor_id'] = 'The supervisor ID exceeds the maximum allowable integer size.';
+                $this->errors['supervisor_id'] = 'Employment Information: The supervisor ID exceeds the maximum allowable integer size.';
 
                 return false;
             }
@@ -1002,7 +1002,7 @@ class EmployeeValidator extends BaseValidator
             return true;
         }
 
-        $this->errors['supervisor_id'] = 'Invalid supervisor ID. Please ensure the supervisor ID is correct and try again.';
+        $this->errors['supervisor_id'] = 'Employment Information: Invalid supervisor ID. Please ensure the supervisor ID is correct and try again.';
 
         return false;
     }
@@ -1010,19 +1010,19 @@ class EmployeeValidator extends BaseValidator
     public function isValidAccessRole(mixed $accessRole): bool
     {
         if ($accessRole === null) {
-            $this->errors['access_role'] = 'The access role cannot be null.';
+            $this->errors['access_role'] = 'Employment Information: The access role cannot be null.';
 
             return false;
         }
 
         if ( ! is_string($accessRole)) {
-            $this->errors['access_role'] = 'The access role must be a string.';
+            $this->errors['access_role'] = 'Employment Information: The access role must be a string.';
 
             return false;
         }
 
         if (trim($accessRole) === '') {
-            $this->errors['access_role'] = 'The access role cannot be empty.';
+            $this->errors['access_role'] = 'Employment Information: The access role cannot be empty.';
 
             return false;
         }
@@ -1035,7 +1035,7 @@ class EmployeeValidator extends BaseValidator
         ];
 
         if ( ! in_array(strtolower($accessRole), $validAccessRoles)) {
-            $this->errors['access_role'] = 'The access role must be one of the following: Staff, Supervisor, Manager, Admin.';
+            $this->errors['access_role'] = 'Employment Information: The access role must be one of the following: Staff, Supervisor, Manager, Admin.';
 
             return false;
         }
@@ -1048,20 +1048,20 @@ class EmployeeValidator extends BaseValidator
         $isEmpty = is_string($id) && trim($id) === '';
 
         if ($id === null || $isEmpty) {
-            $this->errors['payroll_group_id'] = 'The payroll group ID is required.';
+            $this->errors['payroll_group_id'] = 'Pay Information: The payroll group ID is required.';
 
             return false;
         }
 
         if (is_int($id) || filter_var($id, FILTER_VALIDATE_INT) !== false || (is_string($id) && preg_match('/^-?(0|[1-9]\d*)$/', $id))) {
             if ($id < 1) {
-                $this->errors['payroll_group_id'] = 'The payroll group ID must be greater than 0.';
+                $this->errors['payroll_group_id'] = 'Pay Information: The payroll group ID must be greater than 0.';
 
                 return false;
             }
 
             if ($id > PHP_INT_MAX) {
-                $this->errors['payroll_group_id'] = 'The payroll group ID exceeds the maximum allowable integer size.';
+                $this->errors['payroll_group_id'] = 'Pay Information: The payroll group ID exceeds the maximum allowable integer size.';
 
                 return false;
             }
@@ -1073,7 +1073,7 @@ class EmployeeValidator extends BaseValidator
             return true;
         }
 
-        $this->errors['payroll_group_id'] = 'Invalid payroll group ID. Please ensure the payroll group ID is correct and try again.';
+        $this->errors['payroll_group_id'] = 'Pay Information: Invalid payroll group ID. Please ensure the payroll group ID is correct and try again.';
 
         return false;
     }
@@ -1081,25 +1081,25 @@ class EmployeeValidator extends BaseValidator
     public function isValidBasicSalary(mixed $basicSalary): bool
     {
         if ($basicSalary === null) {
-            $this->errors['basic_salary'] = 'The basic salary cannot be null.';
+            $this->errors['basic_salary'] = 'Pay Information: The basic salary cannot be null.';
 
             return false;
         }
 
         if ( ! is_numeric($basicSalary)) {
-            $this->errors['basic_salary'] = 'The basic salary must be a valid number.';
+            $this->errors['basic_salary'] = 'Pay Information: The basic salary must be a valid number.';
 
             return false;
         }
 
         if ($basicSalary < 0) {
-            $this->errors['basic_salary'] = 'The basic salary must be greater than or equal to 0.';
+            $this->errors['basic_salary'] = 'Pay Information: The basic salary must be greater than or equal to 0.';
 
             return false;
         }
 
         if ($basicSalary > 1_000_000) {
-            $this->errors['basic_salary'] = 'The basic salary cannot exceed ₱1,000,000.';
+            $this->errors['basic_salary'] = 'Pay Information: The basic salary cannot exceed ₱1,000,000.';
 
             return false;
         }
@@ -1110,25 +1110,25 @@ class EmployeeValidator extends BaseValidator
     public function isValidTinNumber(mixed $tinNumber): bool
     {
         if ($tinNumber === null) {
-            $this->errors['tin_number'] = 'The TIN number cannot be null.';
+            $this->errors['tin_number'] = 'Government Information: The TIN number cannot be null.';
 
             return false;
         }
 
         if ( ! is_string($tinNumber)) {
-            $this->errors['tin_number'] = 'The TIN number must be a string.';
+            $this->errors['tin_number'] = 'Government Information: The TIN number must be a string.';
 
             return false;
         }
 
         if (trim($tinNumber) === '') {
-            $this->errors['tin_number'] = 'The TIN number cannot be empty.';
+            $this->errors['tin_number'] = 'Government Information: The TIN number cannot be empty.';
 
             return false;
         }
 
         if ( ! preg_match('/^\d{3}-\d{3}-\d{3}-\d{3}$/', $tinNumber)) {
-            $this->errors['tin_number'] = 'The TIN number you entered is not valid. Please ensure it follows the correct "3-3-3-3" format: XXX-XXX-XXX-XXX.';
+            $this->errors['tin_number'] = 'Government Information: The TIN number you entered is not valid. Please ensure it follows the correct "3-3-3-3" format: XXX-XXX-XXX-XXX.';
 
             return false;
         }
@@ -1136,13 +1136,13 @@ class EmployeeValidator extends BaseValidator
         $isUnique = $this->isUnique('tin_number', $tinNumber);
 
         if ($isUnique === null) {
-            $this->errors['tin_number'] = 'Unable to verify the uniqueness of the TIN number. The provided employee ID may be missing or invalid. Please try again later.';
+            $this->errors['tin_number'] = 'Government Information: Unable to verify the uniqueness of the TIN number. The provided employee ID may be missing or invalid. Please try again later.';
 
             return false;
         }
 
         if ($isUnique === false) {
-            $this->errors['tin_number'] = 'This TIN number already exists. Please provide a different one.';
+            $this->errors['tin_number'] = 'Government Information: This TIN number already exists. Please provide a different one.';
 
             return false;
         }
@@ -1153,25 +1153,25 @@ class EmployeeValidator extends BaseValidator
     public function isValidSssNumber(mixed $sssNumber): bool
     {
         if ($sssNumber === null) {
-            $this->errors['sss_number'] = 'The SSS number cannot be null.';
+            $this->errors['sss_number'] = 'Government Information: The SSS number cannot be null.';
 
             return false;
         }
 
         if ( ! is_string($sssNumber)) {
-            $this->errors['sss_number'] = 'The SSS number must be a string.';
+            $this->errors['sss_number'] = 'Government Information: The SSS number must be a string.';
 
             return false;
         }
 
         if (trim($sssNumber) === '') {
-            $this->errors['sss_number'] = 'The SSS number cannot be empty.';
+            $this->errors['sss_number'] = 'Government Information: The SSS number cannot be empty.';
 
             return false;
         }
 
         if ( ! preg_match('/^\d{4}-\d{7}-\d{1}$/', $sssNumber)) {
-            $this->errors['sss_number'] = 'The SSS number you entered is not valid. Please ensure it follows the correct "4-7-1" format: XXXX-XXXXXXX-X.';
+            $this->errors['sss_number'] = 'Government Information: The SSS number you entered is not valid. Please ensure it follows the correct "4-7-1" format: XXXX-XXXXXXX-X.';
 
             return false;
         }
@@ -1179,13 +1179,13 @@ class EmployeeValidator extends BaseValidator
         $isUnique = $this->isUnique('sss_number', $sssNumber);
 
         if ($isUnique === null) {
-            $this->errors['sss_number'] = 'Unable to verify the uniqueness of the SSS number. The provided employee ID may be missing or invalid. Please try again later.';
+            $this->errors['sss_number'] = 'Government Information: Unable to verify the uniqueness of the SSS number. The provided employee ID may be missing or invalid. Please try again later.';
 
             return false;
         }
 
         if ($isUnique === false) {
-            $this->errors['sss_number'] = 'This SSS number already exists. Please provide a different one.';
+            $this->errors['sss_number'] = 'Government Information: This SSS number already exists. Please provide a different one.';
 
             return false;
         }
@@ -1196,25 +1196,25 @@ class EmployeeValidator extends BaseValidator
     public function isValidPhilhealthNumber(mixed $philhealthNumber): bool
     {
         if ($philhealthNumber === null) {
-            $this->errors['philhealth_number'] = 'The PhilHealth number cannot be null.';
+            $this->errors['philhealth_number'] = 'Government Information: The PhilHealth number cannot be null.';
 
             return false;
         }
 
         if ( ! is_string($philhealthNumber)) {
-            $this->errors['philhealth_number'] = 'The PhilHealth number must be a string.';
+            $this->errors['philhealth_number'] = 'Government Information: The PhilHealth number must be a string.';
 
             return false;
         }
 
         if (trim($philhealthNumber) === '') {
-            $this->errors['philhealth_number'] = 'The PhilHealth number cannot be empty.';
+            $this->errors['philhealth_number'] = 'Government Information: The PhilHealth number cannot be empty.';
 
             return false;
         }
 
         if ( ! preg_match('/^\d{2}-\d{9}-\d{1}$/', $philhealthNumber)) {
-            $this->errors['philhealth_number'] = 'The PhilHealth number you entered is not valid. Please ensure it follows the correct "2-9-1" format: XX-XXXXXXXXX-X.';
+            $this->errors['philhealth_number'] = 'Government Information: The PhilHealth number you entered is not valid. Please ensure it follows the correct "2-9-1" format: XX-XXXXXXXXX-X.';
 
             return false;
         }
@@ -1222,13 +1222,13 @@ class EmployeeValidator extends BaseValidator
         $isUnique = $this->isUnique('philhealth_number', $philhealthNumber);
 
         if ($isUnique === null) {
-            $this->errors['philhealth_number'] = 'Unable to verify the uniqueness of the PhilHealth number. The provided employee ID may be missing or invalid. Please try again later.';
+            $this->errors['philhealth_number'] = 'Government Information: Unable to verify the uniqueness of the PhilHealth number. The provided employee ID may be missing or invalid. Please try again later.';
 
             return false;
         }
 
         if ($isUnique === false) {
-            $this->errors['philhealth_number'] = 'This PhilHealth number already exists. Please provide a different one.';
+            $this->errors['philhealth_number'] = 'Government Information: This PhilHealth number already exists. Please provide a different one.';
 
             return false;
         }
@@ -1239,25 +1239,25 @@ class EmployeeValidator extends BaseValidator
     public function isValidPagibigFundNumber(mixed $pagibigFundNumber): bool
     {
         if ($pagibigFundNumber === null) {
-            $this->errors['pagibig_fund_number'] = 'The Pag-IBIG Fund number cannot be null.';
+            $this->errors['pagibig_fund_number'] = 'Government Information: The Pag-IBIG Fund number cannot be null.';
 
             return false;
         }
 
         if ( ! is_string($pagibigFundNumber)) {
-            $this->errors['pagibig_fund_number'] = 'The Pag-IBIG Fund number must be a string.';
+            $this->errors['pagibig_fund_number'] = 'Government Information: The Pag-IBIG Fund number must be a string.';
 
             return false;
         }
 
         if (trim($pagibigFundNumber) === '') {
-            $this->errors['pagibig_fund_number'] = 'The Pag-IBIG Fund number cannot be empty.';
+            $this->errors['pagibig_fund_number'] = 'Government Information: The Pag-IBIG Fund number cannot be empty.';
 
             return false;
         }
 
         if ( ! preg_match('/^\d{4}-\d{4}-\d{4}$/', $pagibigFundNumber)) {
-            $this->errors['pagibig_fund_number'] = 'The Pag-IBIG Fund number you entered is not valid. Please ensure it follows the correct "4-4-4" format: XXXX-XXXXX-XXXX.';
+            $this->errors['pagibig_fund_number'] = 'Government Information: The Pag-IBIG Fund number you entered is not valid. Please ensure it follows the correct "4-4-4" format: XXXX-XXXXX-XXXX.';
 
             return false;
         }
@@ -1265,13 +1265,13 @@ class EmployeeValidator extends BaseValidator
         $isUnique = $this->isUnique('pagibig_fund_number', $pagibigFundNumber);
 
         if ($isUnique === null) {
-            $this->errors['pagibig_fund_number'] = 'Unable to verify the uniqueness of the Pag-IBIG Fund number. The provided employee ID may be missing or invalid. Please try again later.';
+            $this->errors['pagibig_fund_number'] = 'Government Information: Unable to verify the uniqueness of the Pag-IBIG Fund number. The provided employee ID may be missing or invalid. Please try again later.';
 
             return false;
         }
 
         if ($isUnique === false) {
-            $this->errors['pagibig_fund_number'] = 'This Pag-IBIG Fund number already exists. Please provide a different one.';
+            $this->errors['pagibig_fund_number'] = 'Government Information: This Pag-IBIG Fund number already exists. Please provide a different one.';
 
             return false;
         }
@@ -1282,37 +1282,37 @@ class EmployeeValidator extends BaseValidator
     public function isValidBankName(mixed $bankName): bool
     {
         if ($bankName === null) {
-            $this->errors['bank_name'] = 'The bank name cannot be null.';
+            $this->errors['bank_name'] = 'Pay Information: The bank name cannot be null.';
 
             return false;
         }
 
         if ( ! is_string($bankName)) {
-            $this->errors['bank_name'] = 'The bank name must be a string.';
+            $this->errors['bank_name'] = 'Pay Information: The bank name must be a string.';
 
             return false;
         }
 
         if (trim($bankName) === '') {
-            $this->errors['bank_name'] = 'The bank name cannot be empty.';
+            $this->errors['bank_name'] = 'Pay Information: The bank name cannot be empty.';
 
             return false;
         }
 
         if (mb_strlen($bankName) < 3 || mb_strlen($bankName) > 50) {
-            $this->errors['bank_name'] = 'The bank name must be between 3 and 50 characters long.';
+            $this->errors['bank_name'] = 'Pay Information: The bank name must be between 3 and 50 characters long.';
 
             return false;
         }
 
         if ( ! preg_match('/^[A-Za-z0-9\s\-.,\'()\/&]+$/', $bankName)) {
-            $this->errors['bank_name'] = 'The bank name contains invalid characters. Only letters, numbers, spaces, and the following characters are allowed: - . , \' ( ) / &';
+            $this->errors['bank_name'] = 'Pay Information: The bank name contains invalid characters. Only letters, numbers, spaces, and the following characters are allowed: - . , \' ( ) / &';
 
             return false;
         }
 
         if ($bankName !== htmlspecialchars(strip_tags($bankName), ENT_QUOTES, 'UTF-8')) {
-            $this->errors['bank_name'] = 'The bank name contains HTML tags or special characters that are not allowed.';
+            $this->errors['bank_name'] = 'Pay Information: The bank name contains HTML tags or special characters that are not allowed.';
 
             return false;
         }
@@ -1323,37 +1323,37 @@ class EmployeeValidator extends BaseValidator
     public function isValidBankBranchName(mixed $bankBranchName): bool
     {
         if ($bankBranchName === null) {
-            $this->errors['bank_branch_name'] = 'The bank branch name cannot be null.';
+            $this->errors['bank_branch_name'] = 'Pay Information: The bank branch name cannot be null.';
 
             return false;
         }
 
         if ( ! is_string($bankBranchName)) {
-            $this->errors['bank_branch_name'] = 'The bank branch name must be a string.';
+            $this->errors['bank_branch_name'] = 'Pay Information: The bank branch name must be a string.';
 
             return false;
         }
 
         if (trim($bankBranchName) === '') {
-            $this->errors['bank_branch_name'] = 'The bank branch name cannot be empty.';
+            $this->errors['bank_branch_name'] = 'Pay Information: The bank branch name cannot be empty.';
 
             return false;
         }
 
         if (mb_strlen($bankBranchName) < 5 || mb_strlen($bankBranchName) > 100) {
-            $this->errors['bank_branch_name'] = 'The bank branch name must be between 5 and 100 characters long.';
+            $this->errors['bank_branch_name'] = 'Pay Information: The bank branch name must be between 5 and 100 characters long.';
 
             return false;
         }
 
         if ( ! preg_match('/^[A-Za-z0-9\s\-.,\'()\/&]+$/', $bankBranchName)) {
-            $this->errors['bank_branch_name'] = 'The bank branch name contains invalid characters. Only letters, numbers, spaces, and the following characters are allowed: - . , \' ( ) / &';
+            $this->errors['bank_branch_name'] = 'Pay Information: The bank branch name contains invalid characters. Only letters, numbers, spaces, and the following characters are allowed: - . , \' ( ) / &';
 
             return false;
         }
 
         if ($bankBranchName !== htmlspecialchars(strip_tags($bankBranchName), ENT_QUOTES, 'UTF-8')) {
-            $this->errors['bank_branch_name'] = 'The bank branch name contains HTML tags or special characters that are not allowed.';
+            $this->errors['bank_branch_name'] = 'Pay Information: The bank branch name contains HTML tags or special characters that are not allowed.';
 
             return false;
         }
@@ -1364,25 +1364,25 @@ class EmployeeValidator extends BaseValidator
     public function isValidBankAccountNumber(mixed $bankAccountNumber): bool
     {
         if ($bankAccountNumber === null) {
-            $this->errors['bank_account_number'] = 'The bank account number cannot be null.';
+            $this->errors['bank_account_number'] = 'Pay Information: The bank account number cannot be null.';
 
             return false;
         }
 
         if ( ! is_string($bankAccountNumber)) {
-            $this->errors['bank_account_number'] = 'The bank account number must be a string.';
+            $this->errors['bank_account_number'] = 'Pay Information: The bank account number must be a string.';
 
             return false;
         }
 
         if (trim($bankAccountNumber) === '') {
-            $this->errors['bank_account_number'] = 'The bank account number cannot be empty.';
+            $this->errors['bank_account_number'] = 'Pay Information: The bank account number cannot be empty.';
 
             return false;
         }
 
         if ( ! preg_match('/^\d{10,12}$/', $bankAccountNumber)) {
-            $this->errors['bank_account_number'] = 'The bank account number contains invalid characters. It must be between 10 and 12 digits long and contain only numbers.';
+            $this->errors['bank_account_number'] = 'Pay Information: The bank account number contains invalid characters. It must be between 10 and 12 digits long and contain only numbers.';
 
             return false;
         }
@@ -1390,13 +1390,13 @@ class EmployeeValidator extends BaseValidator
         $isUnique = $this->isUnique('bank_account_number', $bankAccountNumber);
 
         if ($isUnique === null) {
-            $this->errors['bank_account_number'] = 'Unable to verify the uniqueness of the bank account number. The provided employee ID may be missing or invalid. Please try again later.';
+            $this->errors['bank_account_number'] = 'Pay Information: Unable to verify the uniqueness of the bank account number. The provided employee ID may be missing or invalid. Please try again later.';
 
             return false;
         }
 
         if ($isUnique === false) {
-            $this->errors['bank_account_number'] = 'This bank account number already exists. Please provide a different one.';
+            $this->errors['bank_account_number'] = 'Pay Information: This bank account number already exists. Please provide a different one.';
 
             return false;
         }
@@ -1407,19 +1407,19 @@ class EmployeeValidator extends BaseValidator
     public function isValidBankAccountType(mixed $bankAccountType): bool
     {
         if ($bankAccountType === null) {
-            $this->errors['bank_account_type'] = 'The bank account type cannot be null.';
+            $this->errors['bank_account_type'] = 'Pay Information: The bank account type cannot be null.';
 
             return false;
         }
 
         if ( ! is_string($bankAccountType)) {
-            $this->errors['bank_account_type'] = 'The bank account type must be a string.';
+            $this->errors['bank_account_type'] = 'Pay Information: The bank account type must be a string.';
 
             return false;
         }
 
         if (trim($bankAccountType) === '') {
-            $this->errors['bank_account_type'] = 'The bank account type cannot be empty.';
+            $this->errors['bank_account_type'] = 'Pay Information: The bank account type cannot be empty.';
 
             return false;
         }
@@ -1432,7 +1432,7 @@ class EmployeeValidator extends BaseValidator
         ];
 
         if ( ! in_array(strtolower($bankAccountType), $validBankAccountTypes)) {
-            $this->errors['bank_account_type'] = 'The bank account type must be one of the following: Payroll Account, Current Account, Checking Account, Savings Account.';
+            $this->errors['bank_account_type'] = 'Pay Information: The bank account type must be one of the following: Payroll Account, Current Account, Checking Account, Savings Account.';
 
             return false;
         }
@@ -1443,31 +1443,31 @@ class EmployeeValidator extends BaseValidator
     public function isValidUsername(mixed $username): bool
     {
         if ($username === null) {
-            $this->errors['username'] = 'The username cannot be null.';
+            $this->errors['username'] = 'Login Credentials: The username cannot be null.';
 
             return false;
         }
 
         if ( ! is_string($username)) {
-            $this->errors['username'] = 'The username must be a string.';
+            $this->errors['username'] = 'Login Credentials: The username must be a string.';
 
             return false;
         }
 
         if (trim($username) === '') {
-            $this->errors['username'] = 'The username cannot be empty.';
+            $this->errors['username'] = 'Login Credentials: The username cannot be empty.';
 
             return false;
         }
 
         if (mb_strlen($username) < 3 || mb_strlen($username) > 25) {
-            $this->errors['username'] = 'The username must be between 3 and 25 characters long.';
+            $this->errors['username'] = 'Login Credentials: The username must be between 3 and 25 characters long.';
 
             return false;
         }
 
         if ( ! preg_match('/^[a-zA-Z0-9._]+$/', $username)) {
-            $this->errors['username'] = 'The username contains invalid characters. Only letters, numbers, and the following characters are allowed: . _';
+            $this->errors['username'] = 'Login Credentials: The username contains invalid characters. Only letters, numbers, and the following characters are allowed: . _';
 
             return false;
         }
@@ -1475,13 +1475,13 @@ class EmployeeValidator extends BaseValidator
         $isUnique = $this->isUnique('username', $username);
 
         if ($isUnique === null) {
-            $this->errors['username'] = 'Unable to verify the uniqueness of the username. The provided employee ID may be missing or invalid. Please try again later.';
+            $this->errors['username'] = 'Login Credentials: Unable to verify the uniqueness of the username. The provided employee ID may be missing or invalid. Please try again later.';
 
             return false;
         }
 
         if ($isUnique === false) {
-            $this->errors['username'] = 'This username already exists. Please provide a different one.';
+            $this->errors['username'] = 'Login Credentials: This username already exists. Please provide a different one.';
 
             return false;
         }
@@ -1492,37 +1492,37 @@ class EmployeeValidator extends BaseValidator
     public function isValidPassword(mixed $password): bool
     {
         if ($password === null) {
-            $this->errors['password'] = 'The password cannot be null.';
+            $this->errors['password'] = 'Login Credentials: The password cannot be null.';
 
             return false;
         }
 
         if ( ! is_string($password)) {
-            $this->errors['password'] = 'The password must be a string.';
+            $this->errors['password'] = 'Login Credentials: The password must be a string.';
 
             return false;
         }
 
         if (trim($password) === '') {
-            $this->errors['password'] = 'The password cannot be empty.';
+            $this->errors['password'] = 'Login Credentials: The password cannot be empty.';
 
             return false;
         }
 
         if (mb_strlen($password) < 8 || mb_strlen($password) > 50) {
-            $this->errors['password'] = 'The password must be between 8 and 50 characters long.';
+            $this->errors['password'] = 'Login Credentials: The password must be between 8 and 50 characters long.';
 
             return false;
         }
 
         if ( ! preg_match('/^[a-zA-Z0-9._!@#$%^&*()\-+=]+$/', $password)) {
-            $this->errors['password'] = 'The password contains invalid characters. Only letters, numbers, and the following characters are allowed: . _ ! @ # $ % ^ & * ( ) - + =';
+            $this->errors['password'] = 'Login Credentials: The password contains invalid characters. Only letters, numbers, and the following characters are allowed: . _ ! @ # $ % ^ & * ( ) - + =';
 
             return false;
         }
 
         if ( ! preg_match('/^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*()\-+=]).+$/', $password)) {
-            $this->errors['password'] = 'The password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character: ! @ # $ % ^ & * ( ) - + =';
+            $this->errors['password'] = 'Login Credentials: The password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character: ! @ # $ % ^ & * ( ) - + =';
 
             return false;
         }

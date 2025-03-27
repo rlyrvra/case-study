@@ -34,13 +34,13 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
 
 
 <!-- Ajax -->
-<script src="deductions/modules/deductions-ajax.js?v1.9"></script>
+<script src="deductions/modules/deductions-ajax.js?v1.10"></script>
 <!-- Scripts -->
-<script src="deductions/modules/deductions-scripts.js?v1.9"></script>
+<script src="deductions/modules/deductions-scripts.js?v1.10"></script>
 <!-- Ajax -->
-<script src="deductions/employee-deduction/modules/assign-deductions-ajax.js?v1.3"></script>
+<script src="deductions/employee-deduction/modules/assign-deductions-ajax.js?v1.4"></script>
 <!-- Scripts -->
-<script src="deductions/employee-deduction/modules/assign-deductions-scripts.js?v1.3"></script>
+<script src="deductions/employee-deduction/modules/assign-deductions-scripts.js?v1.4"></script>
 
 <!---Skeletons--->
 <script src="requests/table-skeleton.js?v1.2"></script>
