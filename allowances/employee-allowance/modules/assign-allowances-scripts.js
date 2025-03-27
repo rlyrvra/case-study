@@ -146,7 +146,7 @@ function confirmDeleteAssignedAllowance(button){
 }
 
 
-function showValidationError(errorMessages) {
+function showValidationErrorAssign(errorMessages) {
     $('#allowance_entitlement_modal').modal('hide');
     $('#assign_allowances_modal').modal('hide');
 

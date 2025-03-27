@@ -111,7 +111,6 @@ function createDeductions(){
         success: function(response) {
             $('#deductions-table').html(response);
             fetchAllDeductions();
-            document.getElementById('add_deductions_form').reset();
         },
         error(xhr, status, error) {
             console.error("Error creating department:", error);

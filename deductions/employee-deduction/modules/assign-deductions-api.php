@@ -95,7 +95,7 @@ try{
         } else if (isset($result['status']) && $result['status'] === 'invalid_input'){
             die("
             <script>
-                showValidationError(" . json_encode($result['errors']) . ");
+                showValidationErrorAssign(" . json_encode($result['errors']) . ");
             </script>
             ");
         }
@@ -129,7 +129,7 @@ try{
         } else if (isset($result['status']) && $result['status'] === 'invalid_input'){
             die("
             <script>
-                showValidationError(" . json_encode($result['errors']) . ");
+                showValidationErrorAssign(" . json_encode($result['errors']) . ");
             </script>
             ");
         }

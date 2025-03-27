@@ -144,9 +144,9 @@ function confirmDeleteAssignedDeduction(button){
     });
 }
 
-function showValidationError(errorMessages) {
-    $('#add-departments-modal').modal('hide');
-    $('#update_departments_modal').modal('hide');
+function showValidationErrorAssign(errorMessages) {
+    $('#deductions_entitlement_modal').modal('hide');
+    $('#assign_deductions_modal').modal('hide');
 
     let formattedMessages = '';
 
