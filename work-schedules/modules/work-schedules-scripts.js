@@ -819,7 +819,7 @@ function showError(){
 function confirmDeleteWorkSchedule(button) {
     Swal.fire({
         title: 'Are you sure?',
-        text: "Do you want to delete this work schedule?",
+        text: "Deleting the schedule will not affect attendance records, but it may still overlap with other active schedules. Do you want to delete this work schedule?",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
