@@ -49,11 +49,16 @@ document.addEventListener("keydown", function(event) {
 
 });
 
-function showResponse(status, message, record = null){
+function showResponse(status, message, errors = null, record = null){
     if(status === 'success'){
         showRecord(record, status, message);
         return;
     }
+
+    if(!isInputValid(status, errors)){
+        return;
+    }
+
     Swal.fire({
         title: status.charAt(0).toUpperCase() + status.slice(1) + "!",
         text: message,
@@ -62,11 +67,42 @@ function showResponse(status, message, record = null){
     });
 }
 
+function isInputValid(status, errorMessages){
+    if(status === 'invalid_input' && (Array.isArray(errorMessages))){
+        formattedMessages = errorMessages.join('<br>'); // Format as a list
+        Swal.fire({
+            title: 'Warning!',
+            html:  formattedMessages,
+            icon: 'warning',
+            confirmButtonText: 'OK'
+        });
+        return false;
+    }else if(status === 'invalid_input' && typeof errorMessages === 'object'){
+        formattedMessages = Object.values(errorMessages).flat().join('<br>');  // Flatten object values
+        Swal.fire({
+            title: 'Warning!',
+            html:  formattedMessages,
+            icon: 'warning',
+            confirmButtonText: 'OK'
+        });
+        return false;
+    }else if(status === 'invalid_input'){
+        formattedMessages = errorMessages; // Assume it's already a string
+        Swal.fire({
+            title: 'Warning!',
+            html:  formattedMessages,
+            icon: 'warning',
+            confirmButtonText: 'OK'
+        });
+        return false;
+    }
+    return true;
+}
+
 
 function showRecord(record, status, message) {
     let countdown = 10;
     let img;
-    console.log(record);
 
     // Ensure 'record' is valid
     if (!Array.isArray(record) || record.length === 0 || !record[0]) {

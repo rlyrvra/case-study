@@ -61,6 +61,7 @@ try {
             $attendanceResponse = $attendanceService->handleRfidTap($employeeRfidUid, $currentDateTime);
             $status = $attendanceResponse['status'];
             $message = $attendanceResponse['message'];
+            $errors = $attendanceResponse['errors'] ?? null;
             //print_r($attendanceResponse);
             $employeeRecord = [];
             if($status === 'success'){
@@ -82,10 +83,11 @@ try {
                     1)['result_set'];
             }
             $employeeJson = json_encode($employeeRecord);
+            $errorJson = isset($errors) && !empty($errors) ? json_encode($errors) : null;
             die(
             "
                 <script>
-                    showResponse('$status', '$message', $employeeJson);
+                    showResponse('$status', '$message', $errorJson, $employeeJson);
                 </script>
             "
             );
@@ -93,6 +95,7 @@ try {
             $breakResponse = $employeeBreakService->handleRfidTap($employeeRfidUid, $currentDateTime);
             $status = $breakResponse['status'];
             $message = $breakResponse['message'];
+            $errors = $breakResponse['errors'] ?? null;
             //print_r($breakResponse);
             $employeeRecord = [];
             if($status === 'success'){
@@ -115,10 +118,11 @@ try {
                     1)['result_set'];
             }
             $employeeJson = json_encode($employeeRecord);
+            $errorJson = isset($errors) && !empty($errors) ? json_encode($errors) : null;
             die(
             "
                 <script>
-                    showResponse('$status', '$message', $employeeJson);
+                    showResponse('$status', '$message', $errorJson, $employeeJson);
                 </script>
             "
             );
