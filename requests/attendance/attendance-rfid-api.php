@@ -63,25 +63,28 @@ try {
             $message = $attendanceResponse['message'];
             $errors = $attendanceResponse['errors'] ?? null;
             //print_r($attendanceResponse);
+
             $employeeRecord = [];
             if($status === 'success'){
                 $employeeRecord = $attendanceService->fetchAllAttendance(
-                    ['employee_profile_picture', 'employee_code', 'check_in_time', 'check_out_time', 'attendance_status'], 
-                    [
+                    columns: ['employee_profile_picture', 'employee_code', 'check_in_time', 'check_out_time', 'attendance_status'], 
+                    filterCriteria: [
                         [
                             "column" => "employee.rfid_uid",
                             "operator" => "=",
                             "value" => $employeeRfidUid
-                        ]
+                        ],
                     ], 
-                    [
+                    sortCriteria: [
                         [
                             "column" => "attendance.updated_at",
                             "direction" => "DESC"
                         ]
                     ],
-                    1)['result_set'];
+                    limit: 1)['result_set'];
             }
+            //print_r($employeeRecord);
+
             $employeeJson = json_encode($employeeRecord);
             $errorJson = isset($errors) && !empty($errors) ? json_encode($errors) : json_encode([]);
             die(
@@ -95,28 +98,25 @@ try {
             $breakResponse = $employeeBreakService->handleRfidTap($employeeRfidUid, $currentDateTime);
             $status = $breakResponse['status'];
             $message = $breakResponse['message'];
+            $id = $breakResponse['employee_break_id'] ?? 0;
             $errors = $breakResponse['errors'] ?? null;
             //print_r($breakResponse);
+
             $employeeRecord = [];
             if($status === 'success'){
                 $employeeRecord = $employeeBreakService->fetchAllEmployeeBreaks(
-                    ['employee_profile_picture', 'employee_code', 'start_time', 'end_time'], 
-                    [
+                    columns: ['employee_profile_picture', 'employee_code', 'start_time', 'end_time'], 
+                    filterCriteria: [
                         [
-                            "column" => "employee.rfid_uid",
+                            "column" => "employee_break.id",
                             "operator" => "=",
-                            "value" => $employeeRfidUid
-                        ]
-                    ], 
-                    [
-                        [
-                            "column" => "employee_break.updated_at",
-                            "direction" => "DESC"
+                            "value" => $id
                         ]
                     ],
-                    [],
-                    1)['result_set'];
+                    limit: 1)['result_set'];
             }
+            //print_r($employeeRecord);
+
             $employeeJson = json_encode($employeeRecord);
             $errorJson = isset($errors) && !empty($errors) ? json_encode($errors) : json_encode([]);
             die(
