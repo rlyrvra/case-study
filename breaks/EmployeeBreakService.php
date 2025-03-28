@@ -442,7 +442,8 @@ class EmployeeBreakService
 
                     return [
                         'status'  => 'success',
-                        'message' => 'Break-in recorded successfully.'
+                        'message' => 'Break-in recorded successfully.',
+                        'employee_break_id' => $employeeBreak->getId()
                     ];
                 }
 
@@ -496,18 +497,20 @@ class EmployeeBreakService
                 }
             }
         }
-
+        
         if (isset($isBreakIn)) {
             if ($isBreakIn) {
                 return [
-                    'status'  => 'success',
-                    'message' => 'Break-in recorded successfully.'
+                    'status'            => 'success'                        ,
+                    'message'           => 'Break-in recorded successfully.',
+                    'employee_break_id' => $employeeBreak->getId()
                 ];
 
             } else {
                 return [
-                    'status'  => 'success',
-                    'message' => 'Break-out recorded successfully.'
+                    'status'            => 'success'                         ,
+                    'message'           => 'Break-out recorded successfully.',
+                    'employee_break_id' => $employeeBreak->getId()
                 ];
             }
 
