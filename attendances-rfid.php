@@ -435,8 +435,8 @@
 
 
 <script src="assets/vendor/libs/jquery/jquery.js"></script>
-<script src="requests/attendance/attendance-rfid-scripts.js?v1.2.3"></script>
-<script src="requests/attendance/attendance-rfid-ajax.js?v1.2.3"></script>
+<script src="requests/attendance/attendance-rfid-scripts.js?v1.2.4"></script>
+<script src="requests/attendance/attendance-rfid-ajax.js?v1.2.4"></script>
 <script src="sweet-alert-toasts/loader/loader.js?v1.0.0"></script>
 
 </body>
