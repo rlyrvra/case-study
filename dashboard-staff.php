@@ -267,7 +267,7 @@ h2.my-4 {
                 </thead>
                 <tbody>
                 <?php if (!empty($myAttendance)): ?>
-                    <?php $i = ($offset + 1); foreach ($myAttendance as $row): ?>
+                    <?php $i = 1; foreach ($myAttendance as $row): ?>
                     <tr>
                         <td><?php echo htmlspecialchars($i); $i++;?></td>
                         <td><?php echo !empty($row['check_in_time']) ? htmlspecialchars(date("h:i:s A", strtotime($row['check_in_time']))) : ''; ?></td>
