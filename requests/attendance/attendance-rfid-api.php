@@ -83,7 +83,7 @@ try {
                     1)['result_set'];
             }
             $employeeJson = json_encode($employeeRecord);
-            $errorJson = isset($errors) && !empty($errors) ? json_encode($errors) : [];
+            $errorJson = isset($errors) && !empty($errors) ? json_encode($errors) : json_encode([]);
             die(
             "
                 <script>
@@ -118,7 +118,7 @@ try {
                     1)['result_set'];
             }
             $employeeJson = json_encode($employeeRecord);
-            $errorJson = isset($errors) && !empty($errors) ? json_encode($errors) : [];
+            $errorJson = isset($errors) && !empty($errors) ? json_encode($errors) : json_encode([]);
             die(
             "
                 <script>
