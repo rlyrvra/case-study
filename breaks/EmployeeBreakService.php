@@ -108,6 +108,10 @@ class EmployeeBreakService
                 'column'   => 'work_schedule_snapshot.employee_id',
                 'operator' => '='                                 ,
                 'value'    => $employeeId
+            ],
+            [
+                'column'   => 'attendance.check_in_time',
+                'operator' => 'IS NOT NULL'
             ]
         ];
 

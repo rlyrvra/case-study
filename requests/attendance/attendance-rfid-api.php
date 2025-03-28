@@ -76,7 +76,7 @@ try {
                     ], 
                     [
                         [
-                            "column" => "attendance.created_at",
+                            "column" => "attendance.updated_at",
                             "direction" => "DESC"
                         ]
                     ],
@@ -110,7 +110,7 @@ try {
                     ], 
                     [
                         [
-                            "column" => "employee_break.created_at",
+                            "column" => "employee_break.updated_at",
                             "direction" => "DESC"
                         ]
                     ],
