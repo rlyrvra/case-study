@@ -135,7 +135,7 @@ try {
         $selectedColumns = ['employee_code', 'check_in_time', 'check_out_time', 'date'];
         $sortCriteria = [
             [
-                "column" => "attendance.created_at",
+                "column" => "attendance.updated_at",
                 "direction" => "DESC"
             ]
         ];
@@ -148,7 +148,7 @@ try {
         $selectedColumns = ['employee_code', 'start_time', 'end_time'];
         $sortCriteria = [
             [
-                "column" => "employee_break.created_at",
+                "column" => "employee_break.updated_at",
                 "direction" => "DESC"
             ]
         ];
