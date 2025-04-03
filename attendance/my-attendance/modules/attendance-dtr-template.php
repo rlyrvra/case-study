@@ -156,6 +156,7 @@
     </tr>
   </thead>
   <tbody>
+  <?php if(!empty($myAttendance)): ?>
     <?php foreach ($myAttendance as $index => $attendance): ?>
       <?php if ($index > 0 && $index % 30 === 0): ?>
         <!-- </tbody></table>
@@ -198,6 +199,11 @@
         <td><?= $attendance['remarks'] ?? '' ?></td>
       </tr>
     <?php endforeach; ?>
+  <?php else: ?>
+    <tr>
+      <td colspan="12">No Data Available</td>
+    </tr>
+  <?php endif ?>
   </tbody>
 </table>
 

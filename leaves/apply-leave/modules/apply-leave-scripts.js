@@ -300,6 +300,15 @@ function showSuccessDeleteRequest(){
     });
 }
 
+function showSuccessCancelRequest(){
+    Swal.fire({
+        title: 'Cancel Success!',
+        text: 'Your leave request has been canceled.',
+        icon: 'success',
+        confirmButtonText: 'OK'
+    });
+}
+
 function showError(){
     Swal.fire({
         title: 'Error!',
