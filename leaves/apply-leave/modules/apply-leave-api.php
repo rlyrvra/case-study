@@ -261,7 +261,7 @@ try {
         if($deleteResult === ActionResult::SUCCESS){
             echo "
             <script>
-                showSuccessDeleteRequest();
+                showSuccessCancelRequest();
             </script>
             ";
         }else{

@@ -178,8 +178,8 @@ try {
                 "operator" => "IS NULL"
             ],
             [
-                'column'      => 'attendance.date'                              ,
-                'operator'    => 'BETWEEN'                                                ,
+                'column'      => 'attendance.date'              ,
+                'operator'    => 'BETWEEN'                      ,
                 'lower_bound' => $_POST['pay_period_start_date'],
                 'upper_bound' => $_POST['pay_period_end_date']
             ],
@@ -204,7 +204,7 @@ try {
             "remarks",
             "work_schedule_snapshot_employee_id"
         ], $filterCriteria);
-        $myAttendance;
+        $myAttendance = [];
         if ($result !== ActionResult::FAILURE) {
             $myAttendance = $result['result_set'];
         }
