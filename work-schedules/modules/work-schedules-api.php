@@ -386,13 +386,14 @@ try {
         }
 
         // Normalize $breakTobeCreated by renaming break_type_id into id
-        foreach ($breakTobeCreated as $break) {
+        foreach ($breakTobeCreated as &$break) {
             if (isset($break['break_type_id'])) {
                 $break['id'] = $break['break_type_id'];
                 unset($break['break_type_id']);
             }
         }
         unset($break); // Break the reference
+        //print_r($breakTobeCreated);
 
         $breakScheduleResult = null;
         if (!empty($breakTobeCreated)) {
