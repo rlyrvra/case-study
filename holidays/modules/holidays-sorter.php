@@ -83,7 +83,7 @@
     <div class="dropdown filter flex-fill col-auto  mx-1">
         <div class="input-group">
             <span class="input-group-text"><i class="bx bx-category-alt fs-4 lh-0"></i></span>
-            <select class="form-select" id="status" name="status" placeholder="Filter By Status" onchange="fetchAllAllowances()">
+            <select class="form-select" id="status" name="status" placeholder="Filter By Status" onchange="fetchAllHolidays()">
                 <option value="" selected>All</option>
                 <option value="Active">Active</option>
                 <option value="Inactive">Inactive</option>
