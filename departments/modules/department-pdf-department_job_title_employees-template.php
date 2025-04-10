@@ -147,7 +147,7 @@
       <th>Status</th>
       <th>Date Created</th>
       <th>Date Modified</th>
-      <?php if($status === 'Archived'):?><th>Deleted At</th><?php endif ?>
+      <th>Deleted At</th>
       <th>Job Title</th>
       <th>Job Title Status</th>
       <th>Employee Code</th>

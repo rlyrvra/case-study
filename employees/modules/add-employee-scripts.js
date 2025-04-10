@@ -217,6 +217,7 @@ function previewImage(event) {
 
 $(document).ready(function() {
     const dateOfBirth = document.getElementById('dob');
+    const dateOfHire = document.getElementById('date-of-hire');
     // Function to disable past dates based on the selected date
     const today = new Date();
     let pastToday = new Date();
@@ -228,9 +229,25 @@ $(document).ready(function() {
         dateOfBirth.setAttribute('min', pastformattedDate);
     });
 
+    dateOfHire.addEventListener('focus', function() {
+        dateOfBirth.setAttribute('max', formattedDate);
+        dateOfBirth.setAttribute('min', pastformattedDate);
+    });
+
     const dateInput = document.getElementById("dob");
 
     dateInput.addEventListener("input", function () {
+        const minDate = new Date(this.min);
+        const maxDate = new Date(this.max);
+        const currentDate = new Date(this.value);
+
+        if (currentDate < minDate || currentDate > maxDate) {
+            alert(`Please select a date between ${pastformattedDate} and ${formattedDate}.`);
+            this.value = ""; // Clear invalid input
+        }
+    });
+
+    dateOfHire.addEventListener("input", function () {
         const minDate = new Date(this.min);
         const maxDate = new Date(this.max);
         const currentDate = new Date(this.value);

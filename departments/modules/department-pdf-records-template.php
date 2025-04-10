@@ -147,7 +147,7 @@
       <th>Status</th>
       <th>Date Created</th>
       <th>Date Updated</th>
-      <?php if($status === 'Archived'):?><th>Deleted At</th><?php endif ?>
+      <th>Deleted At</th>
     </tr>
   </thead>
   <tbody>
