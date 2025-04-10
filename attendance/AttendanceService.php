@@ -469,7 +469,7 @@ class AttendanceService
                 if (empty($workSchedules)) {
                     return [
                         'status'  => 'warning',
-                        'message' => 'You don\'t have an assigned work schedule.'
+                        'message' => 'You do not have an assigned work schedule.'
                     ];
                 }
 
