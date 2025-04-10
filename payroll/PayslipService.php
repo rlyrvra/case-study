@@ -809,8 +809,6 @@ class PayslipService
             }
 
             $hourlyRate = $basicSalary / ($totalRequiredWorkHours * 26.0);
-            $basicPay   = 0;
-            $grossPay   = 0;
 
             foreach ($workSchedules as $workSchedule) {
                 $workScheduleSnapshotId = $workSchedule['work_schedule']['snapshot_id'];

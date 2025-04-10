@@ -63,6 +63,10 @@
                 <div class="col-6 text-danger">₱<?php echo number_format($row['philhealth_deduction'], 2); ?></div>
               </div>
               <div class="row mb-2">
+                <div class="col-6 text-muted">Pag-IBIG Fund:</div>
+                <div class="col-6 text-danger">₱<?php echo number_format($row['pagibig_fund_deduction'], 2); ?></div>
+              </div>
+              <div class="row mb-2">
                 <div class="col-6 text-muted">Tax:</div>
                 <div class="col-6 text-danger">₱<?php echo number_format($row['withholding_tax'], 2); ?></div>
               </div>
