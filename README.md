@@ -116,7 +116,7 @@ To use the system:
 
 ## License
 
-This repository is licensed under the [MIT License](LICENSE.md). You are free to use, modify, and distribute the code under the terms of this license.
+This repository is licensed under the [MIT License](LICENSE). You are free to use, modify, and distribute the code under the terms of this license.
 
 ---
 
