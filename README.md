@@ -7,7 +7,7 @@ Welcome to the **Smart Wage Management System** repository! This project is a we
 ## Table of Contents
 
 - [About](#about)
-- [Features](#features)
+- [Key Features](#key-features)
 - [Usage](#usage)
 - [Access Roles](#access-roles)
 - [Contributing](#contributing)
