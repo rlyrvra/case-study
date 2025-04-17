@@ -1,6 +1,6 @@
 # Smart Wage Management System - Feature Branch
 
-**Branch Status**: Currently not in Active Development since April 1, 2025
+**Branch Status**: Currently not in Active Development since April 2025
 **Current Focus**: Access Roles Implementation (75% complete)  
 **Stable Version**: [Main Branch](https://github.com/rlyrvra/case-study/tree/main)
 
@@ -18,6 +18,9 @@ For updates or bug reports, please contact:
 Features here are unstable and may change before merging with main.
 
 ## Current Development
+- Merging to the last updated branch
+   - Issues when work schedule is updated are fixed
+   - Affected validator classes need to be re-tested
 
 ### Active Features
 - Access Roles System (75% complete)
@@ -26,7 +29,7 @@ Features here are unstable and may change before merging with main.
   - Implementing UI restrictions based on roles
 
 ### Pending Testing
-
+- All modules should be re-tested.
 
 ## Testing Guidelines
 
@@ -50,12 +53,16 @@ Features here are unstable and may change before merging with main.
 ## Development Setup
 
 1. Clone this branch:
+   ```
    git clone -b feature/access-roles https://github.com/rlyrvra/case-study.git
    cd smart-wage-management-system
+   ```
 
 2. Install dependencies:
+   ```
    composer install
    npm install
+   ```
 
 ## Test Data
 
@@ -97,5 +104,3 @@ Figma Designs: https://www.figma.com/design/s8WzT9XziBu4x5zz6ESRhR/SMART-WAGE?no
 ## License
 
 MIT License © 2023 Smart Wage Team
-
-Note: This branch will be archived after merging to main. Refer to commit history for specific changes.
