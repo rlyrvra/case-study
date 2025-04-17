@@ -1,149 +1,94 @@
-# Smart Wage Management System
+# Smart Wage Management System - Feature Branch
 
-Welcome to the **Smart Wage Management System** repository! This project is a web-based platform designed to handle payroll and workforce activities for companies of any size. The system provides an intuitive and unified interface for managing employees, attendance, leave applications, payroll, and more. Whether you're an administrator, manager, supervisor, or staff member, the platform offers features tailored to your specific needs.
+**Branch Status**: Active Development  
+**Current Focus**: Access Roles Implementation (75% complete)  
+**Stable Version**: [Main Branch](https://github.com/rlyrvra/case-study/tree/main)
 
----
+## Development Notice
 
-## Table of Contents
+⚠️ This is a feature development branch containing work-in-progress code.  
+Features here are unstable and may change before merging with main.
 
-- [About](#about)
-- [Features](#features)
-- [Usage](#usage)
-- [Access Roles](#access-roles)
-- [Contributing](#contributing)
-- [License](#license)
-- [Contact](#contact)
+## Current Development
 
----
+### Active Features
+- Access Roles System (75% complete)
+  - Finalizing role-based permissions hierarchy
+  - Testing permission boundaries between roles
+  - Implementing UI restrictions based on roles
 
-## About
-
-The **Smart Wage Management System** is designed to streamline payroll and workforce activities, providing a robust, scalable solution for companies of all sizes. Key functionalities include:
-
-- Managing employee profiles, attendance, and leave applications.
-- Generating precise and automated payrolls factoring in benefits and deductions.
-- Centralized dashboards for tracking key metrics and administering configurations.
-
-The system uses RFID for accurate timekeeping and offers role-based access for enhanced security and flexibility.
-
----
-
-## Key Features
-
-### Dashboard
-- View an overview of key metrics and summaries.
-
-### Department Management
-- Create, view, update, and delete departments.
-
-### Job Title Management
-- Create, view, update, and delete departments.
-
-### Employee Management
-- Add new employees, view profiles, update information, and monitor leave credits.
-
-### Leave Management
-- Create, modify, and remove custom leave types.
-- Employees can submit leave applications, review leave history, and access leave records.
-- Designated approvers (Admin, Manager, Supervisor) can manage leave applications with statuses such as:
-  - Pending
-  - Approved
-  - Rejected
-  - Canceled
-  - Expired
-  - On Leave
-  - Completed
-- Leave benefits are managed based on the employee's employment type.
-
-### Timekeeping Management
-- Monitor and maintain attendance records using RFID for accurate tracking of working hours and absences.
-- Automatic tracking of abscences and resetting of leave credits via cron-jobs.
-- Work Schedules can be dynamically managed in the system.
-- Breaks can be dynamically managed in the system.
-
-### Payroll Management
-- Generate payrolls based on timekeeping data.
-- Employees can view their payslips once generated.
-
-### Benefits and Deductions
-- Automatically factor in benefits and deductions for precise payroll calculations.
-
-## Access Roles
-
-The system provides detailed role-based access and controls, including:
-1. **Admin**
-- Full access and control over the entire system.
-- Exclusive actions such as: Department Management, Job Title Management, Leave Types Management.
-- Ability to edit company profile for header of PDF generation.
-- Ability to edit contents of the landing page.
-
-2. **Manager**
-- Access to employees over the entire system as well as power to its own department.
-- Access to records of employees in its own department.
-- Ability to change the pay rate of the employee.
-- Ability to add Holidays.
-- Ability to manage Leave Requests of its own department.
-- Ability to assign and remove allowances and deductions.
-- Ability to attendance tracking using RFID.
-
-3. **Supervisor**
-- Access to employees over its own supervisees.
-- Access to records of its own supervisees.
-- Ability to manage Leave Requests of its own supervisees.
-- Ability to attendance tracking using RFID.
-
-4. **Staff**
-- Designated end users and lowest authorization for the system.
-- Ability to monitor its own records (payslip/attendance).
-- Ability to attendance tracking using RFID.
+### Pending Testing
 
 
-Each role has specific access and permissions tailored to their responsibilities.
+## Testing Guidelines
 
----
+### Before testing:
+1. Pull the latest changes
+2. Request database from [rlyrvra] and [hannixminji]
 
-## Usage
+### Known Considerations:
+- Permission system may have incomplete UI restrictions
+- Some admin functions might be temporarily exposed
 
-To use the system:
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/rlyrvra/case-study.git
-   ```
-2. Import the database located in database/smart_wage.sql.
-3. Log in with [username: admin, password: admin] credentials.
+## Quick Reference
 
----
+| Section | Description |
+|---------|-------------|
+| Setup | Configure this branch |
+| Test Data | Available testing accounts |
+| API Changes | Modified endpoints |
+| Reporting | How to report issues |
+
+## Development Setup
+
+1. Clone this branch:
+   git clone -b feature/access-roles https://github.com/rlyrvra/smart-wage-management-system.git
+   cd smart-wage-management-system
+
+2. Install dependencies:
+   composer install
+   npm install
+
+## Test Data
+
+| Role        | Username | Password   | Permissions                  |
+|-------------|----------|------------|------------------------------|
+| Admin       | admin    | Admin#1234 | Full system access           |
+| Manager     | b        | b          | Department-level access      |
+| Supervisor  | c        | c          | Team-level access            |
+| Staff       | d        | d          | Personal records only        |
+
+## Bug Reports
+
+Please include:
+1. Branch name and commit hash
+2. Test account used
+3. Clear reproduction steps
+4. Expected vs actual behavior
+5. Relevant screenshots/logs
+6. Document it [here](https://docs.google.com/spreadsheets/d/1KRxfwKuXND44HCCUnGmokcqtAjephycSbW-YoYDsDbo/edit?gid=1144752208#gid=1144752208)
+
+Create new issue: https://github.com/rlyrvra/smart-wage-management-system/issues/new/choose
+
+
+## Documentation
+
+System Documentation: https://docs.google.com/document/d/1u0t_vbD5gFRzyKVPBoQUkYPwyvr3N0AZPwosvC8bzPc
+API Specifications: https://example.com/api-docs (updated weekly)
+Figma Designs: https://figma.com/team-project (UI reference)
+
+## Team Contacts
+
+| Role | Members | Focus Area |
+|------|---------|------------|
+| Backend | hannixminji | API, Database |
+| Frontend | rlyrvra | Integration |
+| UI/UX | Shiro-hr | Interfaces |
+| UI/UX | vane404 | User Flows |
+| UI/UX | carlbryandy | Visual Design |
 
 ## License
 
-This repository is licensed under the [MIT License](LICENSE). You are free to use, modify, and distribute the code under the terms of this license.
+MIT License © 2023 Smart Wage Team
 
----
-
-## Contact
-
-If you have any questions or feedback, feel free to reach out:
-
-## Team Members
-
-- **[rlyrvra](https://github.com/rlyrvra)**  
-  Full Stack Developer | QA Tester
-
-- **[hannixminji](https://github.com/hannixminji)**  
-  Back End Engineer | Requirements Planner
-
-- **[Shiro-hr](https://github.com/Shiro-Hr)**  
-  UI/UX Designer | QA Tester
-
-- **[vane404](https://github.com/vane0404)**  
-  UI/UX Designer | Documentation Researcher
-
-- **[carlbryandy](https://github.com/carlbryandy)**  
-  UI/UX Designer
-
-- **Issues**: Open an issue in the [Issues section](https://github.com/rlyrvra/smart-wage-management-system/issues).
-
-Thank you for exploring the Smart Wage Management System. We hope it serves as a valuable tool for your organization!
-
-## Documentation
-[smartWage_Documentation](https://docs.google.com/document/d/1u0t_vbD5gFRzyKVPBoQUkYPwyvr3N0AZPwosvC8bzPc)
+Note: This branch will be archived after merging to main. Refer to commit history for specific changes.
