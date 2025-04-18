@@ -460,6 +460,22 @@ CREATE TABLE `overtime_rates` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `overtime_rates`
+--
+
+INSERT INTO `overtime_rates` (`id`, `overtime_rate_assignment_id`, `day_type`, `holiday_type`, `regular_time_rate`, `overtime_rate`, `night_differential_rate`, `night_differential_and_overtime_rate`, `created_at`, `updated_at`) VALUES
+(9, 1, 'Regular Day', 'Non-holiday', 1.00000, 1.25000, 1.10000, 1.37500, '2024-12-04 02:05:38', '2024-12-04 02:05:38'),
+(10, 1, 'Regular Day', 'Special Holiday', 1.30000, 1.69000, 1.43000, 1.85900, '2024-12-04 02:05:38', '2024-12-04 02:05:38'),
+(11, 1, 'Regular Day', 'Regular Holiday', 2.00000, 2.60000, 2.20000, 2.86000, '2024-12-04 02:05:38', '2024-12-04 02:05:38'),
+(12, 1, 'Regular Day', 'Double Holiday', 2.60000, 3.90000, 3.30000, 4.29000, '2024-12-04 02:05:38', '2024-12-04 02:05:38'),
+(13, 1, 'Rest Day', 'Non-holiday', 1.30000, 1.69000, 1.43000, 1.85900, '2024-12-04 02:05:38', '2024-12-04 02:05:38'),
+(14, 1, 'Rest Day', 'Special Holiday', 1.50000, 1.95000, 1.65000, 2.14500, '2024-12-04 02:05:38', '2024-12-04 02:05:38'),
+(15, 1, 'Rest Day', 'Regular Holiday', 2.60000, 3.38000, 2.86000, 3.71800, '2024-12-04 02:05:38', '2024-12-04 02:05:38'),
+(16, 1, 'Rest Day', 'Double Holiday', 3.90000, 5.07000, 4.29000, 5.51700, '2024-12-04 02:05:38', '2024-12-04 02:05:38'),
+(17, 1, 'Regular Day', 'Double Special Holiday', 1.50000, 1.95000, 1.65000, 2.14500, '2024-12-04 02:05:38', '2024-12-04 02:05:38'),
+(18, 1, 'Rest Day', 'Double Special Holiday', 1.95000, 2.53500, 2.14500, 2.78850, '2024-12-04 02:05:38', '2024-12-04 02:05:38');
+
 -- --------------------------------------------------------
 
 --

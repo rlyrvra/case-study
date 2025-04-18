@@ -37,7 +37,7 @@ The system uses RFID for accurate timekeeping and offers role-based access for e
 - Create, view, update, and delete departments.
 
 ### Job Title Management
-- Create, view, update, and delete departments.
+- Create, view, update, and delete job titles.
 
 ### Employee Management
 - Add new employees, view profiles, update information, and monitor leave credits.
@@ -141,7 +141,11 @@ If you have any questions or feedback, feel free to reach out:
 - **[carlbryandy](https://github.com/carlbryandy)**  
   UI/UX Designer
 
-- **Issues**: Open an issue in the [Issues section](https://github.com/rlyrvra/smart-wage-management-system/issues).
+## Issues
+
+**Issues**: Open an issue in the [Issues section](https://github.com/rlyrvra/smart-wage-management-system/issues).
+
+---
 
 Thank you for exploring the Smart Wage Management System. We hope it serves as a valuable tool for your organization!
 
