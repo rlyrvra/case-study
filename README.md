@@ -1,6 +1,6 @@
 # Smart Wage Management System - Feature Branch
 
-**Branch Status**: Currently not in Active Development since April 2025
+**Branch Status**: Currently not in Active Development since April 2025  
 **Current Focus**: Access Roles Implementation (75% complete)  
 **Stable Version**: [Main Branch](https://github.com/rlyrvra/case-study/tree/main)
 
@@ -18,11 +18,12 @@ For updates or bug reports, please contact:
 Features here are unstable and may change before merging with main.
 
 ## Current Development
-- Merging to the last updated branch
+
+### Active Features
+- Merging to the last updated branch for backend (0%)
    - Issues when work schedule is updated are fixed
    - Affected validator classes need to be re-tested
 
-### Active Features
 - Access Roles System (75% complete)
   - Finalizing role-based permissions hierarchy
   - Testing permission boundaries between roles
@@ -47,7 +48,6 @@ Features here are unstable and may change before merging with main.
 |---------|-------------|
 | Setup | Configure this branch |
 | Test Data | Available testing accounts |
-| API Changes | Modified endpoints |
 | Reporting | How to report issues |
 
 ## Development Setup
