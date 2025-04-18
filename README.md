@@ -28,7 +28,7 @@ The **Smart Wage Management System** is designed to streamline payroll and workf
 
 The system uses RFID for accurate timekeeping and offers role-based access for enhanced security and flexibility.
 
-## Tech Stack
+### Tech Stack
 - Front End  
 [![HTML](https://img.shields.io/badge/HTML-%23E34F26.svg?logo=html5&logoColor=white)](#)
 [![CSS](https://img.shields.io/badge/CSS-1572B6?logo=css3&logoColor=fff)](#)
@@ -39,7 +39,7 @@ The system uses RFID for accurate timekeeping and offers role-based access for e
 [![PHP](https://img.shields.io/badge/php-%23777BB4.svg?&logo=php&logoColor=white)](#)
 [![MySQL](https://img.shields.io/badge/MySQL-4479A1?logo=mysql&logoColor=fff)](#)
 
-## Libraries and Frameworks
+### Libraries and Frameworks
 
 - UI/UX
 [Sneat Bootstrap Template](https://themewagon.com/themes/free-responsive-bootstrap-5-html5-admin-template-sneat/), 
