@@ -2,6 +2,8 @@
 
 Welcome to the **Smart Wage Management System** repository! This project is a web-based platform designed to handle payroll and workforce activities for companies of any size. The system provides an intuitive and unified interface for managing employees, attendance, leave applications, payroll, and more. Whether you're an administrator, manager, supervisor, or staff member, the platform offers features tailored to your specific needs.
 
+The system is currently hosted at: [cs-devops.com/smartWage](https://cs-devops.com/smartWage)
+
 ---
 
 ## Table of Contents
@@ -25,6 +27,22 @@ The **Smart Wage Management System** is designed to streamline payroll and workf
 - Centralized dashboards for tracking key metrics and administering configurations.
 
 The system uses RFID for accurate timekeeping and offers role-based access for enhanced security and flexibility.
+
+## Libraries and Frameworks
+
+- UI/UX
+[Sneat Bootstrap Template](https://themewagon.com/themes/free-responsive-bootstrap-5-html5-admin-template-sneat/)
+[Bootstrap 5](https://getbootstrap.com/docs/5.0/getting-started/introduction/)
+
+- Functionalities
+[RRULE for PHP](https://github.com/rlanvin/php-rrule)
+[dompdf](https://github.com/dompdf/dompdf)
+
+[jQuery](https://jquery.com/)
+[jQuery DataTables](https://datatables.net/)
+[ChartJS](https://www.chartjs.org/)
+[MomentJS](https://momentjs.com/)
+[FullCalendar](https://fullcalendar.io/)
 
 ---
 

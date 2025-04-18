@@ -19,8 +19,8 @@
         <a href="index.php" target="_blank" class="footer-link fw-bolder">smartWage</a>
         </div>
         <div>
-        <a href="#" class="footer-link me-4" target="_blank">Contact</a>
-        <a href="#" target="_blank" class="footer-link me-4">About Us</a>
+        <a href="https://github.com/rlyrvra/case-study" class="footer-link me-4" target="_blank">Contact</a>
+        <a href="https://github.com/rlyrvra/case-study" target="_blank" class="footer-link me-4">About Us</a>
         </div>
     </div>
 </footer>
