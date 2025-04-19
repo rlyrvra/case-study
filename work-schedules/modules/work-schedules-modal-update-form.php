@@ -89,7 +89,7 @@
                     <i class="bx bx-arrow-back"></i> Close
                 </button>
                 <button type="submit" class="btn btn-info shadow-sm" onclick="updateWorkScheduleBreak(this);" id="update_work_schedule_button">
-                    <i class="bx bx-edit-alt"></i> Update
+                    <i class="bx bx-edit"></i> Update
                 </button>
             </div>
             </form> 

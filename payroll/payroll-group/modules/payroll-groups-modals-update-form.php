@@ -9,7 +9,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content shadow-sm border-0">
             <div class="modal-header bg-light border-bottom">
-                <h2 class="modal-title fs-5 fw-semibold text-primary" id="update-payrollGroups-modalTitle">
+                <h2 class="modal-title fs-5 fw-semibold text-info" id="update-payrollGroups-modalTitle">
                     <i class="bx bx-credit-card"></i> Update Payroll Group
                 </h2>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -142,7 +142,7 @@
                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                     <i class="bx bx-arrow-back"></i> Close
                 </button>
-                <button type="submit" id="update_payrollGroup_button" class="btn btn-primary" onclick="updatePayrollGroup(this);">
+                <button type="submit" id="update_payrollGroup_button" class="btn btn-info" onclick="updatePayrollGroup(this);">
                     <i class="bx bx-edit"></i> Update
                 </button>
             </div>
