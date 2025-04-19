@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content shadow-sm border-0">
             <div class="modal-header bg-light border-bottom">
-                <h2 class="modal-title fs-5 fw-semibold text-primary" id="update-holidays-modalTitle">
+                <h2 class="modal-title fs-5 fw-semibold text-info" id="update-holidays-modalTitle">
                     <i class="bx bx-calendar"></i> Update Holiday
                 </h2>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>

@@ -64,7 +64,7 @@
                     <i class="bx bx-arrow-back"></i> Close
                 </button>
                 <button type="submit" id="update_department_btn" class="btn btn-info" onclick="updateJobTitle(this);">
-                    <i class="bx bx-refresh"></i> Update
+                    <i class="bx bx-edit"></i> Update
                 </button>
             </div>
             </form>

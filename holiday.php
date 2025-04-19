@@ -161,7 +161,6 @@ if($_SESSION['access_role'] !== 'Admin' && $_SESSION['access_role'] !== 'Manager
             <div class="card-body">
               <div id="skeleton-holiday-table" class="visually-hidden table-responsive text-no-wrap"></div>
               <div id="holiday-table" class="table-responsive text-no-wrap">
-              <?php require_once __DIR__ . '/holidays/modules/holidays-table.php' ?>
               <div class="visually-hidden container-fluid spinner-border spinner-border-lg d-flex align-items-center justify-content-center w-px-700 h-px-700" role="status"></div>
               </div>
             </div>
