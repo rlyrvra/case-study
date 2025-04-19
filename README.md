@@ -155,19 +155,19 @@ If you have any questions or feedback, feel free to reach out:
 ## Team Members
 
 - **[rlyrvra](https://github.com/rlyrvra)**  
-  Full Stack Developer | QA Tester
+  Full Stack Developer | QA Tester | UX Designer
 
 - **[hannixminji](https://github.com/hannixminji)**  
-  Back End Engineer | Requirements Planner
+  Back End Engineer | Requirements Planner | UX Designer | Project Leader
 
 - **[Shiro-hr](https://github.com/Shiro-Hr)**  
   UI/UX Designer | QA Tester
 
 - **[vane404](https://github.com/vane0404)**  
-  UI/UX Designer | Documentation Researcher
+  UI Designer | Documentation Researcher
 
 - **[carlbryandy](https://github.com/carlbryandy)**  
-  UI/UX Designer
+  UI Designer
 
 ## Issues
 
